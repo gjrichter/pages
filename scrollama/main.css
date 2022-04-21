@@ -1,0 +1,366 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+iframe,
+img,
+video {
+    display: block;
+    border: none
+}
+
+button,
+input[type=button],
+input[type=file]::-webkit-file-upload-button,
+input[type=reset],
+input[type=submit] {
+    border-radius: 0
+}
+
+body {
+    font-family: SZ Text, Georgia, Times, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    font-size: 18px;
+    font-size: 1rem;
+    line-height: 18px;
+    line-height: 1rem
+}
+
+html {
+    font-size: 1.125em
+}
+
+body {
+    background-color: #f2f2f3;
+    color: #29293a;
+    text-rendering: optimizeLegibility
+}
+
+@media screen and (max-width:500px) {
+    html {
+        font-size: 1em
+    }
+}
+
+h1 {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    margin: 0 0 .5em;
+    color: #333;
+    font-size: 36px;
+    font-size: 2rem;
+    line-height: 1.123
+}
+
+h2 {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-size: 22.5px;
+    font-size: 1.25rem
+}
+
+h2,
+h3 {
+    margin: 0 0 .5em;
+    color: #333;
+    line-height: 1.2
+}
+
+h3 {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-size: 18px;
+    font-size: 1rem
+}
+
+@media screen and (max-width:500px) {
+    h1 {
+        font-size: 2rem
+    }
+}
+
+a {
+    text-decoration: underline;
+    cursor: pointer
+}
+
+a,
+a:active,
+a:focus,
+a:hover,
+a:link,
+a:visited {
+    color: #009990
+}
+
+a:hover {
+    text-decoration: none
+}
+
+html {
+    -ms-content-zooming: none
+}
+
+body#mobile,
+html {
+    overflow-x: hidden
+}
+
+html {
+    width: 100%
+}
+
+html.desktop .show-device-dependent.if-mobile-show:not(.if-desktop-show),
+html.desktop .show-device-dependent.if-tablet-show:not(.if-desktop-show),
+html.mobile:not(.tablet) .show-device-dependent.if-desktop-show:not(.if-mobile-show),
+html.mobile:not(.tablet) .show-device-dependent.if-tablet-show:not(.if-mobile-show),
+html.tablet .show-device-dependent.if-desktop-show:not(.if-tablet-show),
+html.tablet .show-device-dependent.if-mobile-show:not(.if-tablet-show) {
+    display: none
+}
+
+video.fit-width {
+    width: 100%;
+    height: auto
+}
+
+video.fit-height {
+    width: auto;
+    height: 100%
+}
+
+
+.er-crate {
+    position: relative;
+    z-index: 1;
+    display: block;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 46.8px 0;
+    padding: 2.6rem 0;
+    margin-bottom: -1px
+}
+
+@media (max-width:500px) {
+    .er-crate {
+        padding: 1.8rem 0
+    }
+}
+
+.er-plank {
+    display: block;
+    padding-right: 24px;
+    padding-left: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 648px
+}
+
+@media (max-width:500px) {
+    .er-plank {
+        padding-right: 20px;
+        padding-left: 20px
+    }
+}
+
+.er-crate {
+    background-color: #f2f2f3
+}
+
+.er-crate a {
+    color: #69c1b8
+}
+
+.er-crate a:hover {
+    color: #009990
+}
+
+.er-plank--text h1,
+.er-plank--text h2 {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-size: 25.999px;
+    font-size: 1.44444rem;
+    line-height: 1.23077em;
+    letter-spacing: .3px;
+    color: #29293a;
+    margin-bottom: .8em
+}
+
+@media (max-width:750px) {
+    .er-plank--text h1,
+    .er-plank--text h2 {
+        font-size: 1.4rem;
+        margin-bottom: .5em
+    }
+}
+
+.er-plank--text h1~p,
+.er-plank--text h2~p {
+    margin-top: 7.2px;
+    margin-top: .4rem
+}
+
+.er-plank--text h3 {
+    font-family: SZ Sans condensed, SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    margin-top: 1.5em;
+    margin-bottom: .3em;
+    font-size: 22.5px;
+    font-size: 1.25rem
+}
+
+.er-plank--text a {
+    color: #69c1b8
+}
+
+.er-plank--text a:hover {
+    color: #009990
+}
+
+.er-plank--text,
+.er-plank--text p {
+    font-size: 19.999px;
+    font-size: 1.11111rem;
+    line-height: 1.6em
+}
+
+.er-plank--text p {
+    margin-bottom: 48px
+}
+
+@media (max-width:750px) {
+    .er-plank--text p {
+        margin-bottom: 36px
+    }
+}
+
+.er-plank--text b,
+.er-plank--text strong {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1
+}
+
+.er-crate .er-plank--text blockquote~* {
+    margin-top: 36px
+}
+
+.er-plank--text blockquote {
+    position: relative;
+    font-family: SZ Text, Georgia, Times, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-stretch: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    font-size: 34px;
+    font-size: 1.88889rem;
+    line-height: 1.47em;
+    letter-spacing: .2px
+}
+
+@media (max-width:750px) {
+    .er-plank--text blockquote {
+        font-size: 1.55556rem
+    }
+}
+
+@media (min-width:751px) {
+    .er-plank--text blockquote {
+        padding-left: 32px;
+        padding-right: 32px
+    }
+}
+
+.er-plank--text blockquote u {
+    font-family: SZ Sans, Neue Helvetica, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1;
+    padding-top: 8px;
+    display: block;
+    text-decoration: none;
+    font-size: 16px;
+    font-size: .88889rem;
+    line-height: 2em;
+    letter-spacing: .3px
+}
+
+.er-plank--text .er-initial {
+    font-family: SZ Text, Georgia, Times, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    -webkit-font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    font-feature-settings: "onum" 1, "kern" 1, "liga" 1, "dlig" 1, "hlig" 1, "clig" 1, "salt" 1;
+    display: block;
+    float: left;
+    height: 54px;
+    height: 3rem;
+    margin-right: 9px;
+    margin-right: .5rem;
+    text-transform: uppercase;
+    font-size: 70.2px;
+    font-size: 3.9rem;
+    line-height: 1
+}
+
+@media (max-width:500px) {
+    .er-plank--text .er-initial {
+        height: 2.58rem;
+        font-size: 3.9rem
+    }
+}
+
+.er-crate--footer {
+    background-color: #f9f9f9
+}
+
+.er-crate--footer .szig-credits__header {
+    display: none
+}
+
+.er-crate--footer .szig-credits__body td {
+    padding-bottom: .7em
+}
+
+.szig-authorbox h2 {
+
+footer.er-crate.er-crate--footer {
+    padding: 48px 24px
+}
+
+footer.er-crate.er-crate--footer .er-plank {
+    max-width: 744px
+}

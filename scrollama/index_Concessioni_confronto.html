@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>iXmaps Story Map</title>
+    <meta name="description" content="Scrollama Demo: Sticky CSS">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./main.css">
+    <link rel="stylesheet" type="text/css" href="./custom.css">
+    <style>
+		td {
+			vertical-align: top;
+		}
+
+		td:first-child {
+			white-space: nowrap;
+			font-style: italic;
+			padding-right: 1em;
+		}
+
+		#intro {
+			margin-bottom: 20px;
+		}
+
+		#outro {
+			height: 640px;
+		}
+
+		/* ---------------------------------   */
+		/* scrollama			   		       */
+		/* ---------------------------------   */
+
+		#scroll {
+			position: relative;
+			xxborder-top: 1px dashed #000;
+			xxborder-bottom: 1px dashed #000;
+		}
+
+		.scroll__graphic {
+			pointer-events: all;
+			position: -webkit-sticky;
+			position: sticky;
+			xxfloat: right;
+			top: 0;
+			right: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			-moz-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+		}
+
+		.scroll__graphic_active {
+			pointer-events: all;
+		}
+
+		.scroll__text {
+			pointer-events:none;
+			position: relative;
+			padding: 0 1rem;
+			max-width: 30rem;
+			width: 33%;
+			left:58%;
+		}
+
+		.step {
+			font-size: 1em;
+			margin: 2rem auto;
+		}
+
+		.step.is-active {
+			background-color: none;
+		}
+
+		.step p {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			font-weight: 300;
+			font-style: normal;
+			font-stretch: normal;
+			padding: 0.2rem 1rem;
+			font-size: 1.2rem;
+			line-height: 1.5rem;
+		}
+
+		.step-wrapper {
+			background-color: rgba(255, 255, 255, 0.9);
+			border: solid #aaa 0.5px;
+			padding: 0.5rem 0rem;
+		}
+
+		.step-wrapper p span {
+			text-transform: uppercase;
+			font-weight: 700;
+		}
+
+		/* ---------------------------------   */
+		/* custom checkbox (w3schools.com)     */
+		/* ---------------------------------   */
+
+		/* Customize the label (the container) */
+		.check-container {
+			display: block;
+			position: relative;
+			padding-left: 35px;
+			margin-bottom: 12px;
+			cursor: pointer;
+			font-size: 22px;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		/* Hide the browser's default checkbox */
+		.check-container input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		/* Create a custom checkbox */
+		.check-mark {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 25px;
+			width: 25px;
+			background-color: #f4f4f4;
+			border: solid #888 1px;
+		}
+
+		/* On mouse-over, add a grey background color */
+		.check-container:hover input~.check-mark {
+			background-color: #ccc;
+		}
+
+		/* When the checkbox is checked, add a blue background */
+		.check-container input:checked~.check-mark {
+			background-color: #2196F3;
+		}
+
+		/* Create the check-mark/indicator (hidden when not checked) */
+		.check-mark:after {
+			content: "";
+			position: absolute;
+			display: none;
+		}
+
+		/* Show the check-mark when checked */
+		.check-container input:checked~.check-mark:after {
+			display: block;
+		}
+
+		/* Style the check-mark/indicator */
+		.check-container .check-mark:after {
+			left: 9px;
+			top: 5px;
+			width: 5px;
+			height: 10px;
+			border: solid white;
+			border-width: 0 3px 3px 0;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+
+		.hoverbox {
+			position: relative;
+			width: 100%;
+			height: 640px;
+		}
+
+		.hoverbox div {
+			width: 100%;
+			height: 640px;
+		}
+
+		.main {
+			pointer-events: all;
+			-webkit-transition: .9s;
+			-moz-transition: .9s;
+			-o-transition: .9s;
+			-transition: .9s;
+		}
+		.overlay {
+			pointer-events: all;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			-webkit-transition: .9s;
+			-moz-transition: .9s;
+			-o-transition: .9s;
+			-transition: .9s;
+		}
+
+		.hoverbox.on .overlay {
+			opacity: 1;
+		}
+
+	</style>
+  </head>
+  <body>
+    <!-- title of the story -->
+    <section>
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <h1 style="font-size:4em;font-weight:100;margin-bottom:0.2em">Concessioni
+            demaniali</h1>
+          <h2 style="font-size:1.2em;font-weight:400;margin-bottom:0em">Visualizzazioni
+            del dataset sulle 'Concessioni Demaniali Marittime' rilasciato
+            dal'Ministero delle Infrastrutture e dei Trasporti sul portale
+            'opendata' del Governo Italiano</h2>
+        </div>
+      </div>
+    </section>
+    <section id="intro">
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <p style="margin-top:-2em">Sul portale <a href="https://dati.mit.gov.it/catalog/dataset/concessioni-demaniali-marittime-a-maggio-2021"
+
+              target="_blank">Open Data</a> del Govervo Italiano il Ministero
+            delle Infrastrutture e dei Trasporti ha pubblicato dati sulle
+            'Concessuioni Demaniali Marittime' attualizzati al Maggio 2021.</p>
+          <p style="margin-top:-2em"> accessibile su <a href="https://github.com/ondata/elezioni_2020"
+
+              target="_blank">GitHub</a>. dall'associazione <b>onData</b><br>
+            Andando giù per la pagina si susseguano varie mappa tematiche con
+            descrizioni.<br>
+            Per spostare e zoomare la mappa si prega di attivare: esplorare la
+            mappa </p>
+          <div style="text-align:center">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink"
+
+              x="0px" y="0px" width="48px" height="26px" viewBox="0 0 48 26" enable-background="new 0 0 48 26"
+
+              xml:space="preserve">
+              <g>
+                <path fill="#dddddd" d="M24.146,26c-0.53,0-1.039-0.284-1.414-0.659L0.586,3.158c-0.781-0.781-0.781-2.066,0-2.846
+							c0.78-0.781,2.048-0.791,2.828-0.009L24.137,21.02L44.576,0.305c0.776-0.787,2.042-0.796,2.829-0.021							c0.786,0.776,0.794,2.042,0.019,2.828L25.57,25.332C25.196,25.711,24.686,26,24.153,26C24.151,26,24.149,26,24.146,26z"></path>
+              </g> </svg><br>
+            <span style="font-size:0.7em;color:#aaa;">please scroll down</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 
+		this is the map section of the story		the map will scroll to top, and then stick until all themes have passed while the user continues scrolling		behavior realized with 'scrollama'	-->
+    <section id="scroll">
+      <!-- the 'sticky' div containing the map -->
+      <div class="scroll__graphic sticky" style="pointer-events:all;margin:auto;max-width:800px">
+        <div class="hoverbox">
+          <div id="map_div1" class="main" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div2" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div3" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div4" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div5" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+        </div>
+      </div>
+      <!-- the various text fields that evoke different map themes -->
+      <div class="scroll__text" style="visibility:hidden">
+        <div class="step is-active" data-step="1">
+          <div class="step-wrapper">
+            <p><b>Tutte le concessioni demaniali</b></p>
+            <p>Classica mappa a colori che indicano il vincitore comune per
+              comune </p>
+          </div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-wrapper">
+            <p><b>solo uso TURISTICO RICREATIVO </b>valutato con il <b>risultato</b>
+              che incide sulla intensità del colore.</p>
+            <p>Aggiunto il risultato anche in forma testuale</p>
+          </div>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-wrapper">
+            <p>Tutte le concessioni demaniali</p>
+          </div>
+        </div>
+        <div class="step" data-step="4">
+          <div class="step-wrapper">
+            <p>uso TURISTICO RICREATIVO</p>
+          </div>
+        </div>
+         <div class="step" data-step="5">
+          <div class="step-wrapper" style="pointer-events:all">
+            <p>Concessioni demaniali per uso:</p>
+			<p style="font-size:0.7em">  
+			<select class="form-control" id="theme-refresh-select" onchange="eval(document.getElementById('theme-refresh-select').value)" style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter","remove");'>TUTTO</option>
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"PRODUTTIVO ED INDUSTRIALE\"","set");'>PRODUTTIVO ED INDUSTRIALE</option>
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"CANTIERISTICA NAVALE\"","set");'>CANTIERISTICA NAVALE</option>
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"PESCA ED ACQUACOLTURA\"","set");'>PESCA ED ACQUACOLTURA</option>
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"DIPORTO NAUTICO\"","set");'>DIPORTO NAUTICO</option>
+				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"TUTELA AMBIENTALE\"","set");'>TUTELA AMBIENTALE</option>
+			</select>
+			</p>
+          </div>
+        </div>
+     </div>
+    </section>
+    <br>
+    <section>
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <p>Per poter valutare meglio il numero delle concessioni contenuti nel
+            dataset senza un canone specificato, ho scelto una rappresentazione
+            più aggregata e grafici a barra orizzontali.</p>
+        </div>
+      </div>
+    </section>
+    <section id="scroll-22">
+      <!-- the 'sticky' div containing the map -->
+      <div class="scroll__graphic sticky" style="margin:auto;max-width:800px">
+        <div class="hoverbox">
+          <div id="map_div6" class="main" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div7" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+        </div>
+        <div style="margin-top:10em;margin-left:45%;pointer-events:all;z-index:9999">
+          <label for="exploreMap" class="check-container" style="font-size:20px;color:#888;display:inline;vertical-align:85%;">explora
+            la mappa <input id="exploreMap" style="font-size:20px;color:white;background:transparent;border:none;vertical-align:70%;margin-top:1em"
+
+              onclick="__toggleMapEvents();" type="checkbox"> <span class="check-mark"></span>
+          </label> </div>
+      </div>
+      <!-- the various text fields that evoke different map themes -->
+      <div class="scroll__text" style="visibility:hidden">
+        <div class="step" data-step="6">
+          <div class="step-wrapper">
+            <p>Categoria Stabilmenti Balneari</p>
+          </div>
+        </div>
+        <div class="step" data-step="7">
+          <div class="step-wrapper" style="pointer-events:all">
+            <p>Concessioni demaniali per uso:</p>
+			<p style="font-size:0.7em">  
+			<select class="form-control" id="theme-refresh-select-2" onchange="eval(document.getElementById('theme-refresh-select-2').value)" style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter","remove");'>TUTTO</option>
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"PRODUTTIVO ED INDUSTRIALE\"","set");'>PRODUTTIVO ED INDUSTRIALE</option>
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"CANTIERISTICA NAVALE\"","set");'>CANTIERISTICA NAVALE</option>
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"PESCA ED ACQUACOLTURA\"","set");'>PESCA ED ACQUACOLTURA</option>
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"DIPORTO NAUTICO\"","set");'>DIPORTO NAUTICO</option>
+				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"TUTELA AMBIENTALE\"","set");'>TUTELA AMBIENTALE</option>
+			</select>
+			</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+	      <h1>Concessioni</h1>	
+          <h1 style="font-size:4em;font-weight:100;margin-bottom:0.2em">'On Tour'</h1>
+          <h2 style="font-size:1.2em;font-weight:400;margin-bottom:0em">Visitiamo alcuni posti 'illustri' e la loro rappresentazione nel database del Ministero</h2>
+        </div>
+      </div>
+    </section>
+    <section id="scroll-3">
+      <!-- the 'sticky' div containing the map -->
+      <div class="scroll__graphic sticky">
+        <div class="hoverbox">
+          <div id="map_div8" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+        </div>
+      </div>
+      <!-- the various text fields that evoke different map themes -->
+      <div class="scroll__text" style="visibility:hidden">
+        <div class="step" data-step="8">
+          <div class="step-wrapper">
+            <p>Porto di Napoli</p>
+          </div>
+        </div>
+        <div class="step" data-step="9">
+          <div class="step-wrapper">
+            <p>Porto di Cagliari</p>
+          </div>
+        </div>
+        <div class="step" data-step="10">
+          <div class="step-wrapper">
+            <p>uso Industriale in Sardegna</p>
+          </div>
+        </div>
+        <div class="step" data-step="11">
+          <div class="step-wrapper">
+            <p>Chioggia</p>
+          </div>
+        </div>
+        <div class="step" data-step="12">
+          <div class="step-wrapper">
+            <p>Portofino</p>
+          </div>
+        </div>
+        <div class="step" data-step="13">
+          <div class="step-wrapper">
+            <p>Porto Cervo</p>
+          </div>
+        </div>
+        <div class="step" data-step="14">
+          <div class="step-wrapper">
+            <p>Santa Caterina (Salento)</p>
+          </div>
+        </div>
+        <div class="step" data-step="15">
+          <div class="step-wrapper">
+            <p>viciono a Santa Maria di Leuca</p>
+          </div>
+        </div>
+        <div class="step" data-step="16">
+          <div class="step-wrapper">
+            <p>Manfredfonia</p>
+          </div>
+        </div>
+        <div class="step" data-step="17">
+          <div class="step-wrapper">
+            <p>a nord di Fiumicino</p>
+          </div>
+        </div>
+        <div class="step" data-step="18">
+          <div class="step-wrapper">
+            <p>a nord di Fiumicino</p>
+          </div>
+        </div>
+        <div class="step" data-step="19">
+          <div class="step-wrapper">
+            <p>F I N E</p>
+          </div>
+        </div>
+     </div>
+    </section>
+    <br>
+    <br>
+    <!-- 2nd part of the story -->
+    <section id="outro">
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <h1>Credits:</h1>
+          <p> Data: onData <br>
+            Visualizzations: iXMaps <br>
+            Storytelling powered by: <img src="./js/logo.png" height="150px">Scrollama
+            </p> </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/intersection-observer"></script>
+    <script src="./js/scrollama.min.js"></script>
+ 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+    <script>
+		// how much map we want to get on the screen
+		var mapHeight = Math.floor(window.innerHeight * 0.93);
+
+		// initialize the scrollama
+		var scroller = scrollama();
+
+		// generic window resize listener event
+		function handleResize() {
+
+			// 1. update height of step elements
+			var stepHeight = Math.floor(window.innerHeight * 0.95);
+			$('.step').css('height', stepHeight + 'px');
+
+			// 2. update width/height of graphic element
+			var bodyWidth = $('body')[0].offsetWidth;
+			var textWidth = $('.scroll__text')[0].offsetWidth;
+
+			var graphicWidth = bodyWidth; // - textWidth;
+			var graphicHeight = mapHeight - 60; // -60 to hide the map bottoms below the map
+
+			$('.scroll__graphic')
+				.css('width', graphicWidth + 'px')
+				.css('height', graphicHeight + 'px');
+
+			$('#map')
+				.css('width', graphicWidth + 'px')
+				.css('height', graphicHeight + 'px');
+
+			$(".scroll__text")
+				.css('margin-top', '-' + (graphicHeight * 0.2) + 'px');
+
+			// 3. tell scrollama to update new element dimensions
+			scroller.resize();
+		}
+
+		// scrollama event handlers
+		__activeDiv = null;
+
+		function handleStepEnter(response) {
+
+			// response = { element, direction, index }
+			
+			if (__activeDiv){
+				__activeDiv.css("opacity",0);
+			}
+
+			switch (response.index) {
+				case 0:
+					__activeDiv = $("#map_div1");
+					break;
+				case 1:
+					__activeDiv = $("#map_div2");
+					break;
+				case 2:
+					__activeDiv = $("#map_div3");
+					break;
+				case 3:
+					__activeDiv = $("#map_div4");
+					break;
+				case 4:
+					__activeDiv = $("#map_div5");
+					break;
+				case 5:
+					__activeDiv = $("#map_div6");
+					break;
+				case 6:
+					__activeDiv = $("#map_div7");
+					break;
+				case 7:
+					__activeDiv = $("#map_div8");
+					ixmaps.map("map8").setView([40.84174421851159,14.268826246261598],16);
+					ixmaps.map("map8").setMapType("CartoDB - Positron");
+					break;
+				case 8:
+					ixmaps.map("map8").flyTo([39.21160849933709,9.107104146444659],16);
+					ixmaps.map("map8").setMapType("CartoDB - Positron");
+					break;
+				case 9:
+					ixmaps.map("map8").flyTo([39.080039237352594,9.035568251761644],15);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+				case 10:
+					ixmaps.map("map8").flyTo([45.21560490214043,12.290593732212017],15);
+					ixmaps.map("map8").setMapType("CartoDB - Positron");
+					break;
+				case 11:
+					ixmaps.map("map8").flyTo([44.30274833769625,9.213348472009574],17);
+					ixmaps.map("map8").setMapType("CartoDB - Positron");
+					break;
+				case 12:
+					ixmaps.map("map8").flyTo([41.13550625030388,9.53052309640104],17);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+				case 13:
+					ixmaps.map("map8").flyTo([40.13952226628931,17.986488335974105],20);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+				case 14:
+					ixmaps.map("map8").flyTo([39.79609847067559,18.335448904465814],18);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+				case 15:
+					ixmaps.map("map8").flyTo([41.624318859601445,15.921018243142024],16);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+				case 16:
+					ixmaps.map("map8").flyTo([41.866167416994635,12.186112884410877],17);
+					ixmaps.map("map8").setMapType("CartoDB - Positron");
+					break;
+				case 17:
+					ixmaps.map("map8").flyTo([41.866167416994635,12.186112884410877],17);
+					ixmaps.map("map8").setMapType("NOKIA - satellite");
+					break;
+					
+			}
+			__activeDiv.css("opacity",1);
+		}
+
+		function handleContainerEnter(response) {
+			// response = { direction }
+		}
+
+		function handleContainerExit(response) {
+			// response = { direction }
+		}
+
+		function init_scrollama() {
+
+			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+			handleResize();
+
+			// 2. setup the scroller passing options
+			// this will also initialize trigger observations
+			// 3. bind scrollama event handlers (this can be chained like below)
+			scroller.setup({
+					container: '#scroll',
+					graphic: '.scroll__graphic',
+					text: '.scroll__text',
+					step: '.scroll__text .step',
+					debug: false,
+					offset: 0.9
+				})
+				.onStepEnter(handleStepEnter)
+				.onContainerEnter(handleContainerEnter)
+				.onContainerExit(handleContainerExit);
+
+			// setup resize event
+			window.addEventListener('resize', handleResize);
+
+			$('.scroll__text').css('visibility', 'visible');
+
+		}
+
+		// load new theme with timout delay (100ms)
+		// avoid theme superposition with quick scroll
+
+		var __setMapThemeTimeout = null;
+
+		function __setMapTheme(szProjectUrl) {
+			if (1 || ixmaps.isMap) {
+				if (__setMapThemeTimeout) {
+					clearTimeout(__setMapThemeTimeout);
+				}
+				__setMapThemeTimeout = setTimeout("ixmaps.loadProject('map1','" + szProjectUrl + "', 'themeonly')", 100);
+			}
+		}
+
+		// activate/disactivate events on map 
+		// disactivated --> scolling to the story
+		// activated    --> all mouse/touch events to the map
+
+		function __toggleMapEvents() {return;	
+			var eventsOnMap = ($('.scroll__graphic').css('pointer-events') == 'all');
+			if (eventsOnMap) {
+				$('.scroll__graphic').css('pointer-events', 'all');
+				$('.scroll__text').css('visibility', 'visible');
+			} else {
+				$('.scroll__graphic').css('pointer-events', 'all');
+				$('.scroll__text').css('visibility', 'visible');
+			}
+			if(__activeDiv){
+				//__activeDiv.css("pointer-events",$('.scroll__graphic').css('pointer-events'));
+			}
+		}
+
+		// if document ready, start it all
+
+		$(document).ready(function() {
+
+			// init map theme scrolling 
+			init_scrollama();
+			
+			var mapParam = {
+					"mapService": "ll",
+					"mapType": "CartoDB - Positron",
+					"name": "map1",
+					"legend": "true",
+					"align": "right",
+					"silent": false,
+					"height": mapHeight + "px",
+					"scrollsafesilent": "true",
+					"autoSwitchInfo": true
+				}
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map1";
+			ixmaps.embedMap("map_div1", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Stabilmenti_Balneari_Classi_Canoni_Pallini.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map2";
+			ixmaps.embedMap("map_div2", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Stabilmenti_Balneari_Classi_Canoni_Pallini_Star_II.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map3";
+			ixmaps.embedMap("map_div3", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Stabilmenti_Balneari_Classi_Canoni_Pallini_Star_II_void.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map4";
+			ixmaps.embedMap("map_div4", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Stabilmenti_Balneari_Classi_Canoni_Pallini_Star_II_mycolor.json")
+				}
+			);
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map5";
+			ixmaps.embedMap("map_div5", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Classi_Canoni_Pallini_Star_II_mycolor.json")
+				}
+			);
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map6";
+			ixmaps.embedMap("map_div6", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Stabilmenti_Balneari_Classi_Canoni_bars_horz_aggregated_mycolors_void.json")
+				}
+			);
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map7";
+			ixmaps.embedMap("map_div7", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/confronto/ixmaps_project_Concessioni_Classi_Canoni_bars_horz_aggregated_mycolors_void.json")
+				}
+			);
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map8";
+			mapParam.align = "center",
+			//mapParam.height = Math.floor(window.innerHeight) + "px";
+			ixmaps.embedMap("map_div8", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "...")
+						.options({syncMap:false})						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/Concessioni%20Demaniali/projects/canoni/ixmaps_project_Concessioni_uso_all_symbols_glow_colors_uso_text_canone.json")
+				}
+			);
+
+
+
+
+
+		});
+
+	</script>
+  </body>
+</html>

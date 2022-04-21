@@ -1,0 +1,183 @@
+	td {
+		vertical-align: top;
+	}
+
+	td:first-child {
+		white-space: nowrap;
+		font-style: italic;
+		padding-right: 1em;
+	}
+
+	#intro {
+		margin-bottom: 20px;
+	}
+
+	#outro {
+		height: 640px;
+	}
+
+	/* ---------------------------------   */
+	/* scrollama			   		       */
+	/* ---------------------------------   */
+
+	#scroll {
+		position: relative;
+		xxborder-top: 1px dashed #000;
+		xxborder-bottom: 1px dashed #000;
+	}
+
+	.scroll__graphic {
+		pointer-events: none;
+		position: -webkit-sticky;
+		position: sticky;
+		xxfloat: right;
+		top: 0;
+		right: 0;
+		-webkit-transform: translate3d(0, 0, 0);
+		-moz-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+
+	.scroll__graphic_active {
+		pointer-events: all;
+	}
+
+	.scroll__text {
+		position: relative;
+		padding: 0 1rem;
+		max-width: 30rem;
+		width: 33%;
+		left: 60%;
+	}
+
+	.step {
+		font-size: 1em;
+		margin: 2rem auto;
+	}
+
+	.step.is-active {
+		background-color: none;
+	}
+
+	.step p {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		font-weight: 300;
+		font-style: normal;
+		font-stretch: normal;
+		padding: 0.2rem 1rem;
+		font-size: 1.2rem;
+		line-height: 1.5rem;
+	}
+
+	.step-wrapper {
+		background-color: rgba(255, 255, 255, 0.9);
+		border: solid #aaa 0.5px;
+		padding: 0.5rem 0rem;
+	}
+
+	.step-wrapper p span {
+		text-transform: uppercase;
+		font-weight: 700;
+	}
+
+	/* ---------------------------------   */
+	/* custom checkbox (w3schools.com)     */
+	/* ---------------------------------   */
+
+	/* Customize the label (the container) */
+	.check-container {
+		display: block;
+		position: relative;
+		padding-left: 35px;
+		margin-bottom: 12px;
+		cursor: pointer;
+		font-size: 22px;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	/* Hide the browser's default checkbox */
+	.check-container input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+	}
+
+	/* Create a custom checkbox */
+	.check-mark {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 25px;
+		width: 25px;
+		background-color: #f4f4f4;
+		border: solid #888 1px;
+	}
+
+	/* On mouse-over, add a grey background color */
+	.check-container:hover input ~ .check-mark {
+		background-color: #ccc;
+	}
+
+	/* When the checkbox is checked, add a blue background */
+	.check-container input:checked ~ .check-mark {
+		background-color: #2196F3;
+	}
+
+	/* Create the check-mark/indicator (hidden when not checked) */
+	.check-mark:after {
+		content: "";
+		position: absolute;
+		display: none;
+	}
+
+	/* Show the check-mark when checked */
+	.check-container input:checked ~ .check-mark:after {
+		display: block;
+	}
+
+	/* Style the check-mark/indicator */
+	.check-container .check-mark:after {
+		left: 9px;
+		top: 5px;
+		width: 5px;
+		height: 10px;
+		border: solid white;
+		border-width: 0 3px 3px 0;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		transform: rotate(45deg);
+	}
+
+	.hoverbox {
+		position: relative;
+		width: 100%;
+		height: 720px;
+	}
+
+	.hoverbox div {
+		width: 100%;
+		height: 720px;
+	}
+
+	.main {
+		pointer-events: none;
+	}
+
+	.overlay {
+		pointer-events: none;
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		-webkit-transition: .9s;
+		-moz-transition: .9s;
+		-o-transition: .9s;
+		-transition: .9s;
+	}
+
+	.hoverbox.on .overlay {
+		opacity: 1;
+	}
