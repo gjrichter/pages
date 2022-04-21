@@ -220,14 +220,23 @@
 
               target="_blank">Open Data</a> del Govervo Italiano il Ministero
             delle Infrastrutture e dei Trasporti ha pubblicato dati sulle
-            'Concessuioni Demaniali Marittime' attualizzati al Maggio 2021.</p>
-          <p style="margin-top:-2em"> accessibile su <a href="https://github.com/ondata/elezioni_2020"
+            'Concessuioni Demaniali Marittime' riferiti a Maggio 2021.</p>
+          <p style="margin-top:-2em"> Stuzzicato da un <a href="https://twitter.com/EasyInve/status/1498609801080852483"
 
-              target="_blank">GitHub</a>. dall'associazione <b>onData</b><br>
-            Andando giù per la pagina si susseguano varie mappa tematiche con
-            descrizioni.<br>
-            Per spostare e zoomare la mappa si prega di attivare: esplorare la
-            mappa </p>
+              target="_blank">post</a> di Isaia Invernizzi con vari 'avvisi' ai
+            chi <i>volessero maneggiare <span style="color: rgb(15, 20, 25); font-family: TwitterChirp, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif; font-size: 20px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 800; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span>i
+              dati</i>, ho cercato i dati sul sito del Ministero.</p>
+          <p style="margin-top:-2em"><br>
+          </p>
+          <p style="margin-top:-2em">Aiuto! Un dataset che mi interesso molto
+            per la sua complessità, ma perchè si difende dai miei tentativi di
+            mapparlo! Per fortuna c'è <a href="https://twitter.com/aborruso" target="_blank">Andrea
+              Burruso </a>e dopo una breve telefonata arriva un link con i dati
+            '<b>aperti</b>' da lui!</p>
+          <p style="margin-top:-2em"><br>
+            Finalmente posso godermi quei dati e qui alcuni risultati:</p>
+          <p style="margin-top:-2em">Andando giù per la pagina si susseguano
+            varie mappa tematiche con descrizioni.</p>
           <div style="text-align:center">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink"
 
@@ -275,44 +284,51 @@
       <div class="scroll__text" style="visibility:hidden">
         <div class="step is-active" data-step="1">
           <div class="step-wrapper">
-            <p><b>Tutte le concessioni demaniali</b></p>
-            <p>Classica mappa a colori che indicano il vincitore comune per
-              comune </p>
+            <p><b>Le concessioni demaniali per <br>Stabilmenti Balneari</b></p>
+            <p>un 'remake' della mappa pubblicata da <a href="https://twitter.com/EasyInve/status/1498609801080852483"
+
+              target="_blank">Isaia Invernizzi</a> usando i stessi colori e classi canone</p>
           </div>
         </div>
         <div class="step" data-step="2">
           <div class="step-wrapper">
-            <p><b>solo uso TURISTICO RICREATIVO </b>valutato con il <b>risultato</b>
-              che incide sulla intensità del colore.</p>
-            <p>Aggiunto il risultato anche in forma testuale</p>
-          </div>
+            <p><b>aggregando</b> le concessioni con la stesa classe canone</p>
+           </div>
         </div>
         <div class="step" data-step="3">
           <div class="step-wrapper">
-            <p>Tutte le concessioni demaniali</p>
+            <p>tolgo il colore per i canoni non definiti</p>
           </div>
         </div>
         <div class="step" data-step="4">
           <div class="step-wrapper">
-            <p>uso TURISTICO RICREATIVO</p>
-          </div>
+            <p>cambio anche gli altri colori</p>
+            <p>il fenomeno dei canoni manmcanti è tipoco per le concessioni balneari?</p>
+         </div>
         </div>
-         <div class="step" data-step="5">
+        <div class="step" data-step="5">
           <div class="step-wrapper" style="pointer-events:all">
             <p>Concessioni demaniali per uso:</p>
-			<p style="font-size:0.7em">  
-			<select class="form-control" id="theme-refresh-select" onchange="eval(document.getElementById('theme-refresh-select').value)" style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter","remove");'>TUTTO</option>
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"PRODUTTIVO ED INDUSTRIALE\"","set");'>PRODUTTIVO ED INDUSTRIALE</option>
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"CANTIERISTICA NAVALE\"","set");'>CANTIERISTICA NAVALE</option>
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"PESCA ED ACQUACOLTURA\"","set");'>PESCA ED ACQUACOLTURA</option>
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"DIPORTO NAUTICO\"","set");'>DIPORTO NAUTICO</option>
-				<option value='javascript:ixmaps.map("map5").theme().changeStyle("filter:WHERE \"uso\" like \"TUTELA AMBIENTALE\"","set");'>TUTELA AMBIENTALE</option>
-			</select>
-			</p>
+            <p style="font-size:0.7em">
+              <select class="form-control" id="theme-refresh-select" onchange="eval(document.getElementById('theme-refresh-select').value)"
+
+                style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter&quot;,&quot;remove&quot;);">TUTTO</option>
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;PRODUTTIVO ED INDUSTRIALE\&quot;&quot;,&quot;set&quot;);">PRODUTTIVO
+                  ED INDUSTRIALE</option>
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;CANTIERISTICA NAVALE\&quot;&quot;,&quot;set&quot;);">CANTIERISTICA
+                  NAVALE</option>
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;PESCA ED ACQUACOLTURA\&quot;&quot;,&quot;set&quot;);">PESCA
+                  ED ACQUACOLTURA</option>
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;DIPORTO NAUTICO\&quot;&quot;,&quot;set&quot;);">DIPORTO
+                  NAUTICO</option>
+                <option value="javascript:ixmaps.map(&quot;map5&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;TUTELA AMBIENTALE\&quot;&quot;,&quot;set&quot;);">TUTELA
+                  AMBIENTALE</option>
+              </select>
+            </p>
           </div>
         </div>
-     </div>
+      </div>
     </section>
     <br>
     <section>
@@ -354,16 +370,23 @@
         <div class="step" data-step="7">
           <div class="step-wrapper" style="pointer-events:all">
             <p>Concessioni demaniali per uso:</p>
-			<p style="font-size:0.7em">  
-			<select class="form-control" id="theme-refresh-select-2" onchange="eval(document.getElementById('theme-refresh-select-2').value)" style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter","remove");'>TUTTO</option>
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"PRODUTTIVO ED INDUSTRIALE\"","set");'>PRODUTTIVO ED INDUSTRIALE</option>
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"CANTIERISTICA NAVALE\"","set");'>CANTIERISTICA NAVALE</option>
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"PESCA ED ACQUACOLTURA\"","set");'>PESCA ED ACQUACOLTURA</option>
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"DIPORTO NAUTICO\"","set");'>DIPORTO NAUTICO</option>
-				<option value='javascript:ixmaps.map("map7").theme().changeStyle("filter:WHERE \"uso\" like \"TUTELA AMBIENTALE\"","set");'>TUTELA AMBIENTALE</option>
-			</select>
-			</p>
+            <p style="font-size:0.7em">
+              <select class="form-control" id="theme-refresh-select-2" onchange="eval(document.getElementById('theme-refresh-select-2').value)"
+
+                style="padding:0.4em;background:#f8f6f6;font-size:1.2em;border-radius:5px;color:#666">
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter&quot;,&quot;remove&quot;);">TUTTO</option>
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;PRODUTTIVO ED INDUSTRIALE\&quot;&quot;,&quot;set&quot;);">PRODUTTIVO
+                  ED INDUSTRIALE</option>
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;CANTIERISTICA NAVALE\&quot;&quot;,&quot;set&quot;);">CANTIERISTICA
+                  NAVALE</option>
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;PESCA ED ACQUACOLTURA\&quot;&quot;,&quot;set&quot;);">PESCA
+                  ED ACQUACOLTURA</option>
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;DIPORTO NAUTICO\&quot;&quot;,&quot;set&quot;);">DIPORTO
+                  NAUTICO</option>
+                <option value="javascript:ixmaps.map(&quot;map7&quot;).theme().changeStyle(&quot;filter:WHERE \&quot;uso\&quot; like \&quot;TUTELA AMBIENTALE\&quot;&quot;,&quot;set&quot;);">TUTELA
+                  AMBIENTALE</option>
+              </select>
+            </p>
           </div>
         </div>
       </div>
@@ -371,9 +394,12 @@
     <section>
       <div class="er-crate">
         <div class="er-plank er-plank--text">
-	      <h1>Concessioni</h1>	
-          <h1 style="font-size:4em;font-weight:100;margin-bottom:0.2em">'On Tour'</h1>
-          <h2 style="font-size:1.2em;font-weight:400;margin-bottom:0em">Visitiamo alcuni posti 'illustri' e la loro rappresentazione nel database del Ministero</h2>
+          <h1>Concessioni</h1>
+          <h1 style="font-size:4em;font-weight:100;margin-bottom:0.2em">'On
+            Tour'</h1>
+          <h2 style="font-size:1.2em;font-weight:400;margin-bottom:0em">Visitiamo
+            alcuni posti 'illustri' e la loro rappresentanza nel database del
+            Ministero</h2>
         </div>
       </div>
     </section>
@@ -444,7 +470,7 @@
             <p>F I N E</p>
           </div>
         </div>
-     </div>
+      </div>
     </section>
     <br>
     <br>
@@ -462,7 +488,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://unpkg.com/intersection-observer"></script>
     <script src="./js/scrollama.min.js"></script>
- 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
     <script>
 		// how much map we want to get on the screen
 		var mapHeight = Math.floor(window.innerHeight * 0.93);
