@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>iXmaps Story Map</title>
+    <meta name="description" content="Scrollama Demo: Sticky CSS">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./main.css">
+    <link rel="stylesheet" type="text/css" href="./custom.css">
+    <style>
+		td {
+			vertical-align: top;
+		}
+
+		td:first-child {
+			white-space: nowrap;
+			font-style: italic;
+			padding-right: 1em;
+		}
+
+		#intro {
+			margin-bottom: 20px;
+		}
+
+		#outro {
+			height: 640px;
+		}
+
+		/* ---------------------------------   */
+		/* scrollama			   		       */
+		/* ---------------------------------   */
+
+		#scroll {
+			position: relative;
+			xxborder-top: 1px dashed #000;
+			xxborder-bottom: 1px dashed #000;
+		}
+
+		.scroll__graphic {
+			pointer-events: all;
+			position: -webkit-sticky;
+			position: sticky;
+			xxfloat: right;
+			top: 0;
+			right: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			-moz-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+		}
+
+		.scroll__graphic_active {
+			pointer-events: all;
+		}
+
+		.scroll__text {
+			pointer-events:none;
+			position: relative;
+			padding: 0 1rem;
+			max-width: 30rem;
+			width: 50%;
+			left:33%;
+		}
+
+		.step {
+			font-size: 1em;
+			margin: 2rem auto;
+		}
+
+		.step.is-active {
+			background-color: none;
+		}
+
+		.step p {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			font-weight: 400;
+			font-style: normal;
+			font-stretch: normal;
+			padding: 0.2rem 1rem;
+			font-size: 1.2rem;
+			line-height: 1.5rem;
+		}
+
+		.step-wrapper {
+			background-color: rgba(255, 255, 255, 0.7);
+			border: solid #aaa 0px;
+			border-radius: 0.1em;
+			padding: 0.8rem 0.5rem 1rem 0.5rem;
+		}
+
+		.step-wrapper p span {
+			text-transform: uppercase;
+			font-weight: 700;
+		}
+
+		/* ---------------------------------   */
+		/* custom checkbox (w3schools.com)     */
+		/* ---------------------------------   */
+
+		/* Customize the label (the container) */
+		.check-container {
+			display: block;
+			position: relative;
+			padding-left: 35px;
+			margin-bottom: 12px;
+			cursor: pointer;
+			font-size: 22px;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		/* Hide the browser's default checkbox */
+		.check-container input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		/* Create a custom checkbox */
+		.check-mark {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 25px;
+			width: 25px;
+			background-color: #f4f4f4;
+			border: solid #888 1px;
+		}
+
+		/* On mouse-over, add a grey background color */
+		.check-container:hover input~.check-mark {
+			background-color: #ccc;
+		}
+
+		/* When the checkbox is checked, add a blue background */
+		.check-container input:checked~.check-mark {
+			background-color: #2196F3;
+		}
+
+		/* Create the check-mark/indicator (hidden when not checked) */
+		.check-mark:after {
+			content: "";
+			position: absolute;
+			display: none;
+		}
+
+		/* Show the check-mark when checked */
+		.check-container input:checked~.check-mark:after {
+			display: block;
+		}
+
+		/* Style the check-mark/indicator */
+		.check-container .check-mark:after {
+			left: 9px;
+			top: 5px;
+			width: 5px;
+			height: 10px;
+			border: solid white;
+			border-width: 0 3px 3px 0;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+
+		.hoverbox {
+			position: relative;
+			width: 100%;
+			height: 640px;
+		}
+
+		.hoverbox div {
+			width: 100%;
+			height: 640px;
+		}
+
+		.main {
+			pointer-events: all;
+			-webkit-transition: .9s;
+			-moz-transition: .9s;
+			-o-transition: .9s;
+			-transition: .9s;
+		}
+		.overlay {
+			pointer-events: none;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			-webkit-transition: .9s;
+			-moz-transition: .9s;
+			-o-transition: .9s;
+			-transition: .9s;
+		}
+
+		.hoverbox.on .overlay {
+			opacity: 1;
+		}
+
+		body {
+			background-color: white;
+		}
+		.er-crate {
+			background-color: white;
+		}
+		
+		button {
+			padding: 0.5em;
+			border: solid #aaaaaa 1px;
+			border-radius: 0.5em;
+		}
+		
+	</style>
+  </head>
+  <body>
+    <!-- title of the story -->
+    <section>
+      <div class="er-crate">
+        <div class="er-plank er-plank--text" style="text-align:center">
+          <h1 style="font-size:4em;font-weight:100;margin-bottom:0.2em">PREVISIONI
+            DEMOGRAFICHE</h1>
+          <h2 style="font-size:1.2em;font-weight:400;margin-bottom:0em">Visualizzazioni
+            del dataset 'PREVISIONI DEMOGRAFICHE COMUNALI - 1° GENNAIO 2020/1°
+			  GENNAIO 2030' rilasciato dall' <img src="https://www.istat.it/img/logo.png" style="display:inline;height:24px"> <a href="https://www.istat.it/it/archivio/263355"
+
+              target="_blank">qui</a></h2>
+        </div>
+      </div>
+    </section>
+    <section id="intro">
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <div style="text-align:block"> Sul sito, l'ISTAT lo definisce cosi:<br>
+            <p><em>"Le previsioni demografiche hanno l’obiettivo di tracciare il
+                probabile futuro di una popolazione in termini di dimensione
+                totale e di componenti strutturali."</em></p>
+          <p>In seguito una visualizzazione delle
+            'previsioni demografiche' dell'ISTAT riguardante il bilancio
+            demografico dei comuni con più di 30 000 abitanti per i prossimi 10
+			  anni. </p>
+		</div>
+        <div class="er-plank er-plank--text">
+          <div style="text-align:center">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink"
+
+              x="0px" y="0px" width="48px" height="26px" viewBox="0 0 48 26" enable-background="new 0 0 48 26"
+
+              xml:space="preserve">
+              <g>
+                <path fill="#dddddd" d="M24.146,26c-0.53,0-1.039-0.284-1.414-0.659L0.586,3.158c-0.781-0.781-0.781-2.066,0-2.846
+							c0.78-0.781,2.048-0.791,2.828-0.009L24.137,21.02L44.576,0.305c0.776-0.787,2.042-0.796,2.829-0.021			c0.786,0.776,0.794,2.042,0.019,2.828L25.57,25.332C25.196,25.711,24.686,26,24.153,26C24.151,26,24.149,26,24.146,26z"></path>
+              </g> </svg><br>
+            <span style="font-size:0.7em;color:#aaa;">si prega di continuare a
+              scorrere</span> </div>
+        </div>
+      </div>
+    </section>
+    <!-- 
+		this is the 1. map section of the story		the map will scroll to top, and then stick until all themes have passed while the user continues scrolling
+		behavior realized with 'scrollama'	-->
+    <section id="scroll">
+      <!-- the 'sticky' div containing the map -->
+      <div class="scroll__graphic sticky" style="margin:auto;max-width:100%">
+        <div class="hoverbox">
+          <div id="map_div1" class="main" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div2" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div3" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+          <div id="map_div4" class="overlay" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+        </div>
+      </div>
+      <!-- the various text fields that evoke different map themes -->
+      <div class="scroll__text" style="visibility:hidden">
+        <div class="step is-active" data-step="1">
+          <div class="step-wrapper">
+			<p>Cominciamo con un
+            grafico a barre con le previsioni del </p>  
+            <p><b>Tasso di mortalità</b></p>
+            <p>Persone deceduti per 1000 abitanti. Il grafico visualizza
+              i valori stimati dall'ISTAT dal 2021 al 2030 da sinistra
+              a destra. Il tasso varia da 7.2 a 17.2 per 1000 abitanti.</p>
+          </div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-wrapper">
+            <p>Il tasso di mortalità viene compensato dal <span style="color:#A0E36F">tasso di natalità</span>,
+              misurato in nasctite per 1000 abitanti.</p>
+            <p>In alcuni città la natalità compensa o anche supera la mortalità
+              e crea un bilancio demografico naturale positivo.</p>
+          </div>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-wrapper">
+			<p>Al bilancio demografico naturale si aggiunge il <span style="color:#31AEE2">Tasso migratorio netto</span>,
+			  il quale può essere positivo o negativo.</p>
+            <p>In generale incide di più sulla crescita di un luogo che il
+              bilancio naturale.</p>
+          </div>
+        </div>
+        <div class="step" data-step="4">
+          <div class="step-wrapper">
+            <p>Un bilanco migratorio fortemente negativo 'svuota' il luogo.</p>
+            <p>La parte 'bianca' o 'verder chiaro' del grafico a barre da una misure per la decrescita della popolazione del luogo</p>
+            <br>
+            <br>
+          </div>
+        </div>
+        <div class="step" data-step="5">
+          <div class="step-wrapper">
+            <p>passiamo ad una una grafica alternativa ...</p>
+            <p>Ruotando le barre in senso orario intorno a un comune centro si
+              può creare un grafico polare che assomiglia ad un fiore per rappresentare le sorti demografiche di un luogo previsto dall'Istat per i prossimi 10 anni.</p>
+            <br>
+            <p>Un bilancio negativo di migrazione non apare più, ma il 'bianco'
+              rappresenta abbastanza bene la previsione di una decrescita demografica.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+    <!-- 
+		this is the 2. map section of the story		the map will scroll to top, and then stick until all themes have passed while the user continues scrolling
+		behavior realized with 'scrollama'	-->
+    <section>
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">Anche se la visualizzazione polare non rappresenta più tutti elementi della grafica a barre lo è più efficace quando si vuole valutale un'area più estesa con l'insieme di più realtà demografiche.</div>
+        <div class="er-plank er-plank--text"><br>
+        </div>
+        <div class="er-plank er-plank--text">In seguito una sequenza di
+          inquadrature mostrando zone d'Italia con i loro diversi 'previsioni'
+          demografiche.
+          <div style="text-align:block"><br>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="scroll-3">
+      <!-- the 'sticky' div containing the map -->
+      <div class="scroll__graphic sticky">
+        <div class="hoverbox">
+          <div id="map_div8" class="main" width="100%" height="640px" style="background-color:#e8e8e8">
+            <div style="text-align:center;color:#aaa;padding:1em">loading map
+              ...</div>
+          </div>
+  		<div class="btn-group" role="group" aria-label="buttons" style="margin-top:40px;margin-left:10px">
+		  <button type="button"  onclick="ixmaps.map('map8').loadProject('https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_flowers_all_drain.json','keepview')">grafico circolare</button>
+			&lrarr;
+		  <button type="button"  onclick="ixmaps.map('map8').loadProject('https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_bars_all_drain.json','keepview')">lineare</button>
+		</div>
+       </div>
+      </div>
+      <!-- the various text fields that evoke different map themes -->
+      <div class="scroll__text" style="visibility:hidden">
+        <div class="step" data-step="8">
+          <div class="step-wrapper">
+            <p>'Fiori' di previsioni demografiche.</p>
+			  <p>Un forte <span style="color:#31AEE2">blu</span> indica una forte <span style="color:#31AEE2">immigrazione</span> verso il luogo, l'esterno <span style="color:#aaaaaa">grigio</span> chiaro la <span style="color:#aaaaaa">decrescita</span> demografica.</p>
+          </div>
+        </div>
+        <div class="step" data-step="10">
+          <div class="step-wrapper">
+            <p>Sicilia</p>
+          </div>
+        </div>
+        <div class="step" data-step="11">
+          <div class="step-wrapper">
+            <p>Napoli</p>
+          </div>
+        </div>
+        <div class="step" data-step="12">
+          <div class="step-wrapper">
+            <p>Emilia-Romagna</p>
+          </div>
+        </div>
+        <div class="step" data-step="13">
+          <div class="step-wrapper">
+            <p>Milano</p>
+          </div>
+        </div>
+        <div class="step" data-step="14">
+          <div class="step-wrapper">
+            <p>Torino</p>
+          </div>
+        </div>
+        <div class="step" data-step="19">
+          <div class="step-wrapper">
+            <p>F I N E</p>
+          </div>
+        </div>
+      </div>
+    </section>
+		
+    <br>
+    <br>
+    <!-- 2nd part of the story -->
+    <section id="outro">
+      <div class="er-crate">
+        <div class="er-plank er-plank--text">
+          <h1>Credits:</h1>
+          <p> Data: <img src="https://www.istat.it/img/logo.png" style="height:36px"> <a href="https://www.istat.it/it/statistiche-sperimentali" target="_blank">STATISTICHE SPERIMENTALI</a> <br>
+            Visualizzations: iXMaps <br>
+            Storytelling powered by: <img src="./js/logo.png" height="150px">Scrollama
+            </p> </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/intersection-observer"></script>
+    <script src="./js/scrollama.min.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+    <script>
+		// how much map we want to get on the screen
+		var mapHeight = Math.floor(window.innerHeight * 0.93);
+
+		// initialize the scrollama
+		var scroller = scrollama();
+
+		// generic window resize listener event
+		function handleResize() {
+
+			// 1. update height of step elements
+			var stepHeight = Math.floor(window.innerHeight * 0.95);
+			$('.step').css('height', stepHeight + 'px');
+
+			// 2. update width/height of graphic element
+			var bodyWidth = $('body')[0].offsetWidth;
+			var textWidth = $('.scroll__text')[0].offsetWidth;
+
+			var graphicWidth = bodyWidth; // - textWidth;
+			var graphicHeight = mapHeight - 60; // -60 to hide the map bottoms below the map
+
+			$('.scroll__graphic')
+				.css('width', graphicWidth + 'px')
+				.css('height', graphicHeight + 'px');
+
+			$('#map')
+				.css('width', graphicWidth + 'px')
+				.css('height', graphicHeight + 'px');
+
+			$(".scroll__text")
+				.css('margin-top', '-' + (graphicHeight * 0.2) + 'px');
+
+			// 3. tell scrollama to update new element dimensions
+			scroller.resize();
+		}
+
+		// scrollama event handlers
+		__activeDiv = null;
+
+		function handleStepEnter(response) {
+
+			// response = { element, direction, index }
+			
+			if (__activeDiv){
+				__activeDiv.css("opacity",0);
+				__activeDiv.css("pointer-events","none");
+			}
+
+			switch (response.index) {
+				case 0:
+					__activeDiv = $("#map_div1");
+					ixmaps.map("map1").setOptions({basemapopacity:0.5});
+					break;
+				case 1:
+					__activeDiv = $("#map_div2");
+					ixmaps.map("map2").setOptions({basemapopacity:0.5});
+					break;
+				case 2:
+					__activeDiv = $("#map_div3");
+					ixmaps.map("map3").setOptions({basemapopacity:0.5});
+					break;
+				case 3:
+					__activeDiv = $("#map_div3");
+					ixmaps.map("map4").setOptions({basemapopacity:0.5});
+					break;
+				case 4:
+					__activeDiv = $("#map_div4");
+					ixmaps.map("map4").setOptions({basemapopacity:0.5});
+					break;
+				case 5:
+					ixmaps.map("map8").setView([44.23732831822538,11.689453125000002],7);
+					break;
+				case 6:
+					ixmaps.map("map8").flyTo([37.48466628708502,14.175109863281252],9);
+					break;
+				case 7:
+					ixmaps.map("map8").flyTo([40.85900590611001,14.634475708007814],10);
+					break;
+				case 8:
+					ixmaps.map("map8").flyTo([44.6149115235194,11.302185058593752],9);
+					break;
+				case 9:
+					ixmaps.map("map8").flyTo([45.54386969851347,9.190063476562502],10);
+					break;
+				case 10:
+					ixmaps.map("map8").flyTo([45.09267127368945,7.75463104248047],11);
+					break;
+				case 11:
+					ixmaps.map("map8").flyTo([41.962203351671356,17.353289486211057],6);
+					break;
+				
+			}
+			__activeDiv.css("opacity",1);
+			__activeDiv.css("pointer-events","all");
+		}
+
+		function handleContainerEnter(response) {
+			// response = { direction }
+		}
+
+		function handleContainerExit(response) {
+			// response = { direction }
+		}
+
+		function init_scrollama() {
+
+			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+			handleResize();
+
+			// 2. setup the scroller passing options
+			// this will also initialize trigger observations
+			// 3. bind scrollama event handlers (this can be chained like below)
+			scroller.setup({
+					container: '#scroll',
+					graphic: '.scroll__graphic',
+					text: '.scroll__text',
+					step: '.scroll__text .step',
+					debug: false,
+					offset: 0.9
+				})
+				.onStepEnter(handleStepEnter)
+				.onContainerEnter(handleContainerEnter)
+				.onContainerExit(handleContainerExit);
+
+			// setup resize event
+			window.addEventListener('resize', handleResize);
+
+			$('.scroll__text').css('visibility', 'visible');
+
+		}
+
+		// load new theme with timout delay (100ms)
+		// avoid theme superposition with quick scroll
+
+		var __setMapThemeTimeout = null;
+
+		function __setMapTheme(szProjectUrl) {
+			if (1 || ixmaps.isMap) {
+				if (__setMapThemeTimeout) {
+					clearTimeout(__setMapThemeTimeout);
+				}
+				__setMapThemeTimeout = setTimeout("ixmaps.loadProject('map1','" + szProjectUrl + "', 'themeonly')", 100);
+			}
+		}
+
+		// activate/disactivate events on map 
+		// disactivated --> scolling to the story
+		// activated    --> all mouse/touch events to the map
+
+		function __toggleMapEvents() {return;	
+			var eventsOnMap = ($('.scroll__graphic').css('pointer-events') == 'all');
+			if (eventsOnMap) {
+				$('.scroll__graphic').css('pointer-events', 'all');
+				$('.scroll__text').css('visibility', 'visible');
+			} else {
+				$('.scroll__graphic').css('pointer-events', 'all');
+				$('.scroll__text').css('visibility', 'visible');
+			}
+			if(__activeDiv){
+				//__activeDiv.css("pointer-events",$('.scroll__graphic').css('pointer-events'));
+			}
+		}
+
+		// if document ready, start it all
+
+		$(document).ready(function() {
+
+			// init map theme scrolling 
+			init_scrollama();
+			
+			var mapParam = {
+					"mapService": "ll",
+					"mapType": "CartoDB - Positron",
+					"name": "map1",
+					item: "../../app/HelloWorld_API - local/html/item.html",
+					"legend": "true",
+					"align": "left",
+					"silent": false,
+					"search": "Italy",
+					"height": mapHeight + "px",
+					"scrollsafesilent": "true",
+					"autoSwitchInfo": true,
+					"basemapopacity": "0.5"
+				}
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map1";
+			ixmaps.embedMap("map_div1", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "")
+						.setLocal("loading data ...", "")
+						.options({syncMap:true})												.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_bars_mortality.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map2";
+			ixmaps.embedMap("map_div2", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "")
+						.setLocal("loading data ...", "")
+						.options({syncMap:true})												.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_bars_natural_drain.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map3";
+			ixmaps.embedMap("map_div3", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "")
+						.setLocal("loading data ...", "")
+						.options({syncMap:true})												.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_bars_migrant_drain_final_II.json")
+				}
+			);
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map4";
+			ixmaps.embedMap("map_div4", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "")
+						.setLocal("loading data ...", "")
+						.options({syncMap:true})												.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_flowers_migrant_drain_final.json")
+						.setView([38.04782070244462,13.38615417480469],11)
+				}
+			);
+
+			// embed the map, wait for map is ready and make the first theme
+			mapParam.name = "map8";
+			mapParam.align = "center",
+			//mapParam.height = Math.floor(window.innerHeight) + "px";
+			ixmaps.embedMap("map_div8", mapParam,
+				function(map) {
+					map
+						.setLocal("... creating theme ...", "")
+						.setLocal("loading data ...", "")
+						.options({syncMap:false})												.setView([44.23732831822538,11.689453125000002],7)						.loadProject("https://raw.githubusercontent.com/gjrichter/viz/master/ISTAT/ixmaps_project_flowers_all_drain.json","keepview")
+						.setView([44.23732831822538,11.689453125000002],7)
+				}
+			);
+
+		});
+
+	</script>
+  </body>
+</html>

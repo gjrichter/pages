@@ -34,7 +34,40 @@ $Log:index_only_map_embed.html,v $
 
 <body style='text-align:center'>
 
-    <!--========================================================================= -->
+	<div style="position:absolute;top:5.5em;left:2em;white-space: nowrap;text-overflow: ellipsis;">
+		<label id="img_category_label" class="field" for="img_category" data-value="Partito Democratico">
+		<span style="font-size:12px;top:15px ">Lista</span>
+		<div id="img_category" class="psuedo_select" name="img_category" >
+			<span class="selected" style="opacity:1;transform: translateY(0px); transition-duration: 0.1s;">PARTITO DEMOCRATICO</span>
+			<ul id="img_category_options" class="options" style="font-size:0.6em;line-height:1em;white-space: nowrap;text-overflow: ellipsis;">
+				<li class="option" data-value="0" onclick="setLista()">PARTITO DEMOCRATICO</li>
+				<li class="option" data-value="1" onclick="setLista()">FORZA ITALIA-BERLUSCONI</li>
+				<li class="option" data-value="2" onclick="setLista()">FRATELLI D'ITALIA</li>
+				<li class="option" data-value="3" onclick="setLista()">LAVORIAMO PER PALERMO</li>
+				<li class="option" data-value="4" onclick="setLista()">AZIONE CON CALENDA FERRANDELLI SINDACO + EUROPA</li>
+				<li class="option" data-value="5" onclick="setLista()">PROGETTO PALERMO</li>
+				<li class="option" data-value="6" onclick="setLista()">LISTA MOVIMENTO CINQUE STELLE</li>
+				<li class="option" data-value="7" onclick="setLista()">DEMOCRAZIA CRISTIANA</li>
+				<li class="option" data-value="8" onclick="setLista()">PRIMA L'ITALIA</li>
+				<li class="option" data-value="9" onclick="setLista()">SINISTRA CIVICA ECOLOGISTA</li>
+				<li class="option" data-value="10" onclick="setLista()">ALLEANZA PER PALERMO</li>
+				<li class="option" data-value="11" onclick="setLista()">LAGALLA SINDACO UNIONE DI CENTRO</li>
+				<li class="option" data-value="12" onclick="setLista()">NOI CON L'ITALIA - LAGALLA SINDACO</li>
+				<li class="option" data-value="13" onclick="setLista()">RITA BARBERA SINDACA</li>
+				<li class="option" data-value="14" onclick="setLista()">RINASCITA PALERMO DONATO SINDACO</li>
+				<li class="option" data-value="15" onclick="setLista()">E TU SPLENDI PALERMO</li>
+				<li class="option" data-value="16" onclick="setLista()">SICILIANI LIBERI-POPOLO DELLA FAMIGLIA-CON PARAGONE PALERMO NON MOLLA MAI-CIRO LOMONTE SINDACO</li>
+				<li class="option" data-value="17" onclick="setLista()">ROMPI IL SISTEMA - FERRANDELLI SINDACO</li>
+				<li class="option" data-value="18" onclick="setLista()">MODERATI PER LAGALLA SINDACO</li>
+				<li class="option" data-value="19" onclick="setLista()">POTERE AL POPOLO!</li>
+			</ul>
+		</div>
+		</label>
+	</div>	
+  
+	<!--========================================================================= -->
+
+	<script src="material-design-select-dropdown/js/index.js"></script>
 
 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
 	
@@ -75,6 +108,15 @@ $Log:index_only_map_embed.html,v $
 		ixmaps.lista_text = liste[0].name;
 		ixmaps.lista_color = liste[0].color;
 		
+		function setLista(){
+			ixmaps.lista = liste[this.event.target.getAttributeNS(null,"data-value")].id;
+			ixmaps.lista_text = liste[this.event.target.getAttributeNS(null,"data-value")].name;
+			ixmaps.lista_color = liste[this.event.target.getAttributeNS(null,"data-value")].color;
+			console.log(ixmaps.map());
+			ixmaps.map().localize("loading data ... ",ixmaps.lista_text);
+			ixmaps.map().newTheme(getTheme(),"clear");
+		}	
+
 		getTheme = function(){
 			return ixmaps.layer("seggi_elettorali")
 				.data({
@@ -104,7 +146,6 @@ $Log:index_only_map_embed.html,v $
 				})
 				.json()
 		};
-		
 		
 		document.activeElement.appendChild(
 			
@@ -158,49 +199,8 @@ $Log:index_only_map_embed.html,v $
 		);
 
 		
-	function setLista(){
-		ixmaps.lista = liste[this.event.target.getAttributeNS(null,"data-value")].id;
-		ixmaps.lista_text = liste[this.event.target.getAttributeNS(null,"data-value")].name;
-		ixmaps.lista_color = liste[this.event.target.getAttributeNS(null,"data-value")].color;
-		console.log(getTheme());
-		ixmaps.map().newTheme(getTheme(),"clear");
-		ixmaps.showLoading("... "+ixmaps.lista_text);
-	}	
-
 	</script>	
 	
-	<div style="position:absolute;top:5.5em;left:2em;white-space: nowrap;text-overflow: ellipsis;">
-		<label id="img_category_label" class="field" for="img_category" data-value="Partito Democratico">
-		<span style="font-size:12px;top:15px ">Lista</span>
-		<div id="img_category" class="psuedo_select" name="img_category" >
-			<span class="selected" style="opacity:1;transform: translateY(0px); transition-duration: 0.1s;">PARTITO DEMOCRATICO</span>
-			<ul id="img_category_options" class="options" style="font-size:0.6em;line-height:1em;white-space: nowrap;text-overflow: ellipsis;">
-				<li class="option" data-value="0" onclick="setLista()">PARTITO DEMOCRATICO</li>
-				<li class="option" data-value="1" onclick="setLista()">FORZA ITALIA-BERLUSCONI</li>
-				<li class="option" data-value="2" onclick="setLista()">FRATELLI D'ITALIA</li>
-				<li class="option" data-value="3" onclick="setLista()">LAVORIAMO PER PALERMO</li>
-				<li class="option" data-value="4" onclick="setLista()">AZIONE CON CALENDA FERRANDELLI SINDACO + EUROPA</li>
-				<li class="option" data-value="5" onclick="setLista()">PROGETTO PALERMO</li>
-				<li class="option" data-value="6" onclick="setLista()">LISTA MOVIMENTO CINQUE STELLE</li>
-				<li class="option" data-value="7" onclick="setLista()">DEMOCRAZIA CRISTIANA</li>
-				<li class="option" data-value="8" onclick="setLista()">PRIMA L'ITALIA</li>
-				<li class="option" data-value="9" onclick="setLista()">SINISTRA CIVICA ECOLOGISTA</li>
-				<li class="option" data-value="10" onclick="setLista()">ALLEANZA PER PALERMO</li>
-				<li class="option" data-value="11" onclick="setLista()">LAGALLA SINDACO UNIONE DI CENTRO</li>
-				<li class="option" data-value="12" onclick="setLista()">NOI CON L'ITALIA - LAGALLA SINDACO</li>
-				<li class="option" data-value="13" onclick="setLista()">RITA BARBERA SINDACA</li>
-				<li class="option" data-value="14" onclick="setLista()">RINASCITA PALERMO DONATO SINDACO</li>
-				<li class="option" data-value="15" onclick="setLista()">E TU SPLENDI PALERMO</li>
-				<li class="option" data-value="16" onclick="setLista()">SICILIANI LIBERI-POPOLO DELLA FAMIGLIA-CON PARAGONE PALERMO NON MOLLA MAI-CIRO LOMONTE SINDACO</li>
-				<li class="option" data-value="17" onclick="setLista()">ROMPI IL SISTEMA - FERRANDELLI SINDACO</li>
-				<li class="option" data-value="18" onclick="setLista()">MODERATI PER LAGALLA SINDACO</li>
-				<li class="option" data-value="19" onclick="setLista()">POTERE AL POPOLO!</li>
-			</ul>
-		</div>
-		</label>
-	</div>	
-  
-    <script src="material-design-select-dropdown/js/index.js"></script>
 
   </body>
 </html>
