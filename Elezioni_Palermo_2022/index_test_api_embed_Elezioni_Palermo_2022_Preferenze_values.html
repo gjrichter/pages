@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps really simple embed</title>
+	
+    <link rel="stylesheet" href="material-design-select-dropdown/css/style.css">
+
+</head>
+
+<body style='text-align:center'>
+
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+		
+		liste = [
+			{id:"L15", name:"PARTITO DEMOCRATICO", color:"#FF4707"},
+			{id:"L9" , name:"FORZA ITALIA - BERLUSCONI", color:"#0067B7"},
+			{id:"L16" , name:"FRATELLI D'ITALIA", color:"#334F82"},
+			{id:"L6" , name:"LAVORIAMO PER PALERMO", color:"#334F82"},
+			{id:"L3" , name:"AZIONE CON CALENDA FERRANDELLI SINDACO + EUROPA", color:"#41A22D"},
+			{id:"L10" , name:"PROGETTO PALERMO", color:"#C13D22"},
+			{id:"L20" , name:"LISTA MOVIMENTO CINQUE STELLE", color:"#FED600"},
+			{id:"L5" , name:"DEMOCRAZIA CRISTIANA", color:"#0067B7"},
+			{id:"L11" , name:"PRIMA L'ITALIA", color:"#297DBA"},
+			{id:"L1" , name:"SINISTRA CIVICA ECOLOGISTA", color:"#FF2800"},
+			{id:"L8" , name:"ALLEANZA PER PALERMO", color:"#C0E3FA"},
+			{id:"L4" , name:"LAGALLA SINDACO UNIONE DI CENTRO", color:"#21A4ED"},
+			{id:"L12" , name:"NOI CON L'ITALIA - LAGALLA SINDACO", color:"#1F5D92"},
+			{id:"L13" , name:"RITA BARBERA SINDACA", color:"#B1380D"},
+			{id:"L7" , name:"RINASCITA PALERMO DONATO SINDACO", color:"#171415"},
+			{id:"L14" , name:"E TU SPLENDI PALERMO", color:"#FAA000"},
+			{id:"L18" , name:"SICILIANI LIBERI-POPOLO DELLA FAMIGLIA-CON PARAGONE PALERMO NON MOLLA MAI-CIRO LOMONTE SINDACO", color:"#2A57A6"},
+			{id:"L2" , name:"ROMPI IL SISTEMA - FERRANDELLI SINDACO", color:"#59C11D"},
+			{id:"L17" , name:"MODERATI PER LAGALLA SINDACO", color:"#294E63"},
+			{id:"L19" , name:"POTERE AL POPOLO!", color:"#962719"}
+		];
+
+		legend = 
+			"<h1><b style='color:rgb(46, 142, 189)'> Persone con Carica Attive nate all'estero<br>dal 2000 al 2021</b></h1>";
+		
+		attribution = 
+			"<p style='margin-bottom:-1em'>dati: <a href=\"https://risultatipalermo.maggiolicloud.it/web2206/htm/comunali/ODTOT_1_82053.xml\" target=\"_blank\">Città di Palermo - Open Data - Elezioni Comunali</a></br>powered by iXMaps</p>";
+		
+		ixmaps.lista = liste[0].id;
+		ixmaps.lista_text = liste[0].name;
+		ixmaps.lista_color = liste[0].color;
+		
+		getTheme = function(){
+			return ixmaps.layer("seggi_elettorali")
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Palermo/VotiSEZ_Cons_82053_"+ixmaps.lista+".csv",
+					type: "csv"})
+				.binding({
+					value: "Nome Cons",
+					lookup: "sezione",
+					size: "Voti validi"})
+				.style({
+					name: "chart",
+							type: "CHART|SYMBOL|SEQUENCE|STAR|SORT|UP|VALUES|AGGREGATE|CATEGORICAL|SUM|COMPACTLEGEND",
+					colorscheme: [
+						ixmaps.lista_color ],
+					fillopacity: "0.3",
+					shadow: "true",
+					showdata: "true",
+					symbols: [
+						"circle"],
+					units: "",
+					normalsizevalue: "100",
+					scale: "1",
+					valuescale: "1",
+					title: "Preferenze "+ixmaps.lista_text+"",
+					snippet: "dati: <a href=\"https://risultatipalermo.maggiolicloud.it/web2206/htm/comunali/ODTOT_1_82053.xml\" target=\"_blank\">Città di Palermo - Open Data - Elezioni Comunali</a>",
+					description: "Se si clicca su un nome, si possono vedere<br>le preferenze solo di quel candidato"
+				})
+				.json()
+		};
+		
+		
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", 
+				{ 
+			   	mapCdn: "https://gjrichter.github.io/ixmaps",
+				map: 	"../../maps/svg/maps/generic/mercator.svg",
+				mapService: "leaflet",
+				mapType:	"CartoDB - Positron",
+				mode:		"pan",
+				width:    	"100%",
+				align:      "right",
+				legend:     true
+				},
+				map => map
+					.view([15,15],2)          
+					.options({
+						featurescaling: "dynamic",
+						objectscaling: "dynamic",
+						dynamicScalePow: "3",
+						normalSizeScale: "100000",
+						flushChartDraw: "10000",
+						panhidden:"false"
+					})
+					.view([38.13752701030351,13.402462005615236],12)	 
+					.attribution(attribution) 
+						 
+					// load geometries
+						 
+					.layer(
+						ixmaps.layer("seggi_elettorali")
+						.data({
+							name: "SEGGI_ELETTORALI",
+							url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Palermo/seggi_elettorali.geojson",
+							type: "geojson"})
+						.binding({
+							id: "sezione",
+							geo: "geometry"})
+						.style({
+							type: "FEATURES|NOLEGEND",
+							colorscheme: [
+								"none"],
+							scale: "0"
+						})
+						.json()
+					)
+					.layer(
+						getTheme()
+					)
+			)
+		);
+
+		
+	function setLista(){
+		ixmaps.lista = liste[this.event.target.getAttributeNS(null,"data-value")].id;
+		ixmaps.lista_text = liste[this.event.target.getAttributeNS(null,"data-value")].name;
+		ixmaps.lista_color = liste[this.event.target.getAttributeNS(null,"data-value")].color;
+		console.log(getTheme());
+		ixmaps.map().newTheme(getTheme(),"clear");
+		ixmaps.showLoading("&rarr; "+ixmaps.lista);
+	}	
+
+	</script>	
+	
+	<div style="position:absolute;top:5.5em;left:2em;white-space: nowrap;text-overflow: ellipsis;">
+		<label id="img_category_label" class="field" for="img_category" data-value="Partito Democratico">
+		<span style="font-size:12px;top:15px ">Lista</span>
+		<div id="img_category" class="psuedo_select" name="img_category" >
+			<span class="selected" style="opacity:1;transform: translateY(0px); transition-duration: 0.1s;">PARTITO DEMOCRATICO</span>
+			<ul id="img_category_options" class="options" style="font-size:0.6em;line-height:1em;white-space: nowrap;text-overflow: ellipsis;">
+				<li class="option" data-value="0" onclick="setLista()">PARTITO DEMOCRATICO</li>
+				<li class="option" data-value="1" onclick="setLista()">FORZA ITALIA-BERLUSCONI</li>
+				<li class="option" data-value="2" onclick="setLista()">FRATELLI D'ITALIA</li>
+				<li class="option" data-value="3" onclick="setLista()">LAVORIAMO PER PALERMO</li>
+				<li class="option" data-value="4" onclick="setLista()">AZIONE CON CALENDA FERRANDELLI SINDACO + EUROPA</li>
+				<li class="option" data-value="5" onclick="setLista()">PROGETTO PALERMO</li>
+				<li class="option" data-value="6" onclick="setLista()">LISTA MOVIMENTO CINQUE STELLE</li>
+				<li class="option" data-value="7" onclick="setLista()">DEMOCRAZIA CRISTIANA</li>
+				<li class="option" data-value="8" onclick="setLista()">PRIMA L'ITALIA</li>
+				<li class="option" data-value="9" onclick="setLista()">SINISTRA CIVICA ECOLOGISTA</li>
+				<li class="option" data-value="10" onclick="setLista()">ALLEANZA PER PALERMO</li>
+				<li class="option" data-value="11" onclick="setLista()">LAGALLA SINDACO UNIONE DI CENTRO</li>
+				<li class="option" data-value="12" onclick="setLista()">NOI CON L'ITALIA - LAGALLA SINDACO</li>
+				<li class="option" data-value="13" onclick="setLista()">RITA BARBERA SINDACA</li>
+				<li class="option" data-value="14" onclick="setLista()">RINASCITA PALERMO DONATO SINDACO</li>
+				<li class="option" data-value="15" onclick="setLista()">E TU SPLENDI PALERMO</li>
+				<li class="option" data-value="16" onclick="setLista()">SICILIANI LIBERI-POPOLO DELLA FAMIGLIA-CON PARAGONE PALERMO NON MOLLA MAI-CIRO LOMONTE SINDACO</li>
+				<li class="option" data-value="17" onclick="setLista()">ROMPI IL SISTEMA - FERRANDELLI SINDACO</li>
+				<li class="option" data-value="18" onclick="setLista()">MODERATI PER LAGALLA SINDACO</li>
+				<li class="option" data-value="19" onclick="setLista()">POTERE AL POPOLO!</li>
+			</ul>
+		</div>
+		</label>
+	</div>	
+  
+    <script src="material-design-select-dropdown/js/index.js"></script>
+
+  </body>
+</html>
