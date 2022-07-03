@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps really simple embed</title>
+
+	<link rel="stylesheet" href="material-design-select-dropdown/css/style.css">
+
+</head>
+
+<body style='text-align:center'>
+
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<script src="./js/tooltip.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		legend =
+			"<h1><b style='color:rgb(146, 142, 89)'> Esportazione di armi - Italia<br>dal 2000 al 2021</b></h1>";
+
+		attribution =
+			"<p style='margin-bottom:-1em'>data: <a href='https://www.sipri.org/databases/armstransfers' target='_blank'>SIPRI Arms Transfers Database</a>, <a href='https://www.sipri.org/about/terms-and-conditions' target='_blank'>Terms and Conditions</a></br>powered by iXMaps</p>";
+
+		process_data = function(data, options) {
+			data.column('Country').map(function(value) {
+				if (value == 'United States') {
+					return 'United States of America';
+				}
+				if (value == 'UAE') {
+					return 'United Arab Emirates';
+				}
+				return value;
+			});
+			data.addColumn({
+				destination: 'exporter'
+			}, function(row) {
+				return 'Italy';
+			})
+		}
+
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					map: "../../maps/svg/maps/generic/winkel.svg",
+					mapService: "leaflet",
+					mapType: "white",
+					mode: "pan",
+					width: "100%",
+					height: "720px",
+					align: "center",
+					legend: true,
+					mode: "pan",
+					item: "../../app/HelloWorld_API - local/html/item.html",
+					scrollsafesilent: true
+				},
+				map => map
+				.view([15, 15], 2)
+				.options({
+					featurescaling: "dynamic",
+					objectscaling: "dynamic",
+					dynamicScalePow: "3",
+					normalSizeScale: "1000000000",
+					flushChartDraw: "10000",
+					panhidden: "false"
+				})
+				.attribution(attribution)
+				.legend(legend)
+
+				// load geometries
+
+				.layer(
+					ixmaps.layer("COUNTRIES")
+					.data({
+						name: "WORLD_ISO_3_ALPHA",
+						url: "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json",
+						type: "topojson"
+					})
+					.binding({
+						id: "name",
+						geo: "geometry"
+					})
+					.style({
+						type: "FEATURES|NOLEGEND",
+						colorscheme: [
+							"none"
+						],
+						fillopacity: "0.5",
+						linecolor: "black",
+						linewidth: "0.02"
+					})
+					.json()
+				)
+
+				// show arms export 2000 - 2021
+				// value: total in mio €	 
+
+				// choropleth
+
+				.layer(
+					ixmaps.layer("COUNTRIES")
+					.type("CHOROPLETH|QUANTILE")
+					.data({
+						"name": "ARMS_DATA",
+						"url": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TIV/TIV-Export-ITA-2000-2021.csv",
+						"type": "csv",
+						"cache": "true",
+						"process": process_data.toString()
+					})
+					.binding({
+						"value": "Total",
+						"lookupfield": "Country",
+						"titlefield": "Country"
+					})
+					.style({
+						"colorscheme": [
+							"7",
+							"rgb(255,255,255)",
+							"rgb(146, 142, 89)"
+						],
+						"fillopacity": "1",
+						"shadow": "false",
+						"units": "mio €",
+						"valuedecimals": "0",
+					})
+					.meta({
+						"name": "choro",
+						"title": "Export dal 2020 al 2021",
+						"snippet": "in milioni di €",
+						"splash": "loading and aggregating data ...",
+						"description": ""
+					})
+					.define()
+				)
+
+				// vectors
+
+				.layer(
+					ixmaps.layer("COUNTRIES")
+					.type("CHART|VECTOR|BEZIER|GRADIENT|FADEIN|POINTER|FAST|SUM|NOLEGEND")
+					.data({
+						name: "ARMS_DATA_1",
+						url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TIV/TIV-Export-ITA-2000-2021.csv",
+						type: "csv",
+						cache: "true",
+						process: process_data.toString()
+					})
+					.binding({
+						value: "Total",
+						size: "Total",
+						lookupfield: "Exporter",
+						lookupfield2: "Country",
+						titlefield: "Country"
+					})
+					.style({
+						colorscheme: [
+							"rgb(46, 142, 139)"
+						],
+						fillopacity: "1",
+						shadow: false,
+						units: "mio €",
+						refreshtimeout: "0",
+						scale: "0.8",
+						rangescale: "5",
+						sizefield: "Total",
+						linecolor: [
+							"rgb(86, 82, 49)"
+						],
+						markersize: "0.6",
+						valuescale: "1",
+						valuedecimals: "0",
+					})
+					.meta({
+						name: "vectors",
+						title: "Esportazione armi dal 2020 al 2021",
+						snippet: "in milioni di €",
+						splash: "loading and aggregating data ...",
+						description: ""
+					})
+					.define()
+				)
+
+						 
+				// last numbers - label
+				.layer(
+					ixmaps.layer("REGIONI|COUNTRIES")
+					.type("CHART|SYMBOL|SIZEP4|VALUES|BOX|TITLE|COMPACTLEGEND")
+					.data({
+						"name": "ARMS_DATA",
+						"url": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TIV/TIV-Export-ITA-2000-2021.csv",
+						"type": "csv",
+						"cache": "true",
+						"process": process_data.toString()
+					})
+					.binding({
+						"value": "Total",
+						"lookupfield": "Country",
+						"titlefield": "Country"
+					})
+					.style({
+						"colorscheme": [
+							"rgb(255, 255, 255)"],
+						"textcolor": "rgb(146, 142, 89)",
+						"fillopacity": "0.6",
+						"shadow": "true",
+						"symbols": [
+							"label"],
+						"units": "ml €",
+						"normalsizevalue": "100000",
+						"refreshtimeout": "0",
+						"scale": "3",
+						"valuescale": "1",
+						"rangescale": "1",
+						"titlefield": "name",
+						"textscale": "0.25",
+						"valuescale": "1.2",
+						"linewidth": "0.1",
+						"boxopacity": "0",
+						"bordercolor": "none",
+						"boxupper": "1:20000000",
+						"title": "Export"
+					})
+					.define()
+				)
+						 
+				.layer({
+					"layer": "COUNTRIES",
+					"field": "2000|2001|2002|2003|2004|2005|2006|2007|2008|2009|2010|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021",
+					"field100": "",
+					"style": {
+						"type": "CHART|SYMBOL|SEQUENCE|PLOT|LINES|AREA|LOLLIPOP|GRID|BOX|TITLE|NOCLIP|COMPACTLEGEND",
+						"colorscheme": [
+							"rgb(146, 142, 89)"
+						],
+						"fillopacity": "0.2",
+						"shadow": "false",
+						"dbtable": "ARMS_DATA_Y",
+						"dbtableUrl": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TIV/TIV-Export-ITA-2000-2021.csv",
+						"dbtableType": "csv",
+						"dbtableProcess": process_data.toString(),
+						"datacache": "true",
+						"showdata": "true",
+						"lookupfield": "Country",
+						"symbols": [
+							"circle"
+						],
+						"normalsizevalue": "1",
+						"xaxis": ["2000", ".", ".", ".", ".", "2005", ".", ".", ".", ".", "2010", ".", ".", ".", ".", "2015", ".", ".", ".", ".", "2020", "."],
+						"units": "",
+						"align": "center",
+						"refreshtimeout": "0",
+						"scale": "0.07",
+						"linewidth": "0.002",
+						"valuescale": "1",
+						"maxvalue": "auto",
+						"rangescale": "0.4",
+						"boxopacity": "0.85",
+						"boxmargin": "20",
+						"boxupper": "1:20000000",
+						"chartupper": "1:20",
+						"name": "curves",
+						"titlefield": "Country",
+						"textscale": "0.6",
+						"description": ""
+					}
+				})
+			)
+		);
+
+	</script>
+
+</body>
+
+</html>
