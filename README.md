@@ -8,7 +8,7 @@
 
 [amministrative Palermo 2022 - preferenze lista per lista ](https://gjrichter.github.io/pages/Elezioni_Palermo_2022/index_test_api_embed_Elezioni_Palermo_2022_Preferenze_values.html)   &nbsp;&nbsp;&nbsp;   [- confronto liste](https://gjrichter.github.io/pages/Elezioni_Palermo_2022)
 
-[test simple map page ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index.html)
+[test simple map page ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index.html) -
 [test simple map ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index_test_api_embed_Elezioni_2022_candidati_uninominali.html)
 
 
