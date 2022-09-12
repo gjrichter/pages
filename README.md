@@ -12,5 +12,7 @@
 [test simple map ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index_test_api_embed_Elezioni_2022_candidati_uninominali.html)-
 [test embed_sync_Leaflet ](https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?mapservice=leaflet&maptype=CartoDB%20-%20Positron&name=mymap&align=center&legend=true)
 
+[test embed_sync_Leaflet with project ](https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?mapservice=leaflet&maptype=CartoDB%20-%20Positron&name=mymap&align=center&legend=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/Elezioni/Politiche/2022/ixmaps_project_CAMERA_CollegiUNINOMINALI_2020_candidati_poligoni_coalizioni.json)
+
 
 
