@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<script id="tinyhippos-injected">
+	if (window.top.ripple) {
+		window.top.ripple("bootstrap").inject(window, document);
+	}
+
+</script>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<title>COVID-19 World</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+	</style>
+	<!-- Custom styles for this template -->
+	<link href="../assets/css/pricing.css" rel="stylesheet">
+
+	<!-- CSS App -->
+	<link rel="stylesheet" type="text/css" href="../assets/css/dashboard/style.css">
+	<link rel="stylesheet" type="text/css" href="../assets/css/dashboard/themes/flat-blue.css">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/css/font-awesome.min.css">
+
+	<style>
+		.active {
+			border: 2px solid #AFCDEA;
+			border-radius: 0.2em;
+		}
+		.map-frame {
+			height:740px;
+			border:0;
+			width:100%;
+			max-width: 1280px;
+			height:800px;
+		}
+		a.button, a.btn-default {
+			color: #007BFF;
+		}
+	</style>
+
+
+</head>
+
+<body style="text-align:center">
+	
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- P A G E   H E A D E R											 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div class="d-flex flex-column flex-md-row align-items-center p-2 px-md-4 mb-3 bg-white ">
+		<!-- TITLE -->
+		<h5 class="my-0 mr-md-auto font-weight-lighter">iXMaps :: elezioni mappate</h5>
+		<!-- PAGE NAVIGATION -->
+		<nav class="my-2 my-md-0 mr-md-3">
+			<a class="p-1 text-dark font-weight-lighter" style="font-size:18px" href="#footer">Fonti & Attributioni</a>
+		</nav>
+		<!-- EXTERNAL LINK -->
+		<a class="btn btn-outline-primary" href="..">up &rarr;</a>
+	</div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- Top Text Area 													 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	
+	<div class="container">
+		<div class=" mb-3 text-center">
+			<div class="mb-4">
+				<div style="margin-top:-1.5em">
+					<h1 class="pricing-card-title">MOVIMENTI<br><small class="text-muted">fonte dati: <a href='https://elezioni.interno.gov.it/report' target='_blank'>Eligendo - Ministero dell'Interno</a> </small></h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="text-center" style="margin:auto;margin-top:-1em;max-width:1024px">
+		Le mappe sono intenzionate di visualizzare la <b>diffusione territoriale</b> dei principali partiti <b>nel tempo</b>. Le mappe rappresentano il risultato delle ultime 3 elezioni, 2 politiche ed una europea, per i comuni d'Italia con <b>colori composti</b> dai singoli <b>colori</b> associati ai <b>principali partiti</b> valutati per i rispettivi <b>risultati</b>.</div>
+	<div style="margin:1em 0 -1em 0"><em>E' possibile limitare il confronto a singoli partiti o gruppi di partiti clickando sui colori nella leggenda o scegliendo uno degli confronti preparati nella riga sotto</em>. 
+	</div>	
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- Top Jumbo Map 													 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<div class="text-center" style="margin-bottom:1em">
+			solo:
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0')">
+			PD </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('1')">
+			M5S </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('2')">
+			FI </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('3')">
+			LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('4')">
+			FdI </a> confronto:
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1')">
+			PD-M5S </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('0|2')">
+			PD-FI </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('0|3')">
+			PD-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('1|3')">
+			M5S-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('1|2')">
+			M5S-FI </a> a 3: 
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1|2')">
+			PD-M5S-FI </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1|3')">
+			PD-M5S-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('2|3|4')">
+			FI-LEGA-FdI </a> |
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('')">
+			tutti </a>
+		
+	</div>
+	
+    <!--========================================================================= -->
+	<div >
+		<iframe id="map0" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map0&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2013_subtractive.json"></iframe>
+
+		<iframe id="map1" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map1&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2018_subtractive.json"></iframe>
+		
+		<iframe id="map3" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map3&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Europee_2019_subtractive.json"></iframe>
+	</div>
+ 
+	<div style="font-size:1.5em">
+		vai a:</br>
+		<a href="javascript:ixmaps.map('map0').flyTo([45.02792105147572,7.626914978027345],10)">Torino</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([45.49672163945861,10.163970947265627],7)">Milano e Brianza</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([44.536653425107495,11.523284912109375],9)">Emilia-Romagna</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([43.49178653083377,10.763854980468752],8)">Toscana</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([43.04279812270172,13.0078125],8)">Centro</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([41.7508241355329,12.357559204101564],10)">Roma</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([40.900279369669875,14.371490478515627],9)">Napoli</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([40.629587853312174,17.14004516601563],8)">Puglia</a> | 
+		<a href="javascript:ixmaps.map('map0').flyTo([38.14103736644331,15.420556640625002],7)">Sicilia e Calabria</a> 
+	</div>
+
+	
+	
+	<!--
+	<div >
+		<iframe id="map4" width="40%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="../../../../../ixmaps/ui/html/embed_sync_Leaflet.html?name=map4&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=../../projects/ElezioniCompare_small/ixmaps_project_2013_PARTITO_DEMOCRATICO.json"></iframe>
+
+		<iframe id="map5" width="40%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="../../../../../ixmaps/ui/html/embed_sync_Leaflet.html?name=map5&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=../../projects/ElezioniCompare_small/ixmaps_project_2018_PARTITO_DEMOCRATICO.json"></iframe>
+		
+		<iframe id="map6" width="40%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="../../../../../ixmaps/ui/html/embed_sync_Leaflet.html?name=map6&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=../../projects/ElezioniCompare_small/ixmaps_project_2014_PARTITO_DEMOCRATICO.json"></iframe>
+
+		<iframe id="map7" width="40%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="../../../../../ixmaps/ui/html/embed_sync_Leaflet.html?name=map7&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=../../projects/ElezioniCompare_small/ixmaps_project_2019_PARTITO_DEMOCRATICO.json"></iframe>
+	</div>
+	-->
+	
+	<!--========================================================================= -->
+
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- F O O T E R          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<footer id="footer" class="container" style="margin-top:2em;padding:1em 1.5em;background:#f8f8f8">
+		<div class="row">
+			<div class="col-4">
+				<h5>Fonti</h5>
+				<ul class="list-unstyled text-small">
+					<li>
+						<a href='https://github.com/CSSEGISandData/COVID-19/' target='_blank'>2019 Novel Coronavirus COVID-19 (2019-nCoV)</a> Data Repository</a> by Johns Hopkins CSSE<br>
+						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a></li>
+					<li>&nbsp;</li>
+					<li>
+						<a href='https://github.com/pcm-dpc/COVID-19/' target='_blank'>COVID-19 Italia - Monitoraggio situazione</a> Dipartimento della Protezione Civile, Italia<br>
+						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a></li>
+					<li>&nbsp;</li>
+					<li><a class="text-muted" href="https://istat.it">Popolazione 2019, ISTAT</a></li>
+				</ul>
+			</div>
+			<div class="col-4">
+				<h5>Attribuzioni</h5>
+				<ul class="list-unstyled text-small">
+					<li> chart.js - <span style="color:#888888">grafici a barra e curve sono realizzati con Chart.js, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+						Papa Parse - <span style="color:#888888">.csv parser integtegrato in data.js, usato per caricare e manipolare i dati dai siti ufficiali, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+						Flat Admin Bootstrap Templates - <span style="color:#888888">HTML5 Bootstrap template alola base di questo dasboard, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+					</li>
+				</ul>
+			</div>
+			<div class="col-4">
+				<h5>About</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="https://ixmaps.com">powered by iXMaps</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- C O D E	          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<script type="text/javascript" src="../assets/lib/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../assets/lib/js/bootstrap.bundle.min.js"></script>
+
+	<script type="text/javascript" src="../assets/lib/js/Chart.bundle.js"></script>
+
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
+
+	<!-- Javascript -->
+	<script>
+		
+		// ---------------------------------------------------------------------------------------
+		// infuse HTML snippets
+		// ---------------------------------------------------------------------------------------
+
+		infuseHTML = function(szElement, szUrl, szDiv) {
+
+			szStoryRoot = "";
+
+			if (typeof($("#" + szElement)[0]) == "undefined") {
+				return;
+			}
+			$("#" + szElement).load(szUrl + ' #' + szDiv, function(response, status, xhr) {
+				if (status == "error") {
+					var msg = "Sorry but there was an error: ";
+					$("#story").html(msg + xhr.status + "<br><br> '" + szStoryRoot + szUrl + "'<br><br> " + xhr.statusText);
+				}
+			});
+		};
+
+		infuseHTML("menu", "./menu.html", "menu");
+		
+		ixmaps.markClasses = function(szClasses){
+			ixmaps.message("...");
+			ixmaps.map('map0').theme("0").changeStyle('markclasses:'+szClasses,'set');
+			ixmaps.map('map1').theme("0").changeStyle('markclasses:'+szClasses,'set');
+			ixmaps.map('map3').theme("0").changeStyle('markclasses:'+szClasses,'set');	
+		}
+
+
+	</script>
+
+
+</body>
+
+</html>
