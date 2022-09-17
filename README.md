@@ -8,6 +8,10 @@
 
 [amministrative Palermo 2022 - preferenze lista per lista ](https://gjrichter.github.io/pages/Elezioni_Palermo_2022/index_test_api_embed_Elezioni_Palermo_2022_Preferenze_values.html)   &nbsp;&nbsp;&nbsp;   [- confronto liste](https://gjrichter.github.io/pages/Elezioni_Palermo_2022)
 
+[Movimenti nelle elezioni dal 2013 al  2019](https://gjrichter.github.io/pages/Elezioni_2013_2019_small/)
+
+
+
 [test simple map page ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index.html) -
 [test simple map ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index_test_api_embed_Elezioni_2022_candidati_uninominali.html)-
 [test embed_sync_Leaflet ](https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?mapservice=leaflet&maptype=CartoDB%20-%20Positron&name=mymap&align=center&legend=true)
