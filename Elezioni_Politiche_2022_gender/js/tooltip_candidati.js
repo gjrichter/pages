@@ -190,6 +190,7 @@ window.ixmaps = window.ixmaps || {};
 					var themeObj = ixmaps.getThemeObj(szId.split(":")[0]);
 					
 					var szHtml = "";
+					var szTitle = "";
 					
 					var data = ixmaps.map().getData(szId);
 					if (data) {
@@ -197,12 +198,14 @@ window.ixmaps = window.ixmaps || {};
 						var nMaxHeight = window.innerHeight - 200;
 
 						var eta = 0;
+						var nF = 0;
+						var nM = 0;
 
-						szHtml += "<section>";
-						szHtml += "<div style='height:0.1em'></div>"
-						szHtml += "<div style='margin:-2.5em 1em 1em 1em'><h4>" + themeObj.szTitle + "</h4></div>"
-						szHtml += "<div style='margin:1em 1em 1em 1em'><h3>" + data[0].desc_ente + "</h3></div>"
-						szHtml += "</section>";
+						szTitle += "<section>";
+						szTitle += "<div style='height:0.1em'></div>"
+						szTitle += "<div style='margin:-2.5em 1em 1em 1em'><h4>" + themeObj.szTitle + "</h4></div>"
+						szTitle += "<div style='margin:1em 1em 1em 1em'><h3>" + data[0].desc_ente + "</h3></div>"
+						szTitle += "</section>";
 
 						szHtml += "<section >";
 
@@ -233,6 +236,7 @@ window.ixmaps = window.ixmaps || {};
 								szHtml += 
 									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].desc_lista || data[a].coalizione || "" + "</a></td></tr>";
 								eta += data[a].eta;
+								nF++;
 							}
 						}
 						for (a in data) {
@@ -259,16 +263,19 @@ window.ixmaps = window.ixmaps || {};
 								szHtml += 
 									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].desc_lista || data[a].coalizione || "" + "</a></td></tr>";
 								eta += data[a].eta;
+								nM++;
 							}
 						}
 
 						szHtml += "</table>";
 						szHtml += "</section>";
 
-						szHtml += "<section>";
-						szHtml += "<div style='margin:0em 1em 0em 1em'><h4 style='font-size:1.1em'>" + data.length + " candidate/candidati, età media: " + Math.floor(eta / data.length * 10) / 10 + "<h4></div>"
-						szHtml += "<div style='height:0.1em'></div>"
-						szHtml += "</section>";
+						szTitle += "<section>";
+						szTitle += "<div style='margin:-1em 1em 0em 1em'><h4 style='font-size:1.1em'>" + nF + " Donne / " + nM + " Uomini, età media: " + Math.floor(eta / data.length * 10) / 10 + "<h4></div>"
+						szTitle += "<div style='height:0.1em'></div>"
+						szTitle += "</section>";
+						
+						szHtml = szTitle + szHtml;
 
 				
 					}
