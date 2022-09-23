@@ -14,6 +14,10 @@ window.ixmaps = window.ixmaps || {};
 		
 		console.log("hi")
 		console.log(evt)
+		
+		if (!szText || szText.length<=0){
+			return;
+		}
 
 		if (!window.document.getElementById("tooltip")) {
 			var div = document.createElement("div");
@@ -40,14 +44,14 @@ window.ixmaps = window.ixmaps || {};
 
 		var fontsize = Math.min(14,Math.max(11,(22 / 1200 * window.innerWidth)));
 
-		szHtml += "<div id='tooltipDiv' style='position:absolute;left:" + xPos + "px;top:" + yPos + "px;font-family: arial narrow, system;font-size:" + fontsize + "px;color: #444;background: white;border: 0.5px solid black;border-radius: 5px'>";
+		szHtml += "<div id='tooltipDiv' style='position:absolute;left:" + xPos + "px;top:" + yPos + "px;font-family: arial narrow, system;font-size:" + fontsize + "px;color: #444;background: white;border: 0.5px solid black;border-radius: 5px;margin-right:0.5em;'>";
 		console.log(szText);
 		szHtml += "<div style='margin:0.5em 0.5em;max-width:"+width+"px;max-height:"+height+"px;overflow:auto'>" + szText + "</div>";
 
 		szHtml += "<div id='chartDiv' style='margin:0.5em 1em;width:" + width + "px;overflow:hidden'><svg width='300' height='300' viewBox='0 0 5000 5000'><g id='getchartmenutarget' onmousemove='javascript:ixmaps.onMouseOver();' onmouseout='javascript:ixmaps.onMouseOut();' style='pointer-events:all'></g></svg></div>";
 
 		if (__fTooltipPin) {
-			szHtml += "<div onclick='ixmaps.htmlgui_deleteItemPinned()' style='position:absolute;top:-0.5em;right:-0.5em;font-size:1em;color:white;background:#444444;padding:0 0.25em;border-radius:1em;cursor:pointer;'>&Cross;</div>"
+			szHtml += "<div onclick='ixmaps.htmlgui_deleteItemPinned()' style='position:absolute;top:-0.5em;right:-0.5em;font-size:16px;color:white;background:#444444;padding:0 0.25em;border-radius:1em;cursor:pointer;'>&Cross;</div>"
 			__fTooltipPinned = true;
 		}
 		
