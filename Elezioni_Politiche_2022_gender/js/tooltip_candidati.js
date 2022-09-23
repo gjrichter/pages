@@ -231,7 +231,7 @@ window.ixmaps = window.ixmaps || {};
 								szHtml += 
 									"<a href='"+linkW+"' target='_blank' style='text-decoration:none;'> <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OOjs_UI_icon_logo-wikipedia.svg/640px-OOjs_UI_icon_logo-wikipedia.svg.png' height='14px' title='cerca su Wikipedia'></a>";
 								szHtml += 
-									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].coalizione || "" + "</a></td></tr>";
+									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].desc_lista || data[a].coalizione || "" + "</a></td></tr>";
 								eta += data[a].eta;
 							}
 						}
@@ -257,7 +257,7 @@ window.ixmaps = window.ixmaps || {};
 								szHtml += 
 									"<a href='"+linkW+"' target='_blank' style='text-decoration:none;'> <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OOjs_UI_icon_logo-wikipedia.svg/640px-OOjs_UI_icon_logo-wikipedia.svg.png' height='14px' title='cerca su Wikipedia'></a>";
 								szHtml += 
-									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].coalizione || "" + "</a></td></tr>";
+									"</td><td style='font-size:1em;'>" + data[a].eta + " anni</td></tr><tr><td style='font-size:0.6em;width:80%;padding-bottom:0.5em'>" + data[a].desc_lista || data[a].coalizione || "" + "</a></td></tr>";
 								eta += data[a].eta;
 							}
 						}
