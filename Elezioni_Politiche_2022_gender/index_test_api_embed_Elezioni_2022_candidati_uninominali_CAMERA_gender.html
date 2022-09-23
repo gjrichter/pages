@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/pages/Elezioni_Politiche_2022_gender/js/tooltip_candidati.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+		// define the function to query the actual data (last week) from INGV
+		// this functiuon will be loaded (toString()) into the theme definition
+		
+		query_geo = function(data,options){
+			var szUrl1 = "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/CollegiElettoraliBasiGeografiche/CAMERA_CollegiUNINOMINALI_2020_GEO_S.topojson.gz";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "topojson")
+				.realize(
+					function (dataA) {
+						var geo = dataA[0];
+						geo.column('CU20_DEN').map(function(value){
+							value=value.replace("Valle d'aosta/Vallée d'Aoste","Valle d'aosta");
+							return value.toUpperCase();
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(geo,options);
+				});
+		};
+		
+		query_data = function(data,options){
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/CAMERA_ITALIA_20220925_uni.csv";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/CAMERA_ITALIA_20220925_uni_coalizioni_nested.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function (dataA) {
+						var canditati = dataA[0];
+						var coalizioni = dataA[1];
+						var coalizioniIndexA = coalizioni.lookupArray({key:"cod_cand",value:"desc_lista"});
+						canditati.addColumn({destination:"coalizione",source:"cod_cand"},function(value){
+							return coalizioniIndexA[value];
+						});
+						canditati.addColumn({destination:'eta',source:'dt_nasc'},function(value){
+							return 2022-value;
+						});
+						canditati.addColumn({destination:'f_eta',source:'eta'},function(value){
+							return Math.floor(value/10)*10;
+						});
+						canditati.column("desc_ente").map(function(value){return value+""});
+						options.type = "dbtable";
+						ixmaps.setExternalData(canditati,options);
+				});
+		};
+
+		// ----------------------------------------
+		// create the map with DISS and earthquakes
+		// 	5 layer DISS
+		//  1 layer actual earthquakes
+		// ----------------------------------------
+		
+		var partito = decodeURI(window.location.search).split("?")[1] || "*";
+		
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", { 
+			  mapCdn: "https://gjrichter.github.io/ixmaps",
+			  mapType: "white",	
+			  width:  "700px",
+			  height: "740px",
+			  legend: "true",
+			  align: "center",
+			  scrollsafesilent: "true",
+			  name: "map_1"	
+			  },
+			  map => map
+			   .options({objectscaling:"dynamic",normalSizeScale:"10000000",panhidden:"false",basemapopacity:"0.9"})
+			   .view([42.27730877423709,13.172363281250002],6)
+			   .legend("<h2>CAMERA 2022 - Collegi uninominali</h2><h2>"+partito+" ... </h2>")
+			   .attribution("powered by iXMaps")   
+						 
+			   .layer(ixmaps.layer("CAMERA_Collegi_Uniinominali_2020")
+				  .data({
+					type: "ext",
+					query: query_geo.toString()
+				  })
+				  .binding({id: "CU20_DEN",lookup: "geometry"})
+				  .style({
+					type: "FEATURES|NOLEGEND",
+					"colorscheme": [
+						"none"],
+					linecolor: ["#4488dd"],
+					linewidth: 1
+				  })
+				  .define()
+				)
+						 
+			   .layer(ixmaps.theme("CAMERA_Collegi_Uniinominali_2020")
+				  .data({
+					type: "ext",
+					query: query_data.toString()
+				  })
+				  .binding({position: "desc_ente",value:"sesso"})
+				  .style({
+					type: "CHOROPLETH|CATEGORICAL|AGGREGATE|COMPOSECOLOR|SUM",
+					filter: "WHERE coalizione like \""+partito+"\"",
+					"values":[
+						"F",
+						"M"],
+					"colorscheme": [
+						"red",
+						"blue"],
+					fillopacity: "0.3",
+					aggregationfield: "desc_ente",
+					shadow:"false"
+				  })
+				  .meta({title:"Elezioni Camera 2022 - Collegi uninominali"})    
+				  .define()
+				)
+					  
+			 ) 			
+		);
+
+	</script>	
+  </body>
+</html>
