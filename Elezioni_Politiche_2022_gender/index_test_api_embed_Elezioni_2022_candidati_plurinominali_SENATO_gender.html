@@ -87,7 +87,7 @@ $Log:index_only_map_embed.html,v $
 			  height: "740px",
 			  legend: "true",
 			  align: "center",
-			  scrollsafe: "true",
+			  scrollsafesilent: "true",
 			  name: "map_1"	
 			  },
 			  map => map
@@ -127,7 +127,7 @@ $Log:index_only_map_embed.html,v $
 					"colorscheme": [
 						"red",
 						"blue"],
-					fillopacity: "0.1",
+					fillopacity: "0.3",
 					aggregationfield: "desc_ente",
 					shadow:"false"})
 				  .meta({title:"Elezioni Senato 2022 - Collegi uninominali"})    
@@ -145,8 +145,10 @@ $Log:index_only_map_embed.html,v $
 					filter: "WHERE num_c == 1 AND desc_lista like \""+partito+"\"",
 					"colorscheme": [
 						"none"],
-					"textcolor": "#666666",
-					"scale":"3",
+					"labelfield": "cogn_c",
+					"textcolor": "none",
+					"align": "bottom",
+					"scale":"1.5",
 					shadow:"false"})
 				  .meta({title:"Elezioni Senato 2022 - Collegi uninominali"})    
 				  .define()
