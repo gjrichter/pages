@@ -1,7 +1,5 @@
 /**
- * data broker for COVID-19 Italy Map
- * loads data fro ArcGis feature service
- * parses it into iXMaps data table
+ * custom tooltip for italian election maps
  */
 
 window.ixmaps = window.ixmaps || {};
