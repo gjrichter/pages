@@ -51,16 +51,16 @@ $Log:index_only_map_embed.html,v $
 			  legend: "true",
 			  align: "center",
 			  xxscrollsafe: "true",
-			  name: "map_1"	
+			  name: "map_1"	,
 			  },
 			  map => map
-			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.9"})
+			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.9",flushPaintShape:"100000"})
 			   .view([42.030748560601424,12.432528287172318],6)
 			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps")  
 						 
 			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
 				  .data({
-					url:"https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_g_WGS84.topojson.gz",
+					url:"https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
 					type:"topojson"
 				  })
 				  .binding({id: "PRO_COM_T"})
