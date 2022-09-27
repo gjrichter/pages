@@ -80,7 +80,7 @@ $Log:index_only_map_embed.html,v $
 			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.3",flushPaintShape:"100000"})
 			   .view([42.030748560601424,12.432528287172318],6)
 			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps")  
-			   .legend("<h2>Votanti femminili e maschili registrati nel comune <br> Il colore indica il sesso con più votanti nel comune</h2>")		 
+			   .legend("<h2>Elettori femminili e maschili valutato con l'affluenza del comune <br> Il colore indica il sesso con più elettori nel comune</h2>")		 
 						 
 			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
 				  .data({
@@ -116,14 +116,14 @@ $Log:index_only_map_embed.html,v $
 					type: "ext",
 					query: query_data.toString()
 				  })
-				  .binding({position: "CODICE ISTAT",value:"votf_h23|votm_h23"})
+				  .binding({position: "CODICE ISTAT",value:"ele_f|ele_m"})
 				  .type("CHOROPLETH|DOMINANT|DOPACITYMAX|COMPACTLEGEND")		  
 				  .style({
 					colorscheme: [
 						"red",
 						"blue"],
-					label: ["votanti femminili",
-						   "votanti maschili"],
+					label: ["elettori femmine",
+						   "elettori maschi"],
 					units: "",
 					dopacitypow: "2",
 					dopacityscale: "2",
@@ -133,7 +133,7 @@ $Log:index_only_map_embed.html,v $
 				    textcolor: "#000088"
 					})
 				  .meta({
-					title: "Votanti alle 23:00 F/M  - densità elettori"
+					title: "Più elettori F o M  - densità elettori"
 			})	  
 				  .define()
 				)

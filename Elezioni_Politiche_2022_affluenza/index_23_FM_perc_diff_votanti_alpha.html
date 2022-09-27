@@ -49,15 +49,21 @@ $Log:index_only_map_embed.html,v $
 				.realize(
 					function (dataA) {
 						var data = dataA[0];
-						var voti_m_index = data.column("votm_h23").index;
-						var voti_f_index = data.column("votf_h23").index;
-						var eletori_m_index = data.column("ele_m").index;
-						var eletori_f_index = data.column("ele_f").index;
+						var votm_h23_index = data.column("votm_h23").index;
+						var votf_h23_index = data.column("votf_h23").index;
+						var ele_m_index = data.column("ele_m").index;
+						var ele_f_index = data.column("ele_f").index;
 						data.addColumn({destination:"%votm_h23"},function(row){
-							return row[voti_m_index]/row[eletori_m_index]*100;
+							return row[votm_h23_index]/row[ele_m_index]*100;
 						});
 						data.addColumn({destination:"%votf_h23"},function(row){
-							return row[voti_m_index]/row[eletori_f_index]*100;
+							return row[votf_h23_index]/row[ele_f_index]*100;
+						});
+						data.addColumn({destination:"%vot_diff_h23"},function(row){
+							return ((row[votm_h23_index]/row[ele_m_index]*100) - (row[votf_h23_index]/row[ele_f_index]*100));
+						});
+						data.addColumn({destination:"votf_diff_h23"},function(row){
+							return ((row[votm_h23_index]/row[ele_m_index]*100) - (row[votf_h23_index]/row[ele_f_index]*100))*row[votf_h23_index];
 						});
 						options.type = "dbtable";
 						ixmaps.setExternalData(data,options);
@@ -80,7 +86,7 @@ $Log:index_only_map_embed.html,v $
 			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.3",flushPaintShape:"100000"})
 			   .view([42.030748560601424,12.432528287172318],6)
 			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps")  
-			   .legend("<h2>Votanti femminili e maschili registrati nel comune <br> Il colore indica il sesso con più votanti nel comune</h2>")		 
+			   .legend("Votanti mancanti - differenza tra l'affluenza femminile e maschile")			 
 						 
 			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
 				  .data({
@@ -89,7 +95,7 @@ $Log:index_only_map_embed.html,v $
 				  })
 				  .binding({id: "PRO_COM_T"})
 				  .style({
-					"colorscheme": ["none"],
+					colorscheme: ["none"],
 					linecolor: ["none"],
 					linewidth: "0.1",
 					sizefield: "Shape_Area"
@@ -116,24 +122,27 @@ $Log:index_only_map_embed.html,v $
 					type: "ext",
 					query: query_data.toString()
 				  })
-				  .binding({position: "CODICE ISTAT",value:"votf_h23|votm_h23"})
-				  .type("CHOROPLETH|DOMINANT|DOPACITYMAX|COMPACTLEGEND")		  
+				  .binding({position: "CODICE ISTAT",value:"%vot_diff_h23"})
+				  .type("CHOROPLETH|DOPACITYMINMAX|COMPACTLEGEND")		  
 				  .style({
 					colorscheme: [
-						"red",
-						"blue"],
-					label: ["votanti femminili",
-						   "votanti maschili"],
-					units: "",
-					dopacitypow: "2",
-					dopacityscale: "2",
-				    alphafield: "voti_h23",
-				    alphafield100: "$density$",
+						"#0000ff",
+						"#8888ff",
+						"#ddddff",
+						"#ffdddd",
+						"#ff8888",
+						"#ff0000"],
+					ranges: "-20,-10,-5,0,5,10,20",
+					units: "%",
+					alphafield: "ele_f",
+					alphafield100: "$density$",
+					dopacitypow: "3",
+					dopacityscale: "5",
 				    valueupper: "1:500000",
 				    textcolor: "#000088"
 					})
 				  .meta({
-					title: "Votanti alle 23:00 F/M  - densità elettori"
+					title: "Differenza dell'affluenza F/M - densità elettori"
 			})	  
 				  .define()
 				)
