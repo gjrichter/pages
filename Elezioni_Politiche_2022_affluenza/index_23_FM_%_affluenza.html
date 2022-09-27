@@ -36,11 +36,34 @@ $Log:index_only_map_embed.html,v $
     <!--========================================================================= -->
 
 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/viz/ElezioniCompare_small/tooltip.js"></script>
 	
     <!--========================================================================= -->
 
 	<script type="text/javascript" charset="utf-8"> 
 
+		query_data = function(data,options){
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/affluenza/affluenzaComuni_mf.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.realize(
+					function (dataA) {
+						var data = dataA[0];
+						var votm_h23_index = data.column("votm_h23").index;
+						var votf_h23_index = data.column("votf_h23").index;
+						var ele_m_index = data.column("ele_m").index;
+						var ele_f_index = data.column("ele_f").index;
+						data.addColumn({destination:"%votm_h23"},function(row){
+							return row[votm_h23_index]/row[ele_m_index]*100;
+						});
+						data.addColumn({destination:"%votf_h23"},function(row){
+							return row[votf_h23_index]/row[ele_f_index]*100;
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(data,options);
+				});
+		};
+		
 		document.activeElement.appendChild(
 			
 			ixmaps.embed("mymap", { 
@@ -54,7 +77,7 @@ $Log:index_only_map_embed.html,v $
 			  name: "map_1"	
 			  },
 			  map => map
-			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.9",flushPaintShape:"100000"})
+			   .options({objectscaling:"dynamic",normalSizeScale:"10000",panhidden:"false",basemapopacity:"0.3",flushPaintShape:"100000"})
 			   .view([42.030748560601424,12.432528287172318],6)
 			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps")  
 						 
@@ -72,22 +95,37 @@ $Log:index_only_map_embed.html,v $
 				  .define()
 				)
 						 
+			   .layer(ixmaps.layer("ITALIA_Regioni_2022")
+				  .data({
+					url:"https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/regioni_2022/Reg01012022_s_WGS84.topojson.gz",
+					type:"topojson"
+				  })
+				  .binding({id: "COD_REG"})
+				  .style({
+					"colorscheme": ["none"],
+					linecolor: ["#666666"],
+					linewidth: "10"
+					})
+				  .define()
+				)
+						 
 			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
 				  .data({
-					url:"https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/affluenza/affluenzaComuni_mf.csv",
-					type:"csv"
+					type: "ext",
+					query: query_data.toString()
 				  })
-				  .binding({position: "CODICE ISTAT",value:"votf_h23|votm_h23"})
-				  .type("CHOROPLETH|DOMINANT|DOPACITYMAX|VALUES|DTEXT|COMPACTLEGEND")		  
+				  .binding({position: "CODICE ISTAT",value:"%votf_h23|%votm_h23"})
+				  .type("CHOROPLETH|DOMINANT|DOPACITYMAX|COMPACTLEGEND")		  
 				  .style({
 					colorscheme: [
 						"red",
 						"blue"],
-					label: ["votanti feminili",
-						   "votanti maschili"],
-					units: "",
-					dopacitypow: "2",
-					dopacityscale: "3",
+					label: ["affluenza feminile",
+						   "affluenza maschile"],
+					units: "%",
+					alphafield: "%h23",
+					dopacitypow: "0.2",
+					dopacityscale: "2",
 				    valueupper: "1:500000",
 				    textcolor: "#000088"
 					})
