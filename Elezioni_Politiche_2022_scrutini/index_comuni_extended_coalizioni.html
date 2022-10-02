@@ -32,26 +32,43 @@
 			border: 2px solid #AFCDEA;
 			border-radius: 0.2em;
 		}
+
 		.map-frame {
-			border:0;
-			width:100%;
+			border: 0;
+			width: 100%;
 			max-width: 640px;
-			height:800px;
+			height: 800px;
+			margin-bottom: 120px;
+			margin-right:5px;
 		}
+
 		.text {
 			margin: auto;
 			max-width: 1024px;
 		}
+
+		.text-box {
+			margin: auto;
+			margin-top: -120px;
+			z-index: 1;
+			padding: 0.5em 1em 0.01em 1.2em;
+			max-width: 400px;
+			background-color:#f8f8f8;
+			xborder: solid #dddddd 1px;
+			color: black;
+		}
+
 		p {
 			font-size: 1.5em;
 		}
+
 	</style>
 
 
 </head>
 
 <body>
-	
+
 	<!-- --------------------------------------------------------------- -->
 	<!-- --------------------------------------------------------------- -->
 	<!--                                                                 -->
@@ -78,17 +95,20 @@
 	<!--                                                                 -->
 	<!-- --------------------------------------------------------------- -->
 	<!-- --------------------------------------------------------------- -->
-	
+
 	<div class="container">
 		<div class=" mb-3 text-center">
 			<div class="mb-4">
 				<div style="margin-top:-1.5em">
-					<h1 class="pricing-card-title">Politiche 25. sett. 2022 - Scrutini e Coalizioni</h1><h2><small class="text-muted">elaborazione dati:  <a href='https://github.com/ondata/elezioni-politiche-2022' target='_blank'>OnData</a> <- fonte dati:  <a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target='_blank'>Ministero dell'Interno</a></small></h2>
+					<h1 class="pricing-card-title">Elezioni 2022 - Camera dei Deputati <br>Scrutini Comuni - Coalizioni e Liste</h1>
+					<h2><small class="text-muted">elaborazione dati: <a href='https://github.com/ondata/elezioni-politiche-2022' target='_blank'>OnData</a>
+							<- fonte dati: <a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target=' _blank'>Ministero dell'Interno</a>
+						</small></h2>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- --------------------------------------------------------------- -->
 	<!-- --------------------------------------------------------------- -->
 	<!--                                                                 -->
@@ -96,28 +116,52 @@
 	<!--                                                                 -->
 	<!-- --------------------------------------------------------------- -->
 	<!-- --------------------------------------------------------------- -->
-	
-	<div class=" mb-3 text text-center">
-		<p>Le prime due mappe mostrano per ogni comune la lista vincitrice. La mappa a destra evidenzia oltre alla lista vincente la densità della popolazione del comune. La 3. mappa invece analizza il risultato delle elezioni a 'raggio X'. Il colore è composto dai vari colori delle liste rappresentando il risultato di ciascuna lista elencata nella leggenda.<p>
-	</div>
-		
-	<div class=" mb-3 text-center">
-		
-		<iframe id="map_1" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_dominant.json"></iframe>
-		
-		<iframe id="map_2" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_dominant_density.json"></iframe>
-		
-		<iframe id="map_2" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_subtractive.json"></iframe>
-		
 
+	<div class=" mb-3 text">
+		<p>Le mappe mostrano per ogni comune la coalizione/lista vincente. Partendo dai risultati ed i colori delle coalizioni/liste come rappresentati nella leggenda, ogni mappa visualizza i risultati in un modo leggermente diverso con un'infomazione aggiunto per poter valutare al meglio i risultati.<p>
 	</div>
-	
+
+	<div class=" mb-3" style="max-width:1280px;margin:auto;">
+		
+		<div class="row">
+			
+			<div class="map-frame" style="float:left">
+				<iframe id="map_1" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_dominant.json"></iframe>
+				<div class="text-box text-center"><p>Camera dei deputati: coalizione/lista vincente per ogni comune</p></div>
+			</div>
+
+			<div class="map-frame" style="float:left">
+				<iframe id="map_2" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_dominant_density.json"></iframe>
+				<div class="text-box text-center"><p>Quanto pesa il comune, in temine di numero di abitanti, dove la coalizione/lista ha vinto?</p></div>
+			</div>
+
+		</div>
+
+		<div class="row">
+
+			<div class="map-frame" style="float:left">
+				<iframe id="map_2" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_dominant_alpha.json"></iframe>
+				<div class="text-box text-center"><p>Quanto vantaggio ha la coalizione/lista nel comune dove ha vinto?</p></div>
+			</div>
+			
+			<div class="map-frame" style="float:left">
+				<iframe id="map_2" class="map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?&legend=true&align=center&scrollsafe=true&project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_coalizioni_subtractive.json"></iframe>
+				<div class="text-box text-center"><p>Voto a 'Raggi X'. Il colore è composto da quello delle coalizioni/liste in proporzione al risultato nel comune</p></div>
+			</div>
+			
+			
+		</div>
+
+
+	</div>, 
+
 	<!--========================================================================= -->
 
-	<div class=" mb-3 text ">
-		<p><b>nota:</b> cliccando sui colori nelle leggende si può ridurre la visualizzazione a le liste correspondenti, creando mappe sia delle singole liste che di combinazioni di liste selezionadoli.<p>
+	<div class=" mb-3 text " style="clear:both">
+		<p><b>nota:</b> cliccando sui colori nelle leggende si può ridurre la visualizzazione a le liste correspondenti, creando mappe sia delle singole liste che di combinazioni di liste selezionadoli.
+		<p>
 	</div>
-	
+
 	<!-- --------------------------------------------------------------- -->
 	<!-- --------------------------------------------------------------- -->
 	<!--                                                                 -->
@@ -132,12 +176,14 @@
 				<h5>Fonti</h5>
 				<ul class="list-unstyled text-small">
 					<li>
-						<a href='https://github.com/ondata/elezioni-politiche-2022' target='_blank'>OnData</a> - dati elaborati	<br>
-						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a></li>
+						<a href='https://github.com/ondata/elezioni-politiche-2022' target='_blank'>OnData</a> - dati elaborati <br>
+						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>
+					</li>
 					<li>&nbsp;</li>
 					<li>
-						<a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target='_blank'>Ministero dell'Interno</a> - dati grezzi<br>
-						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a></li>
+						<a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target=' _blank'>Ministero dell'Interno</a> - dati grezzi<br>
+						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>
+					</li>
 					<li>&nbsp;</li>
 					<li><a href="https://istat.it">ISTAT</a> - confini comunali 2022</li>
 				</ul>
@@ -177,7 +223,6 @@
 
 	<!-- Javascript -->
 	<script>
-		
 		// ---------------------------------------------------------------------------------------
 		// infuse HTML snippets
 		// ---------------------------------------------------------------------------------------
@@ -198,7 +243,6 @@
 		};
 
 		infuseHTML("menu", "./menu.html", "menu");
-
 
 	</script>
 
