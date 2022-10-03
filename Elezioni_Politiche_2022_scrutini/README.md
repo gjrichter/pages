@@ -1,4 +1,4 @@
-# elezioni politiche 2022
+# elezioni politiche 2022 - scrutini
 
 [scrutinio collegi plurinominali](https://gjrichter.github.io/pages/Elezioni_Politiche_2022_scrutini/index_plurinominali.html)
 
