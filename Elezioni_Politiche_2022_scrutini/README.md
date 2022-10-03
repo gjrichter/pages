@@ -1,6 +1,6 @@
 # elezioni politiche 2022
 
-[scrutinio collegi plurinominali](https://gjrichter.github.io/pages/Elezioni_Politiche_2022_scrutini/index.html)
+[scrutinio collegi plurinominali](https://gjrichter.github.io/pages/Elezioni_Politiche_2022_scrutini/index_plurinominali.html)
 
 [Comuni - proporzionale (4 mappe)](https://gjrichter.github.io/pages/Elezioni_Politiche_2022_scrutini/index_comuni_extended.html)
 
