@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+	
+	<style>
+		button {
+			background-color: #eeeeee;
+			border: solid #888888 1px;
+			border-radius: 0.5em;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+	
+	<script>
+		setFilter = function(value){
+			window.document.getElementById("query").value = value;
+			ixmaps.map('map_1').theme().changeStyle('filter:'+value,'set');	
+		};
+	</script>	
+	
+	<div id="filter-div" style="position:absolute;top:10px;left:20px;font-family:sans-serif">
+		<p style="margin-left:20px;margin-bottom:0.2em">definisci un filtro</p>
+		<div class="search-container">
+			<form name="FilterForm" style="margin-bottom:0.5em;background:rgba(255,255,255,0.7);">
+				<div class="input-group">
+					<span><i class="shareIcon blackHover share_bitly icon-filter" title="Filter" tabindex="-1" style="margin-left:1em;margin-right:0"></i></span>
+					<input class="filter-input search-box" id="query" type="text" placeholder="filtro ..." value="" title="query map items" style="padding:0.5em;border-radius:1em" onkeyup="javascript:var value = event.target.value;ixmaps.map('map_1').theme().changeStyle('filter:'+value,'set');">
+					</input>
+				</div>
+			</form>
+		</div>
+		<p style="margin-left:20px;margin-bottom:0em;margin-top:-0em;color:#666666;max-width:200px;font-size:0.7em">si poù definire qualsiasi filtro testuale. Esempio: Conte, Partito Democratico, Umbria</p>
+	
+		<p style="margin-left:20px;margin-bottom:0em;margin-top:1em;color:#666666;max-width:200px;font-size:0.7em">o scegli uno dei filtri prefabricati</p>
+		<div style="margin-left:20px;margin-top:0.5em;line-height:1.5em">
+			<button onclick="setFilter('WHERE eta < 40');">eta < 40</button>
+			<button onclick="setFilter('WHERE eta BETWEEN 40 AND 60');">40 - 60</button>
+			<button onclick="setFilter('WHERE eta > 60');"> > 60</button>
+			<br>		
+			<button onclick="setFilter('Uninominale');">Uninominali</button>
+			<button onclick="setFilter('Plurinominale');">Plurinominali</button>
+			<br>		
+			<button onclick="setFilter('Centro sinistra');">Centro sinistra</button>
+			<button onclick="setFilter('Centro destra');">Centro destra</button>
+			<br>		
+			<button onclick="setFilter('');">pulisci</button>
+		</div>		
+	</div>
+
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/viz/ElezioniCompare_small/tooltip.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		// define the function to query the actual data (last week) from INGV
+		// this functiuon will be loaded (toString()) into the theme definition
+
+		query_geo = function(data, options) {
+			var szUrl1 = "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/CollegiElettoraliBasiGeografiche/CAMERA_CollegiUNINOMINALI_2020_GEO_S.topojson.gz";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/geo/liste_Camera_Uninominale_MinisteroInterno-ISTAT.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "topojson")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function(dataA) {
+						var geo = dataA[0];
+						var codes = dataA[1];
+						geo.column('CU20_DEN').map(function(value) {
+							value = value.replace("Valle d'aosta/Vallée d'Aoste", "Valle d'aosta");
+							return value.toUpperCase();
+						});
+						var codeIndexA = codes.lookupArray({
+							key: "CU20_COD",
+							value: "cod_ente"
+						});
+						geo.addColumn({
+							destination: 'cod_ente',
+							source: 'CU20_COD'
+						}, function(value) {
+							return codeIndexA[value];
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(geo, options);
+					});
+		};
+
+		query_geo_2 = function(data, options) {
+			var szUrl1 = "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/CollegiElettoraliBasiGeografiche/CAMERA_CollegiPLURINOMINALI_2020_GEO_S.topojson.gz";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/geo/liste_Camera_Plurinominale_MinisteroInterno-ISTAT.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "topojson")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function(dataA) {
+						var geo = dataA[0];
+						var codes = dataA[1];
+						geo.column('CP20_DEN').map(function(value) {
+							value = value.replace("Valle d'aosta/Vallée d'Aoste", "Valle d'aosta");
+							return value.toUpperCase();
+						});
+						var codeIndexA = codes.lookupArray({
+							key: "CP20_COD",
+							value: "cod_ente"
+						});
+						geo.addColumn({
+							destination: 'cod_ente',
+							source: 'CP20_COD'
+						}, function(value) {
+							return codeIndexA[value];
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(geo, options);
+					});
+		};
+
+		query_data = function(data, options) {
+			var szUrl1 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ElezioniPolitiche2022/Politiche2022_Eletti_Camera_Italia.csv.gz";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/CAMERA_ITALIA_20220925_pluri.csv";
+			var szUrl3 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/CAMERA_ITALIA_20220925_uni.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.addSource(szUrl3, "csv")
+				.realize(
+					function(dataA) {
+						var scrutini = dataA[0];
+
+						scrutini.column("Collegio o ripartizione").map(function(value) {
+							return (value.split(" (")[0]);
+						});
+
+						var candidati_pluri = dataA[1];
+						var candidati_uni = dataA[2];
+						var nome_index = candidati_pluri.column("nome_c").index;
+						var cogn_index = candidati_pluri.column("cogn_c").index;
+						candidati_pluri.addColumn({
+							destination: "nome"
+						}, function(row) {
+							return (row[cogn_index] + " " + row[nome_index]);
+						});
+
+						nome_index = candidati_uni.column("nome_c").index;
+						cogn_index = candidati_uni.column("cogn_c").index;
+						candidati_uni.addColumn({
+							destination: "nome"
+						}, function(row) {
+							return (row[cogn_index] + " " + row[nome_index]);
+						});
+
+						var sesso_uA = candidati_uni.lookupArray({
+							key: "nome",
+							value: "sesso"
+						});
+						var dt_nasc_uA = candidati_uni.lookupArray({
+							key: "nome",
+							value: "dt_nasc"
+						});
+						var num_c_uA = candidati_uni.lookupArray({
+							key: "nome",
+							value: "num_c"
+						});
+						var sesso_pA = candidati_pluri.lookupArray({
+							key: "nome",
+							value: "sesso"
+						});
+						var dt_nasc_pA = candidati_pluri.lookupArray({
+							key: "nome",
+							value: "dt_nasc"
+						});
+						var num_c_pA = candidati_pluri.lookupArray({
+							key: "nome",
+							value: "num_c"
+						});
+
+						scrutini.addColumn({
+							source: "Cognome e nome",
+							destination: "sesso"
+						}, function(value) {
+							value = value.trim();
+							return (sesso_uA[value] || sesso_pA[value] || "x");
+						});
+
+						scrutini.addColumn({
+							source: "Cognome e nome",
+							destination: "dt_nasc"
+						}, function(value) {
+							value = value.trim();
+							return (dt_nasc_uA[value] || dt_nasc_pA[value] || "x");
+						});
+
+						scrutini.addColumn({
+							source: "dt_nasc",
+							destination: "eta"
+						}, function(value) {
+							value = value.trim();
+							return (2022 - value);
+						});
+
+						var tipo_index = scrutini.column("Tipo candidatura").index;
+						var key_index = scrutini.column("Cognome e nome").index;
+						scrutini.addColumn({
+							destination: "num_c"
+						}, function(row) {
+							var name = row[key_index].trim();
+							if (row[tipo_index] == "Plurinominale") {
+								return (num_c_pA[name] || "?");
+							} else {
+								return "U" + (num_c_pA[name] ? ("+" + num_c_pA[name]) : "");
+							}
+						});
+
+						scrutini.column("Lista").map(value => {
+							if (value.match(/PARTITO DEM/)) {
+								return "PARTITO DEMOCRATICO";
+							} else
+							if (value.match(/FRATELLI/)) {
+								return "FRATELLI D'ITALIA";
+							} else
+							if (value.match(/LEGA/)) {
+								return "LEGA";
+							} else
+							if (value.match(/AZIONE/)) {
+								return "AZIONE + ITALIA VIVA";
+							} else {
+								return value;
+							}
+						});
+						scrutini.column("Coalizione").map(value => {
+							if (value.match(/PARTITO DEM/)) {
+								return "Centro Sinistra";
+							} else
+							if (value.match(/FRATELLI/)) {
+								return "Centro Destra";
+							} else
+							if (value.match(/AZIONE/)) {
+								return "AZIONE + ITALIA VIVA";
+							} else {
+								return value;
+							}
+						});
+
+						var pol_index = scrutini.column("Lista").index;
+						var upol_index = scrutini.column("Coalizione").index;
+						var nome_index = scrutini.column("Cognome e nome").index;
+						scrutini.addColumn({
+							destination: "nome_pol"
+						}, function(row) {
+							return (row[nome_index] + "(" + (row[pol_index] || row[upol_index]) + ")");
+						});
+
+						options.type = "dbtable";
+						ixmaps.setExternalData(scrutini, options);
+					});
+		};
+
+		// ----------------------------------------
+		// 
+		// 	
+		//  
+		// ----------------------------------------
+
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapType: "Stamen - toner-lite",
+					height: "720px",
+					legend: "true",
+					mode: "pan",
+					name: "map_1"
+				},
+				map => map
+				.options({
+					panhidden: "false",
+					basemapopacity: "0.3",
+					objectscaling: "dynamic",
+					dynamicScalePow: "5",
+					normalSizeScale: "865065"
+				})
+				.require("https://raw.githubusercontent.com/gjrichter/viz/master/Elezioni/Politiche/2022/js/tooltip_eletti.js")
+				.view([41.82860426955568, 11.651000976562502], 6)
+				.attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps")
+				.layer(ixmaps.layer("CAMERA_Collegi_Uninominali_2020")
+					.data({
+						type: "ext",
+						query: query_geo.toString()
+					})
+					.binding({
+						id: "CU20_DEN",
+						lookup: "geometry"
+					})
+					.style({
+						type: "FEATURES|NOLEGEND",
+						"colorscheme": [
+							"none"
+						],
+						linecolor: ["black"],
+						linewidth: 0.1
+					})
+					.define()
+				)
+
+				.layer(ixmaps.layer("CAMERA_Collegi_Plurinominali_2020")
+					.data({
+						type: "ext",
+						query: query_geo_2.toString()
+					})
+					.binding({
+						id: "CP20_DEN",
+						lookup: "geometry"
+					})
+					.style({
+						type: "FEATURES|NOLEGEND",
+						"colorscheme": [
+							"none"
+						],
+						linecolor: ["black"],
+						linewidth: 0.1
+					})
+					.define()
+				)
+
+				.layer(ixmaps.theme("CAMERA_Collegi_Uninominali_2020|CAMERA_Collegi_Plurinominali_2020")
+					.data({
+						type: "ext",
+						query: query_data.toString()
+					})
+					.binding({
+						position: "Collegio o ripartizione",
+						value: "sesso"
+					})
+					.style({
+						type: "CHART|SYMBOL|MULTIPLE|UP|CATEGORICAL|SUM|FIXSIZE|INLINETEXT|BOX|TITLE|VALUES|DTEXT|VALUEBACKGROUND|COMPACTLEGEND",
+						colorscheme: [
+							"#E41B22",
+							"#225BE4",
+							"#aaaaaa"
+						],
+						values: [
+							"F",
+							"M",
+							"x"
+						],
+						label: [
+							"Donne",
+							"Uomini",
+							"nome non ancora pervenuto"
+						],
+						symbols: [
+							"circle"
+						],
+						"fillopacity": "0.3",
+						"shadow": "true",
+						"showdata": "true",
+						"units": "",
+						"refreshtimeout": "0",
+						"normalsizevalue": "20",
+						"scale": "0.6",
+						"labelfield": "nome_pol",
+						"textcolor": "black",
+						"textscale": "1",
+						"borderradius": "10",
+						"boxopacity": "0.5",
+						"boxmargin": "5",
+						"titlefield": "Collegio o ripartizione",
+						"titleupper": "1:500000",
+						"labelupper": "1:500000",
+						"shadowlower": "1:500000",
+						"valuefield": "num_c",
+						"valuescale": "1",
+						"gridwidthpx": "50",
+					})
+					.meta({
+						title: "Elezioni 2022",
+						snippet: "<small><b>Candidati eletti</b> per la <b>Camera dei Deputati</b> nei collegi uninomenali e plurinominali.</small><br><small>Eletti in collegi <b>uninominali</b> sono visualizzati con <b>'U'</b>.</small><br><small>Eletti in collegi <b>plurinominali</b> con la loro <b>posizione</b> nella lista (1,2,3 o 4)</zmall>",
+						description: "dati: <a href=''>onData</a>, <a href=''>Eligendo</a>"
+					})
+					.define()
+				)
+
+
+			)
+		);
+
+	</script>
+</body>
+
+</html>
