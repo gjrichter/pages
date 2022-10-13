@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/viz/ElezioniCompare_small/tooltip.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+		// define the function to query the actual data (last week) from INGV
+		// this functiuon will be loaded (toString()) into the theme definition
+		
+		query_geo = function(data,options){
+			var szUrl1 = "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/CollegiElettoraliBasiGeografiche/CAMERA_CollegiPLURINOMINALI_2020_GEO_S.topojson.gz";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/liste/processing/geo/liste_Camera_Plurinominale_MinisteroInterno-ISTAT.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "topojson")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function (dataA) {
+						var geo = dataA[0];
+						var codes = dataA[1];
+						geo.column('CP20_DEN').map(function(value){
+							value=value.replace("Valle d'aosta/Vallée d'Aoste","Valle d'aosta");
+							return value.toUpperCase();
+						});
+						var codeIndexA = codes.lookupArray({key:"CP20_COD",value:"cod_ente"});
+						geo.addColumn({destination:'cod_ente',source:'CP20_COD'},function(value){
+							return codeIndexA[value];
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(geo,options);
+				});
+		};
+			
+		query_data = function(data,options){
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/risultati/camera-italia-plurinominale.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.realize(
+					function (dataA) {
+						var scrutini = dataA[0];
+						scrutini.column('CR_CP').map(function(value){
+							value = "CP"+value.split("-")[1];
+							return value;
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(scrutini,options);
+				});
+		};
+
+		// ----------------------------------------
+		// create the map with DISS and earthquakes
+		// 	5 layer DISS
+		//  1 layer actual earthquakes
+		// ----------------------------------------
+
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", { 
+			  mapCdn: "https://gjrichter.github.io/ixmaps",
+			  mapType: "Stamen - toner-lite",	
+			  width:  "700px",
+			  height: "780px",
+			  legend: "true",
+			  mode: "pan",		
+			  align: "center",
+			  scrollsafe: "true",
+			  footer: "true"	
+			  },
+			  map => map
+			   .options({objectscaling:"dynamic",normalSizeScale:"10000000",panhidden:"false",basemapopacity:"0.3"})
+			   .view([42.27730877423709,12.172363281250002],6)
+			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps") 
+						 
+			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
+				  .data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
+					type: "topojson"
+				  })
+				  .binding({id: "PRO_COM_T",lookup: "geometry"})
+				  .style({
+					type: "FEATURES|NOLEGEND",
+					"colorscheme": [
+						"none"],
+					linecolor: ["none"],
+					linewidth: 1,
+					sizefield:"Shape_Area"
+					})
+				  .define()
+				)
+						 
+			   .layer(ixmaps.theme("ITALIA_Comuni_2022")
+				  .data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ElezioniPolitiche2022/Camera2022_scrutini_pivot_coalizioni.csv.gz",
+					type: "csv"
+				  })
+				  .binding({position: "pro_com",
+							value:"CSN|CDX|MOVIMENTO 5 STELLE|AZIONE - ITALIA VIVA - CALENDA|SUD CHIAMA NORD|SÜDTIROLER VOLKSPARTEI (SVP) - PATT", 
+							value100:"Total"})
+				  .style({
+					type: "CHOROPLETH|COMPOSECOLOR|SUBTRACTIVE|DOPACITYMAX|HORZ|SORT|SIMPLELEGEND",
+					"colorscheme": [
+						"#E41B22",
+						"RGB(5,77,200)",
+						"RGB(238,217,36)",
+						"#ff00ff",
+						"#dd8800",
+						"#666666"],
+					"label": [
+						"Centro Sinistra",
+						"Centro Destra",
+						"Movimento 5 Stelle",
+						"AZIONE - ITALIA VIVA - CALENDA",
+						"SUD CHIAMA NORD",
+						"SVP"],
+					fillopacity: "0.7",
+					alphafield: "Total",
+					alphafield100: "$density$",
+					dopacitypow: "5",
+					dopacityscale: "2.5",
+					titlefield: "desc_com",
+					valuescale: "1",
+					valuedecimals: "1",
+				  })
+				  .meta({title:"Elezioni Politiche <b>2022</b>",
+						 snippet:"Scrutini <b>Camera dei Deputati - risultati ai raggi X </b> - per ogni comune il colore é composto da quello delle coalizioni/liste in proporzione ai risultati nel comune<br>"})    
+				  .define()
+				)
+					  
+						 
+			 ) 			
+		);
+
+	</script>	
+  </body>
+</html>
