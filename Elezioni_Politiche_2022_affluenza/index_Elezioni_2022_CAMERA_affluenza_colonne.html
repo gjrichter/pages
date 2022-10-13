@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/viz/ElezioniCompare_small/tooltip.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+		// define the function to query the actual data (last week) from INGV
+		// this functiuon will be loaded (toString()) into the theme definition
+		
+		query_data = function(data,options){
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/affluenza/affluenzaComuni_mf.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.realize(
+					function (dataA) {
+						var affluenza = dataA[0];
+						var elettoriIndex = affluenza.column("elettori").index;
+						var votantiIndex = affluenza.column("voti_h23").index;
+						affluenza.addColumn({destination:"non_voti_h23"},row => {
+							return (row[elettoriIndex] - row[votantiIndex]);
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(affluenza,options);
+				});
+		};
+
+		// ----------------------------------------
+		// create the map with DISS and earthquakes
+		// 	5 layer DISS
+		//  1 layer actual earthquakes
+		// ----------------------------------------
+
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", { 
+			  mapCdn: "https://gjrichter.github.io/ixmaps",
+			  mapType: "Stamen - toner-lite",	
+			  width:  "100%",
+			  height: "840px",
+			  legend: "true",
+			  mode: "pan",		
+			  scrollsafe: "true",
+			  footer: "true"	
+			  },
+			  map => map
+			   .options({objectscaling:"dynamic",
+						 normalSizeScale:"10000000",
+						 basemapopacity:"0.3",
+						 flushChartDraw:"5000"})
+			   .view([41.90432124806034,14.043273925781252],8)
+			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps") 
+						 
+			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
+				  .data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
+					type: "topojson"
+				  })
+				  .binding({id: "PRO_COM_T",lookup: "geometry"})
+				  .style({
+					type: "FEATURES|NOLEGEND",
+					"colorscheme": [
+						"none"],
+					linecolor: ["none"],
+					linewidth: 1,
+					sizefield:"Shape_Area"
+					})
+				  .define()
+				)
+						 
+			   .layer(ixmaps.theme("ITALIA_Comuni_2022")
+				  .data({
+					query:query_data.toString(),
+					type:"ext"
+				  })
+				  .binding({position: "CODICE ISTAT",
+							value:"voti_h23|non_voti_h23"})
+				  .type("CHART|BAR|COLUMNS|STACKED|3D|SIZE|AGGREGATE|SUM|SIZE|SUM|COMPACTLEGEND")		  
+				  .style({
+					colorscheme: [
+						"#f8a0b0",
+						"#ffffff"],
+					label: [
+						"hanno votato",
+						"non hanno votato"],
+					shadow: "true",
+					units: "",
+					scale: "1.5",
+					rangescale: "2",
+					linecolor: "#888888",
+					linewidth: "1",
+					titlefield: "comune",
+					valuescale: "1",
+					gridwidthpx: "4.1843562195600015",
+					})
+				  .meta({
+					title: "Elezioni politiche 2022 <br>Camera dei Deputati",
+					snippet: "Nei comuni nel quadro della mappa",
+					description: "elaborazione dati: <a href='https://github.com/ondata/elezioni-politiche-2022/tree/main/affluenza-risultati' target='_blank'>onData</a> su fonte: <a href='https://elezioni.interno.gov.it/camera/votanti/20220925/votantiCI' target='_blank'>Eligendo</a>"
+				  })
+				  .define()
+				)
+					  
+						 
+			 ) 			
+		);
+
+	</script>	
+  </body>
+</html>
