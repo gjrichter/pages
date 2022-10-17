@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+		// define the function to query the actual data (last week) from INGV
+		// this functiuon will be loaded (toString()) into the theme definition
+		
+		query_data = function(data,options){
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/affluenza/affluenzaComuni_mf.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.realize(
+					function (dataA) {
+						var affluenza = dataA[0];
+						options.type = "dbtable";
+						ixmaps.setExternalData(affluenza,options);
+				});
+		};
+
+		// ----------------------------------------
+		// create the map with DISS and earthquakes
+		// 	5 layer DISS
+		//  1 layer actual earthquakes
+		// ----------------------------------------
+
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", { 
+			  mapCdn: "https://gjrichter.github.io/ixmaps",
+			  mapType: "Stamen - toner-lite",	
+			  width:  "100%",
+			  height: "1400px",
+			  legend: "true",
+			  mode: "info",		
+			  align: "center",
+			  tools: "true",	
+			  scrollsafe: "true",
+			  footer: "true"	
+			  },
+			  map => map
+			   .options({objectscaling:"dynamic",
+						 normalSizeScale:"100000",
+						 panhidden:"false",
+						 basemapopacity:"0.3"})
+			   .view([42.27730877423709,12.172363281250002],7)
+			   .attribution("di <a href='https://twitter.com/grichter' target='_blank'>Guenter Richter</a> powered by iXMaps") 
+			   .require("https://gjrichter.github.io/ixmaps/ui/js/tools/tooltip_basic.js")
+			   .layer(ixmaps.layer("ITALIA_Comuni_2022")
+				  .data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
+					type: "topojson"
+				  })
+				  .binding({id: "PRO_COM_T",lookup: "geometry"})
+				  .style({
+					type: "FEATURES|NOLEGEND",
+					"colorscheme": [
+						"none"],
+					linecolor: ["none"],
+					linewidth: 1,
+					sizefield:"Shape_Area"
+					})
+				  .define()
+				)
+						 
+			   .layer(ixmaps.theme("ITALIA_Comuni_2022")
+				  .data({
+					url:"https://raw.githubusercontent.com/ondata/elezioni-politiche-2022/main/affluenza-risultati/dati/affluenza/affluenzaComuni_mf.csv",
+					type:"csv"
+				  })
+				  .binding({position: "CODICE ISTAT",
+							value:"%h23_prec|%h23"})
+				  .type("CHOROPLETH|DIFFERENCE|NEGATIVEISVALUE|DOPACITYMINMAX|VALUES|SIMPLELEGEND")		  
+				  .style({
+					colorscheme: [
+						"red",
+						"orange",
+						"green",
+						"lightgray"],
+					autoopacity: "true",
+					dopacitypow: "2",
+					dopacityscale: "10",
+					ranges: [
+						"-20",
+						"-10",
+						"0",
+						"10",
+						"100"],
+					label: [
+						"più di 10% di affluenza in meno",
+						"tra 0 e 10% in meno",
+						"affluenza in crescita",
+						"improbabile"],
+					units: "%",
+					showdata: "true",
+					datafields: ["elettori","%h23_prec","%h23"],
+					textcolor: "black",
+					titlefield: "comune",
+					valueupper: "1:1000000",
+					titlefield: "comune"
+					})
+				  .meta({
+					title: "Affluenza 2018 / 2022 al confronto"
+				  })
+				  .define()
+				)
+					  
+						 
+			 ) 			
+		);
+
+	</script>	
+  </body>
+</html>
