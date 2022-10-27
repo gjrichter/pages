@@ -12,7 +12,7 @@ Mappe per analizzare il genere dei amministratori comunale, data set pubblicato 
 
 Fonte: <a href="https://dait.interno.gov.it/elezioni/open-data/amministratori-locali-in-carica" target="_blank">Ministero dell'Interno</a>  -> [onData](https://github.com/ondata/sesso-e-potere/tree/main/dati/amministazioni-italiane)
 
-Le seguente mappe sono stati creati da **[Observable](https://observablehq.com/teams)** Notebooks includendo ed utilizzando la piattaforma **[iXMaps](https://ixmaps.com)**. 
+Le seguente mappe sono stati creati da **[Observable](https://observablehq.com/teams)** Notebooks includendo ed utilizzando la piattaforma **[iXMaps](http://www.ixmaps.com)**. 
 
 I dati vengono caricati direttamente dal repository di **[onData](https://github.com/ondata/sesso-e-potere/tree/main/dati/amministazioni-italiane)**.
 
