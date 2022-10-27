@@ -14,7 +14,7 @@ Fonte: <a href="https://dait.interno.gov.it/elezioni/open-data/amministratori-lo
 
 Le seguente mappe sono stati creati da **[Observable](https://observablehq.com/teams)** Notebooks includendo ed utilizzando la piattaforma **[iXMaps](http://www.ixmaps.com)**. 
 
-I dati vengono caricati direttamente dal repository di **[onData](https://github.com/ondata/sesso-e-potere/tree/main/dati/amministazioni-italiane)**.
+I dati vengono caricati direttamente dal repository di **[onData](https://github.com/ondata/sesso-e-potere/tree/main/dati/amministazioni-italiane/processing)**.
 
 
 
