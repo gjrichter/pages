@@ -14,6 +14,10 @@
 
 [Sesso e Potere](https://gjrichter.github.io/pages/Sesso%20e%20Potere/)
 
+[PA Digitale](https://gjrichter.github.io/pages/PA%20Digitale/PA_Digitale_Candidature%20finanziate_dashboard_I.html)
+
+
+
 ---
 
 TEST
