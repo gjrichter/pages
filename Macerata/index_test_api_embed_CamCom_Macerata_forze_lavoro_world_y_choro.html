@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps really simple embed</title>
+	
+    <link rel="stylesheet" href="https://gjrichter.github.io/pages/assets/material-design-select-dropdown/css/style.css">
+
+</head>
+
+<body style='text-align:center'>
+
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+		REGIONI = function (theme, options) {
+
+			/** the data from Camera di Commercio di Macerata **/
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/nuts/main/processing/NUTS2_g.geojson";
+
+			new Data.Broker()
+				.addSource(szUrl1, "geojson")
+				.realize(
+					function (dataA) {
+
+						var __regioni 	= dataA[0];
+
+						__regioni.column("Nome").map(function(value){ 
+							if ( value == "Emilia-Romagna"){
+								return "EMILIA ROMAGNA";
+							}
+							if ( value == "Provincia Autonoma di Trento"){
+								return "TRENTINO - ALTO ADIGE";
+							}
+							if ( value == "Valle d'Aosta/Vallée d'Aoste"){
+								return "VALLE D'AOSTA";
+							}
+							return value.toUpperCase();
+						});
+
+						/** --------------------------------------
+						    deploy the data
+						    -------------------------------------- **/
+
+						ixmaps.setData(__regioni, {
+							type: "dbtable",
+							name: options.name
+						});
+
+				});
+		};
+
+		WORLD_ISO_3_ALPHA = function (theme,options) {
+
+			var szUrl1 = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
+			var szUrl2 = "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.json";
+
+			var broker = new Data.Broker()
+
+				.addSource(szUrl1, "json")
+				.addSource(szUrl2, "json")
+				.realize(
+
+				function (dataA) {
+
+					/** topojson to geojson */
+					var countries = topojson.feature(dataA[0].raw, dataA[0].raw.objects.countries);
+
+					/** get named array and replace iso-3 numeric with iso-3 alpha codes **/
+					var countryCodes = dataA[1];
+					var countryCodesA = countryCodes.lookupArray("alpha-3","country-code");
+					for ( var i in countries.features){
+						countries.features[i].properties.id = countryCodesA[countries.features[i].id];  
+					}
+
+					/** --------------------------------------
+						deploy the data
+						-------------------------------------- **/
+
+					ixmaps.setExternalData(countries, {
+						type: "geojson",
+						name: options.name
+					});
+
+				});
+
+		};
+
+		WORKER_LAST = function (theme, options) {
+
+			var __enhanceData = function(dataA){
+
+				var __flow 		= dataA[0];
+				var __codici 	= dataA[1];
+
+				var codiciToNameA = __codici.lookupArray({key:"Codice AT",value:"Denominazione EN"});
+				__flow.addColumn({source:"Stato di nascita",destination:"name"},function(value){
+					return codiciToNameA[value.split(" - ")[1]]});
+				var codiciToISO3A = __codici.lookupArray({key:"Codice AT",value:"Codice ISO 3166 alpha3"});
+				__flow.addColumn({source:"Stato di nascita",destination:"ISO3"},function(value){
+					return codiciToISO3A[value.split(" - ")[1]]});
+				__flow.addColumn({source:"Territorio Sede d'Impresa",destination:"name_2"},function(value){
+					if (value == "ITALIA"){
+						return "ITA";
+					}
+					return value });
+
+			};
+			
+			/** the data from Camera di Commercio di Macerata **/
+			var szUrl1 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Macerata/Persone-Attive-Italia.csv.gz";
+
+			/** root url to daily reports **/
+			var szUrl2 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Macerata/Elenco-codici-e-denominazioni-al-31_12_2021.csv.gz";
+
+			new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function (dataA) {
+
+						__enhanceData(dataA);
+
+						var __flow 		= dataA[0];
+
+						/** get last date **/
+						var columnsA = __flow.columnNames();
+						var last = columnsA[columnsA.length-4];
+						theme.szFields = last;
+						theme.szFieldsA = [last];
+
+						/** --------------------------------------
+						    deploy the data
+						    -------------------------------------- **/
+
+						ixmaps.setData(__flow, {
+							type: "dbtable",
+							name: options.name
+						});
+
+				});
+		};
+		
+		WORKER_SEQUENCE_Y = function (theme, options) {
+
+			var __enhanceData = function(dataA){
+
+				var __flow 		= dataA[0];
+				var __codici 	= dataA[1];
+
+				var codiciToNameA = __codici.lookupArray({key:"Codice AT",value:"Denominazione EN"});
+				__flow.addColumn({source:"Stato di nascita",destination:"name"},function(value){
+					return codiciToNameA[value.split(" - ")[1]]});
+				var codiciToISO3A = __codici.lookupArray({key:"Codice AT",value:"Codice ISO 3166 alpha3"});
+				__flow.addColumn({source:"Stato di nascita",destination:"ISO3"},function(value){
+					return codiciToISO3A[value.split(" - ")[1]]});
+				__flow.addColumn({source:"Territorio Sede d'Impresa",destination:"name_2"},function(value){
+					if (value == "ITALIA"){
+						return "ITA";
+					}
+					return value });
+
+			};
+			
+			__mean_7 = function(table,first,last) {
+
+				/** make roling average of 7 **/
+				first += 7;
+				var records = table.records;
+				for ( var r=0; r<records.length; r++ ){
+					var c;
+					for ( c=last; c>=first; c--){
+						records[r][c] = ((Number(records[r][c])+
+										 Number(records[r][c-1])+
+										 Number(records[r][c-2])+
+										 Number(records[r][c-3])+
+										 Number(records[r][c-4])+
+										 Number(records[r][c-5])+
+										 Number(records[r][c-6]))/7).toFixed(2);
+					}
+					records[r][c] = ((Number(records[r][c])+
+									 Number(records[r][c-1])+
+									 Number(records[r][c-2])+
+									 Number(records[r][c-3])+
+									 Number(records[r][c-4])+
+									 Number(records[r][c-5]))/6).toFixed(2);
+					c--;
+					records[r][c] = ((Number(records[r][c])+
+									 Number(records[r][c-1])+
+									 Number(records[r][c-2])+
+									 Number(records[r][c-3])+
+									 Number(records[r][c-4]))/5).toFixed(2);
+					c--;
+					records[r][c] = ((Number(records[r][c])+
+									 Number(records[r][c-1])+
+									 Number(records[r][c-2])+
+									 Number(records[r][c-3]))/4).toFixed(2);
+					c--;
+					records[r][c] = ((Number(records[r][c])+
+									 Number(records[r][c-1])+
+									 Number(records[r][c-2]))/3).toFixed(2);
+					c--;
+					records[r][c] = ((Number(records[r][c])+
+									 Number(records[r][c-1]))/2).toFixed(2);
+				}
+
+				return table;
+			}; 
+			
+			/** the data from Camera di Commercio di Macerata **/
+			var szUrl1 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Macerata/Persone-Attive-Italia.csv.gz";
+
+			/** root url to daily reports **/
+			var szUrl2 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Macerata/Elenco-codici-e-denominazioni-al-31_12_2021.csv.gz";
+
+			new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function (dataA) {
+
+						__enhanceData(dataA);
+
+						var __flow 	= dataA[0];
+
+						__flow = __mean_7(__flow,2,__flow.fields.length-4);
+
+						var columnsA = __flow.columnNames();
+						columnsA.shift();
+						columnsA.shift();
+						columnsA.pop();
+						columnsA.pop();
+						columnsA.pop();
+
+						fieldsA = [];
+						for ( i in columnsA ){
+							if (columnsA[i].match(/30\/06/)){
+								fieldsA.push(columnsA[i]);
+							}
+						}
+
+						var last = fieldsA.length - 1;
+
+						/** set as data fields in actual theme **/
+						theme.szFields = fieldsA.slice().join("|");
+						theme.szFieldsA = fieldsA.slice();
+
+						theme.style.setProperties({
+							"label":fieldsA.slice(),
+							"snippet" :"from " + fieldsA[0] + " to " + fieldsA[last],
+							"clipframes": fieldsA.length
+						});
+
+						/** --------------------------------------
+						    deploy the data
+						    -------------------------------------- **/
+
+						ixmaps.setData(__flow, {
+							type: "dbtable",
+							name: options.name
+						});
+
+				});
+		};
+		
+	
+		legend = 
+			"<h1><b style='color:rgb(46, 142, 189)'> Persone con Carica Attive nate all'estero<br>dal giunio 2000 al giunio 2022</b></h1>";
+		
+		attribution = 
+			"<p style='margin-bottom:-1em'>data: <a href='https://opendata.marche.camcom.it/persone-attive.htm' target='_blank'>Camera di Commercio delle Marche</a></br>powered by iXMaps</p>";
+		
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", 
+				{ 
+			   	mapCdn: "https://gjrichter.github.io/ixmaps",
+				map: 	"../../maps/svg/maps/generic/winkel.svg",
+				mapService: "leaflet",
+				mapType:	"white",
+				mode:		"pan",
+				width:    	"100%",
+				align:      "center",
+				legend:     true
+				},
+				map => map
+					.view([15,15],2)          
+					.options({
+						featurescaling: "dynamic",
+						objectscaling: "dynamic",
+						dynamicScalePow: "3",
+						normalSizeScale: "1000000000",
+						flushChartDraw: "10000",
+						panhidden:"false"
+					})
+					.require("../../ui/js/tools/tooltip_basic.js")
+					.attribution(attribution) 
+					.legend(legend)
+						 
+					// load geometries
+						 
+					.layer(
+						ixmaps.layer("COUNTRIES")
+						.data({
+							query: WORLD_ISO_3_ALPHA.toString(),
+							type: "ext"})
+						.binding({
+							id: "id",
+							geo: "geometry"})
+						.style({
+							type: "FEATURES|NOLEGEND",
+							colorscheme: [
+								"none"],
+							fillopacity: "0.5",
+							linecolor: "black",
+							linewidth: "0.02"
+						})
+						.json()
+					)
+					.layer(
+						ixmaps.layer("REGIONI")
+						.data({
+							query: REGIONI.toString(),
+							type: "ext"})
+						.binding({
+							id: "Nome",
+							geo: "geometry"})
+						.style({
+							type: "FEATURES|NOLEGEND",
+							colorscheme: [
+								"#dddddd"],
+							fillopacity: "0.5",
+							linecolor: "black",
+							linewidth: "0.02"
+						})
+						.json()
+					)
+						 
+					// vaccines - choropleth, counties
+						 
+					.layer({
+						"layer": "COUNTRIES|REGIONI",
+						"field": "31/12/2021",
+						"field100": "",
+						"style": {
+							"type": "CHART|VECTOR|BEZIER|GRADIENT|FADEIN|POINTER|FAST|SUM|NOLEGEND",
+							"colorscheme": [
+								"rgb(46, 142, 139)"],
+							"fillopacity": "0.6",
+							"shadow": "false",
+							"filter": "WHERE \"Territorio Sede d'Impresa\" = \"ITALIA\"",
+							"dbtable": "WORKER_LAST",
+							"dbtableQuery": WORKER_LAST.toString(),
+							"dbtableType": "ext",
+							"datacache": "true",
+							"lookupfield": "ISO3",
+							"lookupfield2": "name_2",
+							"units": "",
+							"refreshtimeout": "0",
+							"scale": "0.5",
+							"rangescale": "5",
+							"sizefield": "31/12/2021",
+							"linecolor": [
+								"rgb(46, 142, 189)"],
+							"markersize": "0.5",
+							"name": "vectors",
+							"valuescale": "1",
+							"valuedecimals": "0",
+							"title": "Flow"
+							}
+					})
+						 
+					// last numbers - choropleth
+						 
+					.layer(
+						ixmaps.layer("REGIONI|COUNTRIES")
+						.type("CHOROPLETH|DOPACITY")
+						.data({
+							"name": "WORKER_LAST_1",
+							"query": WORKER_LAST.toString(),
+							"type": "ext",
+							"cache": "true",
+							"filter": "WHERE \"Territorio Sede d'Impresa\" = \"ITALIA\""
+						})
+						.binding({
+							"value": "...placeholder1...",
+							"lookupfield": "ISO3",
+							"titlefield": "name"
+						})
+						.style({
+							"colorscheme": [
+								"rgb(46, 142, 189)"],
+							"fillopacity": "1",
+							"shadow": "false",
+							"dopacitypow": "0.2",
+							"dopacityscale": "0.002"
+						})
+						.meta({
+							"name": "choro",
+							"title": "Provenienza forza lavoro",
+							"snippet": "<h1 style='margin:-0.5em 0'>MARCHE</h1>",
+							"splash": "loading and aggregating data ...",
+							"description": ""
+						})
+						.define() 
+					)
+
+					// fatalities - chart, lat,lon
+						 
+					.layer({
+						"layer": "REGIONI|COUNTRIES",
+						"field": "",
+						"field100": "",
+						"style": {
+							"type": "CHART|SYMBOL|SEQUENCE|PLOT|LINES|AREA|LOLLIPOP|GRID|BOX|TITLE|COMPACTLEGEND",
+							"colorscheme": [
+								"rgb(26, 122, 169)"],
+							"fillopacity": "0.02",
+							"shadow": "false",
+							"filter": "WHERE \"Territorio Sede d'Impresa\" = \"ITALIA\"",
+							"dbtable": "WORKER_SEQUENCE_Y",
+							"dbtableQuery": WORKER_SEQUENCE_Y.toString(),
+							"dbtableType": "ext",
+							"datacache": "true",
+							"lookupfield": "ISO3",
+							"symbols": [
+								"label"],
+							"units": "",
+							"align": "center|23right",
+							"refreshtimeout": "0",
+							"scale": "0.2",
+							"linewidth": "25",
+							"valuescale": "1",
+							"maxvalue": "auto",
+							"rangescale": "1",
+							"boxopacity": "0.003",
+							"boxmargin": "20",
+							"name": "curves",
+							"titlefield": "name",
+							"textscale": "1.5",
+							"title": "Provenienza forza lavoro",
+							"snippet": "<h1 style='margin:-0.5em 0'>MARCHE</h1>",
+							"splash": "loading and aggregating data ...",
+							"description": ""
+							}
+					})
+			)
+		);
+
+		
+	function setFilter(){
+		var value = this.event.target.getAttributeNS(null,"data-value");
+		ixmaps.map().theme("choro").changeStyle("filter:WHERE \"Territorio Sede d'Impresa\" = \""+value+"\"","set");
+		ixmaps.map().theme("curves").changeStyle("filter:WHERE \"Territorio Sede d'Impresa\" = \""+value+"\"","set");
+		ixmaps.map().theme("vectors").changeStyle("filter:WHERE \"Territorio Sede d'Impresa\" = \""+value+"\"","set");
+		ixmaps.showLoading("&rarr; "+value);
+	}	
+
+	</script>	
+	
+	<div style="position:absolute;top:5.5em;left:2em">
+		<label id="img_category_label" class="field" for="img_category" data-value="LOMBARDIA">
+		<span style="font-size:12px;top:15px ">Territorio</span>
+		<div id="img_category" class="psuedo_select" name="img_category">
+			<span class="selected" style="opacity:1;transform: translateY(0px); transition-duration: 0.1s;">Italia</span>
+			<ul id="img_category_options" class="options">
+				<li class="option" data-value="ITALIA" onclick="setFilter()">Italia</li>
+				<li class="option" data-value="ABRUZZO" onclick="setFilter()">Abruzzo</li>
+				<li class="option" data-value="BASILICATA" onclick="setFilter()">Basilicata</li>
+				<li class="option" data-value="CALABRIA" onclick="setFilter()">Calabria</li>
+				<li class="option" data-value="CAMPANIA" onclick="setFilter()">Campania</li>
+				<li class="option" data-value="EMILIA ROMAGNA" onclick="setFilter()">Emilia Romagna</li>
+				<li class="option" data-value="FRIULI-VENEZIA GIULIA" onclick="setFilter()">Friuli-Venezia Giulia</li>
+				<li class="option" data-value="LAZIO" onclick="setFilter()">Lazio</li>
+				<li class="option" data-value="LIGURIA" onclick="setFilter()">Liguria</li>
+				<li class="option" data-value="LOMBARDIA" onclick="setFilter()">Lombardia</li>
+				<li class="option" data-value="MARCHE" onclick="setFilter()">Marche</li>
+				<li class="option" data-value="MOLISE" onclick="setFilter()">Molise</li>
+				<li class="option" data-value="PIEMONTE" onclick="setFilter()">Piemonte</li>
+				<li class="option" data-value="PUGLIA" onclick="setFilter()">Puglia</li>
+				<li class="option" data-value="SICILIA" onclick="setFilter()">Sicilia</li>
+				<li class="option" data-value="SARDEGNA" onclick="setFilter()">Sardegna</li>
+				<li class="option" data-value="TOSCANA" onclick="setFilter()">Toscana</li>
+				<li class="option" data-value="TRENTINO - ALTO ADIGE" onclick="setFilter()">Trentino - Alto Adige</li>
+				<li class="option" data-value="UMBRIA" onclick="setFilter()">Umbria</li>
+				<li class="option" data-value="VALLE D'AOSTA" onclick="setFilter()">Valle d'Aosta</li>
+				<li class="option" data-value="VENETO" onclick="setFilter()">Veneto</li>
+			</ul>
+		</div>
+		</label>
+	</div>	
+  
+  	<div style="position:absolute;top:8em;right:2em">
+		<button style="border-radius:1em;border-color:#dddddd;padding:0.2em 0.6em" onclick="ixmaps.map().theme('symbols').changeStyle('scale:0.90','factor')">-</button>
+		<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+		<button style="border-radius:1em;border-color:#dddddd;padding:0.2em 0.5em" onclick="ixmaps.map().theme('symbols').changeStyle('scale:1.1','factor')">+</button>
+	</div>	
+  
+    <script src="https://gjrichter.github.io/pages/assets/material-design-select-dropdown/js/index.js"></script>
+
+  </body>
+</html>
