@@ -38,8 +38,6 @@ $Log:index_only_map_embed.html,v $
 
 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
 
-	<script src="./js/tooltip.js"></script>
-
 	<!--========================================================================= -->
 
 	<script type="text/javascript" charset="utf-8">
@@ -94,6 +92,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.attribution(attribution)
 				.legend(legend)
+			 	.require("../../ui/js/tools/tooltip_basic.js")
 
 				// load geometries
 
@@ -260,14 +259,13 @@ $Log:index_only_map_embed.html,v $
 						"colorscheme": [
 							"rgb(146, 142, 89)"
 						],
-						"fillopacity": "0.2",
+						"fillopacity": "0.4",
 						"shadow": "false",
 						"dbtable": "ARMS_DATA_Y",
 						"dbtableUrl": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TIV/TIV-Export-ITA-2000-2021.csv",
 						"dbtableType": "csv",
 						"dbtableProcess": process_data.toString(),
 						"datacache": "true",
-						"showdata": "true",
 						"lookupfield": "Country",
 						"symbols": [
 							"circle"
