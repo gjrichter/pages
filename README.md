@@ -18,7 +18,7 @@
 
 [Persone con Carica Attive nate all'estero dal 2000 ad oggi](https://gjrichter.github.io/pages/Macerata/index_test_api_embed_CamCom_Macerata_forze_lavoro_world_y_choro.html)
 
-[Eurostat - Terziary Education - age 25-35 - years 2010-2021](https://gjrichter.github.io/pages/Eurostat_Terziary_Educationa/index.html)
+[Eurostat - Terziary Education - age 25-35 - years 2010-2021](https://gjrichter.github.io/pages/Eurostat_Terziary_Education/index.html)
 
 ---
 
