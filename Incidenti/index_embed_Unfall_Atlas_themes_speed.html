@@ -270,9 +270,9 @@ $Log:index_only_map_embed.html,v $
 		
 		var osm = ixmaps.layer("osm")
 			.data({
-				name: "OSM_dataquery_stressmap",
+				name: "OSM_dataquery_streetmap",
 				type: "ext",
-				ext: "https://raw.githubusercontent.com/gjrichter/viz/master/OSM%20Overpass/dataprovider_stressmap.js"
+				ext: "https://raw.githubusercontent.com/gjrichter/viz/master/OSM%20Overpass/dataprovider_overpass.js"
 			})
 			.binding({
 				position: "geometry",
@@ -333,6 +333,7 @@ $Log:index_only_map_embed.html,v $
 					panhidden: "false"
 				})
 				.local("aggregated", "")
+				.local("loading data ...", "OSM &DownArrowBar; Data")
 				.require("../../ui/js/tools/tooltip_basic.js")
 			    .require("https://unpkg.com/osmtogeojson@3.0.0-beta.4/osmtogeojson.js")
 				.attribution(attribution)
