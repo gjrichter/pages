@@ -1,0 +1,202 @@
+---
+title: "iXMaps example - using Observable Javascript"
+author: "Guenter Richter"
+format: 
+  html: 
+    code-fold: false
+    theme:
+     - materia
+     - custom.scss
+    max-width: 2000px
+---
+
+## Terremoti dell'ultima settimana
+
+### 1. includes
+
+```{ojs}
+ixmaps = require('https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js')
+Data = require('https://gjrichter.github.io/data.js/data.js')
+```
+***ixmaps*** helds the map creation API while ***Data*** is only needed to define the *\_query* function below. When the *\_query* function will be executed by the iXMaps framework, it will use the *Data* object of iXMaps. 
+
+### 2. text definitions
+
+```{ojs}
+attribution = 
+  "<p style='margin-bottom:1em'>data: DISS Working Group. (2021). Database of Individual Seismogenic Sources<a href='https://doi.org/10.13127/diss3.3.0' target='_blank'> (DISS), version 3.3.0</a><br>Data terremoti: <a href='http://terremoti.ingv.it' target='_blank'>Istituto Nazionale di Geofisica e Vulcanologia (INGV)</p>"; 
+```
+
+### 3. define static layer
+Define 4 layer to add the shapes of the **D**atabase of **I**ndividual **S**eismogenic **S**ource to the map as background information for the seismic events.
+
+- the ***url*** property refers to a TopoJson file which contains several geometric objects for the various layer of the DISS data.
+
+- The ***name*** property refers to the object (GeometryCollection) of the TopoJson file which contains the shapes of one DISS layer.
+
+- .define() creates the JSON object used below  
+
+```{ojs}
+_DISS_1 = ixmaps.layer("DISS_3.3.0_2")
+  .data({
+    name: "ISS330",
+    url: "https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/INGV/DISS_3.3.0.json",
+    type: "topojson",
+    object: "ISS330" })
+  .style({ 
+    colorscheme: ["none"], linecolor: "#FD7A00" })
+  .define()
+
+_DISS_2 = ixmaps.layer("DISS_3.3.0_3")
+  .data({
+    name: "CSSPLN330",
+    url: "https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/INGV/DISS_3.3.0.json",
+    type: "topojson" })
+  .style({
+    colorscheme: ["#FD7A00"], opacity: "0.3", linecolor: "none" })
+  .define()
+
+_DISS_3 = ixmaps.layer("DISS_3.3.0_4")
+  .data({
+    name: "CSSTOP330",
+    url: "https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/INGV/DISS_3.3.0.json",
+    type: "topojson" })
+  .style({
+    colorscheme: ["#FD7A00"], linewidth: "0.3" })
+  .define()
+
+_DISS_4 = ixmaps.layer("DISS_3.3.0_5")
+  .data({
+    name: "SUBDCNT330",
+    url: "https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/INGV/DISS_3.3.0.json",
+    type: "topojson" })
+  .style({
+    colorscheme: ["#888888"], linewidth: "0.2" })
+  .define()
+```
+
+### 4. define dynamic, data driven layer
+
+A dynamic data driven visualizzation layer can refer one data rource (css,json, geojson) or a function to get the data.
+
+To get the latest data from INGV, we must define a data query function to configure a dynamic data query URL to the INGV API.
+
+##### the data query function
+To query the data of the seismic events of the past 7 days from the API of the INGV we need to define this function. 
+
+- gets the actual date from Javascript
+- builds the query string
+- queries the data from the API of the INGV
+- sets the data within the ixmaps namespace
+
+```{ojs}
+_query = function(data,options){
+  /* get actual date */
+  var date = new Date();
+  var uTime = date.getTime();
+
+  /* 7 days to the past */
+  uTime -= 1000*60*60*24 * 7;
+  date = new Date(uTime);
+
+  /* make startdate for the API query */
+  var year  = date.getFullYear();
+  var month = date.getMonth()+1;
+  var day   = date.getDate();
+  var szStartdate = year +"-"+ String("0"+month).slice(-2) +"-"+ String("0"+day).slice(-2);
+  
+  /* get data from INGV webservice */
+  Data.feed({
+    source:"https://webservices.ingv.it/fdsnws/event/1/query?starttime="+szStartdate+"T00%3A00%3A00&minmag=1&maxmag=10&mindepth=-10&maxdepth=1000&minlat=-90&maxlat=90&minlon=-180&maxlon=180&minversion=100&orderby=time-asc&format=text&limit=10000",
+    type:"csv"
+    })
+    .load(function(newData){
+      options.type = "jsonDB",
+      ixmaps.setExternalData(newData,options);
+    });
+};
+```
+
+The above defined function ***\_query*** is included into the definition of the visualizzation layer by **text** (see: ```query: _query.toString()```):
+
+##### the data visualization layer
+
+Define a bubble chart to show the lates seismic events with 2 variants: 'Magnitude' and 'Depth/Km'.
+
+- Depth/Km -> color
+- Magnitude -> size
+- with ```timefield: "Time"``` we define a time filter which is shown in the map legend by a slider.
+
+```{ojs}
+_chart = ixmaps.theme("generic")
+  .data({
+    type: "ext",
+    query: _query.toString(),
+    cache: "false",
+    refresh: "10" 
+  })
+  .binding({
+    value: "Depth/Km",
+    position: "Latitude|Longitude",
+    size: "Magnitude",
+    title: "EventLocationName"
+  })
+  .type("CHART|BUBBLE|QUANTILE|LINEAR|VALUES|COUNT")
+  .style({
+    colorscheme: ["7","RGB(245,41,38)","RGB(74,74,255)","dynamic"],
+    fillopacity: "0.7",
+    shadow: "true",
+    legendunits: "km",
+    normalsizevalue: "5",
+    // get the time from column 'Time' and program a 'time slider'
+    timefield: "Time",        
+    // show the 'Magnitude' as text, the color comes from Depth/km
+    valuefield: "Magnitude",  
+    valuescale: "1.2",
+    valuedecimals: "1",
+    showdata: "true"
+  })
+  .meta({
+    title: "Terremoti della ultima settimana",
+    snippet: "Il colore rappresenta la profondità mentra la grandezza la magnitudine",
+    description: "Fonte: INGV Centro Nazionale Terremoti licenza cc-by-4.0" 
+  })
+  .define();
+```
+
+### 5. create the map 
+
+Finaly we create the map, putting all together.
+
+```{ojs}
+map = ixmaps.embed("mymap", { 
+
+  mapCdn: "https://gjrichter.github.io/ixmaps",
+  width:  "100%",
+  height: "720px",
+  legend: "true",
+  item: "html"},
+
+  map => map
+    .mapType("OpenStreetMap - FR")
+    .view([41.577354839557856,15.468750000000002],6) 
+    .attribution(attribution)
+    .localize("loading data ...", " &#x2B73; data")	
+    .require("../../ui/js/tools/tooltip_basic.js") 
+    .options({
+      featurescaling: "dynamic",
+      objectscaling: "dynamic",
+      normalSizeScale: "10000000",
+      panhidden:"false",
+      basemapopacity: "0.7"
+    })
+    .layer(_DISS_1)
+    .layer(_DISS_2)
+    .layer(_DISS_3)
+    .layer(_DISS_4)
+    .layer(_chart)
+  )
+
+```
+
+
