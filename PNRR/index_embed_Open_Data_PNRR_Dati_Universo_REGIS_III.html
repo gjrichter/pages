@@ -1021,7 +1021,7 @@ $Log:index_only_map_embed.html,v $
 		
 		var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
 		// intercept theme creation, to mark active themes
-		ixmaps.htmlgui_onDrawTheme = function(szId) { alert("low");
+		ixmaps.htmlgui_onDrawTheme = function(szId) { 
 
 			ixmaps.themesDrawnA = ixmaps.themesDrawnA || [];
 			ixmaps.themesDrawnA[szId] = true;
@@ -1037,7 +1037,7 @@ $Log:index_only_map_embed.html,v $
 			if (!themeObj.fVisible){
 				return;
 			}
-			alert("hi");
+
 			ixmaps.statistics(szId);
 			
 			var nOpacity = (ixmaps.getZoom()-7)/10;
