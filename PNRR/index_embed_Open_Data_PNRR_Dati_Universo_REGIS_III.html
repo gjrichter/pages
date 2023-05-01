@@ -971,6 +971,7 @@ $Log:index_only_map_embed.html,v $
 
 			if (szId == "chart" || szId == "chart_prov" || szId == "chart_reg" || szId == "details") {
 				var szFieldsA = ["importo"];
+				alert(ixmaps.data.getFacets);
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 
 				console.log("=== statistic facets done ===");
