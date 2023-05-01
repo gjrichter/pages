@@ -967,13 +967,10 @@ $Log:index_only_map_embed.html,v $
 			console.log(szId);
 			console.log("---------------");
 			
-			alert(ixmaps.data);
-
 			var lastFilter = "";
 
 			if (szId == "chart" || szId == "chart_prov" || szId == "chart_reg" || szId == "details") {
 				var szFieldsA = ["importo"];
-				alert(ixmaps.data.getFacets);
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 
 				console.log("=== statistic facets done ===");
