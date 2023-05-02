@@ -33,7 +33,7 @@ I filtri possono essere definiti simile al linguaggio SQL:
 
 esempio:
 
--  filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22
+-  filter=WHERE "misura" = "Creazione di imprese femminili"
 
 filtri possono comprendere più di un campo:
 
@@ -47,31 +47,29 @@ Alcuni esempi:
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22)
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Green%20communities%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Green%20communities%22)
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22)
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "soggetto" = "DIPARTIMENTO PER LE POLITICHE GIOVANILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%2520%2522soggetto%2522%2520%3D%2520%2522DIPARTIMENTO%2520PER%2520LE%2520POLITICHE%2520GIOVANILI%2522%2520AND%2520%2522Descrizione%2520Regione%2522%2520%3D%2520%2522SICILIA%22&view=%5B37.45087706042972%2C14.018554687500002%5D%2C9)
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "soggetto" = "FONDO EDIFICI DI CULTO"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22soggetto%22%20=%20%22FONDO%20EDIFICI%20DI%20CULTO%22)
 
 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?WHERE "soggetto" like "METROPOLITANA"&view=[42.374778361114195,13.568115234375002],6](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?WHERE%20%22soggetto%22%20like%20%22METROPOLITANA%22&view=[42.374778361114195,13.568115234375002],6)
 
 
-
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?
 
 
 
