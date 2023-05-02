@@ -55,7 +55,7 @@ Alcuni esempi:
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "misura" = "Investimenti in infrastrutture idriche primarie per la sicurezza del l'approvvigionamento idrico"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "misura" = "Investimenti in infrastrutture idriche primarie per la sicurezza del l'approvvigionamento idrico"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20"misura"%20=%20"Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20dell%27approvvigionamento%20idrico")
 
 
 
