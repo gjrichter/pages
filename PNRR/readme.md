@@ -72,10 +72,3 @@ Alcuni esempi:
 
 
 
-
-
-
-
-
-il progetto (json) per la mappa si trova  <a href="https://github.com/gjrichter/viz/blob/master/Amministratori/ixmaps_project_ammcom_pointer_diff.json" target="_blank">qui</a>, 
-
