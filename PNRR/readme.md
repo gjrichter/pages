@@ -43,19 +43,19 @@ filtri possono comprendere più di un campo:
 
 Alcuni esempi:
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22categoria%22%20=%20%22PISTE%20CICLABILI%22%20AND%20%22Descrizione%20Regione%22%20=%20%22SICILIA%22&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22categoria%22%20=%20%22PISTE%20CICLABILI%22%20AND%20%22Descrizione%20Regione%22%20=%20%22SICILIA%22&view=[37.45087706042972,14.018554687500002],9)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "categoria" = "PISTE CICLABILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22categoria%22%20=%20%22PISTE%20CICLABILI%22%20AND%20%22Descrizione%20Regione%22%20=%20%22SICILIA%22&view=[37.45087706042972,14.018554687500002],9)
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "misura" = "Creazione di imprese femminili"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22)
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Green%20communities%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html??filter=WHERE%20%22misura%22%20=%20%22Green%20communities%22)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "misura" = "Green communities"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Green%20communities%22)
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "misura" = "Investimenti in infrastrutture idriche primarie per la sicurezza del l'approvvigionamento idrico"](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22misura%22%20=%20%22Investimenti%20in%20infrastrutture%20idriche%20primarie%20per%20la%20sicurezza%20del%20l%27approvvigionamento%20idrico%22)
 
 
 
