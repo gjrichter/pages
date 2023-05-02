@@ -67,7 +67,7 @@ Alcuni esempi:
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?WHERE "soggetto" like "METROPOLITANA"&view=[42.374778361114195,13.568115234375002],6](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?WHERE%20%22soggetto%22%20like%20%22METROPOLITANA%22&view=[42.374778361114195,13.568115234375002],6)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "soggetto" like "METROPOLITANA"&view=[42.374778361114195,13.568115234375002],6](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20%22soggetto%22%20like%20%22METROPOLITANA%22&view=[42.374778361114195,13.568115234375002],6)
 
 
 
