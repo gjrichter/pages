@@ -556,8 +556,7 @@ $Log:index_only_map_embed.html,v $
 					mapType: "OpenStreetMap - FR",
 					map: "../../maps/svg/maps/generic/mercator.svg",
 					mode: "pan",
-					width: "100%",
-					width: (window.innerWidth - 360) + "px",
+					width: (window.innerWidth * 0.69) + "px",
 					height: (window.innerHeight * 0.95) + "px",
 					legend: "true",
 					tools: "true",
@@ -608,7 +607,7 @@ $Log:index_only_map_embed.html,v $
 	<!-- user buttons to change the map charts -->
 	<!-- ------------------------------------- -->
 
-	<div style="position:absolute;top:1em;right:2em">
+	<div style="position:absolute;top:1em;left:72%">
 
 		<script>
 			var getThemeNames = function() {
@@ -660,7 +659,7 @@ $Log:index_only_map_embed.html,v $
 			table {
 				background: #F7F6EF;
 				border-radius: 0.3em;
-				padding: 0.4em 0.8em;
+				xxpadding: 0.4em 0.8em;
 			}
 
 			td {
@@ -692,19 +691,18 @@ $Log:index_only_map_embed.html,v $
 		<!-- dynamic theme info, changes on zoom   -->
 		<!-- ------------------------------------- -->
 		
-		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
+		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 1.5em;width:100%;float:right">
+
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
-			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em">...</span>&nbsp; €<br>
+			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 			<span id="ambito-nazionale" style="display:none">di questi <span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale</span>
 			<span id="ambito-regionale" style="display:none">e <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
-			
+
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:beige;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
 				<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
 			</div>
-			
-		</div>
-		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
+
 			<p>
 				<button onclick="ixmaps.popupThemeFacets(null,null,'missione')" ;>Missione</button>
 				<button onclick="ixmaps.popupThemeFacets(null,null,'misura')" ;>Misura</button>
@@ -714,40 +712,35 @@ $Log:index_only_map_embed.html,v $
 				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Comune')" ;>Comune</button>
 				<button onclick="ixmaps.popupThemeFacets(null,null)" ;>tutti filtri</button>
 			</p>
-		</div>
-		
-		<!-- ------------------------------------- -->
-		<!-- static footer, annotations            -->
-		<!-- ------------------------------------- -->
-		
-		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
+
+			<!-- ------------------------------------- -->
+			<!-- static footer, annotations            -->
+			<!-- ------------------------------------- -->
+
 			<hr>
-			<p>Fonte dati:<br>Open CUP : Focus PNRR</p>
-			<p>Descrizione dei dati ed istruzioni per l'uso si trovano qui sulla pagina dedicata di <a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/opencup/focus-pnrr.html" target="_blank">pnrr.datibenecomune.it</a></p>
-			<p>Link ai dati: <a style="color:#0088dd" href="https://opencup.gov.it/portale/documents/21195/117121/progetti_cup_20230120.xlsx" target="_blank">progetti_cup_20230120.xlsx</a>
+			<p>Fonte dati:<br>Italia<b>domani</b> - Catalogo Open Data</p>
+			<p>Descrizione dei dati ed istruzioni per l'uso si trovano qui sulla pagina dedicata di <a style="color:#0088dd" href="https://aborruso.quarto.pub/italiadomani/" target="_blank">(bozza inofficiale)</a></p>
+			<p>Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>
 			</p>
 			<!--
 			<p><small><b>nota bene:</b><br> - si può clicare sui colori della leggenda per isolare 1 o più categorie<br>
 					- per evitare tempi di aggiornamento grafici lunghi, conviene zoomare un po', prima di attivare l'aggregazione al livello comunale<small></small></p>
 			-->
-		</div>
-		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
-		</div>
-		
-		<table>
-			<tr>
-				<td>
-					<button onclick="sizeCharts(0.90)">-</button>
-				</td>
-				<td>
-					<span style="font-size:0.8em"> &nbsp; grandezza &nbsp;</span>
-				</td>
-				<td>
-					<button onclick="sizeCharts(1.1)">+</button>
-				</td>
-			</tr>
-			
-			<!--
+
+			<table>
+				<tr>
+					<td>
+						<button onclick="sizeCharts(0.90)">-</button>
+					</td>
+					<td>
+						<span style="font-size:0.8em"> &nbsp; grandezza &nbsp;</span>
+					</td>
+					<td>
+						<button onclick="sizeCharts(1.1)">+</button>
+					</td>
+				</tr>
+
+				<!--
 			<tr>
 				<td>
 					<button onclick="opacityCharts(0.75)">-</button>
@@ -793,14 +786,12 @@ $Log:index_only_map_embed.html,v $
 				</td>
 			</tr>
 			-->
-		</table>
+			</table>
 
-		
-		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
+
 			<p>
-				<button onclick="alert(ixmaps.szActualUrl)" ;>share</button>
+				<button onclick="alert(encodeURIComponent(ixmaps.szActualUrl))">share</button>
 			</p>
-		</div>
 		
 		
 	</div>
@@ -963,9 +954,6 @@ $Log:index_only_map_embed.html,v $
 
 		ixmaps.statistics = function(szId) {
 			
-			console.log("---------------");
-			console.log(szId);
-			console.log("---------------");
 			
 			var lastFilter = "";
 
