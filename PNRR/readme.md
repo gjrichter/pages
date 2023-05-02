@@ -59,7 +59,7 @@ Alcuni esempi:
 
 
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "soggetto" = "DIPARTIMENTO PER LE POLITICHE GIOVANILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%2520%2522soggetto%2522%2520%3D%2520%2522DIPARTIMENTO%2520PER%2520LE%2520POLITICHE%2520GIOVANILI%2522%2520AND%2520%2522Descrizione%2520Regione%2522%2520%3D%2520%2522SICILIA%22&view=%5B37.45087706042972%2C14.018554687500002%5D%2C9)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE "soggetto" = "DIPARTIMENTO PER LE POLITICHE GIOVANILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html?filter=WHERE%20"soggetto"%20=%20"DIPARTIMENTO%20PER%20LE%20POLITICHE%20GIOVANILI"%20AND%20"Descrizione%20Regione"%20=%20"SICILIA"&view=[37.45087706042972,14.018554687500002],9)
 
 
 
