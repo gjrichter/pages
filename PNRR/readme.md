@@ -39,6 +39,30 @@ filtri possono comprendere più di un campo:
 
 - WHERE "campo1" = "valore1" AND "campo2" = "valore2"
 
+I campi utilizzabili per definire filtri sono:
+
+```
+Codice Univoco submisura
+Descrizione Submisura
+CUP
+Codice Locale Progetto
+Descrizione Regione
+Descrizione Provincia
+Descrizione Comune
+Indirizzo
+CAP
+Data di Estrazione
+missione
+Descrizione Misura
+CUP Descrizione Categoria
+CUP Descrizione Settore
+PROCOM
+importo
+Sintesi progetto
+Soggetto attuatore
+Denominazione Aggiudicatario
+```
+
 
 
 Alcuni esempi:
