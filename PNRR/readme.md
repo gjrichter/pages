@@ -43,7 +43,7 @@ filtri possono comprendere più di un campo:
 
 Alcuni esempi:
 
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE "CUP Descrizione Categoria" = "PISTE CICLABILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22CUP%20Desrcrizione%20Categoria%22%20=%20%22PISTE%20CICLABILI%22%20AND%20%22Descrizione%20Regione%22%20=%20%22SICILIA%22&view=[37.45087706042972,14.018554687500002],9)
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE "CUP Descrizione Categoria" = "PISTE CICLABILI" AND "Descrizione Regione" = "SICILIA"&view=[37.45087706042972,14.018554687500002],9](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22CUP%20Descrizione%20Categoria%22%20=%20%22PISTE%20CICLABILI%22%20AND%20%22Descrizione%20Regione%22%20=%20%22SICILIA%22&view=[37.45087706042972,14.018554687500002],9)
 
 
 
