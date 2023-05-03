@@ -422,7 +422,7 @@ window.ixmaps = window.ixmaps || {};
 						if ((i == "geometry")) {
 							continue;
 						}
-						if (!(i == "sintesi" || i == "importo" || i == "CUP" || i == "Descrizione Submisura" || i == "soggetto" || i == "aggiudicatario")){
+						if (!(i == "Sintesi progetto" || i == "importo" || i == "CUP" || i == "Descrizione Submisura" || i == "Soggetto attuatore" || i == "Denominazione Aggiudicatario")){
 							continue;
 						}
 						if (themeObj.szDataFieldsA) {
