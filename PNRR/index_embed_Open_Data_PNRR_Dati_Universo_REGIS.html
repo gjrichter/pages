@@ -133,8 +133,11 @@ $Log:index_only_map_embed.html,v $
 
 
 			<p>
-				<button onclick="alert(encodeURIComponent(ixmaps.szActualUrl))">share</button>
+				Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile, 
+				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
 			</p>
+			
+			<div id="popup" style="text-align:left;width:350px;overflow:auto;display:none"></div>
 
 		</div>
 
