@@ -20,7 +20,7 @@ Qui il codice per includere la mappa in una pagina HTML:
 
 Il  link principale alla pagina HTML con la mappa è: 
 
-https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html)
 
 poi si può aggiungere un filtro sui campi del dataset e una posizione per la mappa.
 
