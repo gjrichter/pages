@@ -351,10 +351,11 @@ $Log:index_only_map_embed.html,v $
 			var lastFilter = "";
 
 			if (szId == "chart" || szId == "chart_prov" || szId == "chart_reg" || szId == "details") {
+				
+				_LOG("=== statistics start ===");
+
 				var szFieldsA = ["importo"];
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
-
-				console.log("=== statistic facets done ===");
 
 				var projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
 				var importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
@@ -382,6 +383,8 @@ $Log:index_only_map_embed.html,v $
 				} else {
 					$("#ambito-regionale").hide();
 				}
+				
+				_LOG("=== statistics done ===");
 
 			}
 		};
