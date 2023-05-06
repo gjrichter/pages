@@ -79,7 +79,6 @@ ixmaps.data = ixmaps.data || {};
 		// ------------------------------------
 		var objTheme = ixmaps.data.objTheme = ixmaps.map(szMap||"map").theme(szThemeId).obj;
 		var objThemeDefinition = ixmaps.data.objThemeDefinition = ixmaps.getThemeDefinitionObj(null,szThemeId);
-		console.log("=== make statistic facets - 0 ===");
 
 		// create data object from theme data
 		// ------------------------------------
@@ -87,8 +86,6 @@ ixmaps.data = ixmaps.data || {};
 		mydata.table = objTheme.objTheme.dbTable;
 		mydata.fields = objTheme.objTheme.dbFields;
 		mydata.records = objTheme.objTheme.dbRecords;
-
-		console.log("=== make statistic facets - 1 ===");
 
 		// GR 23.02.2018 take only rows which are on the map
 		// -------------------------------------------------
@@ -113,8 +110,6 @@ ixmaps.data = ixmaps.data || {};
 		}
 
 		mydata.records = records;
-		
-		console.log("=== make statistic facets - 2 ===");
 		
 		// if we have already a filter on the map,
 		// filter data before creating facets
@@ -143,8 +138,6 @@ ixmaps.data = ixmaps.data || {};
 		// make facets from data fields
 		// ----------------------------
 
-		console.log("=== make statistic facets - 3 ===");
-		
 		var a, u;
 		
 		szFieldsA = szFieldsA || mydata.columnNames();
@@ -336,7 +329,6 @@ ixmaps.data = ixmaps.data || {};
 						var facet = {};
 						facet.id = szField;
 						facet.type = "categorical";
-						console.log("categorical 1");
 						if (u.length < 200) {
 							// add value list
 							// ---------------
