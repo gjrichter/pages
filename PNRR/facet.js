@@ -71,14 +71,14 @@ ixmaps.data = ixmaps.data || {};
 		var fTest = true;
 		var sliderA = [];
 
-		console.log("=== make statistic facets ===");
+		console.log("=== make statistic facets === "+szId);
 		
 		var szThemeId = ixmaps.filterThemeId = szId;
 	
 		// theme object
 		// ------------------------------------
 		var objTheme = ixmaps.data.objTheme = ixmaps.map(szMap||"map").theme(szThemeId).obj;
-
+		var objThemeDefinition = ixmaps.data.objThemeDefinition = ixmaps.getThemeDefinitionObj(null,szThemeId);
 		console.log("=== make statistic facets - 0 ===");
 
 		// create data object from theme data
@@ -148,7 +148,14 @@ ixmaps.data = ixmaps.data || {};
 		var a, u;
 		
 		szFieldsA = szFieldsA || mydata.columnNames();
-		
+		var v = null;
+		if (objThemeDefinition.style.sizefield) {
+			if (ixmaps.data.fShowFacetValues) {
+				v = mydata.column(objThemeDefinition.style.sizefield).values();
+				v = v.map(function(value){var x = __scanValue(value);return (isNaN(x)?0:x);})
+			}
+			$("#facets-counts-values").show();
+		}
 		for (var i = 0; i < szFieldsA.length; i++) {
 			
 			var szField = szFieldsA[i];
@@ -255,8 +262,10 @@ ixmaps.data = ixmaps.data || {};
 				// count values
 				var valuesCount = {};
 				var nCount = 0;
+				var nValuesSum = 0;
 				a.forEach(function (x) {
-					valuesCount[x] = (valuesCount[x] || 0) + 1;
+					valuesCount[x] = (valuesCount[x] || 0) + (v?Number(v[nCount]):1);
+					nValuesSum += (v?Number(v[nCount]):1);
                     nCount++;
 				});
 
@@ -278,6 +287,7 @@ ixmaps.data = ixmaps.data || {};
 				facet.id = szField;
 				facet.values = u;
 				facet.nCount = nCount;
+				facet.nValuesSum = nValuesSum;
 				facet.valuesCount = valuesCount;
 				facet.uniqueValues = u.length;
 
@@ -361,14 +371,17 @@ ixmaps.data = ixmaps.data || {};
 						facet.values = u;
 						var valuesCount = {};
 						var nCount = 0;
+						var nValuesSum = 0;
 						a.forEach(function (x) {
-							valuesCount[x] = (valuesCount[x] || 0) + 1;
+							valuesCount[x] = (valuesCount[x] || 0) + (v?Number(v[nCount]):1);
+  							nValuesSum += (v?Number(v[nCount]):1);
                             nCount++;
 						});
 						u.sort(function (a, b) {
 							return ((valuesCount[a] < valuesCount[b]) ? 1 : -1);
 						});
 						facet.nCount = nCount;
+						facet.nValuesSum = nValuesSum;
 						facet.valuesCount = valuesCount;
 						facet.uniqueValues = u.length;
 					}
