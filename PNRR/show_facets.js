@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-ixmaps = window.ixmaps || {};
-ixmaps.data = window.ixmaps.data || {};
+ixmaps = ixmaps || {};
+ixmaps.data = ixmaps.data || {};
 
 (function () {
 
