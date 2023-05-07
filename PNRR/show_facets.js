@@ -653,7 +653,6 @@ ixmaps.data = ixmaps.data || {};
 		
 		** ***************************************************/
 
-		$('[data-toggle="tooltip"]').tooltip();
 	};
 
 	/**
