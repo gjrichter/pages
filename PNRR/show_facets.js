@@ -104,9 +104,6 @@ ixmaps.data = ixmaps.data || {};
 	//
 	// ===========================================
 
-	var __facetFilterA = [];
-	var __rangesA = [];
-
 	// -----------------------------------------------
 	// set the selected facet filter
 	// if this filter is already active, clear filter
@@ -400,23 +397,28 @@ ixmaps.data = ixmaps.data || {};
 				szHtml += (typeof (facetsA[i].min) != "undefined") ? ((facetsA[i].min != facetsA[i].max) ? (": " + szMin + " - " + szMax) : (": " + szMin)) : "";
 			}
 
-			szHtml += fActiveFacet ? "<span style='float:right;margin-right:0em;padding-top:0.1em;'><i class='icon shareIcon share_bitly icon-cancel-circle' title='Share a short link' tabindex='-1'></i></span>" : "";
+			szHtml += fActiveFacet ? "<span style='float:right;margin-right:0em;padding-top:0em;'><i class='icon shareIcon share_bitly icon-cancel-circle' title='Share a short link' tabindex='-1'></i></span>" : "";
 			szHtml += "</div>";
 			szHtml += fActiveFacet ? "</a>" : "";
 
 			if (facetsA[i].type == "textual") {
-				var placeholder = "Search for..." + ((!facetsA[i].values) ? (" (e.g. " + (facetsA[i].example || " ") + ")") : "");
+				var placeholder = "Cerca ..." + ((!facetsA[i].values) ? (" (e.g. " + (facetsA[i].example || " ") + ")") : "");
 				var value = "";
 				if (fActiveFacet) {
 					value = placeholder = szActiveFilter.split("\"")[3];
 				}
-				szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
-				szHtml += '<input id="' + (szSafeId + "query") + '" type="text" class="form-control" style="background:transparent;border:none" value="' + value + '" placeholder="' + placeholder + '"';
-				szHtml += 'onKeyUp="if(event.which == 13){var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);}">';
-				szHtml += '<span class="input-group-btn">';
-				szHtml += '<button class="btn btn-search" type="button" onclick="var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>';
-				szHtml += '</span></input>';
-				szHtml += '</div>'
+				if ( !facetsA[i] || !facetsA[i].values || facetsA[i].values.length > 10){
+					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
+					szHtml += '<input id="' + (szSafeId + "query") + '" type="text" class="form-control" style="background:transparent;border:none" value="' + value + '" placeholder="' + placeholder + '"';
+					szHtml += 'onKeyUp="if(event.which == 13){var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);}">';
+					szHtml += '<span class="input-group-btn">';
+					szHtml += '<button class="btn btn-search" type="button" onclick="var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>';
+					szHtml += '</span></input>';
+					szHtml += '</div>'
+				}else{
+					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
+					szHtml += '</div>'
+				}
 			}
 
 			// ------------------------------------
@@ -565,11 +567,16 @@ ixmaps.data = ixmaps.data || {};
 						var nCount = facetsA[i].valuesCount ? facetsA[i].valuesCount[facetsA[i].values[ii]] : null;
 						var nMaxCount = facetsA[i].nValuesSum || facetsA[i].nCount;
 
-						var bgColor = "#eeeeee";
+						var bgColor = "";
 						var szCount = ixmaps.__formatValue(nCount, 0, "BLANK") + " " + (ixmaps.data.fShowFacetValues ? (objTheme.szUnits || "") : ""); //String(nCount || "");
-
+						
+						var szText = facetsA[i].values[ii];
+						
 						if ((objThemeDefinition.field == facetsA[i].id)) {
 							bgColor = objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
+							if ( objTheme.szLabelA && objTheme.szValuesA ){
+								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
+							}
 						}
 
 						// facet button with one unique value
@@ -579,18 +586,16 @@ ixmaps.data = ixmaps.data || {};
 						if ((objThemeDefinition.field == facetsA[i].id)) {
 							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + '"></span>';
 						}
-						var szText = facetsA[i].values[ii];
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
 								value = szActiveFilter.split("\"")[3].replace("\/", "\\\/");
 								var szTextA = eval("szText.split(/" + value + "/i)");
-								szText = szTextA.join("<span style='background:#ffff00'>" + value + "</span>");
+								szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
 							}
 						}
-						szHtml += '<button type="button" class="btn btn-block btn-secondary " style="width:100%"><span style="margin-left:-0em;float:left;white-space:normal;text-align:left">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:0.2em;float:right;text-align:right" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
+						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;background:'+bgColor+'"><span style="margin-left:-0em;float:left;white-space:normal;text-align:left">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
 
 						var nWidth = (100 / nMaxCount * nCount);
-						console.log("100/" + nMaxCount + "*" + nCount);
 						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues > 2)) {
 							szHtml += '<div style="position:relative;top:0.25em;left:0.1em;background:rgba(208,208,208,1);line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
 						}

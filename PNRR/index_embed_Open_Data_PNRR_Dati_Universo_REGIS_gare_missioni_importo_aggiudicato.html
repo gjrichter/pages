@@ -150,15 +150,12 @@ $Log:index_only_map_embed.html,v $
 				<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
 			</div>
 
-			<p>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'missione')" ;>Missione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Misura')" ;>Misura</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Categoria')" ;>Categoria</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Settore')" ;>Settore</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Regione')" ;>Regione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Comune')" ;>Comune</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null)" ;>tutti filtri</button>
+			<p style="font-size:0.9em;">
+				Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile, 
+				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
 			</p>
+			
+			<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
 			
 			<div id="show-facets-div"> </div>
@@ -417,7 +414,7 @@ $Log:index_only_map_embed.html,v $
 				
 				_LOG("=== statistics start ===");
 
-				var szFieldsA = ["importo"];
+				var szFieldsA = ["Importo aggiudicazione x CUP"];
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 
 				var projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
@@ -450,7 +447,7 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione","Descrizione Comune","Soggetto attuatore","missione","CUP","Descrizione Submisura","CUP Descrizione Categoria"];
+				szFieldsA = ["Descrizione Regione","Descrizione Provincia","Descrizione Comune","missione","CUP","Descrizione Submisura","Denominazione Aggiudicatario","Importo complessivo gara","Importo aggiudicazione x CUP"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 				ixmaps.data.showFacets(lastFilter,"show-facets-div",facetsA);
 
@@ -650,14 +647,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_choropleth =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "PROCOM",
 					value: "missione",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -688,7 +685,7 @@ $Log:index_only_map_embed.html,v $
 					name: "choropleth"
 				})
 				.meta({
-					title: "<b>Open CUP : Focus PNRR</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -696,14 +693,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "PROCOM",
 					value: "missione",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -727,7 +724,7 @@ $Log:index_only_map_embed.html,v $
 					],
 					showdata: "true",
 					units: "€",
-					scale: "5",
+					scale: "3",
 					aggregationscale: [
 						"1:1", "PROCOM",
 						"1:10000000", "Descrizione Provincia"
@@ -739,7 +736,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					description: "nota bene: <b>Livello comunale</b> include <b>solo</b> i progetti direttamente associati ad un comune",
 					splash: "scaricando dati ..."
 				})
@@ -748,14 +745,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "Provincia",
 					value: "missione",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -785,7 +782,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_prov"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					description: "<b>nota bene:</b> L’aggregazione a livello provinciale include anche i progetti per tutti i comuni, ma non i progetto dell'ambito nazionale.",
 					splash: "scaricando dati ..."
 				})
@@ -795,14 +792,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "Regione",
 					value: "missione",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -832,7 +829,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_reg"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi AGGIUDICATI</b>",
 					description: "nota bene: <b>aggregazione a livello regionale</b>; include i progetti per <b>tutti i comuni</b> e dell’<b>ambito nazionale</b>.",
 					splash: "scaricando dati ..."
 				})
@@ -842,7 +839,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -871,8 +868,8 @@ $Log:index_only_map_embed.html,v $
 						"#FACB49"
 					],
 					showdata: "true",
-					valuefield: "importo",
-					sizefield: "importo",
+					valuefield: "Importo aggiudicazione x CUP",
+					sizefield: "Importo aggiudicazione x CUP",
 					units: "€",
 					gridx: "20",
 					scale: "0.75",
@@ -888,7 +885,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details"
 				})
 				.meta({
-					title: "<b>Open CUP : Focus PNRR</b><br>i singoli progetti",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati<br>i singoli progetti</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -896,14 +893,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_SUM =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "PROCOM",
 					value: "missione",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -939,7 +936,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details_sum"
 				})
 				.meta({
-					title: "<b>Open CUP : Focus PNRR</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -947,14 +944,14 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "Provincia",
 					value: "$item$",
-					size: "importo",
+					size: "Importo aggiudicazione x CUP",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
@@ -976,7 +973,7 @@ $Log:index_only_map_embed.html,v $
 					name: "province_sum"
 				})
 				.meta({
-					title: "<b>Open CUP : Focus PNRR</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -984,15 +981,15 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_REGIONI_SUM =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
 				.binding({
 					position: "Regione",
 					value: "$item$",
-					size: "importo",
-					title: "Descrizione Regione"
+					size: "Importo aggiudicazione x CUP",
+					title: "Descrizione Comune"
 				})
 				.filter(__filter)
 				.type("RECT|CHART|SYMBOLS|SIZEP4|TEXTONLY|AGGREGATE|VALUES|SUM|NOLEGEND")
@@ -1012,7 +1009,7 @@ $Log:index_only_map_embed.html,v $
 					name: "regioni_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b>",
+					title: "<b>PNRR - Universo REGIS<br>Importi aggiudicati</b>",
 					snippet: "include i progetti al livello regionale (tutti comuni) e del Ambito Nazionale",
 					splash: "scaricando dati ..."
 				})
@@ -1054,7 +1051,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.local("aggregated", "")
 				.local("loading data ...", "scaricando dati ...")
-				.require("https://raw.githubusercontent.com/gjrichter/pages/main/PNRR/item_simple.js")
+				.require("../../ui/js/tools/tooltip_basic.js")
 				.attribution(attribution)
 
 				// -----------------------------		 

@@ -55,8 +55,8 @@ ixmaps.data = ixmaps.data || {};
 	//
 	// ===========================================
 
-	var __facetFilterA = [];
-	var __rangesA = [];
+	__facetFilterA = [];
+	__rangesA = [];
 
 	// ===========================================
 	//
@@ -111,6 +111,8 @@ ixmaps.data = ixmaps.data || {};
 
 		mydata.records = records;
 		
+		__facetFilterA = [];
+		
 		// if we have already a filter on the map,
 		// filter data before creating facets
 		// ------------------------------------
@@ -129,7 +131,6 @@ ixmaps.data = ixmaps.data || {};
 			}
 			// set filter parts
 			// ----------------
-			__facetFilterA = [];
 			szPartsA.forEach(function(x){
 				__facetFilterA.push(x);
 			});
