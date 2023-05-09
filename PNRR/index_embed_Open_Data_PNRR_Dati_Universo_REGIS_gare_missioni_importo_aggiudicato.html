@@ -132,6 +132,8 @@ $Log:index_only_map_embed.html,v $
 
 <body style='text-align:center;background:#F7F6EF'>
 
+	<div id="aggiudicato_map" style="float:left;width:70%"></div>
+
 	<!-- ------------------------------------- -->
 	<!--                                       -->
 	<!-- s i d e b a r                         -->
@@ -142,13 +144,13 @@ $Log:index_only_map_embed.html,v $
 	<!-- user buttons to change the map charts -->
 	<!-- ------------------------------------- -->
 
-	<div style="position:absolute;top:1em;left:70%;height:800px;overflow:auto">
+	<div style="width:30%;float:right;height:800px;overflow:auto">
 
 		<!-- ------------------------------------- -->
 		<!-- dynamic theme info, changes on zoom   -->
 		<!-- ------------------------------------- -->
 
-		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 1.5em;width:98%;float:right">
+		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 1.5em;">
 
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
 			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
@@ -1035,56 +1037,54 @@ $Log:index_only_map_embed.html,v $
 		 **
 		 **/
 
-		document.activeElement.appendChild(
+		ixmaps.embed("aggiudicato_map", {
+				mapService: "leaflet",
+				mapType: "OpenStreetMap - FR",
+				map: "../../maps/svg/maps/generic/mercator.svg",
+				name: "aggiudicato_map",
+				mode: "pan",
+				width: "100%",
+				height: (window.innerHeight * 0.95) + "px",
+				legend: "true",
+				tools: "true",
+				align: "right",
+				search: "Italy"
+			},
+			map => map
+			.view([__lat, __lon], __zoom)
+			.options({
+				objectscaling: "dynamic",
+				normalSizeScale: "27033",
+				dynamicScalePow: "3",
+				flushChartDraw: "1000000",
+				basemapopacity: "0.1",
+				panhidden: "false"
+			})
+			.local("aggregated", "")
+			.local("loading data ...", "scaricando dati ...")
+			.require("../../ui/js/tools/tooltip_basic.js")
+			.attribution(attribution)
 
-			ixmaps.embed("aggiudicati", {
-					mapService: "leaflet",
-					mapType: "OpenStreetMap - FR",
-					map: "../../maps/svg/maps/generic/mercator.svg",
-					mode: "pan",
-					width: (window.innerWidth * 0.69) + "px",
-					height: (window.innerHeight * 0.95) + "px",
-					legend: "true",
-					tools: "true",
-					align: "right",
-					search: "Italy"
-				},
-				map => map
-				.view([__lat, __lon], __zoom)
-				.options({
-					objectscaling: "dynamic",
-					normalSizeScale: "27033",
-					dynamicScalePow: "3",
-					flushChartDraw: "1000000",
-					basemapopacity: "0.1",
-					panhidden: "false"
-				})
-				.local("aggregated", "")
-				.local("loading data ...", "scaricando dati ...")
-				.require("../../ui/js/tools/tooltip_basic.js")
-				.attribution(attribution)
+			// -----------------------------		 
+			// the geo reference layer 
+			// -----------------------------
 
-				// -----------------------------		 
-				// the geo reference layer 
-				// -----------------------------
+			.layer(__georef_urban)
+			.layer(__georef)
+			.layer(__georef_prov)
+			.layer(__georef_reg)
 
-				.layer(__georef_urban)
-				.layer(__georef)
-				.layer(__georef_prov)
-				.layer(__georef_reg)
+			// -----------------------------		 
+			// the data visualization layer 
+			// -----------------------------
 
-				// -----------------------------		 
-				// the data visualization layer 
-				// -----------------------------
-
-				.layer(__CUP_PNRR_choropleth)
-				.layer(__CUP_PNRR_chart)
-				.layer(__CUP_PNRR_chart_reg)
-				.layer(__CUP_PNRR_chart_prov)
-				.layer(__CUP_PNRR_PROJECTS)
-				.layer(__CUP_PNRR_PROVINCE_SUM)
-				.layer(__CUP_PNRR_REGIONI_SUM)
-			)
+			.layer(__CUP_PNRR_choropleth)
+			.layer(__CUP_PNRR_chart)
+			.layer(__CUP_PNRR_chart_reg)
+			.layer(__CUP_PNRR_chart_prov)
+			.layer(__CUP_PNRR_PROJECTS)
+			.layer(__CUP_PNRR_PROVINCE_SUM)
+			.layer(__CUP_PNRR_REGIONI_SUM)
 		);
 
 	</script>
