@@ -407,7 +407,7 @@ ixmaps.data = ixmaps.data || {};
 				if (fActiveFacet) {
 					value = placeholder = szActiveFilter.split("\"")[3];
 				}
-				if ( !facetsA[i] || !facetsA[i].values || facetsA[i].values.length > 10){
+				if (!facetsA[i] || !facetsA[i].values || facetsA[i].values.length > 10) {
 					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
 					szHtml += '<input id="' + (szSafeId + "query") + '" type="text" class="form-control" style="background:transparent;border:none" value="' + value + '" placeholder="' + placeholder + '"';
 					szHtml += 'onKeyUp="if(event.which == 13){var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);}">';
@@ -415,7 +415,7 @@ ixmaps.data = ixmaps.data || {};
 					szHtml += '<button class="btn btn-search" type="button" onclick="var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>';
 					szHtml += '</span></input>';
 					szHtml += '</div>'
-				}else{
+				} else {
 					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
 					szHtml += '</div>'
 				}
@@ -569,12 +569,12 @@ ixmaps.data = ixmaps.data || {};
 
 						var bgColor = "";
 						var szCount = ixmaps.__formatValue(nCount, 0, "BLANK") + " " + (ixmaps.data.fShowFacetValues ? (objTheme.szUnits || "") : ""); //String(nCount || "");
-						
+
 						var szText = facetsA[i].values[ii];
-						
+
 						if ((objThemeDefinition.field == facetsA[i].id)) {
 							bgColor = objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
-							if ( objTheme.szLabelA && objTheme.szValuesA ){
+							if (objTheme.szLabelA && objTheme.szValuesA) {
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
 							}
 						}
@@ -593,7 +593,7 @@ ixmaps.data = ixmaps.data || {};
 								szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
 							}
 						}
-						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;background:'+bgColor+'"><span style="margin-left:-0em;float:left;white-space:normal;text-align:left">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
+						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;background:' + bgColor + '"><span style="margin-left:-0em;float:left;white-space:normal;text-align:left">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
 
 						var nWidth = (100 / nMaxCount * nCount);
 						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues > 2)) {
