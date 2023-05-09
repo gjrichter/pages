@@ -27,7 +27,7 @@ $Log:index_only_map_embed.html,v $
 	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
 
 	<title>iXMaps embed</title>
-	
+
 	<style>
 		table {
 			background: #F7F6EF;
@@ -59,63 +59,73 @@ $Log:index_only_map_embed.html,v $
 		}
 
 	</style>
-	
+
 	<style type="text/css">
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-family: arial, helvetica;
+			color: #888;
+			font-weight: 300;
+		}
 
-	h1,h2,h3,h4,h5,h6 {
-		font-family: arial,helvetica;
-		color: #888;
-		font-weight: 300;
-	}
-	p {
-		font-family: arial,helvetica;
-		color: #444;
-		font-weight: 300;
-	}
-	a {
-		font-family: arial,helvetica;
-		font-weight: 100;
-		color: black;
-		text-decoration:none;
-	}
+		p {
+			font-family: arial, helvetica;
+			color: #444;
+			font-weight: 300;
+		}
 
-	a:hover {
-		color: #000088;
-		text-decoration:none;
-	}
-	.filter-input {
-		width: 275px;
-		margin: 0;
-		float: left;
-		outline: none;
-		font-size: 1.2em;
-		border: 0;
-		margin-left: 0.2em;
-		font-family: Raleway,Arial;
-		font-weight: 300;
-		color: #444;
-	}
-	.minvalue, .maxvalue {
-		margin-left: 1em;
-		margin-right: 1em;
-	}
-	.slider-handle {
-		position: absolute;
-		top: 0px;
-		width: 20px;
-		height: 20px;
-		background-color: #ddd;
-		background-image: none;
-		filter: none;
-		box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px;
-		background-repeat: repeat-x;
-		border-width: 0px;
-		border-style: solid;
-		border-color: transparent;
-		border-image: initial;
-	}
+		a {
+			font-family: arial, helvetica;
+			font-weight: 100;
+			color: black;
+			text-decoration: none;
+		}
 
-</style>
+		a:hover {
+			color: #000088;
+			text-decoration: none;
+		}
+
+		.filter-input {
+			width: 275px;
+			margin: 0;
+			float: left;
+			outline: none;
+			font-size: 1.2em;
+			border: 0;
+			margin-left: 0.2em;
+			font-family: Raleway, Arial;
+			font-weight: 300;
+			color: #444;
+		}
+
+		.minvalue,
+		.maxvalue {
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+
+		.slider-handle {
+			position: absolute;
+			top: 0px;
+			width: 20px;
+			height: 20px;
+			background-color: #ddd;
+			background-image: none;
+			filter: none;
+			box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px;
+			background-repeat: repeat-x;
+			border-width: 0px;
+			border-style: solid;
+			border-color: transparent;
+			border-image: initial;
+		}
+
+	</style>
 	<link rel="stylesheet" href="./font/IcoMoon-Free.css">
 
 </head>
@@ -151,15 +161,15 @@ $Log:index_only_map_embed.html,v $
 			</div>
 
 			<p style="font-size:0.9em;">
-				Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile, 
+				Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
 				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
 			</p>
-			
+
 			<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
-			
+
 			<div id="show-facets-div"> </div>
-			
+
 			<!-- ------------------------------------- -->
 			<!-- static footer, annotations            -->
 			<!-- ------------------------------------- -->
@@ -192,9 +202,9 @@ $Log:index_only_map_embed.html,v $
 
 
 		</div>
-		
+
 	</div>
-	
+
 
 	<!-- ------------------------------------- -->
 	<!--                                       -->
@@ -405,7 +415,7 @@ $Log:index_only_map_embed.html,v $
 			var lastFilter = themeObj.szFilter || "";
 
 			if (szId == "chart" || szId == "chart_prov" || szId == "chart_reg" || szId == "details") {
-				
+
 				_LOG("=== statistics start ===");
 
 				var szFieldsA = ["Importo complessivo gara x CUP"];
@@ -437,13 +447,13 @@ $Log:index_only_map_embed.html,v $
 				} else {
 					$("#ambito-regionale").hide();
 				}
-				
+
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione","Descrizione Provincia","Descrizione Comune","missione","CUP","Descrizione Submisura","Denominazione Aggiudicatario","Importo complessivo gara x CUP","Importo complessivo gara x CUP"];
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "missione", "CUP", "Descrizione Submisura", "Denominazione Aggiudicatario", "Importo complessivo gara x CUP", "Importo complessivo gara x CUP"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
-				ixmaps.data.showFacets(lastFilter,"show-facets-div",facetsA);
+				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
 			}
 		};
