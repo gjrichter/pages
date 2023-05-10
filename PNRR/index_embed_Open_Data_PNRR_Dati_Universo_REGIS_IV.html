@@ -162,15 +162,12 @@ $Log:index_only_map_embed.html,v $
 				<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
 			</div>
 
-			<p>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'missione')" ;>Missione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Misura')" ;>Misura</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Categoria')" ;>Categoria</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Settore')" ;>Settore</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Regione')" ;>Regione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Comune')" ;>Comune</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null)" ;>tutti filtri</button>
+			<p style="font-size:0.9em;">
+				Crea <a style="color:#0088dd" href="javascript:$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
+				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
 			</p>
+
+			<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
 
 			<div id="show-facets-div"> </div>
@@ -462,7 +459,7 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione", "Descrizione Comune", "Soggetto attuatore", "missione", "CUP", "Descrizione Submisura", "CUP Descrizione Categoria"];
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "CUP", "Descrizione Submisura", "CUP Descrizione Categoria", "Sintesi progetto", "Denominazione Aggiudicatario"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
@@ -655,6 +652,26 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
+		/* 5. miniatura d'Italia per ambito nazionale */
+		var __georef_mini =
+			ixmaps.layer("ITALIA_miniatura", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/minimap/italia_miniatura.topojson",
+					type: "topojson"
+				})
+				.binding({
+					id: "COD_RIP",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["rgba(155,155,155,0.3)"],
+					linecolor: "none",
+					linewidth: "1",
+					sizefield: "Shape_Area"
+				})
+			);
+
 		/**
 		 ** visualizzation themes 
 		 **/
@@ -805,7 +822,7 @@ $Log:index_only_map_embed.html,v $
 
 
 		var __CUP_PNRR_chart_reg =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
 					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
@@ -818,7 +835,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
+				.type("CHART|SYMBOL|SEQUENCE|SIZEP3|STAR|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -995,7 +1012,7 @@ $Log:index_only_map_embed.html,v $
 			);
 
 		var __CUP_PNRR_REGIONI_SUM =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
 					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
@@ -1079,6 +1096,7 @@ $Log:index_only_map_embed.html,v $
 				.layer(__georef)
 				.layer(__georef_prov)
 				.layer(__georef_reg)
+				.layer(__georef_mini)
 
 				// -----------------------------		 
 				// the data visualization layer 
