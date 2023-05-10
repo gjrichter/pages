@@ -652,6 +652,26 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
+		/* 5. miniatura d'Italia per ambito nazionale */
+		var __georef_mini =
+			ixmaps.layer("ITALIA_miniatura", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/minimap/italia_miniatura.topojson",
+					type: "topojson"
+				})
+				.binding({
+					id: "COD_RIP",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["rgba(155,155,155,0.3)"],
+					linecolor: "none",
+					linewidth: "1",
+					sizefield: "Shape_Area"
+				})
+			);
+
 		/**
 		 ** visualizzation themes 
 		 **/
@@ -802,7 +822,7 @@ $Log:index_only_map_embed.html,v $
 
 
 		var __CUP_PNRR_chart_reg =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
 					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
@@ -815,7 +835,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
+				.type("CHART|SYMBOL|SEQUENCE|STAR|SIZEP3|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -1074,6 +1094,7 @@ $Log:index_only_map_embed.html,v $
 			.layer(__georef)
 			.layer(__georef_prov)
 			.layer(__georef_reg)
+			.layer(__georef_mini)
 
 			// -----------------------------		 
 			// the data visualization layer 
