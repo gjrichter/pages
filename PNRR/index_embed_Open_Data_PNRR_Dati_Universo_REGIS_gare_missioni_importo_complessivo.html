@@ -453,7 +453,7 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "missione", "CUP", "Descrizione Submisura", "Denominazione Aggiudicatario", "Importo complessivo gara x CUP", "Importo complessivo gara x CUP"];
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "missione", "CUP", "Descrizione Submisura", "Denominazione Aggiudicatario", "Importo complessivo gara x CUP", "Importo aggiudicazione x CUP", "Descrizione procedura di aggiudicazione"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
@@ -646,6 +646,26 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
+		/* 5. miniatura d'Italia per ambito nazionale */
+		var __georef_mini =
+			ixmaps.layer("ITALIA_miniatura", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/minimap/italia_miniatura.topojson",
+					type: "topojson"
+				})
+				.binding({
+					id: "COD_RIP",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["rgba(155,155,155,0.3)"],
+					linecolor: "none",
+					linewidth: "1",
+					sizefield: "Shape_Area"
+				})
+			);
+
 		/**
 		 ** visualizzation themes 
 		 **/
@@ -729,6 +749,7 @@ $Log:index_only_map_embed.html,v $
 						"#FACB49"
 					],
 					showdata: "true",
+					valuedecimals: "0",
 					units: "€",
 					scale: "3",
 					aggregationscale: [
@@ -781,6 +802,7 @@ $Log:index_only_map_embed.html,v $
 						"#FACB49"
 					],
 					showdata: "true",
+					valuedecimals: "0",
 					units: "€",
 					scale: "3",
 					chartupper: "1:5000000",
@@ -796,7 +818,7 @@ $Log:index_only_map_embed.html,v $
 
 
 		var __CUP_PNRR_chart_reg =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
 					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Gare_Aggiudicatari-Universo_REGIS_esteso.csv.gz",
 					type: "csv",
@@ -828,6 +850,7 @@ $Log:index_only_map_embed.html,v $
 						"#FACB49"
 					],
 					showdata: "true",
+					valuedecimals: "0",
 					units: "€",
 					scale: "3",
 					normalsizevalue: "1000000000",
@@ -877,6 +900,7 @@ $Log:index_only_map_embed.html,v $
 					showdata: "true",
 					valuefield: "Importo complessivo gara x CUP",
 					sizefield: "Importo complessivo gara x CUP",
+					valuedecimals: "0",
 					units: "€",
 					gridx: "20",
 					scale: "0.75",
@@ -930,6 +954,7 @@ $Log:index_only_map_embed.html,v $
 						"#FACB49"
 					],
 					showdata: "true",
+					valuedecimals: "0",
 					gridx: "10",
 					scale: "1",
 					rangescale: "0.2",
@@ -968,6 +993,7 @@ $Log:index_only_map_embed.html,v $
 					symbols: ["label"],
 					units: "€",
 					showdata: "true",
+					valuedecimals: "0",
 					scale: "5",
 					align: "baseline",
 					textcolor: "#aaaaaa",
@@ -1005,6 +1031,7 @@ $Log:index_only_map_embed.html,v $
 					symbols: ["label"],
 					units: "€",
 					showdata: "true",
+					valuedecimals: "0",
 					scale: "7",
 					align: "baseline",
 					rangescale: "0.2",
@@ -1040,7 +1067,7 @@ $Log:index_only_map_embed.html,v $
 					map: "../../maps/svg/maps/generic/mercator.svg",
 					name: "complessivo_map",
 					mode: "pan",
-					width: (window.innerWidth * 0.69) + "px",
+					width: "100%",
 					height: (window.innerHeight * 0.95) + "px",
 					legend: "true",
 					tools: "true",
@@ -1070,6 +1097,7 @@ $Log:index_only_map_embed.html,v $
 				.layer(__georef)
 				.layer(__georef_prov)
 				.layer(__georef_reg)
+				.layer(__georef_mini)
 
 				// -----------------------------		 
 				// the data visualization layer 
