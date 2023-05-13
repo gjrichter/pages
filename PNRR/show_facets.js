@@ -424,6 +424,15 @@ ixmaps.data = ixmaps.data || {};
 			// ------------------------------------
 			// make facet content, different types
 			// ------------------------------------
+			
+			var localTextA = {};
+			localTextA.M1 = "M1 - Digitalizz., innov., competi., cultura e turismo";
+			localTextA.M2 = "M2 - Rivoluzione verde e trans. eco.";
+			localTextA.M3 = "M3 - Infrastrutture per una mobilità sostenibile";
+			localTextA.M4 = "M4 - Istruzione e ricerca";
+			localTextA.M5 = "M5 - Inclusione e coesione";
+			localTextA.M6 = "M6 - Salute";
+ 
 
 			if (typeof (facetsA[i].min) != "undefined" &&
 				!isNaN(facetsA[i].min) &&
@@ -577,6 +586,10 @@ ixmaps.data = ixmaps.data || {};
 							if (objTheme.szLabelA && objTheme.szValuesA) {
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
 							}
+						}
+						
+						if ( localTextA[szText] ){
+							szText = localTextA[szText];
 						}
 
 						// facet button with one unique value
