@@ -64,7 +64,7 @@ ixmaps.data = ixmaps.data || {};
 	//
 	// ===========================================
 
-	ixmaps.data.getFacets = function (szFilter,szDiv,szFieldsA,szId,szMap) {
+	ixmaps.data.getFacets = function (szFilter,szDiv,szFieldsA,szId,szMap,fFlag) {
 		
 		facetsA = [];
 
@@ -164,8 +164,10 @@ ixmaps.data = ixmaps.data || {};
 					fNumeric = false;
 				}
 				return fNumeric;
-			});
-
+			}); 
+			if (fFlag && fFlag.match(/NONUMERIC/)){
+				fNumeric = false;
+			}
 			// test if field already part of the active query 
 			// ------------------------------------------
 			var fActiveFacet = false;
