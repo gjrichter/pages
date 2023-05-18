@@ -60,9 +60,79 @@ $Log:index_only_map_embed.html,v $
 
 	</style>
 
+	<style type="text/css">
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-family: arial, helvetica;
+			color: #888;
+			font-weight: 300;
+		}
+
+		p {
+			font-family: arial, helvetica;
+			color: #444;
+			font-weight: 300;
+		}
+
+		a {
+			font-family: arial, helvetica;
+			font-weight: 100;
+			color: black;
+			text-decoration: none;
+		}
+
+		a:hover {
+			color: #000088;
+			text-decoration: none;
+		}
+
+		.filter-input {
+			width: 275px;
+			margin: 0;
+			float: left;
+			outline: none;
+			font-size: 1.2em;
+			border: 0;
+			margin-left: 0.2em;
+			font-family: Raleway, Arial;
+			font-weight: 300;
+			color: #444;
+		}
+
+		.minvalue,
+		.maxvalue {
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+
+		.slider-handle {
+			position: absolute;
+			top: 0px;
+			width: 20px;
+			height: 20px;
+			background-color: #ddd;
+			background-image: none;
+			filter: none;
+			box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px;
+			background-repeat: repeat-x;
+			border-width: 0px;
+			border-style: solid;
+			border-color: transparent;
+			border-image: initial;
+		}
+
+	</style>
+	<link rel="stylesheet" href="./font/IcoMoon-Free.css">
+
 </head>
 
 <body style='text-align:center;background:#F7F6EF'>
+
+	<div id="regis_map" style="float:left;width:66%"></div>
 
 	<!-- ------------------------------------- -->
 	<!--                                       -->
@@ -74,75 +144,106 @@ $Log:index_only_map_embed.html,v $
 	<!-- user buttons to change the map charts -->
 	<!-- ------------------------------------- -->
 
-	<div style="position:absolute;top:1em;left:72%">
+	<div style="width:33%;float:right;">
 
 		<!-- ------------------------------------- -->
 		<!-- dynamic theme info, changes on zoom   -->
 		<!-- ------------------------------------- -->
 
-		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 1.5em;width:100%;float:right">
+		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
 			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 			<span id="ambito-nazionale" style="display:none">di questi <span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale</span>
 			<span id="ambito-regionale" style="display:none">e <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
 
-			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:beige;padding:0.2em;border-color:#aaaaaa;display:none">
+			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
 				<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
 			</div>
 
-			<p>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'missione')" ;>Missione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Misura')" ;>Misura</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Categoria')" ;>Categoria</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'CUP Descrizione Settore')" ;>Settore</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Regione')" ;>Regione</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null,'Descrizione Comune')" ;>Comune</button>
-				<button onclick="ixmaps.popupThemeFacets(null,null)" ;>tutti filtri</button>
+			<p style="font-size:0.9em;">
+				Crea <a style="color:#0088dd" href="javascript:$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
+				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
 			</p>
 
-			<!-- ------------------------------------- -->
-			<!-- static footer, annotations            -->
-			<!-- ------------------------------------- -->
+			<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
-			<hr>
-			<p style="font-size:1em;">Fonte dati:<br>Italia<b>domani</b> - Catalogo Open Data</p>
-			<p style="font-size:0.9em;">Descrizione dei dati ed istruzioni per l'uso si trovano qui sulla pagina dedicata di <a style="color:#0088dd" href="https://aborruso.quarto.pub/italiadomani/" target="_blank">(bozza inofficiale)</a></p>
-			<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>
-			</p>
-			<!--
+			<div id="scroll-area" style="height:600px;overflow:auto;">
+
+				<div id="show-facets-div" style="margin-right:0.5em"> </div>
+
+				<!-- ------------------------------------- -->
+				<!-- static footer, annotations            -->
+				<!-- ------------------------------------- -->
+
+				<hr>
+				<p style="font-size:1em;">Fonte dati:<br>Italia<b>domani</b> - Catalogo Open Data</p>
+				<p style="font-size:0.9em;">Descrizione dei dati ed istruzioni per l'uso si trovano qui sulla pagina dedicata di <a style="color:#0088dd" href="https://aborruso.quarto.pub/italiadomani/" target="_blank">(bozza inofficiale)</a></p>
+				<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>
+				</p>
+				<!--
 			<p><small><b>nota bene:</b><br> - si può clicare sui colori della leggenda per isolare 1 o più categorie<br>
 					- per evitare tempi di aggiornamento grafici lunghi, conviene zoomare un po', prima di attivare l'aggregazione al livello comunale<small></small></p>
 			-->
 
-			<table>
-				<tr>
-					<td>
-						<button onclick="sizeCharts(0.90)">-</button>
-					</td>
-					<td>
-						<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
-					</td>
-					<td>
-						<button onclick="sizeCharts(1.1)">+</button>
-					</td>
-				</tr>
+				<table>
+					<tr>
+						<td>
+							<button onclick="sizeCharts(0.90)">-</button>
+						</td>
+						<td>
+							<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+						</td>
+						<td>
+							<button onclick="sizeCharts(1.1)">+</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="sizeTexts(0.90)">-</button>
+						</td>
+						<td>
+							<span style="font-size:0.8em"> &nbsp; grandezza testi &nbsp;</span>
+						</td>
+						<td>
+							<button onclick="sizeTexts(1.1)">+</button>
+						</td>
+					</tr>
 
-			</table>
+				</table>
 
 
-			<p style="font-size:0.9em;">
-				Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile, 
-				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
-			</p>
-			
-			<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
+				<p style="font-size:0.9em;">
+					Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
+					mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
+				</p>
 
+				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
+
+			</div>
 		</div>
-		
+
 	</div>
-	
+
+	<div style="position:absolute;bottom:3em;right:35%">
+
+		<table>
+			<tr>
+				<td>
+					<button onclick="sizeCharts(0.90)">-</button>
+				</td>
+				<td>
+					<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+				</td>
+				<td>
+					<button onclick="sizeCharts(1.1)">+</button>
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
 
 	<!-- ------------------------------------- -->
 	<!--                                       -->
@@ -156,6 +257,7 @@ $Log:index_only_map_embed.html,v $
 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
 	<script src="https://gjrichter.github.io/data.js/data.js"></script>
 	<script src="./facet.js"></script>
+	<script src="./show_facets.js"></script>
 
 	<!--========================================================================= -->
 
@@ -171,7 +273,12 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'chart_prov', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'chart_reg', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
+			//ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
+			//ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
+		}
+		var sizeTexts = function(nFactor) {
 			ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'province_sum_2', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
 		}
 		var select = function(element) {
@@ -186,6 +293,7 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'chart_reg', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'details', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'province_sum', 'filter', 'remove');
+			ixmaps.changeThemeStyle(null, 'province_sum_2', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'regioni_sum', 'filter', 'remove');
 		}
 
@@ -347,22 +455,26 @@ $Log:index_only_map_embed.html,v $
 		// ---------------------------------------------------
 
 		ixmaps.statistics = function(szId) {
-
-			var lastFilter = "";
+			
+			var themeObj = ixmaps.getThemeObj(szId);
+			var lastFilter = themeObj.szFilter || "";
 
 			if (szId == "chart" || szId == "chart_prov" || szId == "chart_reg" || szId == "details") {
-				
-				_LOG("=== statistics start ===");
 
+				_LOG("=== statistics start ===");
+				
 				var szFieldsA = ["importo"];
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
-
-				var projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
-				var importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
+				
+				console.log(facetsA);
+				
+				var projects = facetsA[0].data ? ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK"): "0";
+				var importi = facetsA[0].sum ? ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK"): "0";
 				$("#no_progetti").html(projects);
 				$("#sum_importi").html(importi);
-
+				
 				facetsA = ixmaps.data.getFacets("WHERE \"Descrizione Comune\" like \"ambito\"", 'user_legend', szFieldsA, szId, "map");
+				console.log(facetsA);
 				if (facetsA[0].data && facetsA[0].data.length) {
 					projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
 					importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
@@ -374,6 +486,7 @@ $Log:index_only_map_embed.html,v $
 				}
 
 				facetsA = ixmaps.data.getFacets("WHERE \"Descrizione Comune\" like \"tutti\"", 'user_legend', szFieldsA, szId, "map");
+				console.log(facetsA);
 				if (facetsA[0].data && facetsA[0].data.length) {
 					projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
 					importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
@@ -383,8 +496,13 @@ $Log:index_only_map_embed.html,v $
 				} else {
 					$("#ambito-regionale").hide();
 				}
-				
+
 				_LOG("=== statistics done ===");
+
+				ixmaps.data.fShowFacetValues = true;
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "CUP", "Descrizione Submisura", "CUP Descrizione Categoria", "Sintesi progetto", "CIG", "Denominazione Aggiudicatario"];
+				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map","NONUMERIC");
+				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
 			}
 		};
@@ -398,7 +516,7 @@ $Log:index_only_map_embed.html,v $
 		var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
 		// intercept theme creation, to mark active themes
 		ixmaps.htmlgui_onDrawTheme = function(szId) {
-
+			
 			ixmaps.themesDrawnA = ixmaps.themesDrawnA || [];
 			ixmaps.themesDrawnA[szId] = true;
 
@@ -422,7 +540,7 @@ $Log:index_only_map_embed.html,v $
 
 			if (themeObj.szFilter) {
 				$("#filter").html(themeObj.szFilter);
-				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'>filtro: " + themeObj.szFilter.split("WHERE")[1] + "</div>");
+				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + themeObj.szFilter.split("WHERE")[1] + "</div>");
 				$("#filter-div").show();
 			} else {
 				$("#filter").html("");
@@ -433,6 +551,8 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.szActualUrl = window.location.hostname + window.location.pathname;
 			ixmaps.szActualUrl += "?filter=" + themeObj.szFilter;
 			ixmaps.szActualUrl += "&view=[" + ixmaps.getCenter().lat + "," + ixmaps.getCenter().lng + "]," + ixmaps.getZoom();
+			
+			$("#scroll-area").height( window.innerHeight - $("#scroll-area").offset().top - 50);
 
 			try {
 				old_onDrawTheme(szId);
@@ -476,7 +596,7 @@ $Log:index_only_map_embed.html,v $
 
 		if (params.filter) {
 			__filter = params.filter;
-		};
+		}
 
 		if (params.view) {
 			var latlonA = params.view.split('[')[1].split(']')[0].split(',');
@@ -510,7 +630,7 @@ $Log:index_only_map_embed.html,v $
 					colorscheme: ["none"],
 					linecolor: "none",
 					linewidth: "1",
-					scale: "0.1"
+					scale: "0.0001"
 				})
 			);
 
@@ -529,7 +649,7 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: ["none"],
 					linecolor: "none",
-					linewidth: "1",
+					linewidth: "0.3",
 					sizefield: "Shape_Area"
 				})
 			);
@@ -550,7 +670,7 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: ["none"],
 					linecolor: "black",
-					linewidth: "0.3",
+					linewidth: "0.1",
 					sizefield: "Shape_Area"
 				})
 			);
@@ -570,6 +690,26 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: ["rgba(255,255,255,0.5)"],
 					linecolor: "black",
+					linewidth: "0.3",
+					sizefield: "Shape_Area"
+				})
+			);
+
+		/* 5. miniatura d'Italia per ambito nazionale */
+		var __georef_mini =
+			ixmaps.layer("ITALIA_miniatura", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/minimap/italia_miniatura.topojson",
+					type: "topojson"
+				})
+				.binding({
+					id: "COD_RIP",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["rgba(155,155,155,0.3)"],
+					linecolor: "none",
 					linewidth: "1",
 					sizefield: "Shape_Area"
 				})
@@ -582,7 +722,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_choropleth =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -628,7 +768,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -639,7 +779,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|GLOW|SEQUENCE|STAR|SORT|DOWN|GLOW|CATEGORICAL|ORDER|AGGREGATE|SUM|VALUES|INLINETEXT|COMPACTLEGEND")
+				.type("CHART|SYMBOL|SEQUENCE|STAR|DOPACITY|GLOW|SORT|DOWN|SIZE|CATEGORICAL|ORDER|AGGREGATE|SUM|VALUES|INLINETEXT|TITLE|BOX|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -657,9 +797,20 @@ $Log:index_only_map_embed.html,v $
 						"#B671DC",
 						"#FACB49"
 					],
+					fillopacity: "0.66",
+					linecolor: "white",
+					linewidth: "1",
+					valuescale: "1.2",
 					showdata: "true",
 					units: "€",
-					scale: "5",
+					scale: "1",
+					dopacitypow: "2",
+					textscale: "0.7",
+					boxopacity: "0",
+					bordercolor: "none",
+					boxupper: "1:250000",
+					normalsizevalue: "1000000000",
+					showdata: "true",
 					aggregationscale: [
 						"1:1", "PROCOM",
 						"1:10000000", "Descrizione Provincia"
@@ -672,7 +823,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.meta({
 					title: "<b>PNRR - Universo REGIS</b>",
-					description: "<b>nota bene:</b> Il livello comunale include solo i progetti direttamente associati ad un comune",
+					description: "nota bene: <b>Livello comunale</b> include <b>solo</b> i progetti direttamente associati ad un comune",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -680,7 +831,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -691,7 +842,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|GLOW|SEQUENCE|STAR|SORT|DOWN|GLOW|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
+				.type("CHART|SYMBOL|GLOW|DOPACITY|SEQUENCE|STAR|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -711,7 +862,11 @@ $Log:index_only_map_embed.html,v $
 					],
 					showdata: "true",
 					units: "€",
-					scale: "3",
+					scale: "1",
+					linecolor: "white",
+					linewidth: "3",
+					dopacitypow: "5",
+					normalsizevalue: "2000000000",
 					chartupper: "1:5000000",
 					chartlower: "1:2000000",
 					name: "chart_prov"
@@ -725,9 +880,9 @@ $Log:index_only_map_embed.html,v $
 
 
 		var __CUP_PNRR_chart_reg =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -738,7 +893,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
+				.type("CHART|SYMBOL|SEQUENCE|GLOW|SIZEP2|STAR|SORT|DOWN|DOPACITY|CATEGORICAL|ORDER|AGGREGATE|SUM|INLINETEXT|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -758,14 +913,18 @@ $Log:index_only_map_embed.html,v $
 					],
 					showdata: "true",
 					units: "€",
-					scale: "5",
+					scale: "1",
+					normalsizevalue: "2000000000",
+					dopacitypow: "2",
+					linecolor: "white",
+					linewidth: "3",
 					xxglowupper: "1:1000000",
 					chartlower: "1:5000000",
 					name: "chart_reg"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b>",
-					description: "<b>nota bene:</b> L’aggregazione a livello regionale include i progetti per tutti i comuni e dell’ambito nazionale.",
+					title: "<b>PNRR<br>Universo REGIS</b>",
+					description: "nota bene: <b>aggregazione a livello regionale</b>; include i progetti per <b>tutti i comuni</b> e dell’<b>ambito nazionale</b>.",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -774,7 +933,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -784,7 +943,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|VALUES|SIZEP10|INLINETEXT|MULTIQUAD|SORT|CATEGORICAL|SUM|BOX|TITLE|COMPACTLEGEND")
+				.type("CHART|SYMBOL|VALUES|FIXSIZE|INLINETEXT|MULTIQUAD|SORT|CATEGORICAL|SUM|BOX|TITLE|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -807,15 +966,16 @@ $Log:index_only_map_embed.html,v $
 					sizefield: "importo",
 					units: "€",
 					gridx: "20",
-					scale: "0.75",
-					normalsizevalue: "100000",
+					scale: "0.02",
+					normalsizevalue: "1",
 					linecolor: "white",
 					linewidth: "0.1",
 					rangescale: "1.1",
-					valuescale: "0.35",
-					boxopacity: "0.5",
+					valuescale: "0.3",
+					boxopacity: "0",
 					boxmargin: "2",
-					textscale: "2",
+					textscale: "1",
+					textcolor: "black",
 					chartupper: "1:100000",
 					name: "details"
 				})
@@ -828,7 +988,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_SUM =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -879,7 +1039,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -896,13 +1056,13 @@ $Log:index_only_map_embed.html,v $
 					symbols: ["label"],
 					units: "€",
 					showdata: "true",
-					scale: "5",
+					scale: "1",
 					align: "baseline",
 					textcolor: "#aaaaaa",
 					textscale: "1.3",
 					titlefield: "Descrizione Provincia",
 					chartupper: "1:5000000",
-					chartlower: "1:250000",
+					chartlower: "1:2000000",
 					valuescale: "0.8",
 					aggregationfield: "Provincia",
 					name: "province_sum"
@@ -913,10 +1073,47 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
-		var __CUP_PNRR_REGIONI_SUM =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+		var __CUP_PNRR_PROVINCE_SUM_2 =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					type: "csv",
+					name: "pnrr_data"
+				})
+				.binding({
+					position: "PROCOM",
+					value: "$item$",
+					size: "importo",
+					title: "Descrizione Comune"
+				})
+				.filter(__filter)
+				.type("RECT|CHART|SYMBOLS|SIZEP4|TEXTONLY|AGGREGATE|VALUES|SUM|NOLEGEND")
+				.style({
+					colorscheme: ["white"],
+					symbols: ["label"],
+					units: "€",
+					showdata: "true",
+					scale: "1",
+					align: "baseline",
+					textcolor: "#aaaaaa",
+					textscale: "1.3",
+					titlefield: "Descrizione Provincia",
+					chartupper: "1:2000000",
+					chartlower: "1:1000000",
+					valuescale: "0.8",
+					aggregationfield: "Provincia",
+					name: "province_sum_2"
+				})
+				.meta({
+					title: "<b>Open CUP : Focus PNRR</b>",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		var __CUP_PNRR_REGIONI_SUM =
+			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -933,7 +1130,7 @@ $Log:index_only_map_embed.html,v $
 					symbols: ["label"],
 					units: "€",
 					showdata: "true",
-					scale: "7",
+					scale: "1",
 					align: "baseline",
 					rangescale: "0.2",
 					textcolor: "#888888",
@@ -960,56 +1157,57 @@ $Log:index_only_map_embed.html,v $
 		 **
 		 **/
 
-		document.activeElement.appendChild(
-
-			ixmaps.embed("mymap", {
-					mapService: "leaflet",
-					mapType: "OpenStreetMap - FR",
-					map: "../../maps/svg/maps/generic/mercator.svg",
-					mode: "pan",
-					width: (window.innerWidth * 0.69) + "px",
-					height: (window.innerHeight * 0.95) + "px",
-					legend: "true",
-					tools: "true",
-					align: "right",
-					search: "Italy"
-				},
-				map => map
-				.view([__lat, __lon], __zoom)
-				.options({
-					objectscaling: "dynamic",
-					normalSizeScale: "27033",
-					dynamicScalePow: "3",
-					flushChartDraw: "1000000",
-					basemapopacity: "0.1",
-					panhidden: "false"
-				})
-				.local("aggregated", "")
-				.local("loading data ...", "scaricando dati ...")
+		ixmaps.embed("regis_map", {
+				mapService: "leaflet",
+				mapType: "OpenStreetMap - FR",
+				map: "../../maps/svg/maps/generic/mercator.svg",
+				name: "regis_map",
+				mode: "pan",
+				width: "100%",
+				height: (window.innerHeight * 0.95) + "px",
+				legend: "true",
+				tools: "true",
+				align: "right",
+				search: "Italy"
+			},
+			map => map
+			.view([__lat, __lon], __zoom)
+			.options({
+				featurescaling: "true",
+				objectscaling: "dynamic",
+				normalSizeScale: "6000000",
+				dynamicScalePow: "1.5",
+				flushChartDraw: "1000000",
+				basemapopacity: "0.1",
+				panhidden: "false"
+			})
+			.local("aggregated", "")
+			.local("loading data ...", "scaricando dati ...")
 				.require("https://raw.githubusercontent.com/gjrichter/pages/main/PNRR/item_simple.js")
-				.attribution(attribution)
+			.attribution(attribution)
 
-				// -----------------------------		 
-				// the geo reference layer 
-				// -----------------------------
+			// -----------------------------		 
+			// the geo reference layer 
+			// -----------------------------
 
-				.layer(__georef_urban)
-				.layer(__georef)
-				.layer(__georef_prov)
-				.layer(__georef_reg)
+			.layer(__georef_urban)
+			.layer(__georef)
+			.layer(__georef_prov)
+			.layer(__georef_reg)
+			.layer(__georef_mini)
 
-				// -----------------------------		 
-				// the data visualization layer 
-				// -----------------------------
+			// -----------------------------		 
+			// the data visualization layer 
+			// -----------------------------
 
-				.layer(__CUP_PNRR_choropleth)
-				.layer(__CUP_PNRR_chart)
-				.layer(__CUP_PNRR_chart_reg)
-				.layer(__CUP_PNRR_chart_prov)
-				.layer(__CUP_PNRR_PROJECTS)
-				.layer(__CUP_PNRR_PROVINCE_SUM)
-				.layer(__CUP_PNRR_REGIONI_SUM)
-			)
+			.layer(__CUP_PNRR_choropleth)
+			.layer(__CUP_PNRR_chart)
+			.layer(__CUP_PNRR_chart_reg)
+			.layer(__CUP_PNRR_chart_prov)
+			.layer(__CUP_PNRR_PROJECTS)
+			.layer(__CUP_PNRR_PROVINCE_SUM)
+			.layer(__CUP_PNRR_PROVINCE_SUM_2)
+			.layer(__CUP_PNRR_REGIONI_SUM)
 		);
 
 	</script>
