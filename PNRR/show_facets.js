@@ -98,6 +98,14 @@ ixmaps.data = ixmaps.data || {};
 			}
 	};
 
+	
+	const hex2rgba = (hex, alpha = 1) => {
+	  const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+	  return `rgba(${r},${g},${b},${alpha})`;
+	};	
+	
+	
+	
 	// ===========================================
 	//
 	// facet filter handling 
@@ -262,7 +270,6 @@ ixmaps.data = ixmaps.data || {};
 	// ---------------------------------------------------
 
 	__HighlightFacetItems = function (szField, szValue) {
-		console.log("__HighlightFacetItems");
 		var objTheme = ixmaps.getThemeObj();
 		__oldFilter = objTheme.szFilter;
 		if (objTheme && (objTheme.szFlag.match(/AGGREGATE/) || objTheme.szFlag.match(/MULTI/))) {
@@ -326,8 +333,7 @@ ixmaps.data = ixmaps.data || {};
 	// ===========================================
 
 	ixmaps.data.showFacets = function (szFilter, szDiv, facetsA) {
-
-		console.log(" *** step: 0 ***");
+		
 		var fTest = true;
 		var sliderA = [];
 
@@ -338,8 +344,6 @@ ixmaps.data = ixmaps.data || {};
 		szHtml += "<div id='list-facets' class='list-group' style='width:100%;margin-bottom:5em;'>";
 
 		$("#" + (szDiv || "facets")).html(szHtml);
-
-		console.log(" *** step: 1 ***");
 
 		// create an array of the filter to pass them to the executing function
 		// to avoid problems with special characters " and '
@@ -407,15 +411,15 @@ ixmaps.data = ixmaps.data || {};
 				if (fActiveFacet) {
 					value = placeholder = szActiveFilter.split("\"")[3];
 				}
-				if (!facetsA[i] || !facetsA[i].values || facetsA[i].values.length > 10) {
-					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
+				if ( !facetsA[i] || !facetsA[i].values || facetsA[i].values.length > 10){
+					szHtml += '<div class="input-group" style="margin-bottom:0.5em;margin-left:0.1em;width:100%" >';
 					szHtml += '<input id="' + (szSafeId + "query") + '" type="text" class="form-control" style="background:transparent;border:none" value="' + value + '" placeholder="' + placeholder + '"';
 					szHtml += 'onKeyUp="if(event.which == 13){var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);}">';
-					szHtml += '<span class="input-group-btn">';
-					szHtml += '<button class="btn btn-search" type="button" onclick="var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>';
+					szHtml += '<span class="input-group-btn" style="float:right;margin-left:-0.5em;margin-right:0.2em;">';
+					szHtml += '<button class="btn btn-search" style="border:none" type="button" onclick="var value = $(\'#' + (szSafeId + "query") + '\').val();__setFilter(\'' + facetsA[i].id + '\',value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>';
 					szHtml += '</span></input>';
 					szHtml += '</div>'
-				} else {
+				}else{
 					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
 					szHtml += '</div>'
 				}
@@ -444,7 +448,7 @@ ixmaps.data = ixmaps.data || {};
 				// continous value facet
 				// make min/max slider
 				// ---------------------------------
-
+				
 				if (!__rangesA[facetsA[i].id] || !fActiveFacet) {
 					__rangesA[facetsA[i].id] = {
 						min: facetsA[i].min,
@@ -468,7 +472,6 @@ ixmaps.data = ixmaps.data || {};
 
 				if (facetsA[i].data) {
 
-					console.log(objThemeDefinition);
 					var fOnMap = false;
 					if ((objThemeDefinition.field == facetsA[i].id)) {
 						fOnMap = true;
@@ -559,10 +562,8 @@ ixmaps.data = ixmaps.data || {};
 				// --------------------------------------
 				var maxII = (facetsA[i].values.length < 12) ? facetsA[i].values.length : 10;
 
-				console.log(facetsA[i].values.length + " items, clipped to " + maxII)
-
 				for (var ii = 0; ii < facetsA[i].values.length; ii++) {
-
+					
 					if (facetsA[i].values[ii] != " ") {
 
 						// make the facet filter 
@@ -578,16 +579,16 @@ ixmaps.data = ixmaps.data || {};
 
 						var bgColor = "";
 						var szCount = ixmaps.__formatValue(nCount, 0, "BLANK") + " " + (ixmaps.data.fShowFacetValues ? (objTheme.szUnits || "") : ""); //String(nCount || "");
-
+						
 						var szText = facetsA[i].values[ii];
-
+						
 						if ((objThemeDefinition.field == facetsA[i].id)) {
-							bgColor = objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
-							if (objTheme.szLabelA && objTheme.szValuesA) {
+							bgColor = hex2rgba(objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1],0.7);
+							if ( objTheme.szLabelA && objTheme.szValuesA ){
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
 							}
 						}
-						
+
 						if ( localTextA[szText] ){
 							szText = localTextA[szText];
 						}
@@ -597,20 +598,47 @@ ixmaps.data = ixmaps.data || {};
 						szHtml += '<a href="' + href + '">';
 						szHtml += '<div class="input-group" style="margin-bottom:0.5em;width:100%">';
 						if ((objThemeDefinition.field == facetsA[i].id)) {
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + '"></span>';
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
 						}
+						if (szText.match(/M1C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[0],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
+						}
+						if (szText.match(/M2C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[1],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M3C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[2],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M4C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[3],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M5C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[4],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M6C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[5],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
 								value = szActiveFilter.split("\"")[3].replace("\/", "\\\/");
-								var szTextA = eval("szText.split(/" + value + "/i)");
-								szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
+								if ( value != "*" ){
+									var szTextA = eval("szText.split(/" + value + "/i)");
+									szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
+								}
 							}
 						}
-						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;background:' + bgColor + '"><span style="margin-left:-0em;float:left;white-space:normal;text-align:left">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
+						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;border:none;border-bottom:solid #000000 0.1px;border-radius:0;background:'+bgColor+'"><span style="margin-left:-0.5em;float:left;white-space:normal;text-align:left;margin-top:0.2em">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
 
 						var nWidth = (100 / nMaxCount * nCount);
 						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues > 2)) {
-							szHtml += '<div style="position:relative;top:0.25em;left:0.1em;background:rgba(208,208,208,1);line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
+							szHtml += '<div style="position:relative;top:3px;left:0.1em;background:rgba(208,208,208,1);line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
 						}
 
 						szHtml += '</div>';
@@ -639,12 +667,13 @@ ixmaps.data = ixmaps.data || {};
 			} else {
 				// facet has no property .values 
 				// may be there are 0 or to many unique values when creating the facet
-				szHtml += '(too many values)';
+				//szHtml += '(too many values)';
 			}
 			szHtml += "</div>";
+
 		}
 		szHtml += "</div>";
-
+		
 		$("#" + (szDiv || "facets")).html(szHtml);
 
 		/**
