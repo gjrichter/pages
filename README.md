@@ -16,6 +16,8 @@
 
 [PA Digitale](https://gjrichter.github.io/pages/PA%20Digitale/PA_Digitale_Candidature%20finanziate_dashboard_I.html)
 
+[PNRR - Universo REGIS](https://gjrichter.github.io/pages/PNRR)
+
 [Persone con Carica Attive nate all'estero dal 2000 ad oggi](https://gjrichter.github.io/pages/Macerata/index_test_api_embed_CamCom_Macerata_forze_lavoro_world_y_choro.html)
 
 [Eurostat - Terziary Education - age 25-35 - years 2010-2021](https://gjrichter.github.io/pages/Eurostat_Terziary_Education/index.html)
