@@ -4,7 +4,7 @@ Una mappa configurabile per visualizzare l'impatto territoriale dei progetti PNR
 
 Fonte: <a href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani - Open Data PNRR</a>  
 
-<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22"></iframe>
+<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22&scale=6"></iframe>
 
 
 La mappa sopra è un esempio come includere la visualizzazione PNRR configurabile in un documento. 
@@ -94,30 +94,4 @@ Alcuni esempi:
 [https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE "Soggetto attuatore" like "METROPOLITANA"&view=[42.374778361114195,13.568115234375002],6](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Soggetto%20attuatore%22%20like%20%22METROPOLITANA%22&view=[42.374778361114195,13.568115234375002],6)
 
 
-
-## alcuni link per testare:
-
-### mappe pallini
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_IV.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_IV.html)
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare_missioni_importo_complessivo.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare_missioni_importo_complessivo.html)
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare_missioni_importo_aggiudicato.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare_missioni_importo_aggiudicato.html)
-
-
-
-### tarato diversamente
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_IV_nazionale_5050.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_IV_nazionale_5050.html)
-
-
-
-### mappe con 'montagne'
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV.html)
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV_gare.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV_gare.html)
-
-[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV_gare_aggiudicati.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_peaks_III_PROV_gare_aggiudicati.html)
 
