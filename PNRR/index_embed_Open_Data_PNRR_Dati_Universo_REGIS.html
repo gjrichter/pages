@@ -296,6 +296,14 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
 			//ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
 			//ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
+			
+			themesA = ixmaps.getThemes();
+			for (i in themesA){
+				if ( themesA[i].szId.match(/chart|details/) && themesA[i].fVisible ){
+					__actualizeUrl(themesA[i]);
+					break;
+				}
+			}
 		}
 		var sizeTexts = function(nFactor) {
 			ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
@@ -534,6 +542,15 @@ $Log:index_only_map_embed.html,v $
 		//
 		// ---------------------------------------------------
 
+		var __actualizeUrl = function(themeObj) {
+			ixmaps.szActualUrl = window.location.hostname + window.location.pathname;
+			ixmaps.szActualUrl += "?filter=" + themeObj.szFilter;
+			ixmaps.szActualUrl += "&scale=" + themeObj.nScale;
+			ixmaps.szActualUrl += "&view=[" + ixmaps.getCenter().lat + "," + ixmaps.getCenter().lng + "]," + ixmaps.getZoom();
+			$('#popup').html((ixmaps.szActualUrl));
+			$('#popup1').html((ixmaps.szActualUrl));
+		};
+		
 		var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
 		// intercept theme creation, to mark active themes
 		ixmaps.htmlgui_onDrawTheme = function(szId) {
@@ -569,12 +586,7 @@ $Log:index_only_map_embed.html,v $
 				$("#filter-div").hide();
 			}
 
-			ixmaps.szActualUrl = window.location.hostname + window.location.pathname;
-			ixmaps.szActualUrl += "?filter=" + themeObj.szFilter;
-			ixmaps.szActualUrl += "&scale=" + themeObj.nScale;
-			ixmaps.szActualUrl += "&view=[" + ixmaps.getCenter().lat + "," + ixmaps.getCenter().lng + "]," + ixmaps.getZoom();
-			$('#popup').html((ixmaps.szActualUrl));
-			$('#popup1').html((ixmaps.szActualUrl));
+			__actualizeUrl(themeObj);
 			
 			$("#scroll-area").height(window.innerHeight - $("#scroll-area").offset().top - 50);
 
@@ -602,7 +614,7 @@ $Log:index_only_map_embed.html,v $
 		var __lat = 41.86956082699455;
 		var __lon = 13.150634765625002;
 		var __zoom = 6;
-		var __scale_chart = 1.5;
+		var __scale_chart = 1;
 		/**
 		 ** strings used by the map 	
 		 **/
@@ -751,7 +763,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_choropleth =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -797,7 +809,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -832,7 +844,7 @@ $Log:index_only_map_embed.html,v $
 					valuescale: "1.2",
 					showdata: "true",
 					units: "€",
-					scale: "1",
+					scale: __scale_chart,
 					dopacitypow: "2",
 					textscale: "0.7",
 					boxopacity: "0",
@@ -860,7 +872,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -891,7 +903,7 @@ $Log:index_only_map_embed.html,v $
 					],
 					showdata: "true",
 					units: "€",
-					scale: "1",
+					scale: __scale_chart,
 					linecolor: "white",
 					linewidth: "3",
 					dopacitypow: "5",
@@ -911,7 +923,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_reg =
 			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -942,7 +954,7 @@ $Log:index_only_map_embed.html,v $
 					],
 					showdata: "true",
 					units: "€",
-					scale: "1",
+					scale: __scale_chart,
 					normalsizevalue: "2000000000",
 					dopacitypow: "2",
 					linecolor: "white",
@@ -962,7 +974,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -990,6 +1002,7 @@ $Log:index_only_map_embed.html,v $
 						"#B671DC",
 						"#FACB49"
 					],
+					fillopacity: "0.8",
 					showdata: "true",
 					valuefield: "importo",
 					sizefield: "importo",
@@ -1017,7 +1030,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_SUM =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1068,7 +1081,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1105,7 +1118,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM_2 =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1142,7 +1155,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_REGIONI_SUM =
 			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_sub.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
