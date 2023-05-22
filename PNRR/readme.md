@@ -95,3 +95,12 @@ Alcuni esempi:
 
 
 
+## altre mappe PNRR Regis
+
+Una mappa con tutti importi delle gare: 
+
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_gare.html)
+
+Una mappa con solo importi aggiudicati:
+
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_aggiudicate.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_aggiudicate.html)
