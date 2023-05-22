@@ -42,7 +42,7 @@ $Log:index_only_map_embed.html,v $
 	<meta name="twitter:title" content="Dati aperti PNRR: la mappa per esplorarli">
 	<meta name="twitter:description" content="La mappa interattiva per esplorare i dati aperti della piattaforma ReGis pubblicati su Italiadomani">
 	<meta name="twitter: image" content="https://user-images.githubusercontent.com/77018886/239703362-afea9f57-271f-4c0b-99b2-6725b36d88e6.png">
-	
+
 	<style>
 		table {
 			background: #F7F6EF;
@@ -296,10 +296,10 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
 			//ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
 			//ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
-			
+
 			themesA = ixmaps.getThemes();
-			for (i in themesA){
-				if ( themesA[i].szId.match(/chart|details/) && themesA[i].fVisible ){
+			for (i in themesA) {
+				if (themesA[i].szId.match(/chart|details/) && themesA[i].fVisible) {
 					__actualizeUrl(themesA[i]);
 					break;
 				}
@@ -495,15 +495,12 @@ $Log:index_only_map_embed.html,v $
 				var szFieldsA = ["importo"];
 				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
 
-				console.log(facetsA);
-
 				var projects = facetsA[0].data ? ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK") : "0";
 				var importi = facetsA[0].sum ? ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK") : "0";
 				$("#no_progetti").html(projects);
 				$("#sum_importi").html(importi);
 
 				facetsA = ixmaps.data.getFacets("WHERE \"Descrizione Comune\" like \"ambito\"", 'user_legend', szFieldsA, szId, "map");
-				console.log(facetsA);
 				if (facetsA[0].data && facetsA[0].data.length) {
 					projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
 					importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
@@ -515,7 +512,6 @@ $Log:index_only_map_embed.html,v $
 				}
 
 				facetsA = ixmaps.data.getFacets("WHERE \"Descrizione Comune\" like \"tutti\"", 'user_legend', szFieldsA, szId, "map");
-				console.log(facetsA);
 				if (facetsA[0].data && facetsA[0].data.length) {
 					projects = ixmaps.__formatValue(facetsA[0].data.length, 0, "BLANK");
 					importi = ixmaps.__formatValue(facetsA[0].sum, 0, "BLANK");
@@ -550,7 +546,7 @@ $Log:index_only_map_embed.html,v $
 			$('#popup').html((ixmaps.szActualUrl));
 			$('#popup1').html((ixmaps.szActualUrl));
 		};
-		
+
 		var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
 		// intercept theme creation, to mark active themes
 		ixmaps.htmlgui_onDrawTheme = function(szId) {
@@ -587,7 +583,7 @@ $Log:index_only_map_embed.html,v $
 			}
 
 			__actualizeUrl(themeObj);
-			
+
 			$("#scroll-area").height(window.innerHeight - $("#scroll-area").offset().top - 50);
 
 			try {
