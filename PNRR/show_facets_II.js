@@ -98,6 +98,14 @@ ixmaps.data = ixmaps.data || {};
 			}
 	};
 
+	
+	const hex2rgba = (hex, alpha = 1) => {
+	  const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+	  return `rgba(${r},${g},${b},${alpha})`;
+	};	
+	
+	
+	
 	// ===========================================
 	//
 	// facet filter handling 
@@ -575,7 +583,7 @@ ixmaps.data = ixmaps.data || {};
 						var szText = facetsA[i].values[ii];
 						
 						if ((objThemeDefinition.field == facetsA[i].id)) {
-							bgColor = objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
+							bgColor = hex2rgba(objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1],0.7);
 							if ( objTheme.szLabelA && objTheme.szValuesA ){
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
 							}
@@ -590,8 +598,33 @@ ixmaps.data = ixmaps.data || {};
 						szHtml += '<a href="' + href + '">';
 						szHtml += '<div class="input-group" style="margin-bottom:0.5em;width:100%">';
 						if ((objThemeDefinition.field == facetsA[i].id)) {
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + '"></span>';
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
 						}
+						if (szText.match(/M1C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[0],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
+						}
+						if (szText.match(/M2C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[1],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M3C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[2],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M4C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[3],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M5C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[4],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						if (szText.match(/M6C/)){
+							var bgColor = hex2rgba(objTheme.colorScheme[5],0.3);
+							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
+						}
+						
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
 								value = szActiveFilter.split("\"")[3].replace("\/", "\\\/");
