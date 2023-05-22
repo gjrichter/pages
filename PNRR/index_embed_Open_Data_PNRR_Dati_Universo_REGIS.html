@@ -179,7 +179,7 @@ $Log:index_only_map_embed.html,v $
 
 			<p style="font-size:0.9em;">
 				Crea <a style="color:#0088dd" href="javascript:$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
-				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a> (con possibilità di scaricarli)
+				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:ixmaps.showAbout('../../../pages/PNRR/about.html')">qui</a>.
 			</p>
 
 			<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
@@ -521,7 +521,7 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "CUP", "Descrizione Submisura", "CUP Descrizione Categoria", "Sintesi progetto", "CIG", "Denominazione Aggiudicatario"];
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "Descrizione Submisura", "CUP", "CUP Descrizione Categoria", "Sintesi progetto", "CIG", "Denominazione Aggiudicatario"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map", "NONUMERIC");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
@@ -571,8 +571,11 @@ $Log:index_only_map_embed.html,v $
 
 			ixmaps.szActualUrl = window.location.hostname + window.location.pathname;
 			ixmaps.szActualUrl += "?filter=" + themeObj.szFilter;
+			ixmaps.szActualUrl += "&scale=" + themeObj.nScale;
 			ixmaps.szActualUrl += "&view=[" + ixmaps.getCenter().lat + "," + ixmaps.getCenter().lng + "]," + ixmaps.getZoom();
-
+			$('#popup').html((ixmaps.szActualUrl));
+			$('#popup1').html((ixmaps.szActualUrl));
+			
 			$("#scroll-area").height(window.innerHeight - $("#scroll-area").offset().top - 50);
 
 			try {
@@ -599,7 +602,7 @@ $Log:index_only_map_embed.html,v $
 		var __lat = 41.86956082699455;
 		var __lon = 13.150634765625002;
 		var __zoom = 6;
-
+		var __scale_chart = 1.5;
 		/**
 		 ** strings used by the map 	
 		 **/
@@ -626,6 +629,11 @@ $Log:index_only_map_embed.html,v $
 			__zoom = parseInt(params.view.split(',')[2]);
 			//setTimeout("ixmaps.setView(null,"+params.view+")",1000);
 		};
+
+		if (params.scale) {
+			__scale_chart = params.scale;
+		};
+
 
 		// ---------------------------------------------------
 		// t h e   l a y e r 
