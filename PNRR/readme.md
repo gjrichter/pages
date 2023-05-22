@@ -4,14 +4,14 @@ Una mappa configurabile per visualizzare l'impatto territoriale dei progetti PNR
 
 Fonte: <a href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani - Open Data PNRR</a>  
 
-<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22&scale=6"></iframe>
+<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22&scale=10"></iframe>
 
 
 La mappa sopra è un esempio come includere la visualizzazione PNRR configurabile in un documento. 
 Qui il codice per includere la mappa in una pagina HTML:
 
 ```javascript
-<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22"></iframe>
+<iframe id="map" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html?filter=WHERE%20%22Descrizione%20Misura%22%20=%20%22Creazione%20di%20imprese%20femminili%22&scale=10"></iframe>
 ```
 
 
