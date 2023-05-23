@@ -573,7 +573,7 @@ $Log:index_only_map_embed.html,v $
 
 
 			if (themeObj.szFilter) {
-				$("#filter").html("rimuovi filtro ");
+				$("#filter").html(themeObj.szFilter.substr(0,100));
 				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + themeObj.szFilter.split("WHERE")[1] + "</div>");
 				$("#filter-div").show();
 			} else {
