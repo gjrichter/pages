@@ -110,3 +110,7 @@ Una mappa con solo importi aggiudicati:
 ## test
 
 [https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig.html)
+
+
+
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_sub.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_sub.html)
