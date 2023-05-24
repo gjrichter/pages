@@ -159,7 +159,7 @@ $Log:index_only_map_embed.html,v $
 	<!-- user buttons to change the map charts -->
 	<!-- ------------------------------------- -->
 
-	<div style="width:33%;float:right;">
+	<div id="regis_sidebar" style="width:33%;float:right;">
 
 		<!-- ------------------------------------- -->
 		<!-- dynamic theme info, changes on zoom   -->
@@ -232,14 +232,14 @@ $Log:index_only_map_embed.html,v $
 
 				<p style="font-size:0.9em;">
 					Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
-					mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
+					mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>.<a href="">Qui</a> le info sulla mappa.
 				</p>
 
 				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
-				<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
+				<div style="font-family:open sans;text-align:left;margin-left:0em;margin-top:0.5em;max-width:300px">
 					<p>
-						<button onclick="ixmaps.showAbout('../../../pages/PNRR/about.html')" ;>informazioni sulla mappa</button>
+						<button onclick="ixmaps.showAbout('../../pages/PNRR/about.html')" ;>informazioni sulla mappa</button>
 					</p>
 				</div>
 			</div>
@@ -288,6 +288,19 @@ $Log:index_only_map_embed.html,v $
 		</div>
 	</div>
 
+	<!-- sidebar switch -->
+
+		<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none" >
+			<div>
+				<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
+					<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
+					</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+					<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
+					</a>
+				</span>
+			</div>
+		</div>
 
 	<!-- ------------------------------------- -->
 	<!--                                       -->
@@ -1279,7 +1292,45 @@ $Log:index_only_map_embed.html,v $
 		if (!window.location.search) {
 			$("#info-overlay").show();
 		}
+		
+		/**
+		 **
+		 ** window size handling, show or hide sidebar
+		 **
+		 **/
+		
+		ixmaps.resize = function() {
+			$("#regis_map").css("height",(window.innerHeight * 0.95) + "px");
+			if ( window.innerWidth < 600 )	{
+				ixmaps.showMap();
+				$("#sidebarnav").show();
+			}else{
+				ixmaps.showBoth();
+				$("#sidebarnav").hide();
+			}
+		};
+		ixmaps.showSidebar = function(){
+			$("#regis_sidebar").show();
+			$("#regis_sidebar").css("width","100%");
+			$("#regis_map_target").css("width","0");
+		};
+		ixmaps.showMap = function(){
+			$("#regis_sidebar").hide();
+			$("#regis_sidebar").css("width","0");
+			$("#regis_map_target").css("width","100%");
+		};
+		ixmaps.showBoth = function(){
+			$("#regis_sidebar").show();
+			$("#regis_sidebar").css("width","33%");
+			$("#regis_map_target").css("width","66%");
+		};
 
+		ixmaps.resize();
+		
+		$(window).resize(function() {
+			ixmaps.resize();
+		});
+		
 	</script>
 
 </body>
