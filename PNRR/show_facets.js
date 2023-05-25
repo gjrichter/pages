@@ -125,7 +125,7 @@ ixmaps.data = ixmaps.data || {};
 			szFilter = szFilter.split(/WHERE /)[1];
 
 			// add, or remove filter, if exists  
-			__facetFilterA.filter(function (value, index, self) {
+			__facetFilterA = __facetFilterA.filter(function (value, index, self) {
 				return !(szFilter.split(/"/)[1] == value.split(/"/)[1]);
 			});
 
