@@ -247,7 +247,9 @@ $Log:index_only_map_embed.html,v $
 
 	</div>
 
-	<div style="position:absolute;bottom:3em;right:35%">
+	<!-- onmap buttons -->
+
+	<div id="onmap-buttons" style="position:absolute;bottom:3em;right:35%">
 
 		<table>
 			<tr>
@@ -265,7 +267,21 @@ $Log:index_only_map_embed.html,v $
 		</table>
 
 	</div>
-	
+
+	<!-- sidebar switch -->
+
+	<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none">
+		<div>
+			<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
+				<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
+				</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
+				</a>
+			</span>
+		</div>
+	</div>
+
 	<!-- Nota Bene -->
 
 	<div id="info-overlay" style="position:absolute;bottom:20%;right:0;width:100%;max-height:70%;display:none">
@@ -287,20 +303,6 @@ $Log:index_only_map_embed.html,v $
 			</div>
 		</div>
 	</div>
-
-	<!-- sidebar switch -->
-
-		<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none" >
-			<div>
-				<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
-					<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
-					</a>
-					&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-					<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
-					</a>
-				</span>
-			</div>
-		</div>
 
 	<!-- ------------------------------------- -->
 	<!--                                       -->
@@ -609,7 +611,7 @@ $Log:index_only_map_embed.html,v $
 
 
 			if (themeObj.szFilter) {
-				$("#filter").html((themeObj.szFilter.length>100)?(themeObj.szFilter.substr(0,100)+" ... "):themeObj.szFilter);
+				$("#filter").html((themeObj.szFilter.length > 100) ? (themeObj.szFilter.substr(0, 100) + " ... ") : themeObj.szFilter);
 				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + themeObj.szFilter.split("WHERE")[1] + "</div>");
 				$("#filter-div").show();
 			} else {
@@ -1244,7 +1246,7 @@ $Log:index_only_map_embed.html,v $
 				mode: "pan",
 				width: "100%",
 				height: (window.innerHeight * 0.95) + "px",
-				legend: ((__legend==true)?"true":0),
+				legend: ((__legend == true) ? "true" : 0),
 				tools: "true",
 				align: "right",
 				search: "Italy"
@@ -1292,45 +1294,47 @@ $Log:index_only_map_embed.html,v $
 		if (!window.location.search) {
 			$("#info-overlay").show();
 		}
-		
+
 		/**
 		 **
 		 ** window size handling, show or hide sidebar
 		 **
 		 **/
-		
+
 		ixmaps.resize = function() {
-			$("#regis_map").css("height",(window.innerHeight * 0.95) + "px");
-			if ( window.innerWidth < 600 )	{
-				ixmaps.showMap();
+			$("#regis_map").css("height", (window.innerHeight * 0.95) + "px");
+			if (window.innerWidth < 600) {
 				$("#sidebarnav").show();
-			}else{
-				ixmaps.showBoth();
+				$("#onmap-buttons").hide();
+				ixmaps.showMap();
+			} else {
 				$("#sidebarnav").hide();
+				$("#onmap-buttons").show();
+				ixmaps.showBoth();
 			}
 		};
-		ixmaps.showSidebar = function(){
+		ixmaps.showSidebar = function() {
 			$("#regis_sidebar").show();
-			$("#regis_sidebar").css("width","100%");
-			$("#regis_map_target").css("width","0");
+			$("#regis_sidebar").css("width", "100%");
+			$("#regis_map_target").css("width", "0");
 		};
-		ixmaps.showMap = function(){
+		ixmaps.showMap = function() {
 			$("#regis_sidebar").hide();
-			$("#regis_sidebar").css("width","0");
-			$("#regis_map_target").css("width","100%");
+			$("#regis_sidebar").css("width", "0");
+			$("#regis_map_target").css("width", "100%");
 		};
-		ixmaps.showBoth = function(){
+		ixmaps.showBoth = function() {
 			$("#regis_sidebar").show();
-			$("#regis_sidebar").css("width","33%");
-			$("#regis_map_target").css("width","66%");
+			$("#regis_sidebar").css("width", "33%");
+			$("#regis_map_target").css("width", "66%");
 		};
 
 		ixmaps.resize();
-		
+
 		$(window).resize(function() {
 			ixmaps.resize();
 		});
-		
+
 	</script>
 
 </body>
