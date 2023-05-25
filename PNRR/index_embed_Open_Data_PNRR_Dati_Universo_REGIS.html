@@ -247,7 +247,9 @@ $Log:index_only_map_embed.html,v $
 
 	</div>
 
-	<div style="position:absolute;bottom:3em;right:35%">
+	<!-- onmap buttons -->
+
+	<div id="onmap-buttons" style="position:absolute;bottom:3em;right:35%">
 
 		<table>
 			<tr>
@@ -264,6 +266,20 @@ $Log:index_only_map_embed.html,v $
 
 		</table>
 
+	</div>
+
+	<!-- sidebar switch -->
+
+	<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none">
+		<div>
+			<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
+				<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
+				</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
+				</a>
+			</span>
+		</div>
 	</div>
 
 	<!-- Nota Bene -->
@@ -285,20 +301,6 @@ $Log:index_only_map_embed.html,v $
 				</p>
 
 			</div>
-		</div>
-	</div>
-
-	<!-- sidebar switch -->
-
-	<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none">
-		<div>
-			<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
-				<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
-				</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
-				</a>
-			</span>
 		</div>
 	</div>
 
@@ -1302,11 +1304,13 @@ $Log:index_only_map_embed.html,v $
 		ixmaps.resize = function() {
 			$("#regis_map").css("height", (window.innerHeight * 0.95) + "px");
 			if (window.innerWidth < 600) {
-				ixmaps.showMap();
 				$("#sidebarnav").show();
+				$("#onmap-buttons").hide();
+				ixmaps.showMap();
 			} else {
-				ixmaps.showBoth();
 				$("#sidebarnav").hide();
+				$("#onmap-buttons").show();
+				ixmaps.showBoth();
 			}
 		};
 		ixmaps.showSidebar = function() {
