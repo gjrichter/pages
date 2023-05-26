@@ -178,8 +178,8 @@ $Log:index_only_map_embed.html,v $
 			</div>
 
 			<p style="font-size:0.9em;">
-				Crea <a style="color:#0088dd" href="javascript:$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
-				mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:ixmaps.showAbout('../../../pages/PNRR/about.html')">qui</a>.
+				Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
+				mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.showAbout('../../pages/PNRR/about.html')">qui</a>.
 			</p>
 
 			<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
@@ -231,8 +231,8 @@ $Log:index_only_map_embed.html,v $
 
 
 				<p style="font-size:0.9em;">
-					Crea <a style="color:#0088dd" href="javascript:$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
-					mostra tabella <a style="color:#0088dd" href="javascript:ixmaps.popupThemeTable()">dati</a>
+					Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
+					mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>.Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.showAbout('../../pages/PNRR/about.html')">qui</a>.
 				</p>
 
 				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
@@ -273,10 +273,10 @@ $Log:index_only_map_embed.html,v $
 	<div id="sidebarnav" style="position:absolute;left:0px;bottom:20px;opacity:0.9;width:100%;text-align:center;display:none">
 		<div>
 			<span id="sidebarbuttons" data-toggle="buttons" style="padding:8px 16px 8px 18px;border:solid #ddd 1px;border-radius:2px;background-color:#ffffff;">
-				<a href="#javascript:ixmaps.showMap();" class="btn btn-link" onclick="ixmaps.showMap();">Mappa
+				<a class="btn btn-link" href="javascript:void();" onclick="ixmaps.showMap();">Mappa
 				</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<a href="#javascript:ixmaps.showSidebar();" class="btn btn-link" onclick="ixmaps.showSidebar();">Elenco finanziamenti
+				<a class="btn btn-link" href="#javascript:void();" onclick="ixmaps.showSidebar();">Elenco finanziamenti
 				</a>
 			</span>
 		</div>
@@ -287,7 +287,7 @@ $Log:index_only_map_embed.html,v $
 	<div id="info-overlay" style="position:absolute;bottom:20%;right:0;width:100%;max-height:70%;display:none">
 		<div style="background:#F7F6EF;border:solid #444 0.1px;max-width:80%;margin:auto">
 			<div style="float:right;margin-top:0.5em;margin-right:0.5em;font-size:22px">
-				<a href="#" <i class="icon shareIcon share_bitly icon-cancel-circle" title="hide" tabindex="-1" onclick="$('#info-overlay').hide()"></i></a>
+				<a href="javascript:void()" onclick="$('#info-overlay').hide()"><i class="icon shareIcon share_bitly icon-cancel-circle" title="hide" tabindex="-1"></i></a>
 			</div>
 			<div style="margin:1em;">
 				<h2>nota bene:</h2>
