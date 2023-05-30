@@ -168,9 +168,10 @@ $Log:index_only_map_embed.html,v $
 		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
-			con un finanziamento PNRR complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
-			<span id="ambito-nazionale" style="display:none">di questi <span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale</span>
-			<span id="ambito-regionale" style="display:none">e <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
+			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
+			<span id="ambiti" style="display:none">di questi</span>
+			<span id="ambito-nazionale" style="display:none"><span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale e</span>
+			<span id="ambito-regionale" style="display:none"> <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
 
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
@@ -237,11 +238,6 @@ $Log:index_only_map_embed.html,v $
 
 				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
 
-				<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:0.5em;max-width:300px">
-					<p>
-						<button onclick="ixmaps.showAbout('../../../pages/PNRR/about.html')" ;>informazioni sulla mappa</button>
-					</p>
-				</div>
 			</div>
 		</div>
 
@@ -284,8 +280,8 @@ $Log:index_only_map_embed.html,v $
 
 	<!-- Nota Bene -->
 
-	<div id="info-overlay" style="position:absolute;bottom:20%;right:0;width:100%;max-height:70%;display:none">
-		<div style="background:#F7F6EF;border:solid #444 0.1px;max-width:80%;margin:auto">
+	<div id="info-overlay" style="position:absolute;bottom:20%;right:5%;width:90%;max-height:70%;display:none">
+		<div style="background:#F7F6EF;border:solid #444 0.1px;max-width:720px;margin:auto">
 			<div style="float:right;margin-top:0.5em;margin-right:0.5em;font-size:22px">
 				<a href="javascript:void()" onclick="$('#info-overlay').hide()"><i class="icon shareIcon share_bitly icon-cancel-circle" title="hide" tabindex="-1"></i></a>
 			</div>
@@ -560,6 +556,12 @@ $Log:index_only_map_embed.html,v $
 					$("#ambito-regionale").hide();
 				}
 
+				if ($("#ambito-nazionale").css("display") == "inline" || $("#ambito-regionale").css("display") == "inline") {
+					$("#ambiti").show();
+				} else {
+					$("#ambiti").hide();
+				}
+
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
@@ -611,8 +613,9 @@ $Log:index_only_map_embed.html,v $
 
 
 			if (themeObj.szFilter) {
-				$("#filter").html((themeObj.szFilter.length>100)?(themeObj.szFilter.substr(0,100)+" ... "):themeObj.szFilter);
-				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + themeObj.szFilter.split("WHERE")[1] + "</div>");
+				var szFilterClipped = (themeObj.szFilter.length > 100) ? (themeObj.szFilter.substr(0, 100) + " ... ") : themeObj.szFilter;
+				$("#filter").html(szFilterClipped);
+				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + szFilterClipped.split("WHERE")[1] + "</div>");
 				$("#filter-div").show();
 			} else {
 				$("#filter").html("");
