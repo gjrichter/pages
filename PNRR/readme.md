@@ -105,6 +105,12 @@ Una mappa con solo importi aggiudicati:
 
 [https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_aggiudicate.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_aggiudicate.html)
 
+Una mappa con tutti i finanziamenti e  lo stato di avanzamento:
+
+[https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_avanzamento.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_avanzamento.html)
+
+
+
 
 
 ## test
