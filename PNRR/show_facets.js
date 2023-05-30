@@ -144,6 +144,7 @@ ixmaps.data = ixmaps.data || {};
 		for (a in objThemesA) {
 			objTheme = objThemesA[a];
 			if (objTheme.szFlag.match(/CHART|CHOROPLETH/)) {
+				ixmaps.message('&#9881;');
 				if (szFilter) {
 					ixmaps.changeThemeStyle(null, objTheme.szId, "filter:" + (szFilter || " "), "set");
 				} else {
