@@ -168,7 +168,7 @@ $Log:index_only_map_embed.html,v $
 		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
-			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
+			con un finanziamento PNRR complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 			<span id="ambiti" style="display:none">di questi</span>
 			<span id="ambito-nazionale" style="display:none"><span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale e</span>
 			<span id="ambito-regionale" style="display:none"> <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
@@ -237,6 +237,15 @@ $Log:index_only_map_embed.html,v $
 				</p>
 
 				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
+				
+				<p style="font-size:0.9em;">
+					Filteri predefiniti:  
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M4,M5)')">M4+M5</a>, 
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M2,M5)')">M2+M5</a>, 
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M1,M2,M3)')">M1+M2+M3 </a>
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M5,M6)')">M5+M6</a>
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M2,M6)')">M2+M6</a>
+				</p>
 
 			</div>
 		</div>
@@ -891,14 +900,14 @@ $Log:index_only_map_embed.html,v $
 					textscale: "0.7",
 					boxopacity: "0",
 					bordercolor: "none",
-					boxupper: "1:250000",
 					normalsizevalue: "1000000000",
 					showdata: "true",
 					aggregationscale: [
 						"1:1", "PROCOM",
 						"1:10000000", "Descrizione Provincia"
 					],
-					xxglowupper: "1:1000000",
+					boxupper: "1:250000",
+					glowlower: "1:250000",
 					valueupper: "1:1000000",
 					chartupper: "1:2000000",
 					chartlower: "1:100000",
@@ -1295,7 +1304,7 @@ $Log:index_only_map_embed.html,v $
 		);
 
 		if (!window.location.search) {
-			$("#info-overlay").show();
+			$("#info-overlay").show("slow");
 		}
 
 		/**
