@@ -168,7 +168,7 @@ $Log:index_only_map_embed.html,v $
 		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
-			con un importo complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
+			con un finanziamento complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 			<span id="ambiti" style="display:none">di questi</span>
 			<span id="ambito-nazionale" style="display:none"><span id="sum_importi_nazionali" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito nazionale e</span>
 			<span id="ambito-regionale" style="display:none"> <span id="sum_importi_tutti" style="font-weight:bold;font-size:1em">...</span>&nbsp; € in ambito regionale</span>
@@ -180,7 +180,7 @@ $Log:index_only_map_embed.html,v $
 
 			<p style="font-size:0.9em;">
 				Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a> condivisibile,
-				mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.showAbout('../../../pages/PNRR/about.html')">qui</a>.
+				mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.showAbout('../../pages/PNRR/about.html')">qui</a>.
 			</p>
 
 			<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
@@ -237,6 +237,17 @@ $Log:index_only_map_embed.html,v $
 				</p>
 
 				<textarea id="popup" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
+				
+				<p style="font-size:0.9em;">
+					Filteri predefiniti:  
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M4,M5)')">M4+M5</a>, 
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M2,M5)')">M2+M5</a>, 
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M1,M2,M3)')">M1+M2+M3 </a>
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M5,M6)')">M5+M6</a>
+					missioni <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE missione in (M2,M6)')">M2+M6</a><br><br>
+					importo <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE importo > 1000000')"> > 1.000.000 €</a>
+					importo <a style="color:#0088dd" href="javascript:void()" onclick="__setFacetFilter('WHERE importo < 1000000')"> < 1.000.000 €</a>
+				</p>
 
 			</div>
 		</div>
@@ -281,9 +292,9 @@ $Log:index_only_map_embed.html,v $
 	<!-- Nota Bene -->
 
 	<div id="info-overlay" style="position:absolute;bottom:20%;right:5%;width:90%;max-height:70%;display:none">
-		<div style="background:#F7F6EF;border:solid #444 0.1px;border-radius:0.5em;max-width:720px;margin:auto">
+		<div style="background:#F7F6EF;border:solid #444 0.1px;max-width:720px;margin:auto">
 			<div style="float:right;margin-top:0.5em;margin-right:0.5em;font-size:22px">
-				<a href="javascript:void()" onclick="$('#info-overlay').hide()"><i class="icon shareIcon share_bitly icon-cancel-circle" title="hide" tabindex="-1"></i></a>
+				<a href="javascript:void()" onclick="$('#info-overlay').hide('slow')"><i class="icon shareIcon share_bitly icon-cancel-circle" title="hide" tabindex="-1"></i></a>
 			</div>
 			<div style="margin:1em;">
 				<h2>nota bene:</h2>
@@ -330,6 +341,7 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'details_2', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'stato', 'scale:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'stato_II', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'stato_prov', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'stato_reg', 'scale:' + nFactor, 'factor');
 			//ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
@@ -363,9 +375,9 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'province_sum_2', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'regioni_sum', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'stato', 'filter', 'remove');
+			ixmaps.changeThemeStyle(null, 'stato_II', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'stato_prov', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'stato_reg', 'filter', 'remove');
-			
 		}
 
 		// ---------------------------------------------------
@@ -577,7 +589,7 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "Descrizione Submisura", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento", "stato di avanzamento"];
+				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "Descrizione Submisura", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento", "stato di avanzamento","Tipologia procedura di attivazione"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map","NONUMERIC");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
@@ -783,7 +795,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.type("FEATURES|NOLEGEND")
 				.style({
-					colorscheme: ["rgba(255,255,255,0.5)"],
+					colorscheme: ["none"],
 					linecolor: "black",
 					linewidth: "0.3",
 					sizefield: "Shape_Area"
@@ -874,7 +886,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|SEQUENCE|STAR|DOPACITY|SORT|DOWN|SIZE|CATEGORICAL|ORDER|AGGREGATE|SUM|VALUES|INLINETEXT|TITLE|BOX|COMPACTLEGEND")
+				.type("CHART|SYMBOL|GLOW|SEQUENCE|STAR|SORT|DOWN|SIZE|CATEGORICAL|ORDER|AGGREGATE|SUM|VALUES|INLINETEXT|COMPACTLEGEND")
 				.style({
 					values: ["M1", "M2", "M3", "M4", "M5", "M6"],
 					label: ["M1 - Digitalizz., innov., competi., cultura e turismo",
@@ -892,15 +904,13 @@ $Log:index_only_map_embed.html,v $
 						"#B671DC",
 						"#FACB49"
 					],
-					fillopacity: "0.66",
+					fillopacity: "0.5",
 					linecolor: "white",
 					linewidth: "1",
 					valuescale: "1.2",
 					showdata: "true",
 					units: "€",
 					scale: __scale_chart,
-					dopacitypow: "2",
-					dopacityscale: "0.5",
 					textscale: "0.7",
 					boxopacity: "0",
 					bordercolor: "none",
@@ -911,7 +921,8 @@ $Log:index_only_map_embed.html,v $
 						"1:1", "PROCOM",
 						"1:10000000", "Descrizione Provincia"
 					],
-					xxglowupper: "1:1000000",
+					boxupper: "1:250000",
+					xxglowlower: "1:250000",
 					valueupper: "1:1000000",
 					chartupper: "1:1000000",
 					chartlower: "1:100000",
@@ -1065,7 +1076,7 @@ $Log:index_only_map_embed.html,v $
 					sizefield: "importo",
 					units: "€",
 					gridx: "20",
-					scale: "0.05",
+					scale: "0.1",
 					normalsizevalue: "1",
 					linecolor: "white",
 					linewidth: "0.1",
@@ -1075,7 +1086,7 @@ $Log:index_only_map_embed.html,v $
 					boxmargin: "2",
 					textscale: "1",
 					textcolor: "black",
-					chartupper: "1:200000",
+					chartupper: "1:100000",
 					name: "details"
 				})
 				.meta({
@@ -1097,31 +1108,36 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|SYMBOL|FIXSIZE|INLINETEXT|MULTIQUAD|SORT|CATEGORICAL|SUM|COMPACTLEGEND")
+				.type("CHART|SYMBOL|FIXSIZE|INLINETEXT|MULTIQUAD|CATEGORICAL|SUM|COMPACTLEGEND")
 				.style({
-				values: ["in gara","aggiudicato","progetto"],
-					symbols: ["circle","square","none"],
+					values: ["in gara","aggiudicato","progetto"],
+					symbols: [
+						"https://gjrichter.github.io/pages/PNRR/img/megafono.png",
+						"https://gjrichter.github.io/pages/PNRR/img/515345.png",
+						"none"],
 					colorscheme: ["green"],
 					fillopacity: "0.0008",
+					shadow: "true",
 					showdata: "true",
 					valuefield: "importo",
 					sizefield: "importo",
 					units: "€",
 					gridx: "20",
-					scale: "0.05",
-					normalsizevalue: "1",
-					linewidth: "2",
+					scale: "0.1",
+					normalsizevalue: "15",
+					offsety: "-2",
+					offsetx: "-5",
 					rangescale: "1.1",
 					valuescale: "0.3",
 					boxopacity: "0",
 					boxmargin: "2",
 					textscale: "1",
 					textcolor: "black",
-					chartupper: "1:200000",
+					chartupper: "1:100000",
 					name: "details_2"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS</b><br>stato di avanzamento",
+					title: "<b>PNRR - Universo REGIS</b><br>i singoli progetti",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1315,9 +1331,11 @@ $Log:index_only_map_embed.html,v $
 						"solo progetto"],
 					showdata: "true",
 					valuefield: "importo",
-					sizefield: "importo",
+					sizefield: "$item$",
 					legendunits: "progetti",
 					scale: "3",
+					normalsizevalue: "2000",
+					offsety: "1",
 					sizefield: "$item$",
 					linecolor: [
 						"RGB(39, 112, 182)"],
@@ -1339,6 +1357,69 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
+		
+		var __CUP_PNRR_GAUGE_STATO_II =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot.csv.gz",
+					type: "csv",
+					name: "pnrr_data"
+				})
+				.binding({
+					position: "PROCOM",
+					value: "stato di avanzamento",
+					title: "Descrizione Comune"
+				})
+				.filter(__filter)
+				.type("GAUGE|CATEGORICAL|AGGREGATE|RECT|RELOCATE|CHART|BAR|STACKED|HORZ|NOSORT|SIZEP3|FAST|SUM|BOX|VALUES")
+				.style({
+					values: ["aggiudicato","in gara","progetto"],
+					colorscheme: [
+						"RGB(39, 112, 182)",
+						"RGBA(39, 112, 182,0.2)",
+						"RGBA(255,255,255,0.2)"],
+					fillopacity: "0.7",
+					label: [
+						"aggiudicati",
+						"in gara",
+						"solo progetto"],
+					showdata: "true",
+					valuefield: "importo",
+					sizefield: "importo",
+					legendunits: "progetti",
+					legendunits: " progetti",
+					scale: "1.5",
+					rangescale: "8",
+					offsetx: "0.8",
+					offsety: "0.5",
+					valuefield: "importo",
+					sizefield: "$item$",
+					normalsizevalue: "2000",
+					textcolor: "RGB(39, 112, 182)",
+					linecolor: [
+						"RGB(39, 112, 182)"],
+					linewidth: "2",
+					bordercolor: "none",
+					boxopacity: "0",
+					titlefield: "Descrizione Comune",
+					titleupper: "1:200000",
+					chartupper: "1:100000",
+					valuescale: "0.2",
+					valuedecimals: "0",
+					textscale: "1",
+					aggregationscale: [
+						"1:1",
+						"PROCOM",
+						"1:250000",
+						"100px"],
+					name: "stato_II",
+				})
+				.meta({
+					title: "<b>PNRR - Universo REGIS</b><br>stato di avanzamento",
+					splash: "scaricando dati ..."
+				})
+			);
+		
 		var __CUP_PNRR_GAUGE_STATO_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
@@ -1367,7 +1448,7 @@ $Log:index_only_map_embed.html,v $
 					showdata: "true",
 					valuefield: "importo",
 					sizefield: "importo",
-					legendunits: "progetti",
+					units: "progetti",
 					scale: "3",
 					sizefield: "$item$",
 					linecolor: [
@@ -1416,7 +1497,7 @@ $Log:index_only_map_embed.html,v $
 					showdata: "true",
 					valuefield: "importo",
 					sizefield: "importo",
-					legendunits: "progetti",
+					units: "progetti",
 					scale: "4",
 					sizefield: "$item$",
 					linecolor: [
@@ -1459,7 +1540,8 @@ $Log:index_only_map_embed.html,v $
 				legend: ((__legend == true) ? "true" : 0),
 				tools: "true",
 				align: "right",
-				search: "Italy"
+				search: "Italy",
+				about: "test"
 			},
 			map => map
 			.view([__lat, __lon], __zoom)
@@ -1501,12 +1583,13 @@ $Log:index_only_map_embed.html,v $
 			//.layer(__CUP_PNRR_PROVINCE_SUM_2)
 			//.layer(__CUP_PNRR_REGIONI_SUM)
 			.layer(__CUP_PNRR_GAUGE_STATO)
+			.layer(__CUP_PNRR_GAUGE_STATO_II)
 			.layer(__CUP_PNRR_GAUGE_STATO_prov)
 			.layer(__CUP_PNRR_GAUGE_STATO_reg)
 		);
 
 		if (!window.location.search) {
-			$("#info-overlay").show();
+			$("#info-overlay").show("slow");
 		}
 
 		/**
