@@ -1,4 +1,4 @@
-# ItaliaDomani - dati da ReGIS
+# ItaliaDomani - dati da ReGIS - v2 - 13.06.2023
 
 Una mappa configurabile per visualizzare l'impatto territoriale dei progetti PNRR
 
