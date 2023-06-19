@@ -11,7 +11,7 @@ Per una mappa basata su dati aggiornati all'ultima data di osservazione si prega
 
 Il  link principale alla pagina HTML con la mappa è: 
 
-[https://gjrichter.github.io/pages/PNRR_v1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html](https://gjrichter.github.io/pages/PNRR/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html)
+[https://gjrichter.github.io/pages/PNRR_v1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html](https://gjrichter.github.io/pages/PNRR_v1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS.html)
 
 alla URL sopra poi si può aggiungere un filtro sui campi del dataset e una posizione per la mappa per produrre mappe con interessi particolarizzate. 
 
