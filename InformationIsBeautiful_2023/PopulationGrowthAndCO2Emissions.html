@@ -364,7 +364,6 @@ $Log:index_only_map_embed.html,v $
 		
 		ixmaps.refreshThemeList = function(){
 			
-			alert("hi");
 			var themes = ixmaps.getThemes();
 
 			var szHtml = "<ul style='list-style:none;margin-left:-1em'>";
@@ -419,7 +418,6 @@ $Log:index_only_map_embed.html,v $
 			$("#legend").html(szHtml);
 		}
 		ixmaps.htmlgui_onDrawTheme = () => {
-			alert("ok");
 			for (i in ixmaps.embeddedApiA){
 				szMap = i;
 			}
