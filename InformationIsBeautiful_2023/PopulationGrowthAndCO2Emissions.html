@@ -60,7 +60,7 @@ $Log:index_only_map_embed.html,v $
 		ixmaps.tmp.color = 
 			"#888888";
 		ixmaps.tmp.units = 
-			"t";
+			"tons";
 
 		/**
 		 ** query data from Word Bank API and preprocess for the map 
@@ -236,7 +236,7 @@ $Log:index_only_map_embed.html,v $
 						value: "",
 						title: "Entity"
 					})
-					.type("CHART|PIE|STARBURST|XLRAYS|AGGREGATE|SUM|RECT|RELOCATE|NEGATIVEISVALUE|ZEROISVALUE|MEAN")
+					.type("CHART|PIE|STARBURST|XLRAYS|AGGREGATE|SUM|RECT|RELOCATE|NEGATIVEISVALUE|ZEROISVALUE|SUM")
 					.style({
 						name: "pie",
 						colorscheme: [
@@ -254,7 +254,7 @@ $Log:index_only_map_embed.html,v $
 						boxupper: "1:10000000",
 						textcolor: ixmaps.tmp.color,
 						textscale: "1",
-						valuedecimals: "2",
+						valuedecimals: "0",
 						gridwidth: "50px",
 						title: "Annual CO₂ emissions 1960-2020"
 					})
@@ -336,7 +336,7 @@ $Log:index_only_map_embed.html,v $
 						units: "",
 						align: "center|23right",
 						scale: "0.05",
-						weights: "0.0000001",
+						weights: "0.000001",
 						linewidth: "70",
 						maxvalue: "100000000",
 						maxvalue: "auto",
@@ -346,6 +346,7 @@ $Log:index_only_map_embed.html,v $
 						titleupper: "1:10000000",
 						textscale: "0.5",
 						valuedecimals: "0",
+						title: "Population [in millions]",
 						name: "curves"
 					})
 					.json()
@@ -442,7 +443,7 @@ $Log:index_only_map_embed.html,v $
 		</table>
 	</div>
 	
-	<button style="position:absolute;top:1em;right:2em" id="about" onclick="ixmaps.showAbout()">i</<button>
+	<button style="position:absolute;top:2.2em;right:2em" id="about" onclick="ixmaps.showAbout('https://raw.githubusercontent.com/gjrichter/pages/main/InformationIsBeautiful_2023/about.html')">i</<button>
 	
 	<div style="position:absolute;top:16em;right:2em" id="legend"></div>
 
