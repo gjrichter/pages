@@ -22,7 +22,7 @@
 
 [Eurostat - Terziary Education - age 25-35 - years 2010-2021](https://gjrichter.github.io/pages/Eurostat_Terziary_Education/index.html)
 
----
+[InformationIsBeautiful 2023 - submitted work - Population Growth And CO2 Emissions](https://gjrichter.github.io/pages/InformationIsBeautiful_2023/PopulationGrowthAndCO2Emissions.html)
 
 TEST
 
