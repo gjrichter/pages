@@ -83,13 +83,33 @@ $Log:index_only_map_embed.html,v $
 <body style='text-align:center;background:#F7F6EF'>
 
 	<h1>PNRR - Universum REGIS v2.1 - analisi delle Submisure</h1>
-	<div id="list-codici-submisure" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto"><div style="text-align:center"><img src="./img/loading_blue.gif"></div></div>
+	<div id="list-codici-submisure" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto">
+		<div style="text-align:center"><img src="./img/loading_blue.gif"></div>
+	</div>
 
 	<div id="list-submisura-header" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto"></div>
 	<div id="list-regioni" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto"></div>
+	<div id="list-footer" style="margin:1em:0em;font-size:1em;text-cenyter:left;max-width: 1024px;margin:auto">
+		<hr>
+		<p>Queste tabelle elencano i <b>progetti pubblicati sul catalogo open data di Italiadomani</b>, ovvero sul sito ufficiale del Piano, aggregati per submisura e calcola per ogni submisura l'importo, il numero di progetti e la percentuale dei progetti con gara o aggiudicato.
+		</p>
+		<p> La fonte di questi dati è <b>ReGiS</b>, il sistema di <b>rendicontazione</b> e <b>controllo</b> delle misure e dei progetti finanziati dal Piano Nazionale di Ripresa e Resilienza.</p>
 
-	<iframe id="map1" style="border:none;width:49%;height:840px"></iframe>
-	<iframe id="map2" style="border:none;width:49%;height:840px"></iframe>
+		<ul style="text-align:left;margin-left:-1em">
+			<li>
+				<p>Clickando su una righa si aprono due mappa con la distribuzione territoriale dei progetti della submisura al livello regionale e provinciale</p>
+			</li>
+		</ul>
+
+		<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
+
+		<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>13.06.2023 (v2.1)</b>
+		</p>
+		<div style="height:1em"></div>
+	</div>
+
+	<iframe id="map1" style="border:none;width:49%;height:840px;display:none"></iframe>
+	<iframe id="map2" style="border:none;width:49%;height:840px;display:none"></iframe>
 
 
 	<!-- ------------------------------------- -->
@@ -105,161 +125,11 @@ $Log:index_only_map_embed.html,v $
 	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
 	<script src="./data.extend.facets.js"></script>
 	<script src="./json.js"></script>
+	<script src="./format.js"></script>
 
 	<!--========================================================================= -->
 
 	<script type="text/javascript" charset="utf-8">
-		// ---------------------------------------------------
-		// format number display 
-		// ---------------------------------------------------
-
-		/**
-		 * convert a number into a formatted string; if the number > 1000 it will be formatted like 1 023 234 
-		 * @param nValue the number to format
-		 * @param nPrecision the wanted decimal points 
-		 * @param szFlag "CEIL" or "FLOOR" (round either up or down)
-		 */
-		ixmaps.__formatValue = function(nValue, nPrecision, szFlag) {
-
-			nValue = Number(nValue);
-
-			if (!isFinite(nValue) || !isFinite(nPrecision)) {
-				return String(nValue);
-			}
-			if (nValue == 0) {
-				return String(nValue);
-			}
-			if (nValue > 1000000000000) {
-				return String(nValue);
-			}
-			if (nValue < -1000000000000) {
-				return String(nValue);
-			}
-
-			if (!nPrecision) {
-				nPrecision = 0;
-			}
-			nPrecision = Math.max(0, nPrecision);
-
-			// GR 02.12.2011 make that low values do not collapse to 0
-			if ((nValue > 0.0000001) && (nPrecision > 0)) {
-				while (nValue.toFixed(nPrecision - 1) == 0) {
-					nPrecision++;
-				}
-			}
-
-			// GR 11.03.2009 fix precision before CEIL or FLOOR to avoid JS errors eg. 0.0000000000003
-			nValue = nValue.toFixed(nPrecision + 1);
-
-			nClipDecimal = Math.pow(10, nPrecision);
-			if (szFlag && szFlag.match(/CEIL/)) {
-				nValue = Math.ceil(nValue * nClipDecimal) / nClipDecimal;
-			} else
-			if (szFlag && szFlag.match(/FLOOR/)) {
-				nValue = Math.floor(nValue * nClipDecimal) / nClipDecimal;
-			} else {
-				nValue = Math.round(nValue * nClipDecimal) / nClipDecimal;
-			}
-			// format numbers > 1000
-			if (0 && (nValue < 1000)) {
-				return String(nValue);
-			} else {
-				var szDecimals = String(nValue);
-				if (szDecimals.match(/\./)) {
-					szDecimals = szDecimals.split(".")[1];
-					while (szDecimals.length < nPrecision) {
-						szDecimals += '0';
-					}
-				} else {
-					szDecimals = "";
-				}
-				var szReturn = nValue < 0 ? "-" : "";
-				var szLeading = "";
-
-				nValue = Math.floor(Math.abs(nValue));
-
-				// GR new flag
-				if (!szFlag || !szFlag.match(/NOBREAKS/)) {
-					var nClip = 1000;
-					while (nValue > nClip) {
-						nClip *= 1000;
-					}
-					nClip /= 1000;
-
-					var nPart = 0;
-					var szBreak = " ";
-					while (nClip >= 1000) {
-						nPart = Math.floor(nValue / nClip);
-						szReturn += __maptheme_formatpart(nPart, szLeading);
-						nValue = nValue % nClip;
-						nClip /= 1000;
-						if (nPart) {
-							szLeading = "0";
-							if (szFlag && szFlag.match(/SPACE/)) {
-								szBreak = "<span style=\"font-size:0.5em;\">&nbsp;</span>";
-							} else
-							if (szFlag && szFlag.match(/BLANK/)) {
-								szBreak = "&nbsp;";
-							} else {
-								szBreak = ".";
-							}
-						}
-						szReturn += szBreak;
-					}
-				}
-
-				szReturn += __maptheme_formatpart(nValue, szLeading);
-
-				if (!szReturn.length || (szReturn == "-")) {
-					szReturn += "0";
-				}
-
-				if (szDecimals.length && szDecimals != "00") {
-					szReturn += ((szFlag && szFlag.match(/BLANK/)) ? "." : ",") + szDecimals;
-				}
-			}
-			return szReturn;
-		}
-
-		/**
-		 * helper to format a number from 0 to 999 into a string with leading character (sample 32 -> "032" )
-		 * @param nPart the number to format
-		 * @param szLeading the leading character to insert if necessary 
-		 */
-		function __maptheme_formatpart(nPart, szLeading) {
-			if (!szLeading) {
-				szLeading = "";
-			}
-			var szPart = "";
-			if (nPart < 100) {
-				szPart += szLeading;
-			}
-			if (nPart < 10) {
-				szPart += szLeading;
-			}
-			if (nPart == 0) {
-				szPart += szLeading;
-			} else {
-				szPart += String(nPart);
-			}
-			return szPart;
-		}
-
-		/**
-		 * convert a number into a formatted string; if the number > 1000 it will be formatted like 1 023 234 
-		 * @param nValue the number to format
-		 */
-		ixmaps.__bestFormatValue = function(nValue) {
-			if (nValue >= 10) {
-				return ixmaps.__formatValue(nValue, 0, "SPACE");
-			} else
-			if (nValue >= 1) {
-				return ixmaps.__formatValue(nValue, 1, "SPACE");
-			} else {
-				return ixmaps.__formatValue(nValue, 2, "SPACE");
-			}
-		};
-
 
 		var regisData = null;
 
@@ -287,11 +157,11 @@ $Log:index_only_map_embed.html,v $
 		};
 
 		exploreSubmisura = function(i) {
-			
-			if ( $("#map-div"+i).html().length ){
-				$("#map-div"+i).html("");
+
+			if ($("#map-div" + i).html().length) {
+				$("#map-div" + i).html("");
 				return;
-				}
+			}
 
 
 			var filter = subFilterA[i];
@@ -301,28 +171,28 @@ $Log:index_only_map_embed.html,v $
 			var szHtml = "";
 			szHtml += "<h1>" + (decodeURIComponent(submisura)) + "</h1>";
 			szHtml += "<div style='text-align:center'><h1>" +
-				ixmaps.__bestFormatValue(subImportoA[i]) + " <span class='gray'>€  </span></h1><h2>" +
-				ixmaps.__bestFormatValue(subProjectsA[i]) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
-				ixmaps.__bestFormatValue(subInGaraA[i] + subAggiudicatoA[i]) + " <span class='gray'>gare</span>&nbsp;&nbsp; " +
-				ixmaps.__bestFormatValue(subAggiudicatoA[i]) + " <span class='gray'>aggiudicazioni</span></h2></div>";
+				ixmaps.bestFormatValue(subImportoA[i]) + " <span class='gray'>€  </span></h1><h2>" +
+				ixmaps.bestFormatValue(subProjectsA[i]) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
+				ixmaps.bestFormatValue(subInGaraA[i] + subAggiudicatoA[i]) + " <span class='gray'>gare</span><img src='./img/megafono.png' height='16px'>&nbsp;&nbsp; " +
+				ixmaps.bestFormatValue(subAggiudicatoA[i]) + " <span class='gray'>aggiudicazioni</span></h2></div>";
 
 
 			//$("#list-submisura-header").html(szHtml);
-			
-			var szMap1Id = "map1_"+i;
-			var szMap2Id = "map2_"+i;
+
+			var szMap1Id = "map1_" + i;
+			var szMap2Id = "map2_" + i;
 			var szView = "[41.44272637767212,11.40380859375],5.6";
-			
-			szHtml = '<iframe id="'+szMap1Id+'" style="border:none;width:50%;height:720px"></iframe>' +
-					 '<iframe id="'+szMap2Id+'" style="border:none;width:50%;height:720px"></iframe>';
-			
-			$("#map-div"+i).html(szHtml);
+
+			szHtml = '<iframe id="' + szMap1Id + '" style="border:none;width:50%;height:720px"></iframe>' +
+				'<iframe id="' + szMap2Id + '" style="border:none;width:50%;height:720px"></iframe>';
+
+			$("#map-div" + i).html(szHtml);
 
 			legend = "<h1>Tutti progetti (" + subProjectsA[i] + ")<h1>";
-			$("#"+szMap1Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + '&legend=' + legend + '&view=' + szView);
+			$("#" + szMap1Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + '&legend=' + legend + '&view=' + szView);
 
 			legend = "<h1>Progetti in gara (" + subInGaraA[i] + ") o aggiudicati (" + subAggiudicatoA[i] + ")<h1>";
-			$("#"+szMap2Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + ' AND \"stato di avanzamento\" in (\"in gara\",\"aggiudicato\")' + '&legend=' + legend + '&view=' + szView);
+			$("#" + szMap2Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + ' AND \"stato di avanzamento\" in (\"in gara\",\"aggiudicato\")' + '&legend=' + legend + '&view=' + szView);
 
 			/**
 			$("html, body").animate({
@@ -344,7 +214,7 @@ $Log:index_only_map_embed.html,v $
 					console.log("load error:" + e.status + " - " + szUrl)
 				})
 				.load(function(mycdata) {
-					
+
 					console.log(mycdata);
 
 					submisureA = mycdata.column("Codice Univoco Submisura").values();
@@ -354,24 +224,24 @@ $Log:index_only_map_embed.html,v $
 					aggiudicatoA = mycdata.column("aggiudicato").values();
 					importoA = mycdata.column("importo").values();
 					projectsA = mycdata.column("projects").values();
-					
+
 					var aggiudicatoIndex = mycdata.column("aggiudicato").index;
 					var ingaraIndex = mycdata.column("in gara").index;
 					var projectsIndex = mycdata.column("projects").index;
-					
+
 					mycdata.addColumn({
 						destination: "aggiudicato_perc"
 					}, function(row) {
-						return isNaN(row[aggiudicatoIndex]) ? 0 : (Number(row[aggiudicatoIndex])/Number(row[projectsIndex])*100);
+						return isNaN(row[aggiudicatoIndex]) ? 0 : (Number(row[aggiudicatoIndex]) / Number(row[projectsIndex]) * 100);
 					})
-					
+
 					mycdata.addColumn({
 						destination: "con_gara_perc"
 					}, function(row) {
-						return isNaN(row[aggiudicatoIndex]) ? 0 : ((Number(row[ingaraIndex])+Number(row[aggiudicatoIndex]))/Number(row[projectsIndex])*100);
+						return isNaN(row[aggiudicatoIndex]) ? 0 : ((Number(row[ingaraIndex]) + Number(row[aggiudicatoIndex])) / Number(row[projectsIndex]) * 100);
 					})
-					
-					
+
+
 
 					var szHtml = "";
 
@@ -392,10 +262,10 @@ $Log:index_only_map_embed.html,v $
 						garevinte += Number(aggiudicatoA[i]);
 					}
 
-					szHtml += "<div style='text-align:center'><h1>" + ixmaps.__bestFormatValue(sum) + " <span class='gray'>€  </span></h1><h2>" +
-						ixmaps.__bestFormatValue(projects) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
-						ixmaps.__bestFormatValue(gare + garevinte) + " <span class='gray'>gare</span>&nbsp;&nbsp; " +
-						ixmaps.__bestFormatValue(garevinte) + " <span class='gray'>aggiudicazioni</span></h2></div>";
+					szHtml += "<div style='text-align:center'><h1>" + ixmaps.bestFormatValue(sum) + " <span class='gray'>€  </span></h1><h2>" +
+						ixmaps.bestFormatValue(projects) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
+						ixmaps.bestFormatValue(gare + garevinte) + " <span class='gray'>gare</span>&nbsp;<img src='./img/megafono.png' height='16px'>&nbsp;&nbsp; " +
+						ixmaps.bestFormatValue(garevinte) + " <span class='gray'>aggiudicazioni&nbsp;<img src='./img/515345.png' height='16px'></span></h2></div>";
 
 					var missioniA = [];
 					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M1\""));
@@ -409,10 +279,10 @@ $Log:index_only_map_embed.html,v $
 					var count = 0;
 
 					for (i in missioniA) {
-						
+
 						szHtml += "<div>";
 						szHtml += "<table>";
-						
+
 						missioniA[i].sort("aggiudicato_perc").revert();
 
 						var submisureA = missioniA[i].column("Codice Univoco Submisura").values();
@@ -430,7 +300,7 @@ $Log:index_only_map_embed.html,v $
 							"<th>Descrizione submisura</th>" +
 							"<th style='text-align:right'>Importo</th>" +
 							"<th style='text-align:right'>Progetti</th>" +
-							"<th style='text-align:right'>con gara</th>" +
+							"<th style='text-align:right'>- con gara</th>" +
 							"<th style='text-align:right'>aggiudicati</th>";
 						szHtml += "</tr>";
 
@@ -453,15 +323,15 @@ $Log:index_only_map_embed.html,v $
 							szHtml += "<tr onclick='exploreSubmisura(" + count + ")'>" +
 								"<td class='" + mission + "' style='width:20px;vertical-align:top'>" + submisureA[ii] + "</td>" +
 								"<td class='" + mission + "' style='width:400px;vertical-align:top'>" + descrizioneSubmisureA[ii] + "</td>" +
-								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:150px'>" + ixmaps.__bestFormatValue(importoA[ii]) + " €</td>" +
+								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:150px'>" + ixmaps.bestFormatValue(importoA[ii]) + " €</td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:120px'>" + projectsA[ii] + " progetti</td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:80px'>" +
 								(con_gara_percA[ii]).toFixed(1) + "% <img src='./img/megafono.png' height='16px'></td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:80px'>" +
 								(aggiud_percA[ii]).toFixed(1) + "% <img src='./img/515345.png' height='16px'></td>" +
 								"<td></td></tr>";
-							
-							szHtml += "<tr><td style='spacing:0em;padding:0em' colspan='9'><div id='map-div"+count+"' ></div></td></tr>";
+
+							szHtml += "<tr><td style='spacing:0em;padding:0em' colspan='9'><div id='map-div" + count + "' ></div></td></tr>";
 
 							nProgetti += Number(projectsA[ii]);
 							nImporto += Number(importoA[ii]);
@@ -475,7 +345,7 @@ $Log:index_only_map_embed.html,v $
 							szHtml += "<tr>";
 							szHtml += "<th></th>" +
 								"<th></th>" +
-								"<th style='text-align:right'>" + ixmaps.__bestFormatValue(nImporto) + " €</th>" +
+								"<th style='text-align:right'>" + ixmaps.bestFormatValue(nImporto) + " €</th>" +
 								"<th style='text-align:right'>" + nProgetti + " progetti</th>" +
 								"<th style='text-align:right'>" + ((nInGara + nAggiudicato) / nProgetti * 100).toFixed(2) + "% </th>" +
 								"<th style='text-align:right'>" + ((nAggiudicato) / nProgetti * 100).toFixed(2) + "% </th>";
