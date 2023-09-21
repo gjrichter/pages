@@ -224,7 +224,7 @@ window.ixmaps.data = window.ixmaps.data || {};
 				index = dbIndexA[ii];
 
 				var szValue = (nValueIndex?(mydata.records[index][nValueIndex]):"");
-				var szSize  = (nSizeIndex ?(ixmaps.__bestFormatValue(__scanValue(mydata.records[index][nSizeIndex]), 2, "SPACE") + objTheme.szUnit) :"");
+				var szSize  = (nSizeIndex ?(ixmaps.bestFormatValue(__scanValue(mydata.records[index][nSizeIndex]), 2, "SPACE") + objTheme.szUnit) :"");
 				var szTitle = (nTitleIndex?(mydata.records[index][nTitleIndex]):"");
                 if ( 		 objTheme.itemA[objTheme.indexA[i]].szSelectionId2 &&
 							(objTheme.itemA[objTheme.indexA[i]].szSelectionId2 != 'undefined') &&
@@ -260,7 +260,7 @@ window.ixmaps.data = window.ixmaps.data || {};
 						var szValue = mydata.records[index][d];
 						var nValue = __scanValue(mydata.records[index][d]);
 						if (!isNaN(nValue)){
-							szValue = ixmaps.__bestFormatValue(nValue) + (mydata.fields[d].id.match(/importo|Finanziamento/)?" €":"");
+							szValue = ixmaps.bestFormatValue(nValue) + (mydata.fields[d].id.match(/importo|Finanziamento/)?" €":"");
 						}
 						szHtml += "<tr><td style='text-align:right;vertical-align:top;width:"+leftWidth+"px;color:#aaa;font-size:0.8em;'>"+mydata.fields[d].id+"</td><td style='padding-left:0.5em;'>"+szValue+"</td></tr>";
 					}
@@ -442,7 +442,7 @@ window.ixmaps.data = window.ixmaps.data || {};
 				index = dbIndexA[ii];
 
 				var szValue = (nValueIndex?(mydata.records[index][nValueIndex]):"");
-				var szSize  = (nSizeIndex ?(ixmaps.__bestFormatValue(__scanValue(mydata.records[index][nSizeIndex]), 2, "SPACE") + objTheme.szUnit) :"");
+				var szSize  = (nSizeIndex ?(ixmaps.bestFormatValue(__scanValue(mydata.records[index][nSizeIndex]), 2, "SPACE") + objTheme.szUnit) :"");
 				var szTitle = (nTitleIndex?(mydata.records[index][nTitleIndex]):"");
                 if ( 		 objTheme.itemA[objTheme.indexA[i]].szSelectionId2 &&
 							(objTheme.itemA[objTheme.indexA[i]].szSelectionId2 != 'undefined') &&
