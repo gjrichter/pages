@@ -10,4 +10,4 @@ Fonte: <a href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-
 
 <iframe id="map3" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_06_v2.1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_gauge_reg_prov_com.html"></iframe>
 
-<iframe id="map0" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_06_v2.1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_list_submisure_v2.1_pivot.html"></iframe>
+<iframe id="map0" width="1024px" height="840" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_06_v2.1/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_list_submisure_v2.1_pivot.html"></iframe>
