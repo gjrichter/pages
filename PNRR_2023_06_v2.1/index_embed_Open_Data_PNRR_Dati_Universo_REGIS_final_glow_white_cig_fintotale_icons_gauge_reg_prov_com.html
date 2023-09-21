@@ -1069,15 +1069,15 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_06_v2.1/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v2.1.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_06_v2.1/PNRR_Localizzazione-Universo_REGIS_fintot_pivot_prov_sub_avanz_v2.1.csv.gz",
 					type: "csv",
-					name: "pnrr_data"
+					name: "pnrr_data_prov"
 				})
 				.binding({
 					position: "Provincia",
 					value: "$item$",
 					size: "importo",
-					title: "Descrizione Comune"
+					title: "Descrizione Provincia"
 				})
 				.filter(__filter)
 				.type("RECT|CHART|SYMBOLS|SIZEP4|TEXTONLY|AGGREGATE|VALUES|SUM|NOLEGEND")
@@ -1477,6 +1477,7 @@ $Log:index_only_map_embed.html,v $
 				dynamicScalePow: "2.5",
 				flushChartDraw: "1000000",
 				basemapopacity: "0.1",
+				silent: "true",
 				panhidden: "false"
 			})
 			.local("aggregated", "")
@@ -1499,9 +1500,11 @@ $Log:index_only_map_embed.html,v $
 			// -----------------------------
 
 			//.layer(__CUP_PNRR_choropleth)
-			.layer(__CUP_PNRR_chart)
 			.layer(__CUP_PNRR_chart_reg)
+			.layer(__CUP_PNRR_GAUGE_STATO_reg)
 			.layer(__CUP_PNRR_chart_prov)
+			.layer(__CUP_PNRR_GAUGE_STATO_prov)
+			.layer(__CUP_PNRR_chart)
 			.layer(__CUP_PNRR_PROJECTS)
 			.layer(__CUP_PNRR_PROJECTS_ICONS)
 			//.layer(__CUP_PNRR_PROVINCE_SUM)
@@ -1509,8 +1512,6 @@ $Log:index_only_map_embed.html,v $
 			//.layer(__CUP_PNRR_REGIONI_SUM)
 			.layer(__CUP_PNRR_GAUGE_STATO)
 			.layer(__CUP_PNRR_GAUGE_STATO_II)
-			.layer(__CUP_PNRR_GAUGE_STATO_prov)
-			.layer(__CUP_PNRR_GAUGE_STATO_reg)
 		);
 
 		if (!window.location.search) {
