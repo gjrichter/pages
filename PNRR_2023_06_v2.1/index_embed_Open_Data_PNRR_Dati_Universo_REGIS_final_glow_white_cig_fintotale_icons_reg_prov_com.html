@@ -362,10 +362,7 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'chart_prov', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'chart_reg', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
-			//ixmaps.changeThemeStyle(null, 'details_2', 'scale:' + nFactor, 'factor');
 			ixmaps.changeThemeStyle(null, 'details_3', 'scale:' + nFactor, 'factor');
-			//ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
-			//ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
 
 			themesA = ixmaps.getThemes();
 			for (i in themesA) {
@@ -382,7 +379,6 @@ $Log:index_only_map_embed.html,v $
 		}
 		var select = function(element) {
 			element.parent().parent().parent().children().children(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			//$(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			element.parent().prev().html("&bullet;");
 		}
 		var clearFilter = function(szFilter) {
@@ -391,7 +387,6 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.changeThemeStyle(null, 'chart_prov', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'chart_reg', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'details', 'filter', 'remove');
-			//ixmaps.changeThemeStyle(null, 'details_2', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'details_3', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'province_sum', 'filter', 'remove');
 			ixmaps.changeThemeStyle(null, 'province_sum_2', 'filter', 'remove');
@@ -1255,6 +1250,7 @@ $Log:index_only_map_embed.html,v $
 				dynamicScalePow: "2.5",
 				flushChartDraw: "1000000",
 				basemapopacity: "0.1",
+				silent: "true",
 				panhidden: "false"
 			})
 			.local("aggregated", "")
@@ -1268,6 +1264,7 @@ $Log:index_only_map_embed.html,v $
 
 			.layer(__georef_reg)
 			.layer(__CUP_PNRR_chart_reg)
+			.layer(__CUP_PNRR_REGIONI_SUM)
 
 			.layer(__georef_urban)
 			.layer(__georef)
@@ -1286,7 +1283,6 @@ $Log:index_only_map_embed.html,v $
 			.layer(__CUP_PNRR_PROJECTS_ICONS)
 			.layer(__CUP_PNRR_PROVINCE_SUM)
 			.layer(__CUP_PNRR_PROVINCE_SUM_2)
-			.layer(__CUP_PNRR_REGIONI_SUM)
 		);
 
 		if (!window.location.search) {
