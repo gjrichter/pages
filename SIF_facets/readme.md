@@ -27,7 +27,7 @@ Dell'ultima mappa ci sono delle variazioni rispettivo alle curve. Qui i link all
 
 - [incendi per anno](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years.html?legend=1)
 - [ettari bruciati per anno](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years_ha.html?legend=1)
-- [incendi per mese](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_monthhtml?legend=1)
+- [incendi per mese](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_month.html?legend=1)
 - [ettari bruciati per mese](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_month_ha.html?legend=1)
 - [incendi per giorno della settimana](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_day.html?legend=1)
 - [ettari bruciati per giorno della settimana](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_day_ha.html?legend=1)
