@@ -79,7 +79,7 @@ $Log:index_only_map_embed.html,v $
 			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> aree
 			precorse dal fuoco con una superfice complessiva di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; ettari.
 
-			<p>Nelle <b>curve</b> le somme delle aree bruciate per giorno del inizio del incendio.</p>
+			<p>Nelle <b>curve</b> le somme delle <b>aree bruciate</b> per giorno del inizio del incendio (<span style="color:rgb(64,164,164)">finesettimana</span> evidenziato).</p>
 
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
@@ -588,7 +588,7 @@ $Log:index_only_map_embed.html,v $
 				.data({
 					name: "data_2",
 					query: query.toString()
-				}).type("CHART|SYMBOL|SEQUENCE|FIXSIZE|PLOT|LINES|LASTPOP|AREA|BOX|GRID|GRIDSIZE|CATEGORICAL|AGGREGATE|FAST|RECT|SUM|ZEROISVALUE|NOSORT|NOLEGEND")
+				}).type("CHART|SYMBOL|SEQUENCE|FIXSIZE|PLOT|LINES|AREA|BOX|GRID|GRIDSIZE|CATEGORICAL|AGGREGATE|FAST|RECT|SUM|ZEROISVALUE|NOSORT|NOLEGEND")
 				.binding({
 					position: "OBJECTID",
 					value: "giorno della settimana",
@@ -597,7 +597,13 @@ $Log:index_only_map_embed.html,v $
 				})
 				.style({
 					colorscheme: [
-						"RGB(64,64,64)"
+						"RGB(124,124,124)",
+						"RGB(124,124,124)",
+						"RGB(124,124,124)",
+						"RGB(124,124,124)",
+						"RGB(124,124,124)",
+						"RGB(124,124,124)",
+						"RGB(64,164,164)"
 					],
 					fillopacity: "0.1",
 					symbols: [
@@ -631,6 +637,7 @@ $Log:index_only_map_embed.html,v $
 						"d"
 					],
 					scale: "0.95",
+					normalsizevalue: "2",
 					linewidth: "4",
 					markersize: "2",
 					bordercolor: "none",
