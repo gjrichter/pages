@@ -24,6 +24,10 @@
 
 [InformationIsBeautiful 2023 - submitted work - Population Growth And CO2 Emissions](https://gjrichter.github.io/pages/InformationIsBeautiful_2023/PopulationGrowthAndCO2Emissions.html)
 
+[Terre percorse dal fuoco - SIF Regione Sicilia](https://gjrichter.github.io/pages/SIF_facets)
+
+
+
 TEST
 
 [test new map plurinominali ](https://gjrichter.github.io/ixmaps/ui/dispatch.htm?ui=view&basemap=ll&legend=1&project=https://raw.githubusercontent.com/gjrichter/viz/master/Elezioni/Politiche/2022_test/ixmaps_project_CAMERA_CollegiPLURINOMINALI_2020_candidati_poligoni.json)
