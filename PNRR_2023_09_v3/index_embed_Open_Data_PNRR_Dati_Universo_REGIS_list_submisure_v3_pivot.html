@@ -82,30 +82,31 @@ $Log:index_only_map_embed.html,v $
 
 <body style='text-align:center;background:#F7F6EF'>
 
-	<h1>PNRR - Universum REGIS v3 - analisi delle Submisure</h1>
-	<div id="list-codici-submisure" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto">
-		<div style="text-align:center"><img src="./img/loading_blue.gif"></div>
-	</div>
+	<div id="container" style="max-width:1024px;margin:auto">
 
-	<div id="list-submisura-header" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto"></div>
-	<div id="list-regioni" style="margin:0em;font-size:1em;text-align:left;max-width: 1024px;margin:auto"></div>
-	<div id="list-footer" style="margin:1em:0em;font-size:1em;text-cenyter:left;max-width: 1024px;margin:auto">
-		<hr>
-		<p>Queste tabelle elencano i <b>progetti pubblicati sul catalogo open data di Italiadomani</b>, ovvero sul sito ufficiale del Piano, aggregati per submisura e calcola per ogni submisura l'importo, il numero di progetti e la percentuale dei progetti con gara o aggiudicato.
-		</p>
-		<p> La fonte di questi dati è <b>ReGiS</b>, il sistema di <b>rendicontazione</b> e <b>controllo</b> delle misure e dei progetti finanziati dal Piano Nazionale di Ripresa e Resilienza.</p>
+		<h1>PNRR - Universum REGIS v3 - analisi delle Submisure</h1>
+		<div id="list-codici-submisure">
+			<div style="text-align:center"><img src="./img/loading_blue.gif"></div>
+		</div>
 
-		<ul style="text-align:left;margin-left:-1em">
-			<li>
-				<p>Clickando su una righa si aprono due mappa con la distribuzione territoriale dei progetti della submisura al livello regionale e provinciale</p>
-			</li>
-		</ul>
+		<div id="list-footer" style="margin:1em:0em;">
+			<hr>
+			<p>Queste tabelle elencano i <b>progetti pubblicati sul catalogo open data di Italiadomani</b>, ovvero sul sito ufficiale del Piano, aggregati per submisura e calcola per ogni submisura l'importo, il numero di progetti e la percentuale dei progetti con gara o aggiudicato.
+			</p>
+			<p> La fonte di questi dati è <b>ReGiS</b>, il sistema di <b>rendicontazione</b> e <b>controllo</b> delle misure e dei progetti finanziati dal Piano Nazionale di Ripresa e Resilienza.</p>
 
-		<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
+			<ul style="text-align:left;margin-left:-1em">
+				<li>
+					<p>Clickando su una righa si aprono due mappa con la distribuzione territoriale dei progetti della submisura al livello regionale e provinciale</p>
+				</li>
+			</ul>
 
-		<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>08.09.2023 (v3)</b>
-		</p>
-		<div style="height:1em"></div>
+			<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
+
+			<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>08.09.2023 (v3)</b>
+			</p>
+			<div style="height:1em"></div>
+		</div>
 	</div>
 
 	<iframe id="map1" style="border:none;width:49%;height:840px;display:none"></iframe>
@@ -282,8 +283,8 @@ $Log:index_only_map_embed.html,v $
 						missioniA[i].sort("aggiudicato_perc").revert();
 
 						var submisureA = missioniA[i].column("Codice Univoco Submisura").values();
-						
-						if (!submisureA.length){
+
+						if (!submisureA.length) {
 							continue;
 						}
 						console.log(submisureA);
@@ -295,11 +296,11 @@ $Log:index_only_map_embed.html,v $
 						var aggiud_percA = missioniA[i].column("aggiudicato_perc").values();
 						var con_gara_percA = missioniA[i].column("con_gara_perc").values();
 
-						szHtml += "<tr'><td style='padding-top:2em;font-size:1.5em;padding-left:0.35em' colspan='4'>" + missioniDescrA[submisureA[0].substring(0, 2)] + "</td></tr>";
+						szHtml += "<tr'><td style='padding-top:2em;font-size:1.5em;padding-left:0.35em;text-align:left' colspan='4'>" + missioniDescrA[submisureA[0].substring(0, 2)] + "</td></tr>";
 						console.log(i);
 						szHtml += "<tr>";
-						szHtml += "<th>Submisura</th>" +
-							"<th>Descrizione submisura</th>" +
+						szHtml += "<th style='text-align:left'>Submisura</th>" +
+							"<th style='text-align:left'>Descrizione submisura</th>" +
 							"<th style='text-align:right'>Importo</th>" +
 							"<th style='text-align:right'>Progetti</th>" +
 							"<th style='text-align:right'>- con gara</th>" +
