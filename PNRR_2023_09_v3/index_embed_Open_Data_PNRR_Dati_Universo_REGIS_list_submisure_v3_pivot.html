@@ -186,10 +186,10 @@ $Log:index_only_map_embed.html,v $
 			$("#map-div" + i).html(szHtml);
 
 			legend = "<h1>Tutti progetti (" + subProjectsA[i] + ")<h1>";
-			$("#" + szMap1Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + '&legend=' + legend + '&view=' + szView);
+			$("#" + szMap1Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v3.html?' + filter + '&legend=' + legend + '&view=' + szView);
 
 			legend = "<h1>Progetti in gara (" + subInGaraA[i] + ") o aggiudicati (" + subAggiudicatoA[i] + ")<h1>";
-			$("#" + szMap2Id).attr("src", 'http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/PNRR - Small Multiples/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v2.1.html?' + filter + ' AND \"stato di avanzamento\" in (\"in gara\",\"aggiudicato\")' + '&legend=' + legend + '&view=' + szView);
+			$("#" + szMap2Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v3.html?' + filter + ' AND \"stato di avanzamento\" in (\"in gara\",\"aggiudicato\")' + '&legend=' + legend + '&view=' + szView);
 
 			/**
 			$("html, body").animate({
@@ -324,8 +324,8 @@ $Log:index_only_map_embed.html,v $
 							subAggiudicatoA[count] = aggiudicatoA[ii];
 
 							szHtml += "<tr onclick='exploreSubmisura(" + count + ")'>" +
-								"<td class='" + mission + "' style='width:20px;vertical-align:top'>" + submisureA[ii] + "</td>" +
-								"<td class='" + mission + "' style='width:400px;vertical-align:top'>" + descrizioneSubmisureA[ii] + "</td>" +
+								"<td class='" + mission + "' style='width:20px;vertical-align:top;text-align:left'>" + submisureA[ii] + "</td>" +
+								"<td class='" + mission + "' style='width:400px;vertical-align:top;text-align:left'>" + descrizioneSubmisureA[ii] + "</td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:150px'>" + ixmaps.bestFormatValue(importoA[ii]) + " €</td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:120px'>" + projectsA[ii] + " progetti</td>" +
 								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:80px'>" +
