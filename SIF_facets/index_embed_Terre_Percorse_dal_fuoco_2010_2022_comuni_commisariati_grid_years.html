@@ -103,7 +103,7 @@ $Log:index_only_map_embed.html,v $
 							<button onclick="sizeCharts(0.90)">-</button>
 						</td>
 						<td>
-							<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+							<span style="font-size:0.8em"> &nbsp; grandezza griglia &nbsp;</span>
 						</td>
 						<td>
 							<button onclick="sizeCharts(1.1)">+</button>
@@ -134,7 +134,7 @@ $Log:index_only_map_embed.html,v $
 					<button onclick="sizeCharts(0.90)">-</button>
 				</td>
 				<td>
-					<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+					<span style="font-size:0.8em"> &nbsp; grandezza griglia &nbsp;</span>
 				</td>
 				<td>
 					<button onclick="sizeCharts(1.1)">+</button>
@@ -212,7 +212,7 @@ $Log:index_only_map_embed.html,v $
 		// ---------------------------------------------------
 
 		var sizeCharts = function(nFactor) {
-			ixmaps.changeThemeStyle(null, null, 'scale:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, null, 'gridwidth:' + nFactor, 'factor');
 
 			themesA = ixmaps.getThemes();
 			for (i in themesA) {
