@@ -56,16 +56,16 @@ $Log:index_only_map_embed.html,v $
 		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			<div style="margin-top:-1em">
-				<h1>Terre trrascorse dal fuoco 2010-2022 (SIF). </h1>
+				<h1>Terre trascorse dal fuoco 2010-2022 (SIF)</h1>
 			</div>
 
-			<p><b style="color:#ddaaaa">Comuni senza catasto incendi</b> sono evidenziati in rosa.</p>
+			<p><b style="color:#ddaaaa">Comuni senza catasto incendi</b><input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'comuni')"></input></b> sono evidenziati in rosa.</p>
 
 			<div style="margin-top:-1em">
 			Nel quadro della mappa ci sono visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> aree
 			con una superfice di <span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.2em">...</span>&nbsp; ettari</div>
 			
-			<p>Nelle <b>curve</b> il numero di incendi per anno.</p>
+			<p>Nelle <b>curve<input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'curve');ixmaps.toggleTheme(null,'grid')"></input></b> il numero di incendi per anno. <button onclick="ixmaps.changeThemeStyle(null,'curve','type:SMOOTH','add')" title="media mobile di 3 anni">media 3</button><button onclick="ixmaps.changeThemeStyle(null,'curve','type:SMOOTH','remove');ixmaps.redraw(null,'curve')">orig</button></p>
 			
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
@@ -153,7 +153,7 @@ $Log:index_only_map_embed.html,v $
 				<a class="btn btn-link" href="javascript:void();" onclick="ixmaps.showMap();">Mappa
 				</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<a class="btn btn-link" href="#javascript:void();" onclick="ixmaps.showSidebar();">Elenco finanziamenti
+				<a class="btn btn-link" href="#javascript:void();" onclick="ixmaps.showSidebar();">Elenco
 				</a>
 			</span>
 		</div>
@@ -478,11 +478,13 @@ $Log:index_only_map_embed.html,v $
 				.binding({
 					id: "PRO_COM",
 					position: "geometry",
-					value: "commissariato"
+					value: "commissariato",
+					title: "COMUNE"
 				})
 				.filter("WHERE COD_REG = 19")
 				.type("FEATURES|CHOROPLETH|CATEGORICAL|NOLEGEND")
 				.style({
+					name: "comuni",
 					opacity: "0.2",
 					colorscheme: ["#880000", "none"],
 					values: ["si", "no"],
@@ -506,21 +508,16 @@ $Log:index_only_map_embed.html,v $
 					name: "data_2",
 					query: query.toString()
 				})
-				.type("FEATURES|CHOROPLETH|CATEGORICAL|NOLEGEND")
+				.type("FEATURES|CHOROPLETH|NOLEGEND")
 				.binding({
 					id: "OBJECTID",
-					value: "commissariato"
+					value: "$item$",
+					title: "LOCALITA"
 				})
 				.style({
 					colorscheme: [
-						"rgba(0,0,0,0.3)",
 						"rgba(0,0,0,0.3)"
 					],
-					values: [
-						"si",
-						"no"
-					],
-					fillopacity: "0.00005",
 					linecolor: "none",
 					linewidth: "0.2",
 					showdata: "true"
@@ -554,12 +551,13 @@ $Log:index_only_map_embed.html,v $
 					units: "ha",
 					showdata: "true",
 					labelfield: "ANNO",
+					textcolor: "#880000",
 					boxopacity: "0",
-					boxupper: "1:50000",
+					boxupper: "1:10000",
+					valuesupper: "1:10000",
 					labelupper: "1:50000",
-					valuesupper: "1:50000",
 					valuedecimals: "0",
-					normalsizevalue: "1000",
+					normalsizevalue: "100",
 					name: "chart"
 				})
 				.meta({
@@ -574,13 +572,14 @@ $Log:index_only_map_embed.html,v $
 				.data({
 					name: "data_2",
 					query: query.toString()
-				}).type("CHART|SYMBOL|SEQUENCE|FIXSIZE|PLOT|LINES|LASTPOP|AREA|BOX|GRID|GRIDSIZE|CATEGORICAL|AGGREGATE|FAST|RECT|SUM|ZEROISVALUE|NOSORT|NOLEGEND")
+				}).type("CHART|SYMBOL|SEQUENCE|FIXSIZE|PLOT|LINES|SMOOTH|LINREG|NOCLIP|LASTPOP|AREA|BOX|GRID|GRIDSIZE|CATEGORICAL|AGGREGATE|FAST|RECT|SUM|ZEROISVALUE|NOSORT|NOLEGEND")
 				.binding({
 					position: "OBJECTID",
 					value: "year",
 					title: "LOCALITA"
 				})
 				.style({
+					name: "curve",
 					colorscheme: [
 						"RGB(64,64,64)"
 					],
@@ -620,18 +619,18 @@ $Log:index_only_map_embed.html,v $
 					],
 					xaxis: [
 						"2010",
-						"2011",
-						"2012",
-						"2013",
-						"2014",
+						"'",
+						"'",
+						"'",
+						"'",
 						"2015",
-						"2016",
-						"2017",
-						"2018",
-						"2019",
+						"'",
+						"'",
+						"'",
+						"'",
 						"2020",
-						"2021",
-						"2022"
+						"'",
+						"'"
 					],
 					scale: "0.95",
 					linewidth: "4",
@@ -661,6 +660,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.type("CHART|SYMBOL|SIZE|NOOUTLIER|ZEROISNOTVALUE|QUANTILE|AGGREGATE|RECT|MEAN|GRIDSIZE|DOPACITY|NOLEGEND")
 				.style({
+					name: "grid",
 					"colorscheme": [
 						"none"
 					],
@@ -781,8 +781,8 @@ $Log:index_only_map_embed.html,v $
 		 **/
 
 		ixmaps.embed("map_div", {
-				mapService: "leaflet",
-				mapType: "Stamen - toner-lite",
+				mapService: "leaflet_vt",
+				mapType: "VT_VOYAGER_LIGHT",
 				map: "../../maps/svg/maps/generic/mercator.svg",
 				name: "SIF_2022",
 				mode: "pan",
