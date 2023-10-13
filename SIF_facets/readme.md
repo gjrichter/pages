@@ -8,20 +8,11 @@ SIF [Sistema Informativa Forestale](https://sif.regione.sicilia.it/ilportale/)
 
 Open Data Sicilia [Catasto delle terre bruciate](https://opendatasicilia.it/2023/08/10/catasto-delle-terre-bruciate/)
 
-<iframe id="map1" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati.html?legend=1"></iframe>
 
-*map 1: terre percorse dal fuoco e comuni inadempienti al catasto*  --> [a schermo intero](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati.html?legend=1)
-
-
-
-<iframe id="map2" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_EFFIS_7d_final.html?legend=1"></iframe>
+<iframe id="map2" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years_EFFIS_7d.html?legend=1"></iframe>
 *map 1: terre percorse dal fuoco, comuni inadempienti al catasto e rilievi EFFIS degli ultimi 7 giorni*  --> [a schermo intero](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_EFFIS_7d_final.html?legend=1)
 
 
-
-
-<iframe id="map2" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years.html?legend=1"></iframe>
-*map 1: terre percorse dal fuoco e somme degli incendi per griglia dinamica*  --> [a schermo intero](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years.html?legend=1)
 
 Dell'ultima mappa ci sono delle variazioni rispettivo alle curve. Qui i link alle varie mappe:
 
