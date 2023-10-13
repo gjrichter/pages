@@ -10,7 +10,7 @@ Open Data Sicilia [Catasto delle terre bruciate](https://opendatasicilia.it/2023
 
 
 <iframe id="map2" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years_EFFIS_7d.html?legend=1"></iframe>
-*map 1: terre percorse dal fuoco, comuni inadempienti al catasto e rilievi EFFIS degli ultimi 7 giorni*  --> [a schermo intero](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_EFFIS_7d_final.html?legend=1)
+*map 1: terre percorse dal fuoco, comuni inadempienti al catasto e rilievi EFFIS degli ultimi 7 giorni*  --> [a schermo intero](https://gjrichter.github.io/pages/SIF_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_grid_years_EFFIS_7d.html?legend=1)
 
 
 
