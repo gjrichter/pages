@@ -56,7 +56,7 @@ $Log:index_only_map_embed.html,v $
 		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
 
 			<div style="margin-top:-1em">
-				<h1>Terre trascorse dal fuoco 2010-2022 (SIF) + rilievi <b style="color:#dd0088">EFFIS</b> delle ultimi <b style="color:#dd0088">7 giorni</b></h1></h1>
+				<h1>Terre trascorse dal fuoco 2010-2022 (SIF) + rilievi <b style="color:#dd0088">EFFIS</b> delle ultimi <b style="color:#dd0088">7 giorni</b><input type="checkbox" checked="checked" style="accent-color:#dd0088;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'SUOMI_VIIRS_C2_Europe_7d');ixmaps.toggleTheme(null,'J1_VIIRS_C2_Europe_7d');ixmaps.toggleTheme(null,'MODIS_C6_1_Europe_7d')"></input></h1>
 			</div>
 
 			<p><b style="color:#ddaaaa">Comuni senza catasto incendi</b><input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'comuni')"></input></b> sono evidenziati in rosa.</p>
@@ -724,6 +724,7 @@ $Log:index_only_map_embed.html,v $
 					linecolor: "orange",
 					linewidth: "2",
 					gridwidth: "15px",
+					showdata: "true",
 					name: "SUOMI_VIIRS_C2_Europe_7d"
 				})
 				.meta({
@@ -755,6 +756,7 @@ $Log:index_only_map_embed.html,v $
 					linecolor: "black",
 					linewidth: "1",
 					gridwidth: "15px",
+					showdata: "true",
 					name: "J1_VIIRS_C2_Europe_7d"
 				})
 				.meta({
@@ -787,6 +789,7 @@ $Log:index_only_map_embed.html,v $
 					linecolor: "orange",
 					linewidth: "2",
 					gridwidth: "15px",
+					showdata: "true",
 					name: "MODIS_C6_1_Europe_7d"
 				})
 				.meta({
@@ -805,7 +808,7 @@ $Log:index_only_map_embed.html,v $
 
 		ixmaps.embed("map_div", {
 				mapService: "leaflet_vt",
-				mapType: "VT_VOYAGER_LIGHT",
+				mapType: "VT_TOPO_TOPOGRAPHIQUE",
 				map: "../../maps/svg/maps/generic/mercator.svg",
 				name: "SIF_2022",
 				mode: "pan",
@@ -823,7 +826,7 @@ $Log:index_only_map_embed.html,v $
 				normalSizeScale: "259302",
 				dynamicScalePow: "5",
 				flushChartDraw: "1000000",
-				basemapopacity: "0.3",
+				basemapopacity: "0.2",
 				panhidden: "false"
 			})
 			.local("aggregated", "")
