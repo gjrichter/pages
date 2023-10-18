@@ -191,8 +191,24 @@ $Log:index_only_map_embed.html,v $
 						</td>
 					</tr>
 				</table>
+				<table>
+					<tr>
+						<td>
+							<button onclick="ixmaps.setBasemapOpacity(null,-0.1,'relative')">-</button>
+						</td>
+						<td>
+							<span style="font-size:0.8em"> &nbsp; mappa di fondo &nbsp;</span>
+						</td>
+						<td>
+							<button onclick="ixmaps.setBasemapOpacity(null,0.1,'relative')">+</button>
+						</td>
+					</tr>
+				</table>
 
 
+				<p style="font-size:0.9em;">
+					Cambia mappa di <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupBasemapSelect()">fondo</a>.
+				</p>
 				<p style="font-size:0.9em;">
 					Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
 					mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>.Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="$('#info-overlay').show()">qui</a>.
@@ -249,19 +265,16 @@ $Log:index_only_map_embed.html,v $
 			</div>
 			<div style="margin:1em;text-align:left">
 				
-				<p>Questa mappa individua tutte le terre trascorse dal fuoco dal 2011 al 2022 come regsitrato nel 'Sistema Informativa Forestale' (SIF) della Regione Sicilia.</p>
-				<p>Terre localizzate in comuni inadempienti al obbligo di registrare le terre trascorse in un registro catastale dei incendi sono colorati in rosso.</p>  	
-				<p>La lista  destra si aggiorna con ogni zoom o pan della mappa. Contiene la somma dei superfici delle aree trascorse dal fuoco, sommato per vari elementi dei metadati delle terre.</p>  	
-				
+				<p>Questa mappa visualizza dati sull'incidentalità nella regione Lombardia pubblicati dall'Istat è reso disponibile dal sistema GEOMIS della Regiuone Lombardia.</p>
+
+				<p>La visualizzazione evidenzia la natura dell'incidente con un colore, il quale e legato al tiopo della natura dell'incidente. </p>
+
+				<p>I singoli incidenti sono aggregati per una griglia rettangolare di 50 metri. Al di la di un ingrandimento della mappa pari alLa scala di 1:2500, i singoli incidenti sono distinti.</p>
+
+				<p>La lista a destra mostra le somme per le caratteristiche dei incidenti attualmente visibile nell'inquadratura della mappa. Le charatteristiche elencati sono una scelta dei campi dei dati dell'Istat.</p>
+
 				<p style="font-size:1em;">Fonti dati:</p>
-				<p><b>SIF</b> - <a style="color:#0088dd" href='https://sif.regione.sicilia.it/ilportale/' target='_blank'>Sistema Informativa Forestale</a> (Regione Sicilia)</p>
-				<p style="font-size:1em;"><b>Open Data Sicilia</b> - <a style="color:#0088dd" href='https://opendatasicilia.it/2023/08/10/catasto-delle-terre-bruciate/' target='_blank'>Catasto delle terre bruciate</a></p>
-				<p>Nota:</p>
-				<p>Per approfondire il tema si consiglia di leggre i post di Open Data Sicilia:
-				<ul style="text-align:left">
-				<li><a style="color:#0088dd" href="https://opendatasicilia.it/2023/08/10/catasto-delle-terre-bruciate/" target="_blank">Catasto delle terre bruciate</a></li>	
-				<li><a style="color:#0088dd" href="https://opendatasicilia.it/2023/08/18/sicilia-terre-percorse-dal-fuoco/" target="_blank">Terre percorse dal fuoco</a></li>	
-				</ul></p>
+				<p>Incidenti certificati dell'ISTAT, accessibili via <a style="color:#0088dd" href="https://sicurezza.servizirl.it/web/polizia-locale/geomis/" target="_blank">GEOMIS</a> (Monitoraggio Incidentalità Stradale) della Regione Lombardia</p>
 
 			</div>
 		</div>
