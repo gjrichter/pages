@@ -26,6 +26,8 @@
 
 [Terre percorse dal fuoco - SIF Regione Sicilia](https://gjrichter.github.io/pages/SIF_facets)
 
+[Incidentilità nella Regione Lombardia](https://gjrichter.github.io/pages/AREU_facets)
+
 
 
 TEST
