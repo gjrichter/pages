@@ -17,11 +17,11 @@ fonte: [GEOMIS](https://idpcwrapper.crs.lombardia.it/PublisherMetadata/SSOServic
 
 
 <iframe id="map1" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/AREU_facets/index_embed_AREU_incidenti_CODICE_EVE_2019.html?legend=1"></iframe>
-*map 1: Interventi di primo soccorso nella Regione Lombardia, anno 2019 *  --> [a schermo intero](https://gjrichter.github.io/pages/AREU_facets/index_embed_AREU_incidenti_CODICE_EVE_2019.html?legend=1)
+*map 1: Interventi di primo soccorso nella Regione Lombardia, anno 2019*  --> [a schermo intero](https://gjrichter.github.io/pages/AREU_facets/index_embed_AREU_incidenti_CODICE_EVE_2019.html?legend=1)
 
 
 <iframe id="map2" width="1024px" height="720" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/AREU_facets/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT?legend=1"></iframe>
-*map 2: Incidenti con feriti/morti (ISTAT) nella Regione Lombardia, 2019 - 2021 *  --> [a schermo intero](https://gjrichter.github.io/pages/AREU_facets/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT.html?legend=1)
+*map 2: Incidenti con feriti/morti (ISTAT) nella Regione Lombardia, 2019 - 2021*  --> [a schermo intero](https://gjrichter.github.io/pages/AREU_facets/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT.html?legend=1)
 
 
 
