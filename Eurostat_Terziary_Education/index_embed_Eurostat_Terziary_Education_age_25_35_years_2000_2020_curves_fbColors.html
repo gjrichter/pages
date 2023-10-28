@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body style="max-width: 1024px;margin:auto;font-family:open sans;font-size:22px">
+	
+	<div id="map"></div>
+	
+	<h1>di questa mappa</h1>
+	<p>
+		Da qualche giorno circola nella rete la segente mappa che mostra la percentuale della popolazione con una laurea.</p> 
+
+	<img src="../../app/HelloWorld_API - local/Population with university degree or Higher.png" width="800px">
+	
+	<p>
+		Vorrei mettere a canto (in effetti sopra) una mappa che guarda solo alla popolazione tra 25 e 35 anni, che rappresenta, secondo me, meglio l'attuale situazione del livello di istruzione in Italia ed in Europa.</p>
+	
+	<h2>qualche istruzione per l'uso</h2>
+	
+	<ul>
+	<li>la mappa mostra i dati del 2021. Non tutti paesi riportano un valore per il 2021. Con il cursore del tempo (puntino verde) si riesce ad andare indietro nel tempo (scoprendo anche dati da prima del Brexit)</li>
+	<li>si può clickare sui polori della leggenda per vedere solo una classe di valori</li>
+	<li>con il zoom progressivo della mappa si scoprono più dati</li>	
+	</ul>
+	
+	<!--========================================================================= -->
+
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+
+		var nuts_0 = ixmaps
+			.layer("nuts_0")
+			.data({
+				url: "https://raw.githubusercontent.com/gjrichter/geo/main/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_0.geojson",
+				type: "geojson"
+			})
+			.binding({
+				id: "NUTS_ID"
+			})
+			.style({
+				colorscheme: ["none"],
+				linecolor: ["#dddddd"],
+				linewidth: "1"
+			})
+			.define();
+
+		var nuts_2 = ixmaps
+			.layer("nuts_2")
+			.data({
+				url: "https://raw.githubusercontent.com/gjrichter/geo/main/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_2.geojson",
+				type: "geojson"
+			})
+			.binding({
+				id: "NUTS_ID"
+			})
+			.style({
+				colorscheme: ["rgba(255,255,255,0.2)"],
+				linecolor: ["none"],
+				linewidth: "0.01"
+			})
+			.define();
+
+		var choropleth = ixmaps
+			.theme("nuts_2")
+			.data({
+				name: "themeDataObj",
+				url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/EuroStat/tertiary_education_age_25_34_NUTS2_2000_2022.csv",
+				type: "csv",
+				cache: "true"
+			})
+			.binding({
+				geo: "GEO_CODE",
+				value: "2000|2001|2002|2003|2004|2005|2006|2007|2008|2009|2010|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021",
+				title: "GEO_NAME"
+			})
+			.style({
+				type: "CHOROPLETH|ZEROISNOTVALUE|LEGEND|CLIP|PAUSE|LAST",
+				colorscheme: [
+				  "#FCFCE3",
+				  "#B7D9C3",
+				  "#5ABBB9",
+				  "#4A8CA8",
+				  "#435B9F",
+				  "#2C2F7A"
+				],
+				opacity: "0.9",
+				ranges: [0, 20, 26, 32, 38, 47, 100],
+				label: [" ", " ", " ", " ", " ", " ", " "],
+				xaxis: ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2008", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+				showdata: "true",
+				units: "%",
+				textcolor: "white",
+				titlefield: "GEO_NAME",
+				nodatacolor: "RGB(221,221,221)",
+				valueupper: "1:10000000",
+				valuescale: "1",
+				valuedecimals: "1",
+				clipframes: "22",
+				clipframerate: "24",
+				title: "<span style='font-family:MV boli;font-size:1.5em;font-weight:700;line-height:1em'>Tertiary education 2021 age 25-35</span>"
+			})
+			.define();
+
+		// last percentage as text (aggregated)
+
+		var texts = ixmaps
+			.theme("nuts_2")
+			.data({
+				name: "themeDataObj",
+				url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/EuroStat/tertiary_education_age_25_34_NUTS2_2000_2022.csv",
+				type: "csv",
+				cache: "true"
+			})
+			.filter("WHERE 2021 > 0")
+			.type("CHART|LABEL|VALUES|TEXTONLY|FIXSIZE|NOLEGEND")
+			.binding({
+				geo: "GEO_CODE",
+				value: "2021"
+			})
+			.style({
+				colorscheme: [
+					"RGBA(255,255,255,0.5)"
+				],
+				scale: "1.5",
+				textcolor: "#000000",
+				titlefield: "GEO_NAME",
+				units: "%",
+				chartupper: "1:5000000",
+				valuedecimals: "1",
+				offsety: "-1"
+			})
+			.meta({
+				title: "<span style='font-family:MV boli;font-size:1.5em;font-weight:700'>Tertiary education 2021 age 25-35</span>"
+			})
+			.define()
+
+		// from 2010 to 2021 as curves (zoom dependent)
+
+		var curves = ixmaps
+			.theme("nuts_2")
+			.data({
+				name: "themeDataObj",
+				url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/EuroStat/tertiary_education_age_25_34_NUTS2_2000_2022.csv",
+				type: "csv",
+				cache: "true"
+			})
+			.filter("WHERE 2020 > 0")
+			.type("CHART|SYMBOL|SEQUENCE|PLOT|LINES|AREA|VALUES|LASTPOP|MAX|GRID|BOX|NOLEGEND")
+			.binding({
+				geo: "GEO_CODE",
+				value: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+				title: "GEO_NAME"
+			})
+			.style({
+				colorscheme: [
+				  "#ECECD3",
+				  "#B7D9C3",
+				  "#5ABBB9",
+				  "#4A8CA8",
+				  "#435B9F",
+				  "#2C2F7A"
+				],
+				ranges: [0, 20, 26, 32, 38, 47, 100],
+				symbols: ["none"],
+				xaxis: ["2010", "'", "'", "'", "'", "2015", "'", "'", "'", "'", "2020", "'"],
+				fillopacity: "0.8",
+				units: "%",
+				boxcolor: "none",
+				scale: "0.15",
+				align: "23right|bottom",
+				linewidth: "5",
+				boxcolor: "none",
+				bordercolor: "none",
+				gridwidth: "25px",
+				chartupper: "1:5000000",
+				boxupper: "1:2000000"
+			})
+			.meta({
+				title: "<span style='font-family:MV boli;font-size:1.5em;font-weight:700'>Tertiary education 2010-2021 age 25-35"
+			})
+			.define();
+
+
+
+
+		var attribution = '<span style="font-family:MV boli;margin-bottom:-2em">data: EUROSTAT <a href=https://ec.europa.eu/eurostat/databrowser/view/tgs00100/default/table?lang=en/" target="_blank">Total fertility rate by NUTS 2 region</a>, powered by <a href="http://ixmaps.com" target="_blank">iXMaps</a</span>';
+
+		// ----------------------------------------
+		// create the map
+		// ----------------------------------------
+
+		var	map = ixmaps.embed(
+				"map", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					map: "../../maps/svg/maps/generic/winkel.svg",
+					mapService: "leaflet",
+					mapType: "white",
+					mode: "info",
+					width: "100%",
+					height: "800px",
+					legend: true,
+					align: "right"
+				},
+				(map) =>
+				map
+				.view([50.48804553605622, 19.608398437500004], 4)
+				.require("../../ui/js/tools/tooltip_basic.js")
+				.options({
+					objectscaling: "dynamic", // grafici crescono leggermente con lo zoom
+					normalSizeScale: "5000000", // grandezza 'normale' al livello 1:5.000.000
+					dynamicScalePow: "1.8", // dynamica, 1 crescita lineare, valori > 1 meno crescita
+					panhidden: "false" // grafici visibile durante lo spostamento della mappa
+				})
+				.attribution(attribution)
+				.layer(nuts_2)
+				.layer(nuts_0)
+				.layer(choropleth)
+				.layer(texts)
+				.layer(curves)
+			);
+
+	</script>
+</body>
+
+</html>
