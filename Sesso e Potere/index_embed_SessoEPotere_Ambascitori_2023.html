@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body>
+
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+
+		var attribution = "dati: <a href='https://docs.google.com/spreadsheets/d/1OM0Lcnh8GMFTauXFQiYEe9L0Y4mmxPy9/edit?pli=1#gid=209278687' target='_blank'>Sesso e Potere</a>, 	licenza: <a href='https://creativecommons.org/licenses/by/4.0/deed.it target='_blank'>CC-BY-4.0</a>"
+
+		document.activeElement.appendChild(
+
+			ixmaps.embed("map2", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapService: "leaflet",
+					mapType: "white",
+					map: "../../maps/svg/maps/generic/winkel.svg",
+					width: "100%",
+					height: "800px",
+					scrollsafesilent: "true",
+					legend: "true",
+					align: "center",
+					mode: "info"
+				},
+				map => map
+				.view([8.792253570362446, 12.304687500000002], 2)
+				.attribution(attribution)
+				.require("../../ui/js/tools/tooltip_basic.js")
+				.options({
+					scrollSafeSilent: "true",
+					objectscaling: "dynamic",
+					normalsizescale: "10000000",
+					flushChartDraw: "5000",
+					panhidden: "false"
+				})
+				.layer(ixmaps.layer("World_countries")
+					.data({
+						url: "https://raw.githubusercontent.com/gjrichter/geo/main/world/CNTR_RG_10M_2020_4326.json",
+						type: "topojson"
+					})
+					.binding({
+						id: "FID",
+						position: "geometry"
+					})
+					.type("FEATURES|NOLEGEND")
+					.style({
+						colorscheme: ["rgba(0,0,0,0.1)"],
+						linecolor: "white",
+						linewidth: "0.3",
+					showdata: "true"
+					})
+					.define()
+				)
+				.layer(ixmaps.layer("World_countries")
+					.data({
+						url: "https://docs.google.com/spreadsheets/d/1OM0Lcnh8GMFTauXFQiYEe9L0Y4mmxPy9/export?format=csv&gid=209278687",
+						type: "csv"
+					})
+					.binding({
+						value: "sesso",
+						position: "Codice ISO 3166-1"
+					})					   
+					.type("CHOROPLETH|CATEGORICAL|COMPACTLEGEND")
+					.style({
+						colorscheme: [
+							"rgb(213, 60, 46)",
+							"rgb(56, 141, 192)"
+						],
+						showdata: "true",
+						datafields: ["paese","ambasciata","nome","CNTR_NAME","NAME_ENGL"]
+					})
+					.meta({
+						title: "<b>Ambasciatori della Repubblica Italiana in carica al 10.11.2023</b>",
+					})
+					.define()
+				)
+			)
+		);
+
+	</script>
+</body>
+
+</html>
