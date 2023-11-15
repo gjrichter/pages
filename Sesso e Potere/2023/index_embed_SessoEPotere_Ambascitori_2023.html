@@ -42,28 +42,6 @@ $Log:index_only_map_embed.html,v $
 
 		var attribution = "dati: <a href='https://docs.google.com/spreadsheets/d/1OM0Lcnh8GMFTauXFQiYEe9L0Y4mmxPy9/edit?pli=1#gid=209278687' target='_blank'>Sesso e Potere</a>, 	licenza: <a href='https://creativecommons.org/licenses/by/4.0/deed.it target='_blank'>CC-BY-4.0</a>"
 
-		query = function(data,options){
-			var szUrl1 = "https://raw.githubusercontent.com/gjrichter/geo/main/world/CNTR_RG_10M_2020_4326.json";
-			var szUrl2 = "https://raw.githubusercontent.com/gjrichter/geo/main/world/world_country_names_and_codes.csv";
-			var broker = new Data.Broker()
-				.addSource(szUrl1, "topojson")
-				.addSource(szUrl2, "csv")
-				.realize(
-					function (dataA) {
-						var countries = dataA[0];
-						var codes = dataA[1];
-						console.log(codes);
-						var codesA = codes.lookupArray({key:"alpha-3",value:"alpha-2"});
-						countries.addColumn({
-							source: "ISO3_CODE",
-							destination: "ISO2_CODE"
-						}, (value) => {
-							return (codesA[value]);
-						});
-						options.type = "dbtable";
-						ixmaps.setExternalData(countries,options);
-				});
-		};
 		document.activeElement.appendChild(
 
 			ixmaps.embed("map2", {
@@ -90,10 +68,11 @@ $Log:index_only_map_embed.html,v $
 				})
 				.layer(ixmaps.layer("World_countries")
 					.data({
-						query: query.toString()
+						url: "https://raw.githubusercontent.com/gjrichter/geo/main/world/ne_10m_admin_0_countries_s.json",
+						type: "topojson"
 					})
 					.binding({
-						id: "ISO2_CODE",
+						id: "ISO_A2_EH",
 						position: "geometry"
 					})
 					.type("FEATURES|NOLEGEND")
