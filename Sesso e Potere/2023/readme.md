@@ -20,8 +20,13 @@ I dati vengono caricati direttamente dal repository di **[onData](https://github
 
 ### ambasciatori/ambasciatrici
 
-<iframe width="100%" height="876.140625" frameborder="0"
+<iframe width="1024" height="720"  frameborder="0"
   src="https://observablehq.com/embed/6e75d77b045184ee?cells=map"></iframe>
+
+### ambasciatori/ambasciatrici (proiezione Equal Earth)
+
+<iframe width="1024" height="720"  frameborder="0"
+  src="https://observablehq.com/embed/1db93ca6a3ace212?cells=map"></iframe>
 
 ### sindaci/sindache - comuni > 50.000 abitanti
 
