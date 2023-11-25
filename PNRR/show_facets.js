@@ -143,7 +143,7 @@ ixmaps.data = ixmaps.data || {};
 		var objThemesA = ixmaps.getThemes();
 		for (a in objThemesA) {
 			objTheme = objThemesA[a];
-			if (objTheme.szFlag.match(/CHART|CHOROPLETH/)) {
+			if (objTheme.szFlag.match(/CHART|CHOROPLETH/) && !objTheme.szFlag.match(/NOFILTER/)) {
 				ixmaps.message('&#9881;');
 				if (szFilter) {
 					ixmaps.changeThemeStyle(null, objTheme.szId, "filter:" + (szFilter || " "), "set");
@@ -252,8 +252,8 @@ ixmaps.data = ixmaps.data || {};
 				var szFilter = "ixmaps.filterThemeItems(null, null, '', { field: '" + facet.id + "', min: " + bMin + ", max: " + bMax + " }";
 				var szHighlight = "$(this).css('background','#880000');" + szFilter;
 				var szClearHighlight = "$(this).css('background','');ixmaps.filterThemeItems(null,null,'','remove');"
-				bMin = ixmaps.__formatValue(bMin, 2, "BLANK");
-				bMax = ixmaps.__formatValue(bMax, 2, "BLANK");
+				bMin = ixmaps.formatValue(bMin, 2, "BLANK");
+				bMax = ixmaps.formatValue(bMax, 2, "BLANK");
 				szHtml += "<div style='display:inline-block;width:" + width + "px;background-color:" + color + ";height:" + (1 + (height * scale)) + "px;' data-toggle='tooltip' title='" + (bMin + ' - ' + bMax) + " onmouseover='" + szHighlight + "' onmouseout='" + szClearHighlight + "'></div>";
 			}
 			szHtml += "</div>";
@@ -364,6 +364,9 @@ ixmaps.data = ixmaps.data || {};
 		// loop over facets array and create HTML top show the facets
 		//
 
+		console.log(facetsA);
+		console.log("all facets ===>");
+		
 		for (var i = 0; i < facetsA.length; i++) {
 
 			var fActiveFacet = false;
@@ -387,8 +390,8 @@ ixmaps.data = ixmaps.data || {};
 
 			var bgColor = fActiveFacet ? "#884444" : "#888888";
 
-			var szMin = ixmaps.__formatValue(facetsA[i].min, 2, "BLANK");
-			var szMax = ixmaps.__formatValue(facetsA[i].max, 2, "BLANK");
+			var szMin = ixmaps.formatValue(facetsA[i].min, 2, "BLANK");
+			var szMax = ixmaps.formatValue(facetsA[i].max, 2, "BLANK");
 
 			szHtml += fActiveFacet ? "<a href='javascript:__removeFacets(\"" + (facetsA[i].id) + "\");' style='color:white' >" : "";
 			szHtml += "<div style='font-family:arial;font-size:1.1em;text-align:left;padding:0.5em 0.5em 0.5em 0.5em;margin:1em 0 0.4em 0;background:" + bgColor + ";border-radius:5px;color:white'>";
@@ -433,7 +436,7 @@ ixmaps.data = ixmaps.data || {};
 			var localTextA = {};
 			localTextA.M1 = "M1 - Digitalizz., innov., competi., cultura e turismo";
 			localTextA.M2 = "M2 - Rivoluzione verde e trans. eco.";
-			localTextA.M3 = "M3 - Infrastrutture per una mobilit‡ sostenibile";
+			localTextA.M3 = "M3 - Infrastrutture per una mobilit√† sostenibile";
 			localTextA.M4 = "M4 - Istruzione e ricerca";
 			localTextA.M5 = "M5 - Inclusione e coesione";
 			localTextA.M6 = "M6 - Salute";
@@ -450,6 +453,9 @@ ixmaps.data = ixmaps.data || {};
 				// make min/max slider
 				// ---------------------------------
 				
+				console.log(facetsA[i]);
+				console.log("continous value facet");
+				
 				if (!__rangesA[facetsA[i].id] || !fActiveFacet) {
 					__rangesA[facetsA[i].id] = {
 						min: facetsA[i].min,
@@ -461,8 +467,8 @@ ixmaps.data = ixmaps.data || {};
 
 				var min = __rangesA[facetsA[i].id].min;
 				var max = __rangesA[facetsA[i].id].max;
-				var szMin = ixmaps.__formatValue(__rangesA[facetsA[i].id].min, 2, "BLANK");
-				var szMax = ixmaps.__formatValue(__rangesA[facetsA[i].id].max, 2, "BLANK");
+				var szMin = ixmaps.formatValue(__rangesA[facetsA[i].id].min, 2, "BLANK");
+				var szMax = ixmaps.formatValue(__rangesA[facetsA[i].id].max, 2, "BLANK");
 
 				var href = "#";
 				var bgColor = "#eeeeee";
@@ -504,8 +510,8 @@ ixmaps.data = ixmaps.data || {};
 						var height = barA.count[b];
 						var bMin = barA.min[b];
 						var bMax = fDiscret ? barA.min[b] : barA.min[b + 1];
-						var szbMin = ixmaps.__formatValue(bMin, bMin < 100 ? 2 : 0, "BLANK");
-						var szbMax = ixmaps.__formatValue(bMax, bMax < 100 ? 2 : 0, "BLANK");
+						var szbMin = ixmaps.formatValue(bMin, bMin < 100 ? 2 : 0, "BLANK");
+						var szbMax = ixmaps.formatValue(bMax, bMax < 100 ? 2 : 0, "BLANK");
 						var fActive = ((bMax >= facetsA[i].min) && (bMin <= facetsA[i].max));
 						var color = fActive ? "#888" : "#ddd";
 						if (fOnMap) {
@@ -518,7 +524,7 @@ ixmaps.data = ixmaps.data || {};
 						}
 
 						var szTooltip =
-							fDiscret ? String(bMin) : ixmaps.__formatValue(bMin, 2, "BLANK") + ' - ' + ixmaps.__formatValue(bMax, 2, "BLANK");
+							fDiscret ? String(bMin) : ixmaps.formatValue(bMin, 2, "BLANK") + ' - ' + ixmaps.formatValue(bMax, 2, "BLANK");
 						var szFilter = "ixmaps.filterThemeItems(null, null, \"\", { field: \"" + facetsA[i].id + "\", min: " + bMin + ", max: " + bMax + " });";
 						var szHighlight = "__origBg=$(this).css(\"background\");$(this).css(\"background\",\"#880000\");"; //+szFilter;
 						var szClearHighlight = "$(this).css(\"background\",__origBg);"; //ixmaps.filterThemeItems(null,null,\"\",\"remove\");"
@@ -556,7 +562,10 @@ ixmaps.data = ixmaps.data || {};
 				// type B
 				// unique value facet
 				// ---------------------------------
-
+				
+				console.log(facetsA[i]);
+				console.log("unique value facet");
+				
 				szHtml += '<div>'
 
 				// if more than 20 items, clip list to 10
@@ -579,7 +588,7 @@ ixmaps.data = ixmaps.data || {};
 						var nMaxCount = facetsA[i].nValuesSum || facetsA[i].nCount;
 
 						var bgColor = "";
-						var szCount = ixmaps.__formatValue(nCount, 0, "BLANK") + " " + (ixmaps.data.fShowFacetValues ? (objTheme.szUnits || "") : ""); //String(nCount || "");
+						var szCount = ixmaps.formatValue(nCount, 0, "BLANK") + " " + (ixmaps.data.fShowFacetValues ? (objTheme.szUnits || "") : ""); //String(nCount || "");
 						
 						var szText = facetsA[i].values[ii];
 						
@@ -666,6 +675,10 @@ ixmaps.data = ixmaps.data || {};
 
 				szHtml += "</div>";
 			} else {
+				
+				console.log(facetsA[i]);
+				console.log("facet has no properties");
+
 				// facet has no property .values 
 				// may be there are 0 or to many unique values when creating the facet
 				//szHtml += '(too many values)';

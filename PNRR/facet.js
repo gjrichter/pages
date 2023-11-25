@@ -111,12 +111,21 @@ ixmaps.data = ixmaps.data || {};
 
 		mydata.records = records;
 		
+		console.log("**********************");
+		console.log(mydata);
+		console.log("**********************");
+		
 		__facetFilterA = [];
 		
 		// if we have already a filter on the map,
 		// filter data before creating facets
 		// ------------------------------------
 		if (szFilter && szFilter.match(/WHERE/)) {
+			
+			console.log("!!!!!filter!!!!!!");
+			console.log(szFilter);
+			console.log("!!!!!!!!!!!!!!!!!");
+			
 			mydata = mydata.select(szFilter);
 
 			// get filter parts
@@ -136,12 +145,22 @@ ixmaps.data = ixmaps.data || {};
 			});
 		}
 
+		console.log("********---***********");
+		console.log(mydata);
+		console.log("********---***********");
+		
 		// make facets from data fields
 		// ----------------------------
 
 		var a, u;
 		
 		szFieldsA = szFieldsA || mydata.columnNames();
+		
+		for ( i in szFieldsA ){
+			if (szFieldsA[i] == "geometry"){
+				szFieldsA.splice(i, 1);
+			}
+		}
 		var v = null;
 		if (objThemeDefinition.style.sizefield) {
 			if (ixmaps.data.fShowFacetValues) {
@@ -154,13 +173,17 @@ ixmaps.data = ixmaps.data || {};
 			
 			var szField = szFieldsA[i];
 			
+			if (!mydata.column(szField)){
+				continue;
+			}
+			
 			a = mydata.column(szField).values();
 			
 			// test for only numeric values
 			// ----------------------------
 			fNumeric = true;
 			a.every(function (x) {
-				if (x.length && (x != "NaN") && (x != "NULL") && isNaN(__scanValue(x))) {
+				if (x.length && (x != "undefined") && (x != '""') && (x != "''") && (x != "NaN") && (x != "NULL") && isNaN(__scanValue(x))) {
 					fNumeric = false;
 				}
 				return fNumeric;
@@ -184,11 +207,18 @@ ixmaps.data = ixmaps.data || {};
 
 			a.length = Math.min(a.length, 250);
 			u = a.filter(__onlyUnique);
+			
+			console.log("!!!!!!!!!!!!!")
+			console.log(szField);
+			console.log(a);
+			console.log(u);
+			console.log("!!!!!!!!!!!!!")
+
 
 			// if we have many unique values and they are numbers,
 			// make a numerique facet, if they are texts, skip field
 			// -----------------------------------------------------
-			if ((a.length >= 250) && (u.length >= (a.length / 5))) {
+			if ((a.length >= 250) && (u.length >= (a.length / 2))) {
 
 				if (fNumeric) {
 
