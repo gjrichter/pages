@@ -637,10 +637,13 @@ ixmaps.data = ixmaps.data || {};
 						
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
-								value = szActiveFilter.split("\"")[3].replace("\/", "\\\/");
-								if ( value != "*" ){
-									var szTextA = eval("szText.split(/" + value + "/i)");
-									szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
+								value = szActiveFilter.split("\"")[3];
+								if ( value ){
+									value = value.replace("\/", "\\\/");
+									if ( value != "*" ){
+										var szTextA = eval("szText.split(/" + value + "/i)");
+										szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
+									}
 								}
 							}
 						}
