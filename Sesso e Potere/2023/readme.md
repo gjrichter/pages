@@ -28,6 +28,11 @@ I dati vengono caricati direttamente dal repository di **[onData](https://github
 <iframe width="100%" height="876.140625" frameborder="0"
   src="https://observablehq.com/embed/98db01b08b97475f?cells=map"></iframe>
 
+### sindaci/sindache - comuni >50.000 abitanti
+
+<iframe width="100%" height="876.140625" frameborder="0"
+  src="https://observablehq.com/embed/ac243a81f0ca7044?cells=map"></iframe>
+
 ### sindaci/sindache - tutti comuni
 
 <iframe width="100%" height="876.140625" frameborder="0"
