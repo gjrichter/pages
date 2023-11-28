@@ -38,10 +38,10 @@ I dati vengono caricati direttamente dal repository di **[onData](https://github
 <iframe width="100%" height="876.15625" frameborder="0"
   src="https://observablehq.com/embed/73f03b5c79b75b49?cells=map"></iframe>
 
-### vicesindaci per sesso
+### ambasciatori/ambasciatrici
 
 <iframe width="100%" height="876.140625" frameborder="0"
-  src="https://observablehq.com/embed/230430b6af3bd564?cells=map"></iframe>
+  src="https://observablehq.com/embed/6e75d77b045184ee?cells=map"></iframe>
 
 
 
