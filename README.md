@@ -12,7 +12,7 @@
 
 [Elezioni Politiche 2022](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index.html)
 
-[Sesso e Potere](https://gjrichter.github.io/pages/Sesso%20e%20Potere/)
+[Sesso e Potere 2022](https://gjrichter.github.io/pages/Sesso%20e%20Potere/) [-2023](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023)
 
 [PA Digitale](https://gjrichter.github.io/pages/PA%20Digitale/PA_Digitale_Candidature%20finanziate_dashboard_I.html)
 
