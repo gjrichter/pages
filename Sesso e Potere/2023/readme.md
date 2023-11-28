@@ -39,7 +39,11 @@ I dati vengono caricati direttamente dal repository di **[onData](https://github
   src="https://observablehq.com/embed/f23805d6d6027237?cells=map"></iframe>
 
 
-mappe aggiunte [qui](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023/gallery.html)
+### Mappe aggiuntive
+
+A questo [link](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023/gallery.html) si trovano altre mappe sul tema 'Sesso e Potere' con dati sulla presenza delle donne in politica al livello europeo e mondiale.
+
+
 
 
 ### progetti e piattaforma
