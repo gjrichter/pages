@@ -41,7 +41,8 @@ I dati vengono caricati direttamente dal repository di **[onData](https://github
 
 ### Mappe aggiuntive
 
-A questo [link](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023/gallery.html) si trovano altre mappe sul tema 'Sesso e Potere' con dati sulla presenza delle donne in politica al livello europeo e mondiale.
+- Altre mappe sul tema 'Sesso e Potere' con dati sulla presenza delle donne in politica al livello europeo e mondiale -> [**link**](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023/gallery.html)  
+- Una mappa per analizzare l'età degli consiglieri comunali per sesso -> [**link**](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023/gender_eta.html)
 
 
 
