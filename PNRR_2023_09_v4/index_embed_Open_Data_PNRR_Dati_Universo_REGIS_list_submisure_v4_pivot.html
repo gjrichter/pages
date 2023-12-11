@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+ixmaps map embed html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2023/04/22 $
+$Author: guenter richter $
+$Id:index_embed_Open_Data_PNRR_Dati_Universo_REGIS_III.html 1 2023-04-22 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>Dati aperti PNRR: get submisure</title>
+
+	<style>
+		body,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		p,
+		table {
+			font-family: sans-serif;
+		}
+
+		td,
+		th {
+			padding: 0.5em;
+		}
+
+		td {
+			cursor: pointer;
+		}
+
+		.M1 {
+			background-color: #C7E4EE;
+		}
+
+		.M2 {
+			background-color: #D8E6BF;
+		}
+
+		.M3 {
+			background-color: #F3C0C2;
+		}
+
+		.M4 {
+			background-color: #F6DCBE;
+		}
+
+		.M5 {
+			background-color: #E3CEE9;
+		}
+
+		.M6 {
+			background-color: #F7E9BD;
+		}
+
+		.gray {
+			color: gray;
+		}
+
+	</style>
+</head>
+
+<body style='text-align:center;background:#F7F6EF'>
+
+	<div id="container" style="max-width:1024px;margin:auto">
+
+		<h1>PNRR - Universum REGIS v4 - analisi delle Submisure</h1>
+		<div id="list-codici-submisure">
+			<div style="text-align:center"><img src="./img/loading_blue.gif"></div>
+		</div>
+
+		<div id="list-footer" style="margin:1em:0em;">
+			<hr>
+			<p>Queste tabelle elencano i <b>progetti pubblicati sul catalogo open data di Italiadomani</b>, ovvero sul sito ufficiale del Piano, aggregati per submisura e calcola per ogni submisura l'importo, il numero di progetti e la percentuale dei progetti con gara o aggiudicato.
+			</p>
+			<p> La fonte di questi dati è <b>ReGiS</b>, il sistema di <b>rendicontazione</b> e <b>controllo</b> delle misure e dei progetti finanziati dal Piano Nazionale di Ripresa e Resilienza.</p>
+
+			<ul style="text-align:left;margin-left:-1em">
+				<li>
+					<p>Clickando su una righa si aprono due mappa con la distribuzione territoriale dei progetti della submisura al livello regionale e provinciale</p>
+				</li>
+			</ul>
+
+			<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
+
+			<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>04.12.2023 (v4)</b>
+			</p>
+			<div style="height:1em"></div>
+		</div>
+	</div>
+
+	<iframe id="map1" style="border:none;width:49%;height:840px;display:none"></iframe>
+	<iframe id="map2" style="border:none;width:49%;height:840px;display:none"></iframe>
+
+
+	<!-- ------------------------------------- -->
+	<!--                                       -->
+	<!-- c o d e                         -->
+	<!--                                       -->
+	<!-- ------------------------------------- -->
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
+	<script src="./data.extend.facets.js"></script>
+	<script src="./json.js"></script>
+	<script src="./format.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		var regisData = null;
+
+		var submisureA = [];
+		var subFilterA = [];
+		var subImportoA = [];
+		var subProjectsA = [];
+		var subInGaraA = [];
+		var subAggiudicatoA = [];
+
+		var regfilterA = [];
+
+		var inGaraA = null;
+		var aggiudicatoA = null;
+		var importoA = null;
+		var projectsA = null;
+
+		var missioniDescrA = {
+			"M1": "M1 - Digitalizz., innov., competi., cultura e turismo",
+			"M2": "M2 - Rivoluzione verde e trans. eco.",
+			"M3": "M3 - Infrastrutture per una mobilità sostenibile",
+			"M4": "M4 - Istruzione e ricerca",
+			"M5": "M5 - Inclusione e coesione",
+			"M6": "M6 - Salute"
+		};
+
+		exploreSubmisura = function(i) {
+
+			if ($("#map-div" + i).html().length) {
+				$("#map-div" + i).html("");
+				return;
+			}
+
+
+			var filter = subFilterA[i];
+			var legend = null;
+			var submisura = filter.split("=")[2].split("AND")[0];
+
+			var szHtml = "";
+			szHtml += "<h1>" + (decodeURIComponent(submisura)) + "</h1>";
+			szHtml += "<div style='text-align:center'><h1>" +
+				ixmaps.bestFormatValue(subImportoA[i]) + " <span class='gray'>€  </span></h1><h2>" +
+				ixmaps.bestFormatValue(subProjectsA[i]) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
+				ixmaps.bestFormatValue(subInGaraA[i] + subAggiudicatoA[i]) + " <span class='gray'>gare</span><img src='./img/megafono.png' height='16px'>&nbsp;&nbsp; " +
+				ixmaps.bestFormatValue(subAggiudicatoA[i]) + " <span class='gray'>aggiudicazioni</span></h2></div>";
+
+			var szMap1Id = "map1_" + i;
+			var szMap2Id = "map2_" + i;
+			var szMap3Id = "map3_" + i;
+			var szMap4Id = "map4_" + i;
+			var szView = "[41.44272637767212,11.40380859375],5.6";
+
+			szHtml = '<iframe id="' + szMap1Id + '" style="border:none;width:50%;height:720px"></iframe>' +
+					 '<iframe id="' + szMap2Id + '" style="border:none;width:50%;height:720px"></iframe>' +
+					 '<iframe id="' + szMap3Id + '" style="border:none;width:50%;height:720px"></iframe>' +
+					 '<iframe id="' + szMap4Id + '" style="border:none;width:50%;height:720px"></iframe>';
+
+			$("#map-div" + i).html(szHtml);
+
+			legend = "<h1>Tutti progetti (" + subProjectsA[i] + ")<h1>";
+			$("#" + szMap1Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_template_v4.html?' + filter + '&legend=' + legend + '&view=' + szView);
+
+			legend = "<h1>Progetti in gara (" + subInGaraA[i] + ") o aggiudicati (" + subAggiudicatoA[i] + ")<h1>";
+			$("#" + szMap2Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_gauge_template_v4.html?' + filter + '&legend=' + legend + '&view=' + szView);
+
+			legend = "<h1>Progetti in gara (" + subInGaraA[i] + ") o aggiudicati (" + subAggiudicatoA[i] + ")<h1>";
+			$("#" + szMap3Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_pie_template_v4.html?' + filter + ' AND \"stato di avanzamento\" in (\"in gara\",\"aggiudicato\")' + '&legend=' + legend + '&view=' + szView);
+
+			legend = "<h1>Progetti senza gara (" + (subProjectsA[i]-subInGaraA[i]-subInGaraA[i]) + ") <h1>";
+			$("#" + szMap4Id).attr("src", './index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_small_pivot_gray_template_v4.html?' + filter + ' AND \"stato di avanzamento\" in (\"progetto\")' + '&legend=' + legend + '&view=' + szView);
+
+			/**
+			$("html, body").animate({
+				scrollTop: $(document).height()
+			}, 1000);
+			**/
+		};
+
+
+		listSubmisura_II = function() {
+
+			var szUrl = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_pivot_submisure_v4.csv.gz";
+			var myfeed = Data.feed({
+					"source": szUrl,
+					"type": "csv"
+				})
+				.error(function(e) {
+					console.log("load error:" + e.status + " - " + szUrl)
+				})
+				.load(function(mycdata) {
+
+					console.log(mycdata);
+
+					submisureA = mycdata.column("Codice Univoco Submisura").values();
+					var descrizioneSubmisureA = mycdata.column("Descrizione Submisura").values();
+
+					inGaraA = mycdata.column("in gara").values();
+					aggiudicatoA = mycdata.column("aggiudicato").values();
+					importoA = mycdata.column("importo").values();
+					projectsA = mycdata.column("projects").values();
+
+					var aggiudicatoIndex = mycdata.column("aggiudicato").index;
+					var ingaraIndex = mycdata.column("in gara").index;
+					var projectsIndex = mycdata.column("projects").index;
+
+					mycdata.addColumn({
+						destination: "aggiudicato_perc"
+					}, function(row) {
+						return isNaN(row[aggiudicatoIndex]) ? 0 : (Number(row[aggiudicatoIndex]) / Number(row[projectsIndex]) * 100);
+					})
+
+					mycdata.addColumn({
+						destination: "con_gara_perc"
+					}, function(row) {
+						return isNaN(row[aggiudicatoIndex]) ? 0 : ((Number(row[ingaraIndex]) + Number(row[aggiudicatoIndex])) / Number(row[projectsIndex]) * 100);
+					})
+
+
+
+					var szHtml = "";
+
+					var sum = 0;
+					for (i in importoA) {
+						sum += Number(importoA[i]);
+					}
+					var projects = 0;
+					for (i in projectsA) {
+						projects += Number(projectsA[i]);
+					}
+					var gare = 0;
+					for (i in inGaraA) {
+						gare += Number(inGaraA[i]);
+					}
+					var garevinte = 0;
+					for (i in aggiudicatoA) {
+						garevinte += Number(aggiudicatoA[i]);
+					}
+
+					szHtml += "<div style='text-align:center'><h1>" + ixmaps.bestFormatValue(sum) + " <span class='gray'>€  </span></h1><h2>" +
+						ixmaps.bestFormatValue(projects) + " <span class='gray'>progetti</span>&nbsp;&nbsp; " +
+						ixmaps.bestFormatValue(gare + garevinte) + " <span class='gray'>gare</span>&nbsp;<img src='./img/megafono.png' height='16px'>&nbsp;&nbsp; " +
+						ixmaps.bestFormatValue(garevinte) + " <span class='gray'>aggiudicazioni&nbsp;<img src='./img/515345.png' height='16px'></span></h2></div>";
+
+					var missioniA = [];
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M1\""));
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M2\""));
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M3\""));
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M4\""));
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M5\""));
+					missioniA.push(mycdata.select("WHERE \"Codice Univoco Submisura\" like \"M6\""));
+
+					console.log(missioniA);
+
+					var count = 0;
+
+					for (i in missioniA) {
+
+						szHtml += "<div>";
+						szHtml += "<table>";
+
+						missioniA[i].sort("aggiudicato_perc").revert();
+
+						var submisureA = missioniA[i].column("Codice Univoco Submisura").values();
+
+						if (!submisureA.length) {
+							continue;
+						}
+						console.log(submisureA);
+						var descrizioneSubmisureA = missioniA[i].column("Descrizione Submisura").values();
+						var inGaraA = missioniA[i].column("in gara").values();
+						var aggiudicatoA = missioniA[i].column("aggiudicato").values();
+						var importoA = missioniA[i].column("importo").values();
+						var projectsA = missioniA[i].column("projects").values();
+						var aggiud_percA = missioniA[i].column("aggiudicato_perc").values();
+						var con_gara_percA = missioniA[i].column("con_gara_perc").values();
+
+						szHtml += "<tr'><td style='padding-top:2em;font-size:1.5em;padding-left:0.35em;text-align:left' colspan='4'>" + missioniDescrA[submisureA[0].substring(0, 2)] + "</td></tr>";
+						console.log(i);
+						szHtml += "<tr>";
+						szHtml += "<th style='text-align:left'>Submisura</th>" +
+							"<th style='text-align:left'>Descrizione submisura</th>" +
+							"<th style='text-align:right'>Importo</th>" +
+							"<th style='text-align:right'>Progetti</th>" +
+							"<th style='text-align:right'>- con gara</th>" +
+							"<th style='text-align:right'>aggiudicati</th>";
+						szHtml += "</tr>";
+
+						var nProgetti = 0,
+							nImporto = 0,
+							nInGara = 0,
+							nAggiudicato = 0;
+
+						for (ii in submisureA) {
+							var mission = submisureA[ii].substring(0, 2);
+
+							subFilterA[count] = "filter=WHERE \"Descrizione Submisura\" = \"" + (encodeURIComponent(descrizioneSubmisureA[ii])) + "\"";
+							subImportoA[count] = importoA[ii];
+							subProjectsA[count] = projectsA[ii];
+							subInGaraA[count] = inGaraA[ii];
+							subAggiudicatoA[count] = aggiudicatoA[ii];
+
+							szHtml += "<tr onclick='exploreSubmisura(" + count + ")'>" +
+								"<td class='" + mission + "' style='width:20px;vertical-align:top;text-align:left'>" + submisureA[ii] + "</td>" +
+								"<td class='" + mission + "' style='width:400px;vertical-align:top;text-align:left'>" + descrizioneSubmisureA[ii] + "</td>" +
+								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:150px'>" + ixmaps.bestFormatValue(importoA[ii]) + " €</td>" +
+								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:120px'>" + projectsA[ii] + " progetti</td>" +
+								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:80px'>" +
+								(con_gara_percA[ii]).toFixed(1) + "% <img src='./img/megafono.png' height='16px'></td>" +
+								"<td class='" + mission + "' style='vertical-align:top;text-align:right;width:80px'>" +
+								(aggiud_percA[ii]).toFixed(1) + "% <img src='./img/515345.png' height='16px'></td>" +
+								"<td></td></tr>";
+
+							szHtml += "<tr><td style='spacing:0em;padding:0em' colspan='9'><div id='map-div" + count + "' ></div></td></tr>";
+
+							nProgetti += Number(projectsA[ii]);
+							nImporto += Number(importoA[ii]);
+							nInGara += Number(inGaraA[ii]);
+							nAggiudicato += Number(aggiudicatoA[ii]);
+
+							count++;
+						}
+
+						if (1 || nImporto) {
+							szHtml += "<tr>";
+							szHtml += "<th></th>" +
+								"<th></th>" +
+								"<th style='text-align:right'>" + ixmaps.bestFormatValue(nImporto) + " €</th>" +
+								"<th style='text-align:right'>" + nProgetti + " progetti</th>" +
+								"<th style='text-align:right'>" + ((nInGara + nAggiudicato) / nProgetti * 100).toFixed(2) + "% </th>" +
+								"<th style='text-align:right'>" + ((nAggiudicato) / nProgetti * 100).toFixed(2) + "% </th>";
+							szHtml += "</tr>";
+						}
+						szHtml += "</table>";
+						szHtml += "</div>";
+					}
+
+
+					szHtml += "</br>";
+					szHtml += "</br>";
+					szHtml += "</br>";
+					szHtml += "</br>";
+
+
+
+					$("#list-codici-submisure").html(szHtml);
+				});
+		};
+
+
+
+
+
+		listSubmisura_II();
+
+	</script>
+
+</body>
+
+</html>
