@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+
+	<div id="legend" style="display:none">
+		<span style='color:white'>
+			<h1 style='margin-top:1.5em'>Incidenza cummulativa di 7 giorni e tendenza</h1>
+			<h3 style='margin-top:-1em'>Daten: <a href='https://github.com/pcm-dpc/COVID-19' target='_blank'>Dipartimento della Protezione Civile</a> Lizenz: <a href='https://creativecommons.org/licenses/by/4.0/deed.de' target='_blank'>CC BY 4.0</a> Visualisierung: <a href='www.ixmaps.com' target='_blank'>iXMaps</a></h3>
+		</span>
+	</div>
+
+	<div id="attribution" style="display:none">
+		<span style='color:#013161'>
+			Daten: <a href='https://github.com/pcm-dpc/COVID-19' target='_blank' style='color:#316191'>CPM DPC</a> Lizenz: <a href='https://creativecommons.org/licenses/by/4.0/deed.de' target='_blank' style='color:#316191'>CC BY 4.0</a> Visualisierung: <a href='www.ixmaps.com' target='_blank' style='color:#316191'>iXMaps</a>
+		</span>
+	</div>
+
+	<!--========================================================================= -->
+
+	<script src="../../ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		
+		PCM_DPC_COVID_SEQUENCE_INCIDENZA_100000_CUMUL_7_LAST_7 = function(theme, options) {
+
+			/** define data sources **/
+			
+			var szUrl1 = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv";
+			var szUrl2 = "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ISTAT/DCIS_POPRES_Province_2019.csv";
+
+			/** get and process data **/
+			
+			var broker = new Data.Broker()
+			
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function(dataA) {
+
+						var mydata = dataA[0];
+						var dataPop = dataA[1];
+
+						/** make pivot: one row x province with one column per date **/
+						
+						/** correct some cells **/
+						mydata.column("data").map(function(value) {
+							return value.split(" ")[0];
+						});
+
+						/** exclude rows with not relevant data **/
+						mydata = mydata.select("WHERE \"denominazione_provincia\" NOT \"In fase\" AND \"denominazione_provincia\" NOT \"Fuori\"");
+
+						/** make pivot **/
+						var pivot = mydata.pivot({
+							lead: "codice_provincia",
+							columns: "data",
+							value: "totale_casi",
+							keep: ["lat", "long", "denominazione_provincia", "denominazione_regione"]
+						});
+						/** last pivot column = Total, remove it **/
+						pivot.column("Total").remove();
+
+						/** translate dates -> local dates **/
+						var columns = pivot.columnNames();
+						for (var i = 4; i < columns.length; i++) {
+							var date = new Date(columns[i]).toLocaleDateString();
+							pivot.column(columns[i]).rename(date);
+						}
+						columns = pivot.columnNames();
+
+						/** make incidenze **/
+						/** make lookupArray from second data source: COD_PROV ==> population **/
+						var popA = dataPop.lookupArray("Value", "COD_PROV");
+
+						/** calcolate 7 day incidences from table end to begin - 7 **/
+						var lastColumn = columns.length - 1;
+						var records = pivot.records;
+						for (var r = 0; r < records.length; r++) {
+							for (var c = lastColumn; c >= 7; c--) {
+								var last = Number(records[r][c]);
+								var before = Number(records[r][c - 7]);
+								records[r][c] = ((last - before) / popA[Number(records[r][0])] * 100000).toFixed(2);
+							}
+						}
+
+						/** and set title, xaxis and label **/
+						
+						theme.szLabelA = columns.slice(-7);
+						theme.szXaxisA = columns.slice(-7);
+						for (var i=1; i<6; i++){
+							theme.szXaxisA[i] = "";
+						}
+						ixmaps.setTitle(
+							"<span style='color:#aaaaaa;font-family:Arial;font-size:0.6em'>aggiornato al: " +
+							columns[lastColumn] +
+							"</span>"
+						);
+					
+						/** to use the data in the themes, we have two possibilities
+						    we can insert the column names of the last 7 columns into the theme definition
+						    or change column names to be equal to the theme definition.
+							because the column names will change by future data releases,
+							we use the latter one to have an update resistent procedure **/
+						
+						pivot.column(columns[lastColumn]).rename("incidenza");
+						pivot.column(columns[lastColumn-1]).rename("incidenza-1");
+						pivot.column(columns[lastColumn-2]).rename("incidenza-2");
+						pivot.column(columns[lastColumn-3]).rename("incidenza-3");
+						pivot.column(columns[lastColumn-4]).rename("incidenza-4");
+						pivot.column(columns[lastColumn-5]).rename("incidenza-5");
+						pivot.column(columns[lastColumn-6]).rename("incidenza-6");
+
+						/** -----------------------------------------------------------------------------------------------               
+						    deploy the data
+						    ------------------------------------------------------------------------------------------- **/
+
+						ixmaps.setExternalData(pivot, {
+							type: "dbtable",
+							name: options.name
+						});
+
+					});
+
+		};
+
+		// ----------------------------------------
+		// create the map
+		// ----------------------------------------
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapType: "#013161",
+					width: "840px",
+					height: "820px",
+					legend: "true",
+					align: "center",
+					mode: "info",
+					name: "map_1"
+				},
+				map => map
+				.options({
+					objectscaling: "dynamic",
+					normalSizeScale: "1000000",
+					panhidden: "false",
+					basemapopacity: "0.3",
+					flushPaintShape: "100000"
+				})
+				.local("loading data ...", "...")
+				.local("... loading data ...", "...")
+				.local("... creating theme ...", "...")
+				.local("...", "")
+				.view([42.062758505472385, 12.532734929102702], 6.1)
+				.legend(document.getElementById("legend").innerHTML)
+				.attribution(document.getElementById("attribution").innerHTML)
+				.require("../../ui/js/tools/tooltip_basic.js")
+
+				// province bounderies			 
+				// --------------------------------------------------------------------------
+				.layer(ixmaps.layer("Province_2019")
+					.data({
+						url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2019/Province_s.geojson.gz",
+						type: "geojson"
+					})
+					.type("FEATURES|NOLEGEND")
+					.binding({
+						id: "COD_PROV"
+					})
+					.style({
+						colorscheme: ["#ffffff"],
+						linecolor: ["#ffffff"],
+						linewidth: "0.3"
+					})
+					.define()
+				)
+
+				// choropleth theme with last incidence
+				// --------------------------------------------------------------------------
+				.layer(ixmaps.theme("Province_2019")
+					.data({
+						query: PCM_DPC_COVID_SEQUENCE_INCIDENZA_100000_CUMUL_7_LAST_7.toString(),
+						type: "ext",
+						name: "PCM_DPC_COVID_SEQUENCE_INCIDENZA_100000_CUMUL_7_LAST_7"
+					})
+					.type("CHOROPLETH|COMPACTLEGEND")
+					.binding({
+						value: "incidenza",
+						position: "codice_provincia",
+						tonumber: true
+					})
+					.style({
+						colorscheme: [
+							"15",
+							"green",
+							"red",
+							"3colors",
+							"white"
+						],
+						opacity: 1,
+						dopacitypow: 1,
+						dopacityscale: 3,
+						units: "/ 100.000",
+						titlefield: "denominazione_provincia"
+					})
+					.meta({
+						title: "7 Tage Incidenz (100.000)"
+					})
+					.define()
+				)
+
+				// last incidence as text (aggregated)
+				// --------------------------------------------------------------------------
+				.layer(ixmaps.theme("Province_2019")
+					.data({
+						name: "PCM_DPC_COVID_SEQUENCE_INCIDENZA_100000_CUMUL_7_LAST_7"
+					})
+					.type("CHART|LABEL|SIZELOG|VALUES|TEXTONLY|AGGREGATE|RELOCATE|MAX|COMPACTLEGEND")
+					.binding({
+						value: "incidenza",
+						position: "codice_provincia",
+						tonumber: true
+					})
+					.style({
+						colorscheme: [
+							"RGBA(255,255,255,0.5)"
+						],
+						scale: 2,
+						offsety: -15,
+						textcolor: "#660000",
+						titlefield: "denominazione_provincia"
+					})
+					.meta({
+						title: "7 Tage Incidenz (100.000)"
+					})
+					.define()
+				)
+
+				// last 7 incidences as curves (zoom dependent)
+				// --------------------------------------------------------------------------
+				.layer(ixmaps.theme("Province_2019")
+					.data({
+						name: "PCM_DPC_COVID_SEQUENCE_INCIDENZA_100000_CUMUL_7_LAST_7"
+					})
+					.type("CHART|SYMBOL|SEQUENCE|PLOT|FIXSIZE|LINES|AREA|LASTARROW|NOCLIP|AGGREGATE|RELOCATE|MAX|GRID|BOX|BOTTOMTITLE|COMPACTLEGEND")
+					.binding({
+						value: ["incidenza-6","incidenza-5","incidenza-4","incidenza-3","incidenza-2","incidenza-1","incidenza"],
+						position: "codice_provincia",
+						tonumber: true
+					})
+					.filter("WHERE \"denominazione_provincia\" NOT \"aggio\"")
+					.style({
+						colorscheme: [
+							"#660000"
+						],
+						symbols: ["circle"],
+						fillopacity: 0.1,
+						linewidth: 5,
+						markersize: 2,
+						scale: 0.3,
+						normalsizevalue: 3,
+						align: "23right|bottom",
+						boxcolor: "none",
+						textcolor: "#660000",
+						textscale: 8,
+						boxcolor: "none",
+						bordercolor: "none",
+						titlefield: "denominazione_provincia",
+						chartupper: "1:50000000",
+						boxupper: "1:2000000"
+					})
+					.meta({
+						title: "Incidenza cumultiva di 7 giorni (per 100.000 abitanti), tendenza per l'ultima settimana"
+					})
+					.define()
+				)
+			)
+		);
+
+	</script>
+</body>
+
+</html>
