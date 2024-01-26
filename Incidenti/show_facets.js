@@ -345,8 +345,8 @@ ixmaps.data = ixmaps.data || {};
 		var objTheme = ixmaps.data.objTheme;
 
 		var szHtml = "";
-		var	szHighlight = '$(".icon").show()';
-		var szClearHighlight = '$(".icon").hide()';
+		var	szHighlight = '$(".shareIcon").show()';
+		var szClearHighlight = '$(".shareIcon").hide()';
 		szHtml += "<div id='list-facets' class='list-group' style='width:100%;margin-bottom:5em;' onmouseover='" + szHighlight + "' onmouseout='" + szClearHighlight + "'>";
 		
 		szDiv = (szDiv || "facets");
