@@ -146,7 +146,7 @@ ixmaps.data = ixmaps.data || {};
 		var objThemesA = ixmaps.getThemes();
 		for (a in objThemesA) {
 			objTheme = objThemesA[a];
-			if (objTheme.szFlag.match(/CHART|CHOROPLETH/)) {
+			if (objTheme.szFlag.match(/CHART|CHOROPLETH/) && !objTheme.szFlag.match(/LOCKED/)) {
 				ixmaps.message('&#9881;');
 				if (szFilter) {
 					ixmaps.changeThemeStyle(null, objTheme.szId, "filter:" + (szFilter || " "), "set");
