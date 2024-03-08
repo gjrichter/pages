@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body style="max-width: 1024px;margin:auto;font-family:open sans;font-size:22px">
+	
+	<div id="map"></div>
+	
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+
+		var nuts_0 = ixmaps
+			.layer("nuts_0")
+			.data({
+				url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_0.geojson",
+				type: "geojson"
+			})
+			.binding({
+				id: "CNTR_CODE"
+			})
+			.style({
+				colorscheme: ["rgba(0,155,155,0.2)"],
+				fillopacity: "1",
+				linecolor: ["#dddddd"],
+				linewidth: "1"
+			})
+			.define();
+
+		// from 2010 to 2021 as curves (zoom dependent)
+
+		var flowers = ixmaps
+			.theme("nuts_0")
+			.data({
+				name: "themeDataObj",
+				url: "https://raw.githubusercontent.com/gjrichter/pages/main/Sesso%20e%20Potere/dati/sdg_05_50_tabular.csv",
+				type: "csv",
+				cache: "true"
+			})
+			.filter("WHERE org_inst = GOV_NAT")
+			.type("CHART|PIE|STARBURST|XLBOW|CLASSES|QUANTILE|XLRAYS|SIZEP3")
+			.binding({
+				geo: "geo\\TIME_PERIOD",
+				value: ["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+				title: "geo\\TIME_PERIOD"
+			})
+			.style({
+				colorscheme: [
+					"50",
+					"#F7EDee",
+					"#F7ED00",
+					"dynamic",
+					"cold"],
+				units: "%", 
+				boxcolor: "none",
+				textcolor: "#dd00bb",
+				scale: "1",
+				valuescale: "0.8",
+				shadow: "true",
+				showdata: "false",
+				maxvalue: "100"
+			})
+			.meta({
+				title: "<span style='color:#F7ED00;font-family:MV boli;font-size:1.5em;font-weight:100'>Percentuale di <span style='color:#D9041F;font-weight:700;'>donne</span> nei governi nazionali dal 2005 al 2022</span>",
+				description: "<span style='color:#D9041F;font-family:MV boli;font-size:1.5em;font-weight:100'>da leggere in senso orario</span>"
+			})
+			.define();
+
+
+
+
+		var attribution = '<span style="font-family:MV boli;margin-bottom:-2em">data: EUROSTAT <a href="https://ec.europa.eu/eurostat/web/products-datasets/-/sdg_05_50/" target="_blank">Seats held by women in national parliaments and governments</a>, powered by <a href="http://ixmaps.com" target="_blank">iXMaps</a</span>';
+
+		// ----------------------------------------
+		// create the map
+		// ----------------------------------------
+
+		var	map = ixmaps.embed(
+				"map", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					map: "../../maps/svg/maps/generic/winkel.svg",
+					mapService: "leaflet",
+					mapType: "#B5D5A7",
+					mode: "info",
+					width: "100%",
+					height: "800px",
+					legend: true,
+					align: "right",
+					silent: "true"
+				},
+				(map) =>
+				map
+				.view([50.48804553605622, 19.608398437500004], 4.5)
+				.require("../../ui/js/tools/tooltip_basic.js")
+				.options({
+					objectscaling: "dynamic", // grafici crescono leggermente con lo zoom
+					normalSizeScale: "5000000", // grandezza 'normale' al livello 1:5.000.000
+					dynamicScalePow: "1.8", // dynamica, 1 crescita lineare, valori > 1 meno crescita
+					panhidden: "false" // grafici visibile durante lo spostamento della mappa
+				})
+				.attribution(attribution)
+				.layer(nuts_0)
+				.layer(flowers)
+			);
+
+	</script>
+</body>
+
+</html>
