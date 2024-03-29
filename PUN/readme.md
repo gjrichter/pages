@@ -1,23 +1,15 @@
-# ItaliaDomani - dati da ReGIS - v4 - 04.12.2023
+### I dati del 
 
-Una mappa configurabile per visualizzare l'impatto territoriale dei progetti PNRR
+# PUN - P*iattaforma* U*nica* N*azionale* 
 
-Fonte: <a href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani - Open Data PNRR</a>  
+###### dei punti di ricarica per i veicoli elettrici
 
-<iframe id="map1" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_reg_prov_com.html?legend=1"></iframe>
-*mappa 1: finanziamenti PNRR e complementari per missioni e territorio*  --> [a schermo intero](https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_reg_prov_com.html)
+Una mappa per esplorare i dati del PUN, estratti dal sito da **A.Borruso** e resi fruibili per il riuso su **GitHub** di **onData**
 
+Fonte: <a href="https://www.piattaformaunicanazionale.it/idr" target="_blank">www.piattaformaunicanazionale.it</a>  ---> [https://github.com/ondata/rete_ricarica_veicoli_elettrici](https://github.com/ondata/rete_ricarica_veicoli_elettrici)
 
+<iframe id="map1" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PUN/index_embed_PUN_onData.html"></iframe>
 
-<iframe id="map2" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_pro_cap_reg_prov_com.html?legend=1"></iframe>
-*mappa 2: finanziamenti pro capite*  --> [a schermo intero](https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_pro_cap_reg_prov_com.html)
-
-
-
-<iframe id="map3" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_gauge_reg_prov_com.html?legend=1"></iframe>
-*mappa 3: avanzamenti dei progetto per gare e aggiudicazioni*  --> [a schermo intero](https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_glow_white_cig_fintotale_icons_gauge_reg_prov_com.html)
+*mappa 1: esplorare i dati del PUN*  --> [a schermo intero](https://gjrichter.github.io/pages/PUN/index_embed_PUN_onData.html)
 
 
-
-<iframe id="map0" width="1024px" height="840" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_list_submisure_v4_pivot.html"></iframe>
-*elenco 1: analisi dei finanziamenti e dell'avanzamento per submisure*  --> [a schermo intero](https://gjrichter.github.io/pages/PNRR_2023_12_v4/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_list_submisure_v4_pivot.html)
