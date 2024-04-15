@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximal-scale=1.0, user-scale=no" >
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body style='text-align:center;background:#F6F0E3'>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		
+		ixmaps.htmlgui_onZoomAndPan = function(nZoom){
+			var nOpacity = (ixmaps.getZoom() - 6) / 3;
+			ixmaps.setBasemapOpacity(null, nOpacity, "absolute");
+		}
+		
+	</script>	
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapService: "leaflet_vt",
+					mapType: "VT_DATAVIZ",
+					height: "720px",
+					legend: "true",
+					search: "Europe"
+				}, map => map
+				.view([42.17154633452754, 13.699951171875], 6)
+				.require("../../ui/js/tools/tooltip_basic.js")
+				.options({
+					featurescaling: "dynamic",
+					objectscaling: "dynamic",
+					normalSizeScale: "1000000",
+					dynamicScalePow: "7",
+					panhidden: "false",
+				})
+				.layer(
+					ixmaps.layer("Comuni", layer => layer
+						.data("https://confini-amministrativi.it/api/v2/it/20200101/comuni.topo.json", "topojson")
+						.binding({
+							id: "pro_com",
+							size: "shape_area"
+						})
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "white",
+							linewidth: "0.2"
+						})
+						.title("Comuni")
+					)
+				)
+				.layer(
+					ixmaps.layer("Regioni", layer => layer
+						.data("https://confini-amministrativi.it/api/v2/it/20200101/regioni.topo.json", "topojson")
+						.binding({
+							id: "cod_reg"
+						})
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "black",
+							linewidth: "0.5"
+						})
+						.title("Comuni")
+					)
+				)
+				.theme(
+					ixmaps.layer("Comuni", layer => layer
+						.data("https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Italia/MEF/Redditi_e_principali_variabili_IRPEF_su_base_comunale_CSV_2020.csv.gz", "csv")
+						.binding({
+							geo: "Codice Istat Comune",
+							value: "Reddito da lavoro autonomo (comprensivo dei valori nulli) - Ammontare in euro",
+							value100: "Reddito da lavoro autonomo (comprensivo dei valori nulli) - Frequenza",
+							title: "Denominazione Comune"
+						})
+						.type("CHOROPLETH|FRACTION|QUANTILE|DOPACITYMINMAX")
+						.style({
+							colorscheme: [
+								"50",
+								"#006364",
+								"#DA3F00",
+								"3colors",
+								"#E6E1BE"],
+							fillopacity: "auto",
+							units: "€",
+							valuesupper: "1:1000000",
+							dopacitypow: "0.5",
+							dopacityscale: "3000"
+						})
+						.title("<div style='border-radius:0.5em;font-family:courier new,Raleway,arial,helvetica;font-weight:50;'><h3>Reddito da lavoro <b>autonomo</b> anno <b>2020</b> (comprensivo dei valori nulli) - Ammontare in euro</h3></div>")
+					)
+				)
+				.theme(
+					ixmaps.layer("Comuni", layer => layer
+						.data("https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Italia/MEF/Redditi_e_principali_variabili_IRPEF_su_base_comunale_CSV_2020.csv.gz", "csv")
+						.binding({
+							position: "Codice Istat Comune",
+							value: "Reddito da lavoro autonomo (comprensivo dei valori nulli) - Ammontare in euro",
+							value100: "Reddito da lavoro autonomo (comprensivo dei valori nulli) - Frequenza",
+							title: "Denominazione Comune"
+						})
+						.type("CHART|LABEL|TEXTONLY|FRACTION|VALUES|AGGREGATE|RELOCATE|SUM|BOX|BOTTOMTITLE|NOLEGEND")
+						.style({
+							"colorscheme": [
+								"white"
+							],
+							"linecolor": "none",
+							fillopacity: "0.00001",
+							textcolor: "black",
+							textscale: "0.9",
+							scale: "1.5",
+							normalsizevalue: "80000",
+							units: "€",
+							gridwidthpx: "50",
+							boxopacity: "0.2",
+							borderradius: "2",
+							titleupper: "1:250000"
+						})
+						.title("Comuni")
+					)
+				)
+			)
+		);
+
+	</script>
+</body>
+
+</html>
