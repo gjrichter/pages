@@ -60,7 +60,7 @@ $Log:index_only_map_embed.html,v $
 					search: "Europe"
 				}, map => map
 				.view([42.17154633452754, 13.699951171875], 6)
-				.require("../../ui/js/tools/tooltip_basic.js")
+				.require("../../ui/js/tools/tooltip_mustache.js")
 				.options({
 					featurescaling: "dynamic",
 					objectscaling: "dynamic",
@@ -120,7 +120,8 @@ $Log:index_only_map_embed.html,v $
 							units: "€",
 							valuesupper: "1:1000000",
 							dopacitypow: "0.5",
-							dopacityscale: "3000"
+							dopacityscale: "3000",
+							tooltip: "{{Denominazione Comune}}<br><h2 style='margin:0.3em 0 0 0'>{{theme.item.value}}&nbsp;€</h2>"
 						})
 						.title("<div style='border-radius:0.5em;font-family:courier new,Raleway,arial,helvetica;font-weight:50;'><h3>Reddito da lavoro <b>autonomo</b> anno <b>2020</b> (comprensivo dei valori nulli) - Ammontare in euro</h3></div>")
 					)
