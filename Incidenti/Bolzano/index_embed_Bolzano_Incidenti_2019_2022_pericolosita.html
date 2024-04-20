@@ -318,17 +318,6 @@ $Log:index_only_map_embed.html,v $
 
 			ixmaps.statistics(szId);
 
-			if (themeObj.szFilter) {
-				var szFilterClipped = (themeObj.szFilter.length > 100) ? (themeObj.szFilter.substr(0, 100) + " ... ") : themeObj.szFilter;
-				$("#filter").html(szFilterClipped);
-				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + szFilterClipped.split("WHERE")[1] + "</div>");
-				$("#filter-div").show();
-			} else {
-				$("#filter").html("");
-				ixmaps.setTitle("");
-				$("#filter-div").hide();
-			}
-
 			__actualizeUrl(themeObj);
 
 			$("#scroll-area").height(window.innerHeight - $("#scroll-area").offset().top - 50);
