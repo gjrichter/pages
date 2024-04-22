@@ -60,11 +60,14 @@ $Log:index_only_map_embed.html,v $
 			<h1 style='margin:0em'>punti di ricarica<span style="font-size:0.6em"> per i veicoli elettrici</span></h1>
 			<p>Dati: strappati da <a style="color:#0088dd" href="https://www.piattaformaunicanazionale.it/idr" target="_blank">piattaformaunicanazionale.it</a>  da <a style="color:#0088dd"href="https://github.com/ondata/rete_ricarica_veicoli_elettrici" target="_blank">A.Borruso</a></p>
 			<div style="margin-top:0.5em;margin-left:-0.8em">
-				  <input type="radio" id="html" name="fav_language" value="" checked="checked" onclick="ixmaps.clearAll(null);ixmaps.newTheme(null,theme_fasce_potenza)">
+				  <input type="radio" id="html" name="fav_language" value="" checked="checked" onclick="ixmaps.clearAllCharts('map');ixmaps.newTheme('map',theme_fasce_potenza);ixmaps.newTheme('map',theme_fasce_potenza_II)">
 				  <label for="html">Fasce di potenza</label>
-				  <input type="radio" id="css" name="fav_language" value="camere" onclick="ixmaps.clearAll(null);ixmaps.newTheme(null,theme_power_type)">
-				  <label for="css">Tipo di alimentazione</label>
+				  <input type="radio" id="css" name="fav_language" value="camere" onclick="ixmaps.clearAllCharts('map');ixmaps.newTheme('map',theme_power_type);ixmaps.newTheme('map',theme_power_type_II)">
+				  <label for="css">Tipo alimentazione e potenza</label>
 			</div>
+			<div>
+			Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> colonnine 
+			con una potenza erogabile complessiva di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; Watt</div>
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 				<span id="filter"></span>
 				<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
@@ -198,6 +201,7 @@ $Log:index_only_map_embed.html,v $
 
 		var sizeCharts = function(nFactor) {
 			ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'chart_II', 'scale:' + nFactor, 'factor');
 
 			themesA = ixmaps.getThemes();
 			for (i in themesA) {
@@ -209,6 +213,7 @@ $Log:index_only_map_embed.html,v $
 		}
 		var setChartSize = function(nValue) {
 			ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nValue, 'set');
+			ixmaps.changeThemeStyle(null, 'chart_II', 'scale:' + nValue, 'set');
 		}
 		var sizeGrid = function(nFactor) {
 			ixmaps.changeThemeStyle(null, 'chart', 'gridwidth:' + nFactor, 'factor');
@@ -228,6 +233,7 @@ $Log:index_only_map_embed.html,v $
 		}
 		var clearFilter = function(szFilter) {
 			ixmaps.changeThemeStyle(null, 'chart', 'filter', 'remove');
+			ixmaps.changeThemeStyle(null, 'chart_II', 'filter', 'remove');
 
 		}
 
@@ -271,10 +277,18 @@ $Log:index_only_map_embed.html,v $
 			var themeObj = ixmaps.getThemeObj(szId);
 			var lastFilter = themeObj.szFilter || "";
 
-			if (szId == "chart") {
+			if (szId.match(/chart/)) {
+
+				var szFieldsA = ["Potenza_erogabile"];
+				var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
+				var projects = facetsA[0].data ? ixmaps.formatValue(facetsA[0].data.length, 0, "BLANK") : "0";
+				var importi = facetsA[0].sum ? ixmaps.formatValue(facetsA[0].sum, 0, "BLANK") : "0";
+				
+				$("#no_progetti").html(projects);
+				$("#sum_importi").html(importi);
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = 				["Fasce_di_potenza","Tipologia_di_alimentazione","OBJECTID","ID_location","Nome_location","Indirizzo","Regione","Città","Codice_postale","Provincia","Orario_d_apertura","ID_univoco_EVSE","ID_EVSE","Stato","Numero_Connettori","ID_connettore","Standard_del_connettore","Formato_del_connettore","Voltaggio_massimo","Amperaggio_massimo","Potenza_erogabile","Stato_di_pubblicazione","Longitudine_EVSE","Latitudine_EVSE","Capabilities","Data_ultimo_aggiornamento","Data_di_caricamento","Comune"];
+				szFieldsA = 				["Fasce_di_potenza","Tipologia_di_alimentazione","EVSE","OBJECTID","ID_location","Nome_location","Indirizzo","Regione","Città","Codice_postale","Provincia","Orario_d_apertura","ID_univoco_EVSE","ID_EVSE","Stato","Numero_Connettori","ID_connettore","Standard_del_connettore","Formato_del_connettore","Voltaggio_massimo","Amperaggio_massimo","Potenza_erogabile","Stato_di_pubblicazione","Longitudine_EVSE","Latitudine_EVSE","Capabilities","Data_ultimo_aggiornamento","Data_di_caricamento","Comune"];
 				
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map", "NONUMERIC");
 				
@@ -439,6 +453,9 @@ $Log:index_only_map_embed.html,v $
 			data.column("Data_di_caricamento").map(value => {
 				return new Date(Number(value)).toDateString();
 			});
+			data.addColumn({source:"ID_EVSE",destination:"EVSE"},value => {
+				return(value.split("*")[1]);
+			});
 		};
 		
 		
@@ -459,12 +476,13 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: ["#0061A1"],
 					linecolor: "#0061A1",
-					linewidth: "2"
+					linewidth: "15"
 				})
 			);
 
 		var theme_fasce_potenza = ixmaps.layer("mercator", layer => layer
 			.data({
+				name: "rete_ricarica_veicoli_elettrici",
 				url: "https://raw.githubusercontent.com/ondata/rete_ricarica_veicoli_elettrici/main/data/rete_ricarica_veicoli_elettrici.csv",
 				type: "csv",
 				process: __process_date.toString()
@@ -477,20 +495,57 @@ $Log:index_only_map_embed.html,v $
 			.style({
 				type: "CHART|SYMBOL|SEQUENCE|GLOW|CATEGORICAL|ORDER|VALUES|AGGREGATE|RELOCATE|SUM|CLIPTOGEOBOUNDS",
 				colorscheme: [17, "tableau20"],
+				values: ["Veloce o Fast","Accelerata o Quick","Ultraveloce o Ultra-fast","Lenta o Slow"],
 				fillopacity: "1",
 				showdata: "true",
 				scale: "1",
-				normalsizevalue: "1000",
+				normalsizevalue: "10",
 				valuefield: "$item$",
 				linecolor: "black",
-				linewidth: "1",
+				linewidth: "5",
+				glowlower: "1:500000",
 				valueupper: "1:500000",
+				chartlower: "1:100000",
 				gridwidth: "1px",
 				name: "chart"
 			})
 			.meta({
 				title: "E-charging in stations Italy",
 			snippet: "dati strappati dal WEB da A.Borruso"
+			})
+		);
+
+		var theme_fasce_potenza_II = ixmaps.layer("mercator", layer => layer
+			.data({
+				name: "rete_ricarica_veicoli_elettrici"
+			})
+			.binding({
+				position: "Y|X",
+				value: "Fasce_di_potenza",
+				size: "$item$"
+			})
+			.style({
+				type: "CHART|SYMBOL|UP|CATEGORICAL|ORDER|SIZEP4|VALUES|SUM|MULTIPLE|GROUP|INLINETEXT|CLIPTOGEOBOUNDS",
+				colorscheme: [17, "tableau20"],
+				values: ["Veloce o Fast","Accelerata o Quick","Ultraveloce o Ultra-fast","Lenta o Slow"],
+				fillopacity: "0.7",
+				shadow: "true",
+				showdata: "true",
+				symbols: "roundrect",
+				scale: "1",
+				normalsizevalue: "100",
+				valuefield: "Tipologia_di_alimentazione",
+				valuescale: "0.7",
+				linecolor: "white",
+				linewidth: "1",
+				chartupper: "1:100000",
+				gridwidth: "3px",
+				tooltip: "<b>{{ID_EVSE}}</b><p>{{Indirizzo}}<br>{{raw.Codice_postale}} {{Città}}</p><p><b>{{Tipologia_di_alimentazione}}<br>{{Potenza_erogabile}} Watt</b><br><br>{{Orario_d_apertura}}</p>",
+				name: "chart_II"
+			})
+			.meta({
+				title: "E-charging in stations Italy",
+				snippet: "dati strappati dal WEB da A.Borruso"
 			})
 		);
 
@@ -512,12 +567,49 @@ $Log:index_only_map_embed.html,v $
 				showdata: "true",
 				units: "W",
 				scale: "1",
-				normalsizevalue: "10000000",
+				normalsizevalue: "100000",
+				valuefield: "Potenza_erogabile",
 				linecolor: "black",
-				linewidth: "0.3",
+				linewidth: "1",
 				valueupper: "1:500000",
+				chartlower: "1:100000",
 				gridwidth: "1px",
 				name: "chart",
+				tooltip: "{{theme.item.chart}}"
+			})
+			.meta({
+				title: "E-charging in stations Italy",
+			snippet: "dati strappati dal WEB da A.Borruso"
+			})
+		);
+		
+		var theme_power_type_II = ixmaps.layer("mercator", layer => layer
+			.data({
+				url: "https://raw.githubusercontent.com/ondata/rete_ricarica_veicoli_elettrici/main/data/rete_ricarica_veicoli_elettrici.csv",
+				type: "csv",
+				process: __process_date.toString()
+			})
+			.binding({
+				position: "Latitudine_EVSE|Longitudine_EVSE",
+				value: "Tipologia_di_alimentazione",
+				size: "Potenza_erogabile"
+			})
+			.style({
+				type: "CHART|SYMBOL|UP|CATEGORICAL|ORDER|SIZEP4|VALUES|SUM|MULTIPLE|GROUP|INLINETEXT|CLIPTOGEOBOUNDS",
+				colorscheme: __setColorsTipo.toString(),
+				symbols: "roundrect",
+				fillopacity: "0.5",
+				showdata: "true",
+				units: "W",
+				"normalsizevalue": "5000000",
+				"scale": "1",
+				valuefield: "Potenza_erogabile",
+				valuescale: "0.3",
+				linecolor: "white",
+				linewidth: "0.3",
+				chartupper: "1:100000",
+				gridwidth: "3px",
+				name: "chart_II",
 				tooltip: "{{theme.item.chart}}"
 			})
 			.meta({
@@ -541,24 +633,27 @@ $Log:index_only_map_embed.html,v $
 				height: (window.innerHeight - 15) + "px",
 				legend: ((__legend == true) ? "true" : 0),
 				tools: "true",
+				search: "Italy",
 				about: "test"
 			},
 			map => map
 			.view([__lat||42.02856104646156, __lon||12.150152576755932], __zoom||6.3)
 			.options({
+				featurescaling: "dynamic",
 				objectscaling: "dynamic",
-				normalSizeScale: "10000000",
+				normalSizeScale: "100000",
 				dynamicScalePow: "2",
 				flushChartDraw: "10000",
 				panhidden: "false"
 			})
-			.require("../../ui/js/tools/tooltip_basic.js")
+			.require("../../ui/js/tools/tooltip_mustache.js")
 			.attribution(attribution)
 			.local("loading data ...","scarico dati ...")
 			.legend(" ")
 
 			.layer(__autostrade)
 			.layer(theme_fasce_potenza)
+			.layer(theme_fasce_potenza_II)
 		);
 
 		// ---------------------------------------------------
