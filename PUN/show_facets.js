@@ -558,6 +558,10 @@ ixmaps.data = ixmaps.data || {};
 				}
 			} else
 			if (facetsA[i].values) {
+				
+				if (facetsA[i].values.length == 0){
+					szHtml += '<div>'+facetsA[i].values.length+'</div>';
+				}
 
 				// ---------------------------------
 				// type B
@@ -623,8 +627,6 @@ ixmaps.data = ixmaps.data || {};
 						}
 
 						var nWidth = (100 / nMaxCount * nCount);
-						console.log(facetsA[i].id);
-						console.log(nWidth);
 						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues >= 2)) {
 							
 							szHtml += '<div style="position:relative;top:3px;left:0.1em;background:'+bgColor+';line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
