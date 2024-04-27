@@ -332,6 +332,14 @@ $Log:index_only_map_embed.html,v $
 				return;
 			}
 
+			// set the values of the 'detail' theme to the values of the 'main' theme
+			// if we don't do this, colors will not match on zoom dependent 'detail' theme (chart_II)
+			if ( szId == 'chart' ){
+				if (themeObj.szValuesA){
+					ixmaps.changeThemeStyle(null,"chart_II","values:"+ themeObj.szValuesA.join(","),"set");
+				}
+			}
+			
 			ixmaps.statistics(szId);
 
 			if (themeObj.szFilter) {
@@ -483,7 +491,8 @@ $Log:index_only_map_embed.html,v $
 				fillopacity: "0.9",
 				showdata: "true",
 				scale: "1",
-				normalsizevalue: "300000",
+				normalsizevalue: "500000",
+				sizepow: 3,
 				units: "W",
 				valuefield: "$item$",
 				linecolor: "black",
