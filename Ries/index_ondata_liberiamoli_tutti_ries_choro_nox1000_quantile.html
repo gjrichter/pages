@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximal-scale=1.0, user-scale=no" >
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body style='text-align:center;background:#FFFFFF'>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		
+		ixmaps.htmlgui_onZoomAndPan = function(nZoom){
+			var nOpacity = (ixmaps.getZoom() - 6) / 3;
+			ixmaps.setBasemapOpacity(null, nOpacity, "absolute");
+		}
+		
+	</script>	
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		
+		var query = (themeObj,options) => {
+			
+			var szUrl1 = "https://raw.githubusercontent.com/ondata/liberiamoli-tutti/main/ries/data/ries.csv";
+			var szUrl2 = "https://raw.githubusercontent.com/ondata/liberiamoli-tutti/main/ries/data/comuni_dimensioni.csv";
+			var broker = new Data.Broker()
+				.addSource(szUrl1, "csv")
+				.addSource(szUrl2, "csv")
+				.realize(
+					function(dataA) {
+						pivot = dataA[0].pivot({
+							lead: "codice_comune_alfanumerico",
+							keep: "istat_comune_nome"
+						});
+						var pop_resA = dataA[1].lookupArray({key:"PRO_COM_T",value:"POP_RES"});
+						pivot.addColumn({source:"codice_comune_alfanumerico",destination:"pop_res"},value => {
+							return pop_resA[value];
+						});
+						options.type = "dbtable";
+						ixmaps.setExternalData(pivot, options);
+					});
+		}
+		
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapService: "leaflet_vt",
+					mapType: "VT_DATAVIZ",
+					height: "720px",
+					legend: "true",
+					search: "Europe"
+				}, map => map
+				.view([42.17154633452754, 13.699951171875], 6)
+				.require("../../ui/js/tools/tooltip_mustache.js")
+				.options({
+					featurescaling: "dynamic",
+					objectscaling: "dynamic",
+					normalSizeScale: "1000000",
+					dynamicScalePow: "5",
+					panhidden: "false",
+				})
+				.layer(
+					ixmaps.layer("Comuni", layer => layer
+						.data("https://confini-amministrativi.it/api/v2/it/20210101/comuni.topo.json", "topojson")
+						.binding({
+							id: "pro_com",
+							size: "shape_area"
+						})
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "white",
+							linewidth: "0.2"
+						})
+						.title("Comuni")
+					)
+				)
+				.layer(
+					ixmaps.layer("Comuni_centri", layer => layer
+						.data("https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Italia/Geonames/IT.csv.gz","csv")
+						.filter("WHERE \"feature code\" like ADM3")
+						.binding({
+							id: "admin3 code",
+							geo: "latitude|longitude"
+						})
+						.type("FEATURES")
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "white",
+							scale: "0",
+							linewidth: "0.2"
+						})
+						.title("Comuni Centri Urbani")
+					)
+				)
+				.layer(
+					ixmaps.layer("Regioni", layer => layer
+						.data("https://confini-amministrativi.it/api/v2/it/20210101/regioni.topo.json", "topojson")
+						.binding({
+							id: "cod_reg"
+						})
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "black",
+							linewidth: "0.5"
+						})
+						.title("Regionii")
+					)
+				)
+				.theme(
+					ixmaps.layer("Comuni", layer => layer
+						.data({
+							query: query.toString()
+						})
+						.binding({
+							position: "codice_comune_alfanumerico",
+							value: "Total",
+							value100: "pop_res",
+							title: "istat_comune_nome"
+						})
+						.type("CHOROPLETH|PERMILLE|QUANTILE")
+						.style({
+							colorscheme: [
+								"17",
+								"#FFeedd",
+								"#DA3F00"],
+							fillopacity: "auto",
+							units: "",
+							valuesupper: "1:1000000",
+							dopacitypow: "0.5",
+							dopacityscale: "3000",
+							lookuptonumber: true,
+							tooltip: "<h2 style='margin:0;white-space:nowrap'>{{istat_comune_nome}}</h2><i style='white-space:nowrap'>{{Total}} esercizi {{pop_res}} abitanti</i><h1 style='margin:0'>{{theme.item.value}}</h1><p style='margin:0'>esercizi x1000 abitanti</p>"
+						})
+						.meta({
+							title:"<div style='border-radius:0.5em;font-family:courier new,Raleway,arial,helvetica;font-weight:50;font-size:32px'><b>Numero</b> di <b>esercizi</b> con gioco d'azzardo per <b>1000</b> abitanti</div>",
+							description: "(quantili)"
+						})		 
+					)
+				)
+				/**
+				.theme(
+					ixmaps.layer("Comuni_centri", layer => layer
+						.data({
+							query: query.toString()
+						})
+						.binding({
+							position: "codice_comune_alfanumerico",
+							value: "pop_res",
+							title: "istat_comune_nome"
+						})
+						.type("CHART|BUBBLE|NOLEGEND")
+						.style({
+							colorscheme: [
+								"none"],
+							linecolor: "black",
+							linewidth: "0.3",
+							normalsizevalue: "100000",
+							maxcharts: 200,
+							lookuptonumber: true
+						})
+						.meta({
+							title:"<div style='border-radius:0.5em;font-family:courier new,Raleway,arial,helvetica;font-weight:50;font-size:32px'>Numero di esercizi con gioco d'azzardo per 1000 abitanti</div>",
+							description: "(equidistanti - valori fuori 2xdeviazione standard tagliati)"
+						})		 
+					)
+				)
+				**/
+				.theme(
+					ixmaps.layer("Comuni_centri", layer => layer
+						.data({
+							query: query.toString()
+						})
+						.binding({
+							position: "codice_comune_alfanumerico",
+							value: "Total",
+							value100: "pop_res",
+							title: "istat_comune_nome"
+						})
+						.type("CHART|LABEL|TEXTONLY|PERMILLE|NOSIZE|VALUES|AGGREGATE|RELOCATE|MEAN|BOX|TITLE|NOLEGEND")
+						.style({
+							"colorscheme": [
+								"white"],
+							"linecolor": "none",
+							fillopacity: "0.00001",
+							textcolor: "black",
+							scale: "1.5",
+							units: "",
+							boxcolor: "White",
+							boxopacity: "0.5",
+							boxupper: "1:250000",
+							bordercolor: "black",
+							borderradius: "2",
+							boxmargin: 5,
+							xxchartupper: "1:1000000",
+							textscale: "1.2",
+							valuedecimals: "1",
+							lookuptonumber: true,
+							gridwidthpx: "20",
+							tooltip: "<h2 style='margin:0'>{{istat_comune_nome}}</h2><h1 style='margin:0'>{{theme.item.value}}</h1><p style='margin:0'>esercizi x1000 abitanti</p>"
+						})
+						.meta({
+							title:"<div style='border-radius:0.5em;font-family:courier new,Raleway,arial,helvetica;font-weight:50;font-size:32px'>Numero di esercizi con gioco d'azzardo per 1000 abitanti</div>",
+							description: "(equidistanti - valori fuori 2xdeviazione standard tagliati)"
+						})		 
+					)
+				)
+			)
+		);
+
+	</script>
+</body>
+
+</html>
