@@ -100,6 +100,9 @@ ixmaps.data = ixmaps.data || {};
 
 	
 	const hex2rgba = (hex, alpha = 1) => {
+	  if (hex.match(/rgb/i)){
+		  return hex;
+	  }	
 	  const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
 	  return `rgba(${r},${g},${b},${alpha})`;
 	};	
@@ -354,7 +357,7 @@ ixmaps.data = ixmaps.data || {};
 		__szFilter = szFilter;
 		__szDiv = szDiv;
 		__facetsA = facetsA;
-		
+
 		var fTest = true;
 		var sliderA = [];
 
@@ -362,9 +365,13 @@ ixmaps.data = ixmaps.data || {};
 		var objTheme = ixmaps.data.objTheme;
 
 		var szHtml = "";
-		szHtml += "<div id='list-facets' class='list-group' style='width:100%;margin-bottom:5em;'>";
+		var	szHighlight = '$(".shareIcon").show()';
+		var szClearHighlight = '$(".shareIcon").hide()';
+		szHtml += "<div id='list-facets' class='list-group' style='width:100%;margin-bottom:5em;' onmouseover='" + szHighlight + "' onmouseout='" + szClearHighlight + "'>";
+		
+		szDiv = (szDiv || "facets");
 
-		$("#" + (szDiv || "facets")).html(szHtml);
+		$("#"+szDiv).html(szHtml);
 
 		// create an array of the filter to pass them to the executing function
 		// to avoid problems with special characters " and '
@@ -384,9 +391,6 @@ ixmaps.data = ixmaps.data || {};
 		// loop over facets array and create HTML top show the facets
 		//
 
-		console.log(facetsA);
-		console.log("all facets ===>");
-		
 		for (var i = 0; i < facetsA.length; i++) {
 
 			var fActiveFacet = false;
@@ -426,10 +430,6 @@ ixmaps.data = ixmaps.data || {};
 			}
 
 			szHtml += fActiveFacet ? "<span style='float:right;margin-right:0em;padding-top:0em;'><i class='icon shareIcon share_bitly icon-cancel-circle' title='Share a short link' tabindex='-1'></i></span>" : "";
-			
-			
-			console.log(facetsA[i].id);
-			console.log(facetsA[i]);
 			if ((facetsA[i].type == "textual") && !facetsA[i].values){
 				szHtml += "<a href='javascript:__makeWordCloud(\"" + (facetsA[i].id) + "\")'><span style='float:right;margin-right:0em;padding-top:0em;color:white'><i class='icon shareIcon share_bitly icon-cloud' title='Share a short link' tabindex='-1'></i></span></a>";
 			}
@@ -438,7 +438,7 @@ ixmaps.data = ixmaps.data || {};
 			szHtml += fActiveFacet ? "</a>" : "";
 
 			if (facetsA[i].type == "textual") {
-				var placeholder = "Cerca ..." + ((!facetsA[i].values) ? (" (e.g. " + (facetsA[i].example || " ") + ")") : "");
+				var placeholder = "Filtra per ..." + ((!facetsA[i].values) ? (" (e.g. " + (facetsA[i].example || " ") + ")") : "");
 				var value = "";
 				if (fActiveFacet) {
 					value = placeholder = szActiveFilter.split("\"")[3];
@@ -485,9 +485,6 @@ ixmaps.data = ixmaps.data || {};
 				// continous value facet
 				// make min/max slider
 				// ---------------------------------
-				
-				console.log(facetsA[i]);
-				console.log("continous value facet");
 				
 				if (!__rangesA[facetsA[i].id] || !fActiveFacet) {
 					__rangesA[facetsA[i].id] = {
@@ -590,15 +587,16 @@ ixmaps.data = ixmaps.data || {};
 				}
 			} else
 			if (facetsA[i].values) {
+				
+				if (facetsA[i].values.length == 0){
+					szHtml += '<div>'+facetsA[i].values.length+'</div>';
+				}
 
 				// ---------------------------------
 				// type B
 				// unique value facet
 				// ---------------------------------
-				
-				console.log(facetsA[i]);
-				console.log("unique value facet");
-				
+
 				szHtml += '<div>'
 
 				// if more than 20 items, clip list to 10
@@ -607,7 +605,7 @@ ixmaps.data = ixmaps.data || {};
 
 				for (var ii = 0; ii < facetsA[i].values.length; ii++) {
 					
-					if (facetsA[i].values[ii] != " ") {
+					if (facetsA[i].values[ii].length && (facetsA[i].values[ii] != " ")) {
 
 						// make the facet filter 
 						var szQuery = "WHERE \"" + facetsA[i].id + "\" = \"" + facetsA[i].values[ii] + "\"";
@@ -642,9 +640,6 @@ ixmaps.data = ixmaps.data || {};
 						// -----------------------------------
 						szHtml += '<a href="' + href + '">';
 						szHtml += '<div class="input-group" style="margin-bottom:0.5em;width:100%">';
-						if ((objThemeDefinition.field == facetsA[i].id)) {
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
-						}
 						
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
@@ -658,11 +653,17 @@ ixmaps.data = ixmaps.data || {};
 								}
 							}
 						}
-						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;border:none;border-bottom:solid #000000 0.1px;border-radius:0;background:'+bgColor+'"><span style="margin-left:-0.5em;float:left;white-space:normal;text-align:left;margin-top:0.2em">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px" onmouseover=\'' + szHighlight + '\' onmouseout=\'' + szClearHighlight + '\'>' + szCount + '</span></button>';
+						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;border:none;border-bottom:solid #000000 0.1px;border-radius:0;"> <i class="icon shareIcon share_bitly icon-filter" style="float:left;margin-left:-0.5em;margin-right:1em;padding-top:0.2em;color:#888888;display:none" title="filter by this" tabindex="-1"></i><span style="margin-left:-0.5em;float:left;white-space:normal;text-align:left;margin-top:0.2em">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px">' + szCount + '</span></button>';
+						
+						bgColor = "rgba(208,208,208,1)";
+						if ((objThemeDefinition.field == facetsA[i].id)) {
+							bgColor = hex2rgba( objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1]||"none");
+						}
 
 						var nWidth = (100 / nMaxCount * nCount);
-						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues > 2)) {
-							szHtml += '<div style="position:relative;top:3px;left:0.1em;background:rgba(208,208,208,1);line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
+						if (!isNaN(nWidth) && (nWidth < 100) && (facetsA[i].uniqueValues >= 2)) {
+							
+							szHtml += '<div style="position:relative;top:3px;left:0.1em;background:'+bgColor+';line-height:0.4em;width:' + nWidth + '%;border-radius:0 0.5em 0.5em 0">&nbsp;</div>';
 						}
 
 						szHtml += '</div>';
@@ -677,6 +678,7 @@ ixmaps.data = ixmaps.data || {};
 					}
 
 				}
+
 				szHtml += '</div>';
 				szHtml += '<div>';
 
@@ -688,10 +690,6 @@ ixmaps.data = ixmaps.data || {};
 
 				szHtml += "</div>";
 			} else {
-				
-				console.log(facetsA[i]);
-				console.log("facet has no properties");
-
 				// facet has no property .values 
 				// may be there are 0 or to many unique values when creating the facet
 				//szHtml += '(too many values)';
@@ -701,8 +699,12 @@ ixmaps.data = ixmaps.data || {};
 		}
 		szHtml += "</div>";
 		
-		$("#" + (szDiv || "facets")).html(szHtml);
-
+		$("#"+szDiv).html(szHtml);
+		
+		if ($(".facet-active")[0]){
+			$("#"+szDiv).parent().scrollTop($(".facet-active")[0].offsetTop-$("#"+szDiv)[0].offsetTop)+"px";
+		}
+		
 		/**
 		 ** to be done, actually no bootstrap, slider support
 		 ** *****************************************************
