@@ -405,8 +405,7 @@ $Log:index_only_map_embed.html,v $
 			var latlonA = params.view.split('[')[1].split(']')[0].split(',');
 			__lat = latlonA[0];
 			__lon = latlonA[1];
-			__zoom = parseInt(params.view.split(',')[2]);
-			//setTimeout("ixmaps.setView(null,"+params.view+")",1000);
+			__zoom = parseFloat(params.view.split(',')[2]);
 		};
 
 		if (params.zoom) {
