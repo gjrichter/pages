@@ -75,22 +75,6 @@
 					panhidden: "false",
 				})
 				.layer(
-					ixmaps.layer("Comuni", layer => layer
-						.data("https://confini-amministrativi.it/api/v2/it/20210101/comuni.topo.json", "topojson")
-						.binding({
-							id: "pro_com",
-							size: "shape_area"
-						})
-						.style({
-							colorscheme: ["none"],
-							fillopacity: "0.5",
-							linecolor: "white",
-							linewidth: "0.2"
-						})
-						.title("Comuni")
-					)
-				)
-				.layer(
 					ixmaps.layer("Comuni_centri", layer => layer
 						.data("https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Italia/Geonames/IT.csv.gz","csv")
 						.filter("WHERE \"feature code\" like ADM3")
