@@ -409,6 +409,10 @@ $Log:index_only_map_embed.html,v $
 			//setTimeout("ixmaps.setView(null,"+params.view+")",1000);
 		};
 
+		if (params.zoom) {
+			__zoom = params.zoom;
+		};
+
 		if (params.scale) {
 			__scale_chart = params.scale;
 		};
