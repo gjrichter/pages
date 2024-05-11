@@ -30,11 +30,14 @@ $Log:index_only_map_embed.html,v $
 
 	<link rel="stylesheet" href="../css/sidebar.css">
 	<link rel="stylesheet" href="../font/IcoMoon-Free.css">
-	
+
 	<style>
-		body, table, button {
+		body,
+		table,
+		button {
 			background: #F5F5F4;
 		}
+
 	</style>
 
 </head>
@@ -63,10 +66,19 @@ $Log:index_only_map_embed.html,v $
 			<!-- tìstatic info, header, ... 		   -->
 			<!-- ------------------------------------- -->
 
-			<h1 style="margin-top:0em">Incidenti Bolzano 2019-2022</h1>
-			<h3 style="margin-top:-1.2em"><span>Pericolosità</span></h3>
-			
-			<p>Indice sintetico della pericolosità calcolato come: somma del numero di illesi*0.3 + numero di feriti*3 + morti*10, normalizato tra 0 e 1, per una griglia rettangolare di 10 pixel (schermo)</p>
+			<h1 style="margin-top:-0.2em">Incidenti Bolzano 2013-2022</h1>
+			<h3 style="margin-top:-1.2em"><span>Numero incidenti</span></h3>
+
+			<p>
+				<input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'chart')"></input>i
+				singoli incidenti</p>
+			<p>
+				<input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'indice_grid')"></input>numero incidenti aggregati</p>
+
+			<p> 
+				<input type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="ixmaps.toggleTheme(null,'indice_curves')"></input>la
+				tendenza del numero di incidenti</p>
+
 
 			<p>Dati: Incidenti stradali sul territorio del Comune di Bolzano dal 2016 al 2023 ripresi da <a style="color:#0088dd" href="https://studio.foursquare.com/public/d7fbbd6d-5153-4a92-8ab9-cf1cc2831663" target="_blank"> qui</a></p>
 			<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
@@ -76,8 +88,7 @@ $Log:index_only_map_embed.html,v $
 
 			<p style="font-size:0.9em;">
 				Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup1').html((ixmaps.szActualUrl));$('#link-div').toggle();">link</a> condivisibile,
-				mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="$('#info-overlay').show()">qui</a>.
-			</p>
+				mostra tabella <a style="color:#0088dd" href="javascript:void()" onclick="ixmaps.popupThemeTable()">dati</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="$('#info-overlay').show()">qui</a>.</p>
 
 			<!-- ------------------------------------- -->
 			<!-- map link display area                 -->
@@ -87,9 +98,9 @@ $Log:index_only_map_embed.html,v $
 				<textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;float:left"></textarea>
 				<button style="float:left;margin-left: 0.5em" onclick="window.open('http://'+ixmaps.szActualUrl)">prova il link</button>
 			</div>
-	
+
 			<div style="clear:both"></div>
-	
+
 			<!-- ------------------------------------- -->
 			<!-- dynamic theme info, changes on zoom   -->
 			<!-- ------------------------------------- -->
@@ -105,6 +116,23 @@ $Log:index_only_map_embed.html,v $
 				<!-- ------------------------------------- -->
 				<!-- static footer, annotations            -->
 				<!-- ------------------------------------- -->
+
+				<hr>
+
+				<table>
+					<tbody>
+						<tr>
+							<td> <button onclick="sizeGrid(0.90)">-</button> </td>
+							<td> <span style="font-size:0.8em;margin-left:0.3em;vertical-align:-2px">grandezza griglia</span><br><input type='range' min='10' max='200' value='0' class='slider' id='myRange2'> </td>
+							<td> <button onclick="sizeGrid(1.1)">+</button> </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
 
 				<!-- ------------------------------------- -->
 				<!-- static footer, annotations            -->
@@ -173,7 +201,7 @@ $Log:index_only_map_embed.html,v $
 				<p style="font-size:1.5em">Questa mappa visualizza la pericolosità stradate calcolata dagli incidenti stradali nel comune di Bolzano dal 2019 al 2022</p>
 				<p>- L'indice sintetico della pericolosità è calcolato come: somma del numero di illesi*0.3 + numero di feriti*3 + morti*10, normalizato tra 0 e 1, per una griglia rettangolare di 10 pixel (schermo).</p>
 				<p style="font-size:1.2em">La visualizzazione presenta due elementi, una mappa e una lista, che sono collegati l'una col l'altra:</p>
-				<p>- la <b>lista destra</b> si aggiorna con ogni zoom o pan della mappa. Contiene un'analisi della distribuzione degli incidenti per i valori delle colonne del dataset, effetuata sui incidenti visibile nell'attuale inquadratura della mappa.</p> 
+				<p>- la <b>lista destra</b> si aggiorna con ogni zoom o pan della mappa. Contiene un'analisi della distribuzione degli incidenti per i valori delle colonne del dataset, effetuata sui incidenti visibile nell'attuale inquadratura della mappa.</p>
 				<p>- i vari <b>elementi della lista</b> possono essere applicati come <b>filtro</b> per gli incidenti della mappa cliccando su uno degli valori. Si può definire più di un filtro e rimuovere i filtri individualmente.</p>
 				<p style="font-size:1em;"><b>Fonte dati:</b></p>
 				<p>Elenco degli incidenti stradali avvenuti sul territorio del Comune di Bolzano dal 2016 al 2023: <a style="color:#0088dd" href="https://studio.foursquare.com/public/d7fbbd6d-5153-4a92-8ab9-cf1cc2831663" target="_blank">Incidenti Bolzano</a></p>
@@ -217,24 +245,20 @@ $Log:index_only_map_embed.html,v $
 				}
 			}
 		}
+
 		var setChartSize = function(nValue) {
 			ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nValue, 'set');
 		}
+
 		var sizeGrid = function(nFactor) {
-			ixmaps.changeThemeStyle(null, 'curves', 'gridwidthpx:' + nFactor, 'factor');
-			ixmaps.changeThemeStyle(null, 'grid', 'gridwidthpx:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'indice_curves', 'gridwidthpx:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'indice_grid', 'gridwidthpx:' + nFactor, 'factor');
 
 		}
 		var setGrid = function(nValue) {
-			ixmaps.changeThemeStyle(null, 'curves', 'gridwidthpx:' + nValue, 'set');
-			ixmaps.changeThemeStyle(null, 'grid', 'gridwidthpx:' + nValue, 'set');
+			ixmaps.changeThemeStyle(null, 'indice_curves', 'gridwidthpx:' + nValue, 'set');
+			ixmaps.changeThemeStyle(null, 'indice_grid', 'gridwidthpx:' + nValue, 'set');
 
-		}
-		var sizeTexts = function(nFactor) {}
-		var select = function(element) {
-			element.parent().parent().parent().children().children(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			//$(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			element.parent().prev().html("&bullet;");
 		}
 		var clearFilter = function(szFilter) {
 			ixmaps.changeThemeStyle(null, 'chart', 'filter', 'remove');
@@ -242,21 +266,11 @@ $Log:index_only_map_embed.html,v $
 
 		var __actualizeUrl = function(themeObj) {
 			ixmaps.szActualUrl = window.location.hostname + window.location.pathname;
-			ixmaps.szActualUrl += "?filter=" + (themeObj.szFilter||"");
+			ixmaps.szActualUrl += "?filter=" + (themeObj.szFilter || "");
 			ixmaps.szActualUrl += "&scale=" + themeObj.nScale;
 			ixmaps.szActualUrl += "&view=[" + ixmaps.getCenter().lat + "," + ixmaps.getCenter().lng + "]," + ixmaps.getZoom();
 			$('#popup').html((ixmaps.szActualUrl));
 			$('#popup1').html((ixmaps.szActualUrl));
-		};
-
-		var __toggleSizefield = function(el) {
-			if (el.checked) {
-				ixmaps.changeThemeStyle(null, "chart", "sizefield:FERITI", "set");
-				ixmaps.changeThemeStyle(null, "curves", "sizefield:FERITI", "set");
-			} else {
-				ixmaps.changeThemeStyle(null, "chart", "sizefield", "remove");
-				ixmaps.changeThemeStyle(null, "curves", "sizefield", "remove");
-			}
 		};
 
 		var slider = document.getElementById("myRange1");
@@ -270,6 +284,26 @@ $Log:index_only_map_embed.html,v $
 				setChartSize(ixmaps.value)
 			}, 10);
 		}
+		var slider = document.getElementById("myRange2");
+		// Update the current slider value (each time you drag the slider handle)
+		slider.oninput = function() {
+			if (ixmaps.sliderT) {
+				clearTimeout(ixmaps.sliderT);
+			}
+			ixmaps.value = this.value;
+			ixmaps.sliderT = setTimeout(function() {
+				setGrid(ixmaps.value)
+			}, 100);
+		}
+		var setSlider = function(sliderId, value, mode) {
+			var slider = document.getElementById(sliderId);
+			if (mode == 'factor') {
+				slider.value *= value;
+			} else {
+				slider.value = value;
+			}
+		};
+
 
 		// -----------------------------------------------------------
 		//
@@ -285,7 +319,7 @@ $Log:index_only_map_embed.html,v $
 			if (szId == "chart") {
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["NATURA","URSACHE","fid","ID","NRINCID","ANNOINC","TPINCID","DTINCID","DATA","ORA","DOW","ID_VIA_1","VIA1_IT","VIA1_DE","ID_VIA_2","VIA2_IT","VIA2_DE","AMBITO","BEREICH","NR_VEICOLI","NR_PEDONI","ILLESI","FERITI","MORTI","geometry","year","month","day","pericolo","Incidente con lesioni"];
+				szFieldsA = ["fid", "ID", "NRINCID", "ANNOINC", "TPINCID", "DTINCID", "DATA", "ORA", "DOW", "ID_VIA_1", "VIA1_IT", "VIA1_DE", "ID_VIA_2", "VIA2_IT", "VIA2_DE", "year", "month", "day"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map", "NONUMERIC");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 
@@ -315,6 +349,8 @@ $Log:index_only_map_embed.html,v $
 			if (!themeObj.fVisible) {
 				return;
 			}
+
+			setSlider("myRange2", themeObj.nGridWidthPx);
 
 			ixmaps.statistics(szId);
 
@@ -384,46 +420,160 @@ $Log:index_only_map_embed.html,v $
 		// ---------------------------------------------------
 		// t h e   d a t a   p r o c e s s i n g
 		// ---------------------------------------------------
-		
+
 		/**
 		 ** the process function will be included into the theme definitions below
 		 **/
 
 		var process = function(data, options) {
-			data.addColumn({source:"DATA",destination:"year"},function(value){
+			data.addColumn({
+				source: "DATA",
+				destination: "year"
+			}, function(value) {
 				return (value.split("/")[2]);
 			});
-			data.addColumn({source:"DATA",destination:"month"},function(value){
+			data.addColumn({
+				source: "DATA",
+				destination: "month"
+			}, function(value) {
 				return (value.split("/")[1]);
 			});
-			data.addColumn({source:"DATA",destination:"day"},function(value){
+			data.addColumn({
+				source: "DATA",
+				destination: "day"
+			}, function(value) {
 				var a = value.split("/");
-				var date = new Date(a[2],a[1],a[0]);
+				var date = new Date(a[2], a[1], a[0]);
 				return (date.getDay());
 			});
-			data.column("FERITI").map(value =>{
-				return (value||0);
+			data.column("FERITI").map(value => {
+				return (value || 0);
 			});
 			var illesiIndex = data.column("ILLESI").index;
 			var feritiIndex = data.column("FERITI").index;
 			var mortiIndex = data.column("MORTI").index;
-			data.addColumn({destination:"pericolo"},function(row){
-				return ((row[illesiIndex]||0)*0.3+(row[feritiIndex]||0)*3+(row[mortiIndex]||0)*10);
+			data.addColumn({
+				destination: "pericolo"
+			}, function(row) {
+				return ((row[illesiIndex] || 0) * 0.3 + (row[feritiIndex] || 0) * 3 + (row[mortiIndex] || 0) * 10);
 			});
-			data.addColumn({destination:"Incidente con lesioni"},function(row){
-				return ((row[feritiIndex]||0)+(row[mortiIndex]||0)>0?"si":"no");
+			data.addColumn({
+				destination: "Incidente con lesioni"
+			}, function(row) {
+				return ((row[feritiIndex] || 0) + (row[mortiIndex] || 0) > 0 ? "si" : "no");
 			});
-			
+
 		};
-		
+
+		// define a color function
+		// assigns a color to every categorical value found
+		// using matches with the category texts present in the theme property szLabelA[] 
+
+		__setColors = objTheme => {
+			for (i = 0; i < objTheme.szLabelA.length; i++) {
+
+				if (objTheme.szLabelA[i].match(/investimento/i)) {
+					objTheme.colorScheme[i] = "#ff0088";
+				} else
+				if (objTheme.szLabelA[i].match(/tamponamento/i)) {
+					objTheme.colorScheme[i] = "#0066cc";
+				} else
+				if (objTheme.szLabelA[i].match(/scontro/i)) {
+					objTheme.colorScheme[i] = "#ddbb22";
+				} else {
+					objTheme.colorScheme[i] = "#00aaaa";
+				}
+			}
+		};
+
 		// ---------------------------------------------------
 		// t h e   l a y e r 
 		// ---------------------------------------------------
 
-		// indice sintetico di pericolosità 
-		// ---------------------------------
-		var __pericolosita = 
-			ixmaps.layer("Mercator")
+		var __incidenti =
+			ixmaps.layer("Mercator", layer => layer
+				.data({
+					name: "themeDataObj",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
+					type: "csv",
+					process: process.toString(),
+					cache: "true",
+				})
+				.type("CHART|SYMBOL|FIXSIZE")
+				.binding({
+					position: "geometry",
+					value: "$item$"
+				})
+				.style({
+					name: "chart",
+					colorscheme: "black",
+					opacity: "0.3",
+					shadow: "false",
+					showdata: "true",
+					units: "",
+					refreshtimeout: "0",
+					normalsizevalue: "10",
+					scale: "1",
+					valuescale: "1",
+					valuedecimals: "0",
+					clipupper: "1:1000000"
+				})
+				.meta({
+					title: "Palermo - incidenti 2022",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		var __indice =
+			ixmaps.layer("Mercator", layer => layer
+				.data({
+					name: "themeDataObj",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
+					type: "csv",
+					process: process.toString(),
+					cache: "true",
+				})
+				.type("CHART|SYMBOL|AGGREGATE|RECT|SUM|GRIDSIZE|DOPACITY|VALUES")
+				.binding({
+					position: "geometry",
+					value: "$item$"
+				})
+				.style({
+					name: "indice_grid",
+					colorscheme: [
+						"1",
+						"#ffeeee",
+						"#dd0000",
+						"dynamic",
+						"cold"
+					],
+					symbols: [
+						"square"
+					],
+					fillopacity: "0.3",
+					shadow: "false",
+					textcolor: "black",
+					valuescale: "0.8",
+					linecolor: "black",
+					linewidth: "0.05",
+					showdata: "true",
+					units: "",
+					scale: "1",
+					dopacitypow: "1",
+					dopacityscale: "1",
+					valuedecimals: "0",
+					valuescale: "0.5",
+					gridwidth: "70px",
+					clipupper: "1:1000000"
+				})
+				.meta({
+					title: "Palermo - incidenti 2022",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		var __incidenti_curves_years =
+			ixmaps.layer("Mercator", layer => layer
 				.data({
 					name: "themeDataObj",
 					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
@@ -433,31 +583,74 @@ $Log:index_only_map_embed.html,v $
 				})
 				.binding({
 					position: "geometry",
-					value: "pericolo"
+					value: "year",
+					size: "$item$"
 				})
-				.filter("WHERE ANNOINC BETWEEN 2019 AND 2022")
-				.type("CHART|SYMBOLS|SIZE|LINEAR|GLOW|NORMALIZE|ZEROISNOTVALUE|CLEAR|AGGREGATE|RELOCATE|SUM|RECT|VALUES|CLIPTOGEOBOUNDS")
+				.type("CHART|SYMBOL|PLOT|LINES|AREA|SMOOTH|LASTARROW|CATEGORICAL|BOX|XAXIS|FIXSIZE|GRIDSIZE|AGGREGATE|RECT|SUM|NOSORT|ZEROISVALUE|NOCLIP|NOLEGEND")
 				.style({
-					name: "chart",
+					name: "indice_curves",
 					colorscheme: [
-						"7",
-						"#36A6B1",
-						"#b94023",
-						"3colors",
-						"#DDA729"],
-					opacity: "0.6",
+						"#aa4444"
+					],
+					fillopacity: "0.001",
 					shadow: "false",
-					symbols: [
-						"circle"],
-					units: "feriti",
-					scale: "1",
-					normalsizevalue: "1",
+					values: [
+						"2013",
+						"2014",
+						"2015",
+						"2016",
+						"2017",
+						"2018",
+						"2019",
+						"2020",
+						"2021",
+						"2022"
+					],
+					label: [
+						"2013",
+						"2014",
+						"2015",
+						"2016",
+						"2017",
+						"2018",
+						"2019",
+						"2020",
+						"2021",
+						"2022"
+					],
+					xaxis: [
+						"2013",
+						"2014",
+						"2015",
+						"2016",
+						"2017",
+						"2018",
+						"2019",
+						"2020",
+						"2021",
+						"2022"
+					],
+					offsetx: "-15",
+					offsety: "-8",
+					normalsizevalue: "20",
+					scale: "0.95",
+					rangescale: "1",
+					linewidth: "8",
+					markersize: "2",
+					minvalue: 0,
+					boxopacity: "0.001",
+					bordercolor: "none",
 					valuescale: "1",
-					valuedecimals: "1",
-					gridwidthpx: "10",
-					title: "Incidenti Bolzano 2021 - Indice di pericolosità"
+					gridwidth: "70px",
 				})
-				.define();
+				.meta({
+					title: "Palermo - incidenti 2020-2022",
+					snippet: "Indice di pericolosità *)",
+					description: "*) numero feriti + esito riservato*5 + morti*10",
+					splash: "scaricando dati ..."
+				})
+			);
+
 
 		// ---------------------------------------------------
 		// e m b e d   t h e   m a p  
@@ -465,7 +658,7 @@ $Log:index_only_map_embed.html,v $
 
 		ixmaps.embed("map_div", {
 				mapService: "leaflet_vt",
-				mapType: "VT_BRIGHT_LIGHT",
+				mapType: "VT_DATAVIZ_LIGHT",
 				map: "../../maps/svg/maps/generic/mercator.svg",
 				name: "map",
 				mode: "pan",
@@ -476,7 +669,7 @@ $Log:index_only_map_embed.html,v $
 				about: "test"
 			},
 			map => map
-			.view([__lat||46.48669306753273,__lon||11.336249572972105],__zoom||14)
+			.view([__lat || 46.48669306753273, __lon || 11.336249572972105], __zoom || 14)
 			.options({
 				featurescaling: "true",
 				objectscaling: "dynamic",
@@ -493,7 +686,10 @@ $Log:index_only_map_embed.html,v $
 			.attribution(attribution)
 			.legend(" ")
 
-			.layer(__pericolosita)
+			.layer(__incidenti)
+			.layer(__indice)
+			.layer(__incidenti_curves_years)
+
 		);
 
 		// ---------------------------------------------------

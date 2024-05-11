@@ -270,7 +270,6 @@ $Log:index_only_map_embed.html,v $
 		var sizeTexts = function(nFactor) {}
 		var select = function(element) {
 			element.parent().parent().parent().children().children(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			//$(".radio").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			element.parent().prev().html("&bullet;");
 		}
 		var clearFilter = function(szFilter) {
@@ -377,18 +376,7 @@ $Log:index_only_map_embed.html,v $
 			setSlider("myRange2",themeObj.nGridWidthPx);
 			
 			ixmaps.statistics(szId);
-			/**
-			if (themeObj.szFilter) {
-				var szFilterClipped = (themeObj.szFilter.length > 100) ? (themeObj.szFilter.substr(0, 100) + " ... ") : themeObj.szFilter;
-				$("#filter").html(szFilterClipped);
-				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + szFilterClipped.split("WHERE")[1] + "</div>");
-				$("#filter-div").show();
-			} else {
-				$("#filter").html("");
-				ixmaps.setTitle("");
-				$("#filter-div").hide();
-			}
-			**/
+ 
 			__actualizeUrl(themeObj);
 
 			$("#scroll-area").height(window.innerHeight - $("#scroll-area").offset().top - 50);
@@ -456,33 +444,6 @@ $Log:index_only_map_embed.html,v $
 		// t h e   d a t a   p r o c e s s i n g
 		// ---------------------------------------------------
 		
-		// join data from 2021,2022 and 2023
-		
-		__query_data = (theme, options) => {
-			var broker = new Data.Broker()
-				.addSource("../../data/Incidenti/Incidenti_Stradali_2021.xlsx - Foglio 1.csv", "csv")
-				.addSource("../../data/Incidenti/Incidenti_2022_geolocalizzati_Matera.xlsx - Foglio 1.csv", "csv")
-				.addSource("../../data/Incidenti/Incidenti _2023_geolocalizzati_Matera.xlsx - Foglio 1.csv", "csv")
-				.realize(function(dataA) {
-					
-					dataA[0].column("Latitudine").rename("Lat");
-					dataA[0].column("Longitudine").rename("Lon");
-					dataA[0].column("Localita' dell'incidente").remove();
-					dataA[0].append(dataA[1]);
-					dataA[0].append(dataA[2]);
-					
-					dataA[0].addColumn({
-						source: "Data incidente",
-						destination: "Anno"}, value => {
-							return value.split("/")[2];
-						}
-					);
-					
-					options.type = "jsonDB";
-					ixmaps.setExternalData(dataA[0], options);
-				});
-		};
-
 		// define a color function
 		// assigns a color to every categorical value found
 		// using matches with the category texts present in the theme property szLabelA[] 
@@ -540,8 +501,8 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.layer("Esiti_2022", layer => layer
 				.data({
 					name: "themeDataObj",
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.geojson.gz",
-					type: "geojson",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
+					type: "csv",
 					process: process.toString(),
 					cache: "true"
 				})
@@ -562,7 +523,7 @@ $Log:index_only_map_embed.html,v $
 					units: "feriti",
 					refreshtimeout: "0",
 					scale: __scale_chart,
-					normalsizevalue: "50",
+					normalsizevalue: "25",
 					valuescale: "1",
 					valuedecimals: "0",
 					tooltip: "<h3>{{theme.title}}</h3></br></br>{{theme.item.chart}}{{theme.item.data}}",
@@ -585,8 +546,8 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.layer("AREU", layer => layer
 				.data({
 					name: "themeDataObj",
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.geojson.gz",
-					type: "geojson",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
+					type: "csv",
 					process: process.toString(),
 					cache: "true"
 				})
@@ -641,8 +602,8 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.layer("AREU", layer => layer
 				.data({
 					name: "themeDataObj",
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.geojson.gz",
-					type: "geojson",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Bolzano/urban_accidents.csv.gz",
+					type: "csv",
 					process: process.toString(),
 					cache: "true"
 				})
@@ -700,7 +661,7 @@ $Log:index_only_map_embed.html,v $
 				objectscaling: "dynamic",
 				normalSizeScale: "259302",
 				flushChartDraw: "1000000",
-				basemapopacity: "0.8",
+				basemapopacity: "0.5",
 				worksilent: "true",
 				loadsilent: "true",
 				panhidden: "false"
