@@ -38,5 +38,5 @@ In fine un link che porta ad una **storia che unisce le varia mappe**:
 
 ![](https://gjrichter.github.io/pages/Incidenti/Bolzano/bolzano_storia.png)
 
-<iframe id="map1" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/app/Viewer/index.html?layout=right&sidebar=35%&sidebarbutton=0&story=https://gjrichter.github.io/viz/Bolzano_Incidenti/stories/Bolzano_Incidenti_III/index.html"></iframe>
+
 
