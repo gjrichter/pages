@@ -1,30 +1,28 @@
 ### I dati degli 
 
-# Incidenti stradali sul territorio della Regione Lombardia  
+# Incidenti stradali sul territorio della Germania  
 
 ###### in alcune mappe 
 
-Le mappe mostrano diversi modi di visualizzare dati georeferenziati su incidenti stradali pubblicati in [GEOMIS](https://sicurezza.servizirl.it/web/polizia-locale/geomis/) (Monitoraggio Incidentalità Stradale) della Regione Lombardia
+Le mappe mostrano diversi modi di visualizzare dati georeferenziati su incidenti stradali pubblicati nel <a style="color:#0088dd" href="https://unfallatlas.statistikportal.de/" target="_blank">Unfallatlas Deutschland</a> > Unfallatlas und Open Data > Unfallorte 2018 - 2022
 
-La prima mappa visualizza gli eventi di primo soccorso legati ad incidenti con investimenti pedoni nel comune di Milano.
+La prima mappa visualizza gli incidenti nel comune di Hamburgo.
 
-La mappa si basa su dati AREU (Interventi di primo Soccorso), pubblicati sul sito [GEOMIS](https://sicurezza.servizirl.it/web/polizia-locale/geomis/) (Monitoraggio Incidentalità Stradale) della Regione Lombardia e le seguenti elementi 2019 al 2022
+![](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Unfall_Atlas_themes_speed.png)
 
-![](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_AREU_incidenti_CODICE_EVE_2019_2022_milano_investimenti_pedoni_years_zone30.png)
+*mappa 1: incidenti e limiti di velocità (OSM)*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Unfall_Atlas_themes_speed.html)
 
-*mappa 1: investimenti pedoni da AREU e limiti di velocità (OSM)*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_AREU_incidenti_CODICE_EVE_2019_2022_milano_investimenti_pedoni_years_zone30.html)
+La prima mappa visualizza gli incidenti con investimenti pedoni nel comune di Hamburgo.
 
-La seconda mappa visualizza un indice sintetico della pericolosità calcolato come: 
+![](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Unfall_Atlas_themes_speed_pedoni.png)
 
-![](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT_milano_investimenti_pedoni_years_zone30.png)
+*mappa 2: investimenti pedoni e limiti di velocità (OSM)*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Unfall_Atlas_themes_speed.html)
 
-*mappa 2: investimenti pedoni da ISTAT e limiti di velocità (OSM)*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT_milano_investimenti_pedoni_years_zone30.html)
+La terza mappa visualizza la natura degli incidenti con focus a Monaco in Baveria ![](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Germania_Incidenti_2020_2022_tipo_simple_years_curve_incidenti.png)
 
-La terza mappa visualizza un indice sintetico della pericolosità calcolato come: ![](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT.png)
+*mappa 3: incidenti per natura*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Germania_Incidenti_2020_2022_tipo_simple_years_curve_incidenti.html)
 
-*mappa 3: incidenti per natura, dati ISTAT*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT.html)
+La quarta mappa visualizza la natura degli incidenti su scala più granda![](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Germania_Incidenti_2020_2022_tipo_simple_years_curve_incidenti_big.png)
 
-La quarta mappa visualizza un indice sintetico della pericolosità calcolato come: ![](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT_big.png)
-
-*mappa 4: incidenti per natura, dati ISTAT*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Lombardia/index_embed_ISTAT_incidenti_NATURA_2019_2022_simple_VT_big.html)
+*mappa 4: incidenti per natura*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Germania/index_embed_Germania_Incidenti_2020_2022_tipo_simple_years_curve_incidenti.html)
 
