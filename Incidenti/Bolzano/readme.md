@@ -35,3 +35,5 @@ Mentre le prime due mappa sono limitati sui incidenti dal 2019 al 2022 per l'ana
 In fine un link che porta ad una **storia che unisce le varia mappe**:
 
 [Bolzano Incidenti](https://gjrichter.github.io/ixmaps/app/Viewer/index.html?layout=right&sidebar=35%&sidebarbutton=0&story=https://gjrichter.github.io/viz/Bolzano_Incidenti/stories/Bolzano_Incidenti_III/index.html)
+
+![](https://gjrichter.github.io/pages/Incidenti/Bolzano/bolzano_storia.png)
