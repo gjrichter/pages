@@ -30,7 +30,7 @@ $Log:index_only_map_embed.html,v $
 
 </head>
 
-<body style='text-align:center;background:#F6F0E3'>
+<body style='text-align:center;background:#F3F1E7'>
 
 	<!--========================================================================= -->
 
@@ -105,7 +105,7 @@ $Log:index_only_map_embed.html,v $
 		
 		var unfallart = ixmaps.layer("World_countries")
 			.data({
-				name: "data_2020",
+				name: "data_2022",
 				query: query.toString(),
 				type: "ext"
 			})
@@ -113,7 +113,7 @@ $Log:index_only_map_embed.html,v $
 				geo: "YGCSWGS84|XGCSWGS84",
 				value: "UART"
 			})
-			.type("GLOW|CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|LINEAR|CATEGORICAL|VALUES|AGGREGATE|RECT|RELOCATE|SUM|COMPACTLEGEND|CLIPTOGEOBOUNDS")
+			.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|LINEAR|CATEGORICAL|VALUES|AGGREGATE|RECT|RELOCATE|SUM|COMPACTLEGEND|CLIPTOGEOBOUNDS")
 			.style({
 				colorscheme: [
 					"#0066cc",
@@ -126,9 +126,8 @@ $Log:index_only_map_embed.html,v $
 					"#ddbb22",
 					"#ddbb22"
 				],
-				opacity: "0.3",
-				fillopacity: "0.5",
-				shadow: "false",
+				fillopacity: "0.9",
+				shadow: "true",
 				symbols: [
 					"circle"
 				],
@@ -156,12 +155,12 @@ $Log:index_only_map_embed.html,v $
 				],
 				units: "",
 				
-				linecolor: "black",
+				linecolor: "white",
 				normalsizevalue: "10",
 				scale: "1",
 				valuescale: "1",
 				valuedecimals: "0",
-				valuesupper: "1:50000",
+				valuesupper: "1:500000",
 				maxcharts: "20000",
 				aggregationscale: [
 					"1:1",
@@ -171,14 +170,16 @@ $Log:index_only_map_embed.html,v $
 				],
 				clipupper: "1:1000000",
 				name: "dstatis",
-				title: "Unfall Statistik 2020",
-				splash: "lade Daten ... (ca. 250 000 Ereignisse)"
+				title: "Unfall Statistik 2022",
+				splash: "lade Daten ... (ca. 250 000 Ereignisse)",
+				showdata: "true",
+				tooltip: "<h3 style='white-space:nowrap'>{{theme.title}}</h3>{{theme.item.title}}{{theme.item.chart}}{{theme.item.data}} km/h"
 			})
 			.json()
 
 		var unfallschwere = ixmaps.layer("World_countries")
 			.data({
-				name: "data_2020",
+				name: "data_2022",
 				query: query.toString(),
 				type: "ext"
 			})
@@ -225,7 +226,7 @@ $Log:index_only_map_embed.html,v $
 		
 		var unfallgefahr = ixmaps.layer("World_countries")
 			.data({
-				name: "data_2020",
+				name: "data_2022",
 				query: query.toString(),
 				type: "ext"
 			})
@@ -233,7 +234,7 @@ $Log:index_only_map_embed.html,v $
 				geo: "YGCSWGS84|XGCSWGS84",
 				value: "UGEFAHR"
 			})
-			.type("CHART|SYMBOLS|SIZE|LINEAR|GLOW|NORMALIZE|ZEROISNOTVALUE|CLEAR|AGGREGATE|SUM|RECT|VALUES|CLIPTOGEOBOUNDS|COMPACTLEGEND")
+			.type("CHART|SYMBOLS|SIZE|SIZE|NORMALIZE|ZEROISNOTVALUE|CLEAR|AGGREGATE|SUM|RECT|VALUES|CLIPTOGEOBOUNDS|COMPACTLEGEND")
 			.style({
 				colorscheme: [
 					"7",
@@ -245,7 +246,7 @@ $Log:index_only_map_embed.html,v $
 				fillopacity: "0.5",
 				linecolor: "white",
 				linewidth: "5",
-				shadow: "false",
+				shadow: "true",
 				symbols: [
 					"circle"
 				],
@@ -292,12 +293,13 @@ $Log:index_only_map_embed.html,v $
 				scale: "1",
 				linecolor: [
 					"none"],
-				linewidth: "1.5",
+				linewidth: "2",
 				valuescale: "1",
-				name: "features",
+				name: "osm",
 				title: "Speed limits",
 				snippet: "Limits are in kmh if no unit is specified explicitly",
-				splash: "loading OSM data ..."
+				splash: "loading OSM data ...",
+				tooltip: "<h3 style='white-space:nowrap'>{{theme.title}}</h3>{{maxspeed}} km/h"
 			})  
 			.json()  
 	
@@ -334,7 +336,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.local("aggregated", "")
 				.local("loading data ...", "OSM &DownArrowBar; Data")
-				.require("../../ui/js/tools/tooltip_basic.js")
+				.require("../../ui/js/tools/tooltip_mustache.js")
 			    .require("https://unpkg.com/osmtogeojson@3.0.0-beta.4/osmtogeojson.js")
 				.attribution(attribution)
 
@@ -356,8 +358,11 @@ $Log:index_only_map_embed.html,v $
 	<div style="position:absolute;top:6em;right:2em">
 
 		<script>
+			var setChartSize = function(nValue) {
+				ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nValue, 'set');
+			}
 			var sizeCharts = function(nFactor) {
-				ixmaps.changeThemeStyle(null, 'curves', 'scale:' + nFactor, 'factor');
+				ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nFactor, 'factor');
 			}
 			var opacityCharts = function(nFactor) {
 				ixmaps.changeThemeStyle(null, 'curves', 'fillopacity:' + nFactor, 'factor');
@@ -371,17 +376,17 @@ $Log:index_only_map_embed.html,v $
 
 		<style>
 			table {
-				background: #F6F0E3;
+				background: none;
 				border-radius: 0.3em;
 				padding: 0.4em 0.8em;
 			}
 
 			td {
-				border: dotted #888800 0.1px;
+				xborder: dotted #888800 0.1px;
 			}
 
 			button {
-				background: #F6F0E3;
+				background: none;
 				border: #dddddd solid 1px;
 				border-radius: 0.3em;
 				padding: 0.4em 0.8em;
@@ -397,46 +402,13 @@ $Log:index_only_map_embed.html,v $
 
 		</style>
 
-		<table>
-			<tr>
-				<td>
-					<button onclick="sizeCharts(0.90)">-</button>
-				</td>
-				<td>
-					<span style="font-size:0.8em"> &nbsp; chart size &nbsp;</span>
-				</td>
-				<td>
-					<button onclick="sizeCharts(1.1)">+</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<button onclick="opacityCharts(0.75)">-</button>
-				</td>
-				<td>
-					<span style="font-size:0.8em"> &nbsp; opacity &nbsp;</span>
-				</td>
-				<td>
-					<button onclick="opacityCharts(1.5)">+</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<button onclick="ixmaps.changeThemeStyle(null,'curves','type:AGGREGATE','toggle');">aggregated y / n </button>
-				</td>
-				<td>
-				</td>
-			</tr>
-		</table>
 
 		<table >
 			<tr>
 				<td class="radio">&bullet;
 				</td>
 				<td class="left" >
-					<button onclick="select($(this));ixmaps.map().theme('dstatis').replace(unfallart);select($('#alle'));">Unfall Art</button>
+					<button onclick="select($(this));ixmaps.map().replace('dstatis',unfallart);select($('#alle'));">Unfall Art</button>
 				</td>
 				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</td>
@@ -445,7 +417,7 @@ $Log:index_only_map_embed.html,v $
 				<td class="radio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</td>
 				<td class="left" >
-					<button onclick="select($(this));ixmaps.map().theme('dstatis').replace(unfallschwere);select($('#alle'));">Unfall Schwere</button>
+					<button onclick="select($(this));ixmaps.map().replace('dstatis',unfallschwere);select($('#alle'));">Unfall Schwere</button>
 				</td>
 				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</td>
@@ -454,7 +426,7 @@ $Log:index_only_map_embed.html,v $
 				<td class="radio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</td>
 				<td class="left" >
-					<button onclick="select($(this));ixmaps.map().theme('dstatis').replace(unfallgefahr);select($('#alle'));">Gefahren Index</button>
+					<button onclick="select($(this));ixmaps.map().replace('dstatis',unfallgefahr);select($('#alle'));">Gefahren Index</button>
 				</td>
 				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</td>
@@ -500,6 +472,38 @@ $Log:index_only_map_embed.html,v $
 			</tr>
 		</table>
 		
+		<table>
+			<tr>
+				<td>
+					<button onclick="sizeCharts(0.90)">-</button>
+				</td>
+				<td>
+					<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
+				</td>
+				<td>
+					<button onclick="sizeCharts(1.1)">+</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type='range' min='0.1' max='2' step="0.01" value='1' class='slider' id='myRange1'>
+				</td>
+			</tr>
+
+		</table>
+		
+		<table>
+			<tr>
+				<td class="radio">
+				</td>
+				<td class="left" >
+					<input id="OSMCheckBox" type="checkbox" style="accent-color:#888888;vertical-align:middle" onclick="__toggleOSM(this)" checked="checked"></input> OSM Dpeed Limits
+				</td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+		
 		<div style="font-family:open sans;text-align:left;margin-left:1em;margin-top:7em;max-width:200px">
 			Daten: Unfallatlas, Statistische Aemter des Bundes und der Laender  
 			<a href="https://unfallatlas.statistikportal.de/_opendata2022.html" target="_blank">Open Data</a></div>
@@ -507,8 +511,32 @@ $Log:index_only_map_embed.html,v $
 		
 		
 	</div>
+	<div id="onmap-buttons" style="position:absolute;bottom:3em;right:35%">
+
+
+	</div>
 	
-	
+	<script type="text/javascript" charset="utf-8">
+		var slider = document.getElementById("myRange1");
+		// Update the current slider value (each time you drag the slider handle)
+		slider.oninput = function() {
+			if (ixmaps.sliderT1) {
+				clearTimeout(ixmaps.sliderT1);
+			}
+			ixmaps.value = this.value;
+			ixmaps.sliderT1 = setTimeout(function() {
+				setChartSize(ixmaps.value)
+			}, 10);
+		}
+		var __toggleOSM = function(el) {
+			if (el.checked) {
+				ixmaps.showTheme(null,'osm');
+			} else {
+				ixmaps.hideTheme(null,'osm');
+			}
+		};
+
+	</script>
 					
 	
 	
