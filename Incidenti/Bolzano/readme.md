@@ -27,3 +27,11 @@ Mentre le prime due mappa sono limitati sui incidenti dal 2019 al 2022 per l'ana
 <iframe id="map1" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/Incidenti/Bolzano/index_embed_Bolzano_Incidenti_2013_2022_grid.html"></iframe>
 
 *mappa 3: tutti incidenti dal 2013 al 2022 con posizione, numero aggregato su griglia e evoluzione per anno*  --> [a schermo intero](https://gjrichter.github.io/pages/Incidenti/Bolzano/index_embed_Bolzano_Incidenti_2013_2022_grid.html)
+
+
+
+
+
+In fine un link che porta ad una **storia che unisce le varia mappe**:
+
+[Bolzano Incidenti](https://gjrichter.github.io/ixmaps/app/Viewer/index.html?layout=right&sidebar=35%&sidebarbutton=0&story=https://gjrichter.github.io/viz/Bolzano_Incidenti/stories/Bolzano_Incidenti_III/index.html)
