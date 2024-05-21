@@ -37,7 +37,7 @@ $Log:index_only_map_embed.html,v $
 	<div id="onmap-buttons" style="position:absolute;top:1em;right:2em;font-family:open sans">
 		<div style="float:left;margin:0.3em 1em;">
 			<input id="sizeFieldCheckBox" type="checkbox" checked="checked" style="accent-color:#0066dd;vertical-align:middle" onclick="__toggleMin100(this)"></input>
-			filtro: lunghezza strada tra 50 e 500 m
+			filtro: strada tra 50 e 500 m
 		</div>
 		<table>
 			<tr>
@@ -61,7 +61,10 @@ $Log:index_only_map_embed.html,v $
 
 	</div>
 
-
+	<div id="onmap-info" style="position:absolute;top:0.5em;left:2em;font-family:open sans">
+		<p style='margin-bottom:1em'>dati: <a href='http://saichepuoi.it/wp-content/uploads/2024/05/ViaLibera_DATI-GREZZI.pdf' target='_blank'>ViaLibera</a> (estratti &rarr; .csv da A.Borruso)</p>
+	</div>
+	
 	<!--========================================================================= -->
 
 	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
@@ -70,7 +73,7 @@ $Log:index_only_map_embed.html,v $
 
 	<script type="text/javascript" charset="utf-8">
 		attribution =
-			"<p style='margin-bottom:-1em'>data: <a href='https://afdc.energy.gov/stations/#' target='_blank'>Alternative Fuels Data Center</a></br>powered by iXMaps</p>";
+			"<p style='margin-bottom:1em'>data: <a href='http://saichepuoi.it/wp-content/uploads/2024/05/ViaLibera_DATI-GREZZI.pdf' target='_blank'>ViaLibera</a> (estratti &rarr; .csv da A.Borruso)</br>powered by iXMaps</p>";
 
 		make_street_name_upper = function(data, options) {
 			data.addColumn({
