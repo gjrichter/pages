@@ -119,7 +119,7 @@ $Log:index_only_map_embed.html,v $
 					dynamicScalePow: "3",
 					normalSizeScale: "6758",
 					flushChartDraw: "10000",
-					panhidden: "true"
+					panhidden: "false"
 				})
 				.attribution(attribution)
 				.require("../../ui/js/tools/tooltip_mustache.js")
@@ -170,10 +170,44 @@ $Log:index_only_map_embed.html,v $
 						valuescale: "1.2",
 						sizepow: "1.5",
 						name: "chart",
+						chartlower: "1:10000",
 						"tooltip": "<span style='white-space:nowrap'>{{name_via}} (lunghezza: {{length_km_tot_street}} km)</span>{{theme.item.chart}})* valore calcolato su 100 m di strada"
 					})
 					.meta({
-						"name": "Auto_1",
+						"title": "Auto in sosta irregolare per 100 m"
+					})
+					.define()
+				)
+				.layer(
+					ixmaps.layer("STREETS")
+					.data({
+						"name": "ViaLibera",
+						"url": "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Milano/AB_ViaLibera_DATI-GREZZI.csv",
+						"type": "csv",
+						"process": make_street_name_upper.toString(),
+						"cache": "true"
+					})
+					.binding({
+						"value": "auto_su_carreggiata|auto_su_marciapiede|auto_su_verde",
+						"value100": "length_km_tot_street",
+						"lookupfield": "name_via_upper"
+					})
+					.filter("WHERE length_km_tot_street <= 0.5 AND length_km_tot_street >= 0.05")
+					.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|VALUES|FRACTION|SIMPLELEGEND|CIRCULARBOX")
+					.style({
+						colorscheme: [3, "tableau10"],
+						shadow: true,
+						label: "su carreggiata|su marciapiede|su verde",
+						weights: "0.1",
+						valuedecimals: "1",
+						normalsizevalue: "50",
+						valuescale: "1.1",
+						sizepow: "1.5",
+						name: "chart2",
+						chartupper: "1:10000",
+						"tooltip": "<span style='white-space:nowrap'>{{name_via}} (lunghezza: {{length_km_tot_street}} km)</span>{{theme.item.chart}})* valore calcolato su 100 m di strada"
+					})
+					.meta({
 						"title": "Auto in sosta irregolare per 100 m"
 					})
 					.define()
@@ -185,10 +219,12 @@ $Log:index_only_map_embed.html,v $
 
 		var sizeCharts = function(nFactor) {
 			ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nFactor, 'factor');
+			ixmaps.changeThemeStyle(null, 'chart2', 'scale:' + nFactor, 'factor');
 		}
 
 		var setChartSize = function(nValue) {
 			ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nValue, 'set');
+			ixmaps.changeThemeStyle(null, 'chart2', 'scale:' + nValue, 'set');
 		}
 
 		var slider = document.getElementById("myRange1");
@@ -205,8 +241,10 @@ $Log:index_only_map_embed.html,v $
 		var __toggleMin100 = function(el) {
 			if (el.checked) {
 				ixmaps.changeThemeStyle(null, 'chart', 'filter:WHERE length_km_tot_street <= 0.5 AND length_km_tot_street >= 0.05', 'set');
+				ixmaps.changeThemeStyle(null, 'chart2', 'filter:WHERE length_km_tot_street <= 0.5 AND length_km_tot_street >= 0.05', 'set');
 			} else {
 				ixmaps.changeThemeStyle(null, 'chart', 'filter:', 'set');
+				ixmaps.changeThemeStyle(null, 'chart2', 'filter:', 'set');
 			}
 		};
 
