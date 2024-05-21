@@ -119,7 +119,8 @@ $Log:index_only_map_embed.html,v $
 					dynamicScalePow: "3",
 					normalSizeScale: "6758",
 					flushChartDraw: "10000",
-					panhidden: "false"
+					panhidden: "false",
+					basemapopacity: 0.6
 				})
 				.attribution(attribution)
 				.require("../../ui/js/tools/tooltip_mustache.js")
@@ -190,13 +191,14 @@ $Log:index_only_map_embed.html,v $
 					.binding({
 						"value": "auto_su_carreggiata|auto_su_marciapiede|auto_su_verde",
 						"value100": "length_km_tot_street",
-						"lookupfield": "name_via_upper"
+						"lookupfield": "name_via_upper",
+						"title": "name_via"
 					})
 					.filter("WHERE length_km_tot_street <= 0.5 AND length_km_tot_street >= 0.05")
-					.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|VALUES|FRACTION|SIMPLELEGEND|CIRCULARBOX")
+					.type("CHART|SYMBOL|SEQUENCE|STAR|SORT|DOWN|VALUES|FRACTION|SIMPLELEGEND|CIRCULARBOX|BOTTOMTITLE")
 					.style({
 						colorscheme: [3, "tableau10"],
-						shadow: true,
+						shadow: false,
 						label: "su carreggiata|su marciapiede|su verde",
 						weights: "0.1",
 						valuedecimals: "1",
