@@ -60,10 +60,10 @@
 			ixmaps.embed("mymap", {
 					mapCdn: "https://gjrichter.github.io/ixmaps",
 					mapService: "leaflet_vt",
-					mapType: "white",
+					mapType: "VT_DATAVIZ",
 					height: "720px",
 					legend: "true",
-					mode: "info",
+					mode: "pan",
 					search: "Europe"
 				}, map => map
 				.view([42.17154633452754, 13.699951171875], 6)
@@ -136,7 +136,7 @@
 							value100: "pop_res",
 							title: "istat_comune_nome"
 						})
-						.type("CHOROPLETH|DOMINANT|DEVIATION|PERMILLE|DOPACITYMAX|COUNT")
+						.type("CHOROPLETH|DOMINANT|PERCENTOFMEAN|PERMILLE|DOPACITYMAX|COUNT")
 						.style({
 							colorscheme: [
 								"#dd8800",
@@ -146,11 +146,11 @@
 								"Tipo A",
 								"Tipo B",
 								"Tipo A+B"],
-							fillopacity: "1",
+							fillopacity: "auto",
 							units: "",
 							valuesupper: "1:1000000",
-							dopacitypow: "1",
-							dopacityscale: "5",
+							dopacitypow: "0.5",
+							dopacityscale: "50",
 							lookuptonumber: true,
 							showdata: true,
 							tooltip: "<h2 style='margin:0;white-space:nowrap'>{{istat_comune_nome}}</h2><i style='white-space:nowrap'>{{Total}} esercizi {{pop_res}} abitanti</i><h1 style='margin:0'>{{theme.item.value}}</h1><p style='margin:0'>esercizi x1000 abitanti</p>{{theme.item.data}}"
