@@ -1,0 +1,240 @@
+		table {
+			background: #F7F6EF;
+			border-radius: 0.3em;
+			xxpadding: 0.4em 0.8em;
+		}
+
+		td {
+			xxborder: dotted #888800 0.1px;
+		}
+
+		button {
+			background: #F7F6EF;
+			border: #dddddd solid 1px;
+			border-radius: 0.3em;
+			padding: 0.4em 0.8em;
+		}
+
+		button:hover {
+			cursor: pointer;
+		}
+
+		.left {
+			text-align: left;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-family: arial, helvetica;
+			color: #888;
+			font-weight: 300;
+		}
+
+		p {
+			font-family: arial, helvetica;
+			color: #444;
+			font-weight: 300;
+		}
+
+		a {
+			font-family: arial, helvetica;
+			font-weight: 100;
+			color: black;
+			text-decoration: none;
+		}
+
+		a:hover {
+			color: #000088;
+			text-decoration: none;
+		}
+
+		.filter-input {
+			width: 275px;
+			margin: 0;
+			float: left;
+			outline: none;
+			font-size: 1.2em;
+			border: 0;
+			margin-left: 0.2em;
+			font-family: Raleway, Arial;
+			font-weight: 300;
+			color: #444;
+		}
+
+		.minvalue,
+		.maxvalue {
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+
+		.slider-handle {
+			position: absolute;
+			top: 0px;
+			width: 20px;
+			height: 20px;
+			background-color: #ddd;
+			background-image: none;
+			filter: none;
+			box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px;
+			background-repeat: repeat-x;
+			border-width: 0px;
+			border-style: solid;
+			border-color: transparent;
+			border-image: initial;
+		}
+
+		.facet-header {
+			font-family: arial;
+			font-size: 1.1em;
+			text-align: left;
+			padding: 0.5em 0.5em 0.5em 0.5em;
+			margin: 1em 0 0.4em 0;
+			background: #888888;
+			border-radius: 5px;
+			color: white;
+		}
+
+		.facet-active .facet-header {
+			background: #884444;
+		}
+	
+		/*! part of the Boostrap version 3 css, needed for slider tooltips 	*/
+		/*  copied from the v3.3.5 Bootstrap css 							*/
+
+		.tooltip {
+			position: absolute;
+			z-index: 1070;
+			display: block;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 1.42857143;
+			text-align: left;
+			text-align: start;
+			text-decoration: none;
+			text-shadow: none;
+			text-transform: none;
+			letter-spacing: normal;
+			word-break: normal;
+			word-spacing: normal;
+			word-wrap: normal;
+			white-space: normal;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			line-break: auto
+		}
+
+		.tooltip.in {
+			filter: alpha(opacity=90);
+			opacity: .9
+		}
+
+		.tooltip.top {
+			padding: 5px 0;
+			margin-top: -3px
+		}
+
+		.tooltip.right {
+			padding: 0 5px;
+			margin-left: 3px
+		}
+
+		.tooltip.bottom {
+			padding: 5px 0;
+			margin-top: 3px
+		}
+
+		.tooltip.left {
+			padding: 0 5px;
+			margin-left: -3px
+		}
+
+		.tooltip-inner {
+			max-width: 200px;
+			padding: 3px 8px;
+			color: #fff;
+			text-align: center;
+			background-color: #000;
+			border-radius: 4px
+		}
+
+		.tooltip-arrow {
+			position: absolute;
+			width: 0;
+			height: 0;
+			border-color: transparent;
+			border-style: solid
+		}
+
+		.tooltip.top .tooltip-arrow {
+			bottom: 0;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px 5px 0;
+			border-top-color: #000
+		}
+
+		.tooltip.top-left .tooltip-arrow {
+			right: 5px;
+			bottom: 0;
+			margin-bottom: -5px;
+			border-width: 5px 5px 0;
+			border-top-color: #000
+		}
+
+		.tooltip.top-right .tooltip-arrow {
+			bottom: 0;
+			left: 5px;
+			margin-bottom: -5px;
+			border-width: 5px 5px 0;
+			border-top-color: #000
+		}
+
+		.tooltip.right .tooltip-arrow {
+			top: 50%;
+			left: 0;
+			margin-top: -5px;
+			border-width: 5px 5px 5px 0;
+			border-right-color: #000
+		}
+
+		.tooltip.left .tooltip-arrow {
+			top: 50%;
+			right: 0;
+			margin-top: -5px;
+			border-width: 5px 0 5px 5px;
+			border-left-color: #000
+		}
+
+		.tooltip.bottom .tooltip-arrow {
+			top: 0;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 0 5px 5px;
+			border-bottom-color: #000
+		}
+
+		.tooltip.bottom-left .tooltip-arrow {
+			top: 0;
+			right: 5px;
+			margin-top: -5px;
+			border-width: 0 5px 5px;
+			border-bottom-color: #000
+		}
+
+		.tooltip.bottom-right .tooltip-arrow {
+			top: 0;
+			left: 5px;
+			margin-top: -5px;
+			border-width: 0 5px 5px;
+			border-bottom-color: #000
+		}
