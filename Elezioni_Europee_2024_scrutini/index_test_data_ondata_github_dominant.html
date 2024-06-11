@@ -85,11 +85,8 @@ $Log:index_only_map_embed.html,v $
 				.view([42.17154633452754,13.699951171875],6)
 				.require("../../ui/js/tools/tooltip_basic.js")		 
 				.options({
-					featurescaling: "dynamic",
-					objectscaling: "dynamic",
-					normalSizeScale: "1000000",
-					dynamicScalePow: "7",
-					panhidden: "false",       
+					flushPaintShape: "100000",
+					panhidden: "false"       
 				})
 				.layer(
 					ixmaps.layer("Comuni")
@@ -128,6 +125,7 @@ $Log:index_only_map_embed.html,v $
 					})
 					.binding({
 						geo: "CODICE ISTAT",
+						title: "DESCRIZIONE COMUNE",
 						values: [
 							"PARTITO DEMOCRATICO",
 							"LEGA SALVINI PREMIER",
@@ -170,12 +168,8 @@ $Log:index_only_map_embed.html,v $
 							"LIBERTA'",
 							"ALTERNATIVA POPOLARE",
 							"SVP"],
-						fillopacity: "auto",
 						units: "%",
-						valuesupper: "1:1000000",
-						valuedecimals: "1",
-						aggregationfield: "CODICE ISTAT",
-						titlefield: "DESCRIZIONE COMUNE"
+						valuedecimals: "1"
 					})
 					.title("Europee 2024<h3>Partito vincente</h3><hr>")
 					.json()
