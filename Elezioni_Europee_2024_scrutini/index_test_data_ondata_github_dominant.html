@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps test Api 2</title>
+
+</head>
+
+<body style='text-align:center;background:#F6F0E3'>
+
+    <!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	
+    <!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8"> 
+
+
+		query_data = function(theme, options) {
+			var broker = new Data.Broker()
+			
+			.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/liste.csv", "csv")
+			.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/insieme.csv", "csv")
+			
+			.realize(function(dataA) {
+				
+				var data = dataA[0];
+				var nameLookupA = dataA[1].lookupArray({
+					key: "CODICE ISTAT",
+					value: "DESCRIZIONE COMUNE"
+				});
+				
+				dataA[0].addColumn({
+					source: "CODICE ISTAT",
+					destination: "DESCRIZIONE COMUNE"
+				}, function(value) {
+					return (nameLookupA[value]);
+				});
+				
+				pivot = data.pivot({
+					lead: "CODICE ISTAT",
+					keep: "DESCRIZIONE COMUNE",
+					columns: "desc_lis",
+					value: "perc"
+				});
+				
+				options.type = "jsonDB", ixmaps.setExternalData(pivot, options);
+			});
+		};
+		
+		document.activeElement.appendChild(
+			
+			ixmaps.embed("mymap", { 
+			   mapCdn: "https://gjrichter.github.io/ixmaps",
+			   mapType: "CartoDB - Positron",	
+			   height: "720px",
+			   legend: "true",
+			   mode: "info"	
+			 }, map => map
+				.view([42.17154633452754,13.699951171875],6)
+				.require("../../ui/js/tools/tooltip_basic.js")		 
+				.options({
+					featurescaling: "dynamic",
+					objectscaling: "dynamic",
+					normalSizeScale: "1000000",
+					dynamicScalePow: "7",
+					panhidden: "false",       
+				})
+				.layer(
+					ixmaps.layer("Comuni")
+						.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20200101_comuni.s.topo.json", "topojson")
+						.binding({
+							id: "pro_com_T",
+							size: "shape_area"
+						})
+						.style({
+							colorscheme: ["none"],
+							fillopacity: "0.5",
+							linecolor: "white",
+							linewidth: "0.02"
+						})
+						.title("Comuni")
+					.json()
+				)
+				.layer(
+					ixmaps.layer("Regioni")
+					.data("https://raw.githubusercontent.com/openpolis/geojson-italy/master/topojson/limits_IT_regions.topo.json","topojson")
+					.binding({
+						id:"reg_istat_code_num" })
+					.style({
+						colorscheme: ["none"],
+						fillopacity: "0.5",
+						linecolor: "black",
+						linewidth: "0.5"
+					})
+					.title("Comuni")
+					.json()
+				)
+				.theme(
+					ixmaps.theme("Comuni")
+					.data({
+						query: query_data.toString()
+					})
+					.binding({
+						geo: "CODICE ISTAT",
+						values: [
+							"PARTITO DEMOCRATICO",
+							"LEGA SALVINI PREMIER",
+							"MOVIMENTO 5 STELLE",
+							"FORZA ITALIA - NOI MODERATI - PPE",
+							"FRATELLI D'ITALIA",
+							"STATI UNITI D'EUROPA",
+							"AZIONE - SIAMO EUROPEI",
+							"ALLEANZA VERDI E SINISTRA",
+							"PACE TERRA DIGNITA'",
+							"LIBERTA'",
+							"ALTERNATIVA POPOLARE",
+							"SÜDTIROLER VOLKSPARTEI (SVP)"]
+					})
+					.type("CHOROPLETH|DOMINANT|SIMPLELEGEND")
+					.style({
+						colorscheme: [
+							"RGB(203,28,36)",
+							"RGB(0,48,160)",
+							"RGB(238,217,36)",
+							"RGB(5,177,240)",
+							"#0B3B6A",
+							"RGB(237,28,36)",
+							"#FFA619",
+							"red",
+							"red",
+							"RGB(136,68,0)",
+							"RGB(136,68,0)",
+							"RGB(68,68,68)"],
+						label: [
+							"PARTITO DEMOCRATICO",
+							"LEGA SALVINI PREMIER",
+							"MOVIMENTO 5 STELLE",
+							"FORZA ITALIA - PPE",
+							"FRATELLI D'ITALIA",
+							"STATI UNITI D'EUROPA",
+							"AZIONE - SIAMO EUROPEI",
+							"ALLEANZA VERDI E SINISTRA",
+							"PACE TERRA DIGNITA'",
+							"LIBERTA'",
+							"ALTERNATIVA POPOLARE",
+							"SVP"],
+						fillopacity: "auto",
+						units: "%",
+						valuesupper: "1:1000000",
+						valuedecimals: "1",
+						aggregationfield: "CODICE ISTAT",
+						titlefield: "DESCRIZIONE COMUNE"
+					})
+					.title("Europee 2024<h3>Partito vincente</h3><hr>")
+					.json()
+				)
+			)
+		);
+		
+		var old_onZoom = ixmaps.htmlgui_onZoomAndPan;
+		ixmaps.htmlgui_onZoomAndPan = function(nZoom) {
+			ixmaps.setBasemapOpacity(null, (ixmaps.getZoom() - 7) / 5, "absolute");
+			try {
+				old_onZoomAndPan(nZoom);
+			} catch (e) {}
+		};
+
+	</script>	
+  </body>
+</html>
