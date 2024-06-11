@@ -90,7 +90,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.layer(
 					ixmaps.layer("Comuni")
-						.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20200101_comuni.s.topo.json", "topojson")
+						.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20240101_comuni.s.topo.json", "topojson")
 						.binding({
 							id: "pro_com_T",
 							size: "shape_area"
@@ -106,9 +106,9 @@ $Log:index_only_map_embed.html,v $
 				)
 				.layer(
 					ixmaps.layer("Regioni")
-					.data("https://raw.githubusercontent.com/openpolis/geojson-italy/master/topojson/limits_IT_regions.topo.json","topojson")
+					.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20210101_regioni.topo.json","topojson")
 					.binding({
-						id:"reg_istat_code_num" })
+						id:"cod_reg" })
 					.style({
 						colorscheme: ["none"],
 						fillopacity: "0.5",
