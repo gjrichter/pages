@@ -112,8 +112,8 @@ $Log:index_only_map_embed.html,v $
 					.style({
 						colorscheme: ["none"],
 						fillopacity: "0.5",
-						linecolor: "black",
-						linewidth: "0.5"
+						linecolor: "white",
+						linewidth: "0.2"
 					})
 					.title("Comuni")
 					.json()
@@ -170,6 +170,11 @@ $Log:index_only_map_embed.html,v $
 							"SVP"],
 						units: "%",
 						valuedecimals: "1"
+					})
+					.meta({
+						title: "Europee 2024<h3>Partito vincente</h3><hr>",
+						description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, confini amministrativi: <a href='https://confini-amministrativi.it/' target='_blank'>onData</a>",
+						tooltip: "<h2 style='margin:0'>{{DESCRIZIONE COMUNE}}</h2><hr><br>{{theme.item.chart}}"
 					})
 					.title("Europee 2024<h3>Partito vincente</h3><hr>")
 					.json()
