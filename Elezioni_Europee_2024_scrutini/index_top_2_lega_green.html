@@ -90,12 +90,13 @@
 		Le mappe sono intenzionate di visualizzare la <b>diffusione territoriale</b> dei principali partiti <b>nel tempo</b>. Le mappe rappresentano il risultato delle ultime 2 elezioni (2022 politiche e 2024 europee), per i comuni d'Italia con <b>colori composti</b> dai singoli <b>colori</b> associati ai <b>principali partiti</b> valutati per i rispettivi <b>risultati</b>.</div>
 		
 	</div>
-	
+
+
     <!--========================================================================= -->
 	<div >
 		<iframe id="map1" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map1&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_subtractive_lega_green.json"></iframe>
 		
-		<iframe id="map2" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://localhost/ixmaps/deploy/rc-exp/ixmaps/pages/Elections/Europe_2024/Italy/index_test_data_ondata_github_composecolor_density_small.html"></iframe>
+		<iframe id="map2" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/Elezioni_Europee_2024_scrutini/index_test_data_ondata_github_composecolor_density_small.html"></iframe>
 	</div>
  
 	<div style="font-size:1.5em">
@@ -114,10 +115,6 @@
 	<div style="font-size:1.5em;text-align:left;max-width:1024px;margin:auto">
 		<br> 
 		Le mappe sopra mostrano paesaggi partitici del presente e del passato.<br><br> 
-	</div>
-
-	<div >
-		<iframe id="map0" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map0&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Europee_2019_subtractive_lega_green.json"></iframe>
 	</div>
 
 	
@@ -179,8 +176,7 @@
 
 	<script type="text/javascript" src="../assets/lib/js/Chart.bundle.js"></script>
 
-	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
-	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
 
 	<!-- Javascript -->
 	<script>
@@ -208,8 +204,8 @@
 		
 		ixmaps.markClasses = function(szClasses){
 			ixmaps.message("...");
-			ixmaps.map('map0').theme("0").changeStyle('markclasses:'+szClasses,'set');
-			ixmaps.map('map1').theme("1").changeStyle('markclasses:'+szClasses,'set');
+			ixmaps.changeThemeStyle('map0',null,'markclasses:'+szClasses,'set');
+			ixmaps.changeThemeStyle('map1',null,'markclasses:'+szClasses,'set');
 		}
 
 
