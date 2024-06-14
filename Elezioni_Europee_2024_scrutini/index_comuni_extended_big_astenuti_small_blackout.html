@@ -246,7 +246,7 @@
 					size: "shape_area"
 				})
 				.style({
-					colorscheme: ["#ffdddd"],
+					colorscheme: ["white"],
 					fillopacity: "0.5",
 					linecolor: "white",
 					linewidth: "0.02"
@@ -289,6 +289,7 @@
 					colorscheme: [
 						"black",
 					],
+					opacity: 1,
 					units: "%",
 					valuedecimals: "1"
 				})
@@ -413,10 +414,10 @@
 					map.setOptions(options)
 						.setView([41.43181858864192, 12.321655273437502], 7.3)
 						.require("../../ui/js/tools/tooltip_mustache.js")
-						//.layer(geo_reg)
+						.layer(geo_reg)
 						.layer(geo)
-						.layer(theme)
 						.layer(affluenza)
+						.layer(theme)
 				}
 			);
 
