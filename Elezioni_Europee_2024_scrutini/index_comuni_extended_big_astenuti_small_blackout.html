@@ -246,7 +246,7 @@
 					size: "shape_area"
 				})
 				.style({
-					colorscheme: ["#dddddd"],
+					colorscheme: ["#ffdddd"],
 					fillopacity: "0.5",
 					linecolor: "white",
 					linewidth: "0.02"
@@ -285,7 +285,7 @@
 				})
 				.style({
 					filter: "WHERE perc_vot < 50",
-					type: "CHOROPLETH|FORCE|LOCKED|NOLEGEND",
+					type: "CHOROPLETH|LOCKED|NOLEGEND",
 					colorscheme: [
 						"black",
 					],
@@ -331,7 +331,7 @@
 				})
 				.style({
 					filter: "WHERE perc_vot >= 50",
-					type: "CHOROPLETH|DOMINANT|DOPACITYMAX|HORZ|SORT|SIMPLELEGEND",
+					type: "CHOROPLETH|DOMINANT|DOPACITYMAX|HORZ|SORT|LOCKED|SIMPLELEGEND",
 					colorscheme: [
 						"RGB(203,28,36)",
 						"#048467",
@@ -415,11 +415,10 @@
 						.require("../../ui/js/tools/tooltip_mustache.js")
 						//.layer(geo_reg)
 						.layer(geo)
-						.layer(affluenza)
 						.layer(theme)
+						.layer(affluenza)
 				}
 			);
-
 
 		});
 
