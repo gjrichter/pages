@@ -181,6 +181,7 @@
 
 					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/liste.csv", "csv")
 					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/insieme.csv", "csv")
+					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/affluenza.csv", "csv")
 
 					.realize(function(dataA) {
 
@@ -197,9 +198,9 @@
 							key: "CODICE ISTAT",
 							value: "vot_t"
 						});
-						var percVotLookupA = dataA[1].lookupArray({
+						var percVotLookupA = dataA[2].lookupArray({
 							key: "CODICE ISTAT",
-							value: "perc_vot"
+							value: "perc"
 						});
 
 						dataA[0].addColumn({
@@ -245,7 +246,7 @@
 					size: "shape_area"
 				})
 				.style({
-					colorscheme: ["black"],
+					colorscheme: ["#dddddd"],
 					fillopacity: "0.5",
 					linecolor: "white",
 					linewidth: "0.02"
@@ -266,6 +267,36 @@
 					linewidth: "0.5"
 				})
 				.title("Regionii")
+				.define();
+
+			// defining the visualization
+			// uses the georeference layer "ITALIA_Comuni_2022"
+			// defines a CHOROPLETH theme with zoom dependent value display 
+			//
+			var affluenza =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "DESCRIZIONE COMUNE",
+					value: "perc_vot"
+				})
+				.style({
+					filter: "WHERE perc_vot < 50",
+					type: "CHOROPLETH|FORCE|LOCKED|NOLEGEND",
+					colorscheme: [
+						"black",
+					],
+					units: "%",
+					valuedecimals: "1"
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h2 style='margin:0'>{{DESCRIZIONE COMUNE}}</h2> Affluenza: {{perc_vot}} %"
+				})
 				.define();
 
 			// defining the visualization
@@ -299,7 +330,7 @@
 					value100: "Total"
 				})
 				.style({
-					filter: "WHERE perc_vot > 50",
+					filter: "WHERE perc_vot >= 50",
 					type: "CHOROPLETH|DOMINANT|DOPACITYMAX|HORZ|SORT|SIMPLELEGEND",
 					colorscheme: [
 						"RGB(203,28,36)",
@@ -382,8 +413,9 @@
 					map.setOptions(options)
 						.setView([41.43181858864192, 12.321655273437502], 7.3)
 						.require("../../ui/js/tools/tooltip_mustache.js")
-						.layer(geo_reg)
+						//.layer(geo_reg)
 						.layer(geo)
+						.layer(affluenza)
 						.layer(theme)
 				}
 			);
