@@ -80,7 +80,7 @@
 		<div class=" mb-3 text-center">
 			<div class="mb-4">
 				<div style="margin-top:-1.5em">
-					<h1 class="pricing-card-title">MOVIMENTI 2022/2024<br><small class="text-muted">fonte dati: <a href='https://elezioni.interno.gov.it/europee/scrutini/20240609/scrutiniEI' target='_blank'>Eligendo - Ministero dell'Interno</a> </small> <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>&rarr; onData</a> </small></h1>
+					<h1 class="pricing-card-title">MOVIMENTI<br><small class="text-muted">fonte dati: <a href='https://elezioni.interno.gov.it/europee/scrutini/20240609/scrutiniEI' target='_blank'>Eligendo - Ministero dell'Interno</a> </small> <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>&rarr; onData</a> </small></h1>
 				</div>
 			</div>
 		</div>
@@ -90,9 +90,55 @@
 		Le mappe sono intenzionate di visualizzare la <b>diffusione territoriale</b> dei principali partiti <b>nel tempo</b>. Le mappe rappresentano il risultato delle ultime 2 elezioni (2022 politiche e 2024 europee), per i comuni d'Italia con <b>colori composti</b> dai singoli <b>colori</b> associati ai <b>principali partiti</b> valutati per i rispettivi <b>risultati</b>.</div>
 		
 	</div>
+	
+ 	<div class="text-center" style="margin-bottom:1em">
+			solo:
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0')">
+			PD </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('1')">
+			M5S </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('2')">
+			FI </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('3')">
+			LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('4')">
+			FdI </a> confronto:
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1')">
+			PD-M5S </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('0|2')">
+			PD-FI </a>
+		<a class="btn btn-default app-btn" role="button"
+		   href="javascript:ixmaps.markClasses('0|3')">
+			PD-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('1|3')">
+			M5S-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('1|2')">
+			M5S-FI </a> a 3: 
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1|2')">
+			PD-M5S-FI </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('0|1|3')">
+			PD-M5S-LEGA </a>
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('2|3|4')">
+			FI-LEGA-FdI </a> |
+		<a class="btn btn-default app-btn" role="button" 
+		   href="javascript:ixmaps.markClasses('')">
+			tutti </a>
+		
+	</div>
 
-
-    <!--========================================================================= -->
+<!--========================================================================= -->
 	<div >
 		<iframe id="map1" width="38%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/ixmaps/ui/html/embed_sync_Leaflet.html?name=map1&amp;basemap=ll&amp;align=center&amp;mode=info&amp;scrollsafesilent=1&amp;legend=1&amp;sync=true&amp;ui=hidden&amp;project=https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2022_subtractive_lega_green.json"></iframe>
 		
@@ -202,11 +248,31 @@
 
 		infuseHTML("menu", "./menu.html", "menu");
 		
+		ixmaps.tmp = ixmaps.tmp || {};
+		ixmaps.tmp.markedClasses = null;
 		ixmaps.markClasses = function(szClasses){
 			ixmaps.message("...");
-			ixmaps.changeThemeStyle('map0',null,'markclasses:'+szClasses,'set');
-			ixmaps.changeThemeStyle('map1',null,'markclasses:'+szClasses,'set');
+			if (szClasses && (szClasses == ixmaps.tmp.markedClasses)){
+				szClasses = "";
+				}
+			var maps = ixmaps.maps();
+			for ( i in maps ){
+				ixmaps.map(i).theme().changeStyle('markclasses:'+szClasses,'set');
+			}
+			ixmaps.tmp.markedClasses = szClasses;
 		}
+		
+		var old_onZoom = ixmaps.htmlgui_onZoomAndPan;
+		ixmaps.htmlgui_onZoomAndPan = function(nZoom) {
+			var maps = ixmaps.maps();
+			for ( i in maps ){
+				ixmaps.map(i).theme().changeStyle('opacity:(15-ixmaps.getZoom()) / 3','set');
+				ixmaps.setBasemapOpacity(i, (ixmaps.getZoom() - 7) / 5, "absolute");
+			}
+			try {
+				old_onZoomAndPan(nZoom);
+			} catch (e) {}
+		};
 
 
 	</script>
