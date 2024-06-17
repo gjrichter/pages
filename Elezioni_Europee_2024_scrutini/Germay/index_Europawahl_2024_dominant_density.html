@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps</title>
+
+</head>
+
+<body>
+
+	<div id="tooltip"></div>
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		query_data = function(theme, options) {
+			var broker = new Data.Broker()
+				.addSource("https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ElezioniEuropee2024/kerg2.csv", "csv")
+				.realize(function(dataA) {
+					var pivot = dataA[0].pivot({
+						"lead": "Gebietsnummer",
+						"columns": "Gruppenname",
+						"value": "Anzahl",
+						"keep": ["Gebietsname"]
+					});
+					options.type = "jsonDB", ixmaps.setExternalData(pivot, options);
+				});
+		};
+
+		RS_toNumber = function(data) {
+			data.column("RS").map(function(value) {
+				return Number(value);
+			});
+
+		}
+		// ----------------------------------------
+		// 
+		// ----------------------------------------
+
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapService: "leaflet_vt",
+					mapType: "white",
+					width: "840px",
+					height: "800px",
+					legend: "true",
+					align: "center",
+					mode: "info",
+					name: "map_1"
+				},
+				map => map
+				.options({
+					objectscaling: "dynamic",
+					normalSizeScale: "1000000",
+					panhidden: "false",
+					basemapopacity: "0.6",
+					flushPaintShape: "100000"
+				})
+				.view([50.84063582806037, 10.523925781250002], 6)
+				.attribution("Daten: <a href='https://bundeswahlleiterin.de/europawahlen/2024/ergebnisse/opendata.html#4c0a8846-ae6b-4689-9730-4a2bfca7af94' target='_blank'>Open-Data-Angebot der Bundeswahlleiterin</a> Lizenz: <a href='https://www.govdata.de/dl-de/by-2-0' target='_blank'>Datenlizenz Deutschland – Namensnennung – Version 2.0</a> Visualisierung: <a href='www.ixmaps.com' target='_blank'>iXMaps</a>")
+				.require("../../ui/js/tools/tooltip_mustache.js")
+
+				// bounderies			 
+
+				.layer(ixmaps.layer("Landkreise")
+					.data({
+						url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Germania/landkreise_simplify200_area.topojson.gz",
+						type: "topojson",
+						process: RS_toNumber.toString()
+					})
+					.type("FEATURES|NOLEGEND")
+					.binding({
+						id: "RS",
+						size: "area"
+					})
+					.style({
+						colorscheme: ["none"],
+						linecolor: ["#ffffff"],
+						linewidth: "0.3",
+						showdata: true
+					})
+					.define()
+				)
+
+				// choropleth theme with last incidence
+
+				.layer(ixmaps.theme("Landkreise")
+					.data({
+						query: query_data.toString()
+					})
+					.type("CHOROPLETH|DOMINANT|COMPACTLEGEND|DOPACITYMAX|SIMPLELEGEND")
+					.binding({
+						position: "Gebietsnummer",
+						values: [
+							"CDU",
+							"SPD",
+							"GRÜNE",
+							"AfD",
+							"CSU",
+							"FDP",
+							"DIE LINKE"
+						],
+						value100: "Gültige",
+						alpha: "Wahlberechtigte",
+						alpha100: "$density$",
+						title: "Gebietsname"
+					})
+					.style({
+						colorscheme: [
+							"black",
+							"#E2001A",
+							"#1FA12D",
+							"#009FE1",
+							"black",
+							"#FFEE00",
+							"magenta"
+						],
+						label: [
+							"CDU",
+							"SPD",
+							"GRÜNE",
+							"AfD",
+							"CSU",
+							"FDP",
+							"DIE LINKE"
+						],
+						units: "%",
+						dopacitypow: "2",
+						dopacityscale: "1.5"
+					})
+					.meta({
+						title: "Europawahl 2024 - vorlaeufiges Ergebnis",
+						snippet: "Die <b>Farbe</b> entspricht der Partei mit dem <b>besten Ergebnis</b>, die Intesisitaet der Waehlerdichte",
+						tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2><p>{{Wahlberechtigte}} Wahlberechtigte</p>{{theme.item.chart}}"
+					})
+					.define()
+				)
+			)
+		);
+
+	</script>
+
+	<div id="onmap-buttons" style="position:absolute;bottom:6em;left:20%">
+
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:0.6','factor')">-</button>
+		<span style="font-size:0.8em"> &nbsp; Intensitat &nbsp;</span>
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:1.5','factor')">+</button>
+		&nbsp;&nbsp;
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:1.1','factor')">-</button>
+		<span style="font-size:0.8em"> &nbsp; Kontrast &nbsp;</span>
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:0.9','factor')">+</button>
+
+	</div>
+
+</body>
+
+</html>
