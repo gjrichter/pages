@@ -76,13 +76,12 @@ $Log:index_only_map_embed.html,v $
 			ixmaps.embed("mymap", {
 					mapCdn: "https://gjrichter.github.io/ixmaps",
 					mapType: "CartoDB - Positron",
-			   height: String(window.innerHeight-20) + "px",
 					legend: "true",
 					mode: "info",
 					search: "Ttaly"
 				}, map => map
 				.view([42.17154633452754, 13.699951171875], 6)
-				.require("../../ui/js/tools/tooltip_mustache.js")		 
+				.require("../../ui/js/tools/tooltip_mustache.js")
 				.options({
 					flushPaintShape: "100000",
 					panhidden: "false",
@@ -177,7 +176,7 @@ $Log:index_only_map_embed.html,v $
 						],
 						fillopacity: 1,
 						dopacitypow: 2,
-						dopacityscale: 3.5,
+						dopacityscale: 4,
 						units: "%",
 						valuedecimals: "1"
 					})
@@ -201,37 +200,20 @@ $Log:index_only_map_embed.html,v $
 		};
 
 	</script>
-	
-	<div id="onmap-buttons" style="position:absolute;bottom:2em;right:35%">
 
-		<table>
-			<tr>
-				<td>
-					<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:0.6','factor')">-</button>
-				</td>
-				<td>
-					<span style="font-size:0.8em"> &nbsp; intensità &nbsp;</span>
-				</td>
-				<td>
-					<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:1.5','factor')">+</button>
-				</td>
-				
-				<td>
-					<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:1.1','factor')">-</button>
-				</td>
-				<td>
-					<span style="font-size:0.8em"> &nbsp; contrasto &nbsp;</span>
-				</td>
-				<td>
-					<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:0.9','factor')">+</button>
-				</td>
-			</tr>
+	<div id="onmap-buttons" style="position:absolute;bottom:2em;left:0;width:100%;display:flex;justify-content:center;">
 
-		</table>
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:0.6','factor')">-</button>
+		<span style="font-size:0.8em"> &nbsp; intensità &nbsp;</span>
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacityscale:1.5','factor')">+</button>
+		&nbsp;&nbsp;
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:1.1','factor')">-</button>
+		<span style="font-size:0.8em"> &nbsp; contrasto &nbsp;</span>
+		<button onclick="ixmaps.changeThemeStyle(null,null,'dopacitypow:0.9','factor')">+</button>
 
 	</div>
-	
-	
+
+
 </body>
 
 </html>
