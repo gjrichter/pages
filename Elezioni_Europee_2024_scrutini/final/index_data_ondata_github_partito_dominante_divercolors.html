@@ -30,7 +30,7 @@ $Log:index_only_map_embed.html,v $
 
 </head>
 
-<body style='text-align:center;background:#F0F0F2'>
+<body style='text-align:center;background:#F6F0E3'>
 
     <!--========================================================================= -->
 
@@ -80,6 +80,7 @@ $Log:index_only_map_embed.html,v $
 			   mapType: "CartoDB - Positron",	
 			   height: String(window.innerHeight-20) + "px",
 			   legend: "true",
+			   search: "Italy",	
 			   mode: "info"	
 			 }, map => map
 				.view([42.17154633452754,13.699951171875],6)
@@ -100,7 +101,7 @@ $Log:index_only_map_embed.html,v $
 							colorscheme: ["none"],
 							fillopacity: "0.5",
 							linecolor: "white",
-							linewidth: "0.02"
+							linewidth: "0.01"
 						})
 						.title("Comuni")
 					.json()
@@ -114,7 +115,7 @@ $Log:index_only_map_embed.html,v $
 						colorscheme: ["none"],
 						fillopacity: "0.5",
 						linecolor: "white",
-						linewidth: "0.2"
+						linewidth: "0.1"
 					})
 					.title("Comuni")
 					.json()
