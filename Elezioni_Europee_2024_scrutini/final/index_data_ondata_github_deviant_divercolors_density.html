@@ -70,7 +70,35 @@ $Log:index_only_map_embed.html,v $
 					options.type = "jsonDB", ixmaps.setExternalData(pivot, options);
 				});
 		};
-
+		process = function(data){
+			data.column("pro_com_t").map(function(value) {
+				// Quero Vas -> Setteville
+				if (value == "025070") {
+					return "025075";
+				}
+				// Alano di Piave -> Setteville
+				if (value == "025002") {
+					return "025075";
+				}
+				// Sovizzo -> Sovizzo
+				if (value == "024044") {
+					return "024128";
+				}
+				// Gambugliano -> Sovizzo
+				if (value == "024103") {
+					return "024128";
+				}
+				// Carceri -> Sovizzo
+				if (value == "028022") {
+					return "024128";
+				}
+				// Vighizzolo -> Sovizzo
+				if (value == "028098") {
+					return "028108";
+				}
+				return value;
+			});
+		};
 		document.activeElement.appendChild(
 
 			ixmaps.embed("mymap", {
@@ -89,7 +117,11 @@ $Log:index_only_map_embed.html,v $
 				})
 				.layer(
 					ixmaps.layer("Comuni")
-					.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20240101_comuni.s.topo.json", "topojson")
+						.data({
+							url:							"https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20240101_comuni.s.topo.json",
+							type: "topojson",
+							process: process.toString()
+						})
 					.binding({
 						id: "pro_com_T",
 						size: "shape_area"
