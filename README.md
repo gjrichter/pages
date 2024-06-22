@@ -11,6 +11,7 @@
 [Movimenti nelle elezioni dal 2013 al  2019](https://gjrichter.github.io/pages/Elezioni_2013_2019_small/index_top_3.html)
 
 [Elezioni Politiche 2022](https://gjrichter.github.io/pages/Elezioni_Politiche_2022/index.html)
+[Elezioni Europee 2024](https://gjrichter.github.io/pages/Elezioni_Europee_2024_scrutini/index.html)
 
 [Sesso e Potere 2022](https://gjrichter.github.io/pages/Sesso%20e%20Potere/) [-2023](https://gjrichter.github.io/pages/Sesso%20e%20Potere/2023)
 
