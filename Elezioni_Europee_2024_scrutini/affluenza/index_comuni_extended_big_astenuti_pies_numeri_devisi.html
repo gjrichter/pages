@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script id="tinyhippos-injected">
+		if (window.top.ripple) {
+			window.top.ripple("bootstrap").inject(window, document);
+		}
+
+	</script>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>iXMaps</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/bootstrap.min.css">
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/pricing.css">
+	<!-- CSS App -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/dashboard/style.css">
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/dashboard/themes/flat-blue.css">
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/lib/css/font-awesome.min.css">
+	<style>
+		.active {
+			border: 2px solid #AFCDEA;
+			border-radius: 0.2em;
+		}
+
+	</style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- P A G E   H E A D E R											 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div class="d-flex flex-column flex-md-row align-items-center p-2 px-md-4 mb-3 bg-white ">
+		<!-- TITLE -->
+		<h5 class="my-0 mr-md-auto font-weight-lighter">iXMaps :: elezioni</h5>
+		<!-- PAGE NAVIGATION -->
+		<nav class="my-2 my-md-0 mr-md-3">
+			<a class="p-1 text-dark font-weight-lighter" style="font-size:18px" href="#footer">Fonti & Attributioni</a>
+		</nav>
+		<!-- EXTERNAL LINK -->
+		<a class="btn btn-outline-primary" href="./index.html">up &rarr;</a>
+	</div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- Top Text Area 													 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div class="container" style="margin-top:-2em">
+		<div class=" mb-3 text-center">
+			<h1 class="display-4">Elezioni Europee 2024</h1>
+			<div class="mb-4">
+				<div class="">
+					<h4 class="my-0 font-weight-normal" style='line-height:1.8em'><b>Affluenza</b> - divisi per comuni <span style='background-color:#ffffff;border:black solid 1px;border-radius:0.2em;padding:0 0.3em 0.1em 0.3em'> con elezioni amministrative</span> e comuni <br> con <span style='background-color:#eeeeff;border:black solid 1px;border-radius:0.2em;padding:0 0.3em 0.1em 0.3em;white-space:nowrap'>solo elezioni europee</span></b></h4>
+				</div>
+				<div class="">
+					<h1 class="pricing-card-title"><small class="text-muted">elaborazione dati: <a href='https://github.com/ondata/elezioni-politiche-2022' target='_blank'>OnData</a>
+							<- fonte dati: <a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target=' _blank'>Ministero dell'Interno</a>
+						</small></h1>
+				</div>
+		<p><big>i <b>grafici</b> (torte) mostrano il <b>n° di astenuti e votanti</b> e sono aggregati al livello regionale e provinciale o disaggregato per comune</big></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- Maps 													    	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div id="map_div_1" style="margin-top:-16px;padding:10px;" background="#f8f8f8" onclick="event.stopPropagation();return false;">
+	</div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- F O O T E R          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>
+	<footer id="footer" class="container" style="margin-top:2em;padding:1em 1.5em;background:#f8f8f8">
+		<div class="row">
+			<div class="col-4">
+				<h5>Fonti</h5>
+				<ul class="list-unstyled text-small">
+					<li>
+						dati elaborati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>OnData</a><br>
+						Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>
+					</li>
+					<li>&nbsp;</li>
+					<li>
+						scrutini pubblicati:<br><a href='https://dait.interno.gov.it/elezioni/trasparenza/elezioni-politiche-2022 target=' _blank'>Ministero dell'Interno</a>
+					</li>
+					<li>&nbsp;</li>
+					<li>
+						confini comunali:<br><a href="confini-amministrativi.it">confini-amministrativi.it</a></li>
+				</ul>
+			</div>
+			<div class="col-4">
+				<h5>Attribuzioni</h5>
+				<ul class="list-unstyled text-small">
+					<li> Papa Parse - <span style="color:#888888">.csv parser integtegrato in data.js, usato per caricare e manipolare i dati dai siti ufficiali, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+						Flat Admin Bootstrap Templates - <span style="color:#888888">HTML5 Bootstrap template alola base di questo dasboard, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+					</li>
+				</ul>
+			</div>
+			<div class="col-4">
+				<h5>About</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="https://ixmaps.com">powered by iXMaps</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- C O D E	          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<script type="text/javascript" src="https://gjrichter.github.io/pages/assets/lib/js/jquery.min.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/pages/assets/lib/js/bootstrap.bundle.min.js"></script>
+
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
+
+	<!-- Javascript -->
+	<script>
+		// ---------------------------------------------------------------------------------------
+		// infuse HTML snippets
+		// ---------------------------------------------------------------------------------------
+
+		infuseHTML = function(szElement, szUrl, szDiv) {
+
+			szStoryRoot = "";
+
+			if (typeof($("#" + szElement)[0]) == "undefined") {
+				return;
+			}
+			$("#" + szElement).load(szUrl + ' #' + szDiv, function(response, status, xhr) {
+				if (status == "error") {
+					var msg = "Sorry but there was an error: ";
+					$("#story").html(msg + xhr.status + "<br><br> '" + szStoryRoot + szUrl + "'<br><br> " + xhr.statusText);
+				}
+			});
+		};
+
+		infuseHTML("menu", "./menu.html", "menu");
+
+		// ---------------------------------------------------------------------------------------
+		// make dynamic page content
+		// ---------------------------------------------------------------------------------------
+
+		$(document).ready(function() {
+
+
+			// defining the data query and process function
+			//
+			query_data = function(theme, options) {
+				var broker = new Data.Broker()
+
+					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/affluenza.csv", "csv")
+					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/risorse/elenco_enti_partecipanti_amministrative_2024.csv","csv")
+				
+					.realize(function(dataA) {
+
+						var data = dataA[0];
+						var mLookupA = data.lookupArray({
+							key: "CODICE ISTAT",
+							value: "vot_m"
+						});
+						var fLookupA = data.lookupArray({
+							key: "CODICE ISTAT",
+							value: "vot_f"
+						});
+						var eLookupA = data.lookupArray({
+							key: "CODICE ISTAT",
+							value: "ele_t"
+						});
+						var amministrativeLookupA = dataA[1].lookupArray({
+							key: "CODICE ISTAT",
+							value: "comune"
+						});
+						data.addColumn({
+							source: "CODICE ISTAT",
+							destination: "elez_amm"
+						}, function(value) {
+							return (amministrativeLookupA[value]?"si":"no");
+						});
+						data.addColumn({
+							source: "CODICE ISTAT",
+							destination: "ast_t"
+						}, function(value) {
+							return (Number(eLookupA[value]) - Number(mLookupA[value]) - Number(fLookupA[value]));
+						});
+						data.addColumn({
+							source: "CODICE ISTAT",
+							destination: "CODICE PROV"
+						}, function(value) {
+							return (Number(value.substr(0,3)));
+						});
+
+						data.column("cod_prov").map(function(value){
+							return Number(value);
+						})
+						options.type = "jsonDB", ixmaps.setExternalData(data, options);
+					});
+			};
+
+			// defining the data query and process function
+			//
+			query_all_data = function(theme, options) {
+				var broker = new Data.Broker()
+
+					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/liste.csv", "csv")
+					.addSource("https://raw.githubusercontent.com/ondata/elezioni_europee_2024/main/data/insieme.csv", "csv")
+
+					.realize(function(dataA) {
+
+						var data = dataA[0];
+						var nameLookupA = dataA[1].lookupArray({
+							key: "CODICE ISTAT",
+							value: "DESCRIZIONE COMUNE"
+						});
+
+						dataA[0].addColumn({
+							source: "CODICE ISTAT",
+							destination: "DESCRIZIONE COMUNE"
+						}, function(value) {
+							return (nameLookupA[value]);
+						});
+
+						pivot = data.pivot({
+							lead: "CODICE ISTAT",
+							keep: "DESCRIZIONE COMUNE",
+							columns: "desc_lis",
+							value: "voti"
+						});
+
+						options.type = "jsonDB", ixmaps.setExternalData(pivot, options);
+					});
+			};
+
+			// defining the georeference layer for the CHOROPLETH thematic map
+			//
+			var geo =
+				ixmaps.layer("ITALIA_Comuni_2022")
+				.data("https://raw.githubusercontent.com/gjrichter/data/master/TopoJSON/IT/ondata_confini_amministrativi_api_v2_it_20240101_comuni.s.topo.json", "topojson")
+				.binding({
+					id: "pro_com_T",
+					size: "shape_area"
+				})
+				.style({
+					colorscheme: ["none"],
+					fillopacity: "0.5",
+					linecolor: "white",
+					linewidth: "0.02"
+				})
+				.title("Comuni")
+				.define();
+
+			var geo_reg =
+				ixmaps.layer("ITALIA_Regioni_2022")
+				.data("https://raw.githubusercontent.com/openpolis/geojson-italy/master/topojson/limits_IT_regions.topo.json", "topojson")
+				.binding({
+					id: "reg_istat_code_num"
+				})
+				.style({
+					colorscheme: ["none"],
+					fillopacity: "0.5",
+					linecolor: "black",
+					linewidth: "0.5"
+				})
+				.title("Regionii")
+				.define();
+
+			var geo_prov =
+				ixmaps.layer("ITALIA_Province_2022")
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2022/Prov01012022_g_WGS84.topojson.gz",
+					type: "topojson"
+				})
+				.binding({
+					id: "COD_PROV",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "#888888",
+					linewidth: "0.1",
+					sizefield: "Shape_Area"
+				})
+				.define();
+
+			// --------------------
+			// regioni %
+			// --------------------
+			
+			var theme_reg_no =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "$aggregation$",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					],
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|AGGREGATE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#F79399"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"femmine"
+					],
+					normalsizevalue: 500000,
+					linecolor: "black",
+					boxcolor: "#dddddd",
+					boxopacity: "0.5",
+					boxupper: "1:1000000000",
+					titleupper: "1:100000",
+					chartlower: "1:2500000",
+					textscale: 1.5,
+					align: "top",
+					aggregationfield: "cod_reg"
+				})
+				.meta({
+					title: " ",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h4 style='margin:0 0 1em 0;white-space:nowrap'>Comuni con solo elezioni europee</h4><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_reg_si =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "$aggregation$",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					],
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|AGGREGATE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#F79399"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"femmine"
+					],
+					normalsizevalue: 500000,
+					linecolor: "black",
+					boxcolor: "none",
+					boxopacity: "0.5",
+					boxmargin: 1,
+					boxupper: "1:100000000",
+					titleupper: "1:100000",
+					chartlower: "1:2500000",
+					textscale: 1.5,
+					align: "bottom",
+					aggregationfield: "cod_reg"
+				})
+				.meta({
+					title: " ",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h4 style='margin:0 0 1em 0;white-space:nowrap'>In comuni con elezioni amministrativi</h4><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			// --------------------
+			// regioni %
+			// --------------------
+			
+			var theme_reg_no_num_m =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "desc",
+					value: "vot_m",
+					value100: "ele_m",
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|VALUES|SIZEP3|AGGREGATE|NOLEGEND",
+					colorscheme: [
+						"#eeeeff"
+					],
+					symbols: "label",
+					chartlower: "1:2500000",
+					valuescale: 2.0,
+					textcolor: "#0066aa",
+					offsety: -4,
+					align: "below|2left",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					aggregationfield: "cod_reg",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h3 style='margin:0'>Affluenza maschile in comuni con solo elezioni europee</h3><br>{{theme.item.chart}}"
+				})
+				.define();
+			
+			var theme_reg_no_num_f =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "desc",
+					value: "vot_f",
+					value100: "ele_f",
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|VALUES|SIZEP3|AGGREGATE|NOLEGEND",
+					colorscheme: [
+						"#eeeeff"
+					],
+					symbols: "label",
+					chartlower: "1:2500000",
+					valuescale: 2.0,
+					textcolor: "#aa4422",
+					offsety: -4,
+					align: "top|2right",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					aggregationfield: "cod_reg",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h3 style='margin:0'>Affluenza femminile in comuni con solo elezioni europee</h3><br>{{theme.item.chart}}"
+				})
+				.define();
+			
+			var theme_reg_si_num_m =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "desc",
+					value: "vot_m",
+					value100: "ele_m",
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|VALUES|SIZEP3|AGGREGATE|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartlower: "1:2500000",
+					valuescale: 2.0,
+					textcolor: "#0066aa",
+					offsety: -4,
+					align: "2left",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					aggregationfield: "cod_reg",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h3 style='margin:0'>Affluenza maschile in comuni con amministrativi</h3><br>{{theme.item.chart}}"
+				})
+				.define();
+			
+			var theme_reg_si_num_f =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "desc",
+					value: "vot_f",
+					value100: "ele_f",
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|VALUES|SIZEP3|AGGREGATE|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartlower: "1:2500000",
+					valuescale: 2.0,
+					textcolor: "#aa4422",
+					offsety: -4,
+					align: "2right",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					aggregationfield: "cod_reg",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h3 style='margin:0'>Affluenza femminile in comuni con amministrativi</h3><br>{{theme.item.chart}}"
+				})
+				.define();
+			
+			var theme_reg_no_num =
+				ixmaps.theme("ITALIA_Regioni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "cod_reg",
+					title: "$aggregation$",
+					value: "perc",
+					size: "ele_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|AGGREGATE|MEAN|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartlower: "1:2500000",
+					textscale: 2,
+					textcolor: "#aaaaaa",
+					offsetx: -100,
+					aggregationfield: "cod_reg",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			// --------------------
+			// province 
+			// --------------------
+			
+			var theme_amm_si_num =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					values: [
+						"perc"
+					],
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					offsety: -8,
+					chartlower: "1:2500000",
+					textscale: 1,
+					textcolor: "#66aa44",
+					normalsizevalue: "10000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_prov_no =
+				ixmaps.theme("ITALIA_Province_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE PROV",
+					title: "$aggregation$",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					]
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|AGGREGATE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#dd4400"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"#F79399"
+					],
+					normalsizevalue: 100000,
+					boxcolor: "none",
+					boxupper: "1:1000000",
+					titleupper: "1:100000",
+					chartupper: "1:2500000",
+					chartlower: "1:1000000",
+					textscale: 1.5,
+					align: "left",
+					aggregationfield: "cod_prov"
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h4 style='margin:0 0 1em 0;white-space:nowrap'>In comuni con solo elezioni europee</h4><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_prov_si =
+				ixmaps.theme("ITALIA_Province_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE PROV",
+					title: "$aggregation$",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					]
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|AGGREGATE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#F79399"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"femmine"
+					],
+					normalsizevalue: 100000,
+					linecolor: "black",
+					boxcolor: "#88ff00",
+					boxopacity: "0.6",
+					boxmargin: "2",
+					boxupper: "1:100000000",
+					titleupper: "1:100000",
+					chartupper: "1:2500000",
+					chartlower: "1:1000000",
+					textscale: 1.5,
+					offsetx: "10",
+					aggregationfield: "cod_prov"
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h4 style='margin:0 0 1em 0;white-space:nowrap'>In comuni con <span style='color:#66aa00'>elezioni amministrativi</span></h4><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_no =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					]
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#F79399"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"femmine"
+					],
+					normalsizevalue: 50000,
+					linecolor: "#dddddd",
+					linewidth: "0.2",
+					boxcolor: "none",
+					boxupper: "1:1000000",
+					titleupper: "1:500000",
+					chartupper: "1:1000000",
+					textscale: 1.2
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: <big><b>{{perc}} %</b></big><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_no_num =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					values: [
+						"perc"
+					],
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#aaaaaa",
+					offsety: -4,
+					normalsizevalue: "100000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_no_num_f =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					value: "vot_f",
+					value100: "ele_f",
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#aa4422",
+					offsety: -4,
+					align: "right",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_si_num_m =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					value: "vot_m",
+					value100: "ele_m",
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#0066aa",
+					offsety: -4,
+					align: "left",
+					normalsizevalue: "20000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_si_num_f =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					value: "vot_f",
+					value100: "ele_f",
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#aa4422",
+					offsety: -4,
+					align: "right",
+					normalsizevalue: "20000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			// ----------------
+			// comuni
+			// ----------------
+			
+			var theme_amm_no_num_m =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					value: "vot_m",
+					value100: "ele_m",
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = no")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SIZEP3|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#0066aa",
+					offsety: -4,
+					align: "left",
+					normalsizevalue: "200000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			var theme_amm_si_num =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					values: [
+						"perc"
+					],
+					size: "ast_t"
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|SYMBOL|TEXTONLY|VALUES|SILENT|NOLEGEND",
+					colorscheme: [
+						"white"
+					],
+					symbols: "label",
+					offsety: -8,
+					chartupper: "1:1000000",
+					textscale: 1,
+					textcolor: "#66aa44",
+					normalsizevalue: "10000",
+					valuedecimals: "1",
+					units: "%"
+				})
+				.meta({
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>solo elezioni europee<br>Affluenza: {{perc}} %<hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+			
+			// defining the visualization
+			// uses the georeference layer "ITALIA_Comuni_2022"
+			// defines a CHOROPLETH theme with zoom dependent value display 
+			//
+			var theme_amm_si =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "desc",
+					values: [
+						"ast_t",
+						"vot_m",
+						"vot_f"
+					]
+				})
+				.filter("WHERE elez_amm = si")
+				.style({
+					type: "CHART|PIE|SYMMETRIC|SIZEP3|CIRCULARBOX|BOTTOMTITLE|SIMPLELEGEND",
+					colorscheme: [
+						"RGBA(255,255,255,0.9)",
+						"#4DB2F7",
+						"#F79399"
+					],
+					label: [
+						"astenuti",
+						"maschi",
+						"femmine"
+					],
+					normalsizevalue: 50000,
+					boxcolor: "#88ff00",
+					boxopacity: "0.6",
+					boxmargin: 1,
+					boxupper: "1:100000000",
+					titleupper: "1:500000",
+					chartupper: "1:1000000",
+					textscale: 1.2
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h2 style='margin:0'>{{theme.item.title}}</h2>con elezioni amministrative<br>Affluenza: <big><b>{{perc}} %</b></big><hr>n° di persone che non hanno votato<br><br>{{theme.item.chart}}<br>n° votanti femminili/maschili"
+				})
+				.define();
+
+
+			// defining the visualization
+			// uses the georeference layer "ITALIA_Comuni_2022"
+			// defines a CHOROPLETH theme with zoom dependent value display 
+			//
+			var theme =
+				ixmaps.theme("ITALIA_Comuni_2022")
+				.data({
+					query: query_all_data.toString()
+				})
+				.binding({
+					geo: "CODICE ISTAT",
+					title: "DESCRIZIONE COMUNE",
+					alpha: "Total",
+					alpha100: "$density$",
+					values: [
+						"PARTITO DEMOCRATICO",
+						"LEGA SALVINI PREMIER",
+						"MOVIMENTO 5 STELLE",
+						"FORZA ITALIA - NOI MODERATI - PPE",
+						"FRATELLI D'ITALIA",
+						"STATI UNITI D'EUROPA",
+						"AZIONE - SIAMO EUROPEI",
+						"ALLEANZA VERDI E SINISTRA",
+						"PACE TERRA DIGNITA'",
+						"LIBERTA'",
+						"ALTERNATIVA POPOLARE",
+						"SÜDTIROLER VOLKSPARTEI (SVP)"
+					],
+					value100: "Total"
+				})
+				.style({
+					type: "CHOROPLETH|DOMINANT|DOPACITYMAX|HORZ|SORT|SIMPLELEGEND",
+					colorscheme: [
+						"RGB(203,28,36)",
+						"#048467",
+						"RGB(238,217,36)",
+						"RGB(5,177,240)",
+						"#0B3B6A",
+						"RGB(117,28,236)",
+						"orange",
+						"#88DD19",
+						"magenta",
+						"RGB(136,68,0)",
+						"RGB(136,68,0)",
+						"RGB(68,68,68)"
+					],
+					label: [
+						"PARTITO DEMOCRATICO",
+						"LEGA SALVINI PREMIER",
+						"MOVIMENTO 5 STELLE",
+						"FORZA ITALIA - PPE",
+						"FRATELLI D'ITALIA",
+						"STATI UNITI D'EUROPA",
+						"AZIONE - SIAMO EUROPEI",
+						"ALLEANZA VERDI E SINISTRA",
+						"PACE TERRA DIGNITA'",
+						"LIBERTA'",
+						"ALTERNATIVA POPOLARE",
+						"SVP"
+					],
+					units: "%",
+					dopacitypow: "3",
+					dopacityscale: "0.4",
+					textcolor: "black",
+					valuedecimals: "1",
+					chartupper: "1:500000",
+				})
+				.meta({
+					title: "Europee 2024 - Partito vincente<hr>",
+					description: "<p>dati: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a>, comuni: <a href='https://confini-amministrativi.it/' target='_blank'>confini-amministrativi.it</a>",
+					tooltip: "<h2 style='margin:0'>{{DESCRIZIONE COMUNE}}</h2>{{Total}} Voti totale<hr><br>{{theme.item.chart}}"
+				})
+				.define();
+
+			// defining common map options for both maps
+			//
+			var options = {
+				autoSwitchInfo: true,
+				panHidden: false,
+				syncMap: false,
+				basemapopacity: "0.03",
+				objectscaling: "dynamic",
+				normalSizeScale: "1000000",
+				flushChartDraw: "50000",
+				flushPaintShape: "50000"
+			};
+
+			// --------------------------------------------------------------------------
+			// creating two maps
+			// 1. uppper part of Italy
+			// 2. lower part of Italy
+			// the same thematic map with different views
+			// --------------------------------------------------------------------------
+
+			// 1. uppper part of Italy
+			//
+			ixmaps.embedMap("map_div_1", {
+					mapService: "leaflet_vt",
+					mapType: "VT_TONER_LITE",
+					width: "100%",
+					height: "1500px",
+					legend: true,
+					silent: true,
+					align: "center",
+					scrollsafe: true,
+					search: false,
+					mode: "info",
+					tools: true,
+					name: "map1"
+				},
+				map => {
+					map.setOptions(options)
+						.setView([41.43181858864192, 12.321655273437502], 7)
+						.require("../../ui/js/tools/tooltip_mustache.js")
+						.layer(geo_reg)
+						.layer(geo_prov)
+						.layer(geo)
+				
+						.layer(theme_reg_no_num_f)
+						.layer(theme_reg_no_num_m)
+						.layer(theme_reg_si_num_f)
+						.layer(theme_reg_si_num_m)
+						.layer(theme_reg_no)
+						.layer(theme_reg_si)
+				
+						.layer(theme_prov_no)
+						.layer(theme_prov_si)
+				
+						.layer(theme_amm_no)
+						.layer(theme_amm_no_num_f)
+						.layer(theme_amm_no_num_m)
+						.layer(theme_amm_si)
+						.layer(theme_amm_si_num_f)
+						.layer(theme_amm_si_num_m)
+				
+						.layer(theme)
+				}
+			);
+
+
+		});
+
+	</script>
+</body>
+
+</html>
