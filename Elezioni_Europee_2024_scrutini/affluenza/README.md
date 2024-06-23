@@ -1,6 +1,6 @@
-# elezioni Europee 2024 - scrutini
+# elezioni Europee 2024 - affluenza
 
-affluenza
+
 <div style='float:left'>
 <a href='./index_top_3_affluenza_split.html'>
 <img style='text-align:left' src='./affluenza_split.png' width='320px'></img>
