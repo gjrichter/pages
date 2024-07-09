@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embedable HTML map">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps embed</title>
+
+</head>
+
+<body style='text-align:center;background:#FFFFFF'>
+
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		document.activeElement.appendChild(
+
+			ixmaps.embed("mymap", {
+					mapCdn: "https://gjrichter.github.io/ixmaps",
+					mapType: "white",
+					height: "800px",
+					legend: "true",
+					align: "top",
+					mode: "info"
+				}, map => map
+				.view([41.89818843043047, 12.661743164062502], 6)
+				.require("../../ui/js/tools/tooltip_mustache.js")
+				.options({
+					flushPaintShape: "100000",
+					panhidden: "false"
+				})
+				.project("https://raw.githubusercontent.com/gjrichter/viz/master/ElezioniCompare_small/ixmaps_project_Elezioni_Politiche_2018_dominant_lega_green.json")
+			)
+		);
+
+		var old_onZoom = ixmaps.htmlgui_onZoomAndPan;
+		ixmaps.htmlgui_onZoomAndPan = function(nZoom) {
+			ixmaps.setBasemapOpacity(null, (ixmaps.getZoom() - 7) / 5, "absolute");
+			try {
+				old_onZoomAndPan(nZoom);
+			} catch (e) {}
+		};
+
+	</script>
+</body>
+
+</html>
