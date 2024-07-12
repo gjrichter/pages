@@ -246,7 +246,12 @@ $Log:index_only_map_embed.html,v $
 				.view([41.89818843043047, 12.661743164062502], 6)
 				.require("../../ui/js/tools/tooltip_mustache.js")
 				.options({
-					flushPaintShape: "100000",
+					featurescaling: "true",
+					objectscaling: "dynamic",
+					normalSizeScale: "1000",
+					dynamicScalePow: "3",
+					flushChartDraw: "1000000",
+					basemapopacity: "0.5",
 					panhidden: "false"
 				})
 				.layer(__concessioni)
