@@ -12,3 +12,8 @@ dati: [Ministero delle Infrastrutture](https://dati.mit.gov.it/catalog/dataset/c
 
 
 
+Per vedere meglio le differenze tra le due versioni dei dati, qui una pagina che visualizza le due versioni dei dati in due mappe sincronizzate:
+
+ 
+
+[![](./compare.png)](https://gjrichter.github.io/pages/Concessioni%20Demaniali/index_compare_2021_2022.html)
