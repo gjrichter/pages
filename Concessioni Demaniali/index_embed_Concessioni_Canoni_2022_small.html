@@ -23,6 +23,7 @@ $Log:index_only_map_embed.html,v $
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="ixmaps embedable HTML map">
+    <meta name="keywords" content="ixmaps, map, embeddable, concessioni, demaniali, viz">
 	<meta name="author" content="guenter richter">
 	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
 
@@ -39,6 +40,9 @@ $Log:index_only_map_embed.html,v $
 	<!--========================================================================= -->
 
 	<script type="text/javascript" charset="utf-8">
+		/**
+		 ** variables which can be set by url params 	
+		 **/
 		var __filter = "";
 		var __lat = null;
 		var __lon = null;
@@ -115,6 +119,48 @@ $Log:index_only_map_embed.html,v $
 		// t h e   l a y e r 
 		// ---------------------------------------------------
 
+		var __concessioni_dot =
+
+			ixmaps.layer("Concessioni", layer => layer
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ConcessioniDemaniali/concessioni-maggio_2022_epsg4326.csv.gz",
+					type: "csv",
+					process: process.toString(),
+					name: "processed_data"
+				})
+				.type("CHART|BUBBLE|CATEGORICAL|NOLEGEND")
+				.binding({
+					position: "Georeferenziazione",
+					value: "uso"
+				})
+				.style({
+					colorscheme: [
+						"9",
+						"tableau"
+					],
+					values: [
+						"Vario",
+						"Turistico Ricreativo",
+						"Diporto Nautico",
+						"Cantieristica Navale",
+						"Pesca Ed Acquacoltura",
+						"Tutela Ambientale",
+						"Produttivo Ed Industriale",
+						"Mancante",
+						"Altri Usi Pubblici Ex Art 34 Del Cod Nav. Ex Art. 36 Reg. Cod. Nav."
+					],
+					fillopacity: "0.7",
+					scale: 0.05,
+					chartupper: "1:100000",
+					name: "symbol_dot",
+					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.8em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
+				})
+				.meta({
+					title: "Concessioni demaniali 2021",
+					splash: "scaricando dati ..."
+				})
+			);
+
 		var __concessioni =
 
 			ixmaps.layer("Concessioni", layer => layer
@@ -159,10 +205,10 @@ $Log:index_only_map_embed.html,v $
 					gridwidthpx: "3",
 					glowlower: "1:10000",
 					name: "symbol",
-					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.8em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
+					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.6em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
 				})
 				.meta({
-					title: "Concessioni demaniali 2022",
+					title: "Concessioni demaniali marittime a maggio 2022",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -196,7 +242,7 @@ $Log:index_only_map_embed.html,v $
 						"#888888"
 					],
 					valueupper: "1:50000",
-					chartupper: "1:10000",
+					chartupper: "1:20000",
 					valuescale: "1",
 					valuedecimals: "0",
 					name: "text",
@@ -216,34 +262,36 @@ $Log:index_only_map_embed.html,v $
 
 			ixmaps.embed("map_div", {
 					mapService: "leaflet_vt",
-					mapType: "VT_BASIC_LIGHT",
-					name: "map",
+					mapType: "VT_DATAVIZ",
 					mode: "pan",
 					width: "100%",
 					height: (window.innerHeight - 15) + "px",
 					legend: ((__legend == true) ? "true" : 0),
+					align: "center",
 					tools: "true",
 					search: "Italy",
 					about: "test"
 				},
 				map => map
-				.view([__lat || 41.4982027812882, __lon || 12.987141661096643], __zoom || 6.45)
+				.view([__lat || 41.25938208069294, __lon || 12.979546358493344], __zoom || 6.31)
 				.options({
 					featurescaling: "true",
 					objectscaling: "dynamic",
 					normalSizeScale: "1000",
 					dynamicScalePow: "3",
 					flushChartDraw: "1000000",
-					basemapopacity: "0.5",
+					basemapopacity: "0.7",
 					panhidden: "false"
 				})
 				.local("aggregated", "")
 				.local("loading data ...", "...")
+				.local("working ...", "&#9881;")
 				.require("../../ui/js/tools/tooltip_mustache.js")
 				.attribution(attribution)
 
 				.loadMap("https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/ConcessioniBalneari/oggetti_demaniali.svgz")
 
+				.layer(__concessioni_dot)
 				.layer(__concessioni)
 				.layer(__canoni)
 			)
