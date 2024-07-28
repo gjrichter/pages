@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_embed_2_maps.html
+
+$Comment: ixmaps embed multi maps test
+$Source : index_embed_2_maps.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2024/07/28 $
+$Author: guenter richter $
+$Id:index_embed_2_maps.html 1 2024-07-28 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_embed_2_maps.html,v $
+
+********************************************************************** -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ixmaps multiple embed HTML maps">
+    <meta name="keywords" content="ixmaps, map, embeddable, multiple, synchronize">
+    <meta name="author" content="guenter richter">
+    <link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+    <title>iXMaps embed</title>
+
+</head>
+
+<body style='text-align:center;background:#FFFFFF'>
+
+    <div style="width:90%;height:640px;margin:auto">
+        <div id="map_1" style="float:left;width:49%;height:640px;"></div>
+        <div id="map_2" style="float:left;width:49%;height:640px;"></div>
+    </div>
+
+    <!--========================================================================= -->
+
+ 	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+
+    <!--========================================================================= -->
+
+    <script type="text/javascript" charset="utf-8">
+        
+        // ---------------------------------------------------
+        // e m b e d   2   m a p s
+        // ---------------------------------------------------
+
+        ixmaps.embed("map_1", {
+                height: "640px"
+            },
+            map => map
+            .view([40.988554618729744, 12.774916955582258], 6.20)
+        )
+        ixmaps.embed("map_2", {
+                height: "640px"
+            },
+            map => map
+            .view([40.988554618729744, 12.774916955582258], 6.20)
+        )
+
+    </script>
+</body>
+
+</html>
