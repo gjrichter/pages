@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<script id="tinyhippos-injected">
+	if (window.top.ripple) {
+		window.top.ripple("bootstrap").inject(window, document);
+	}
+
+</script>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>ixmaps compare</title>
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/bootstrap.min.css">
+
+	</style>
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/pricing.css">
+
+	<!-- CSS App -->
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/dashboard/style.css">
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/css/dashboard/themes/flat-blue.css">
+	<link rel="stylesheet" type="text/css" href="https://gjrichter.github.io/pages/assets/lib/css/font-awesome.min.css">
+
+	<style>
+		.active {
+			border: 2px solid #AFCDEA;
+			border-radius: 0.2em;
+		}
+
+		.map-frame {
+			height: 740px;
+			border: 0;
+			width: 100%;
+			max-width: 1280px;
+			height: 800px;
+		}
+
+		a.button,
+		a.btn-default {
+			color: #007BFF;
+		}
+
+	</style>
+
+
+</head>
+
+<body style="text-align:center">
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- P A G E   H E A D E R											 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div class="d-flex flex-column flex-md-row align-items-center p-2 px-md-4 mb-3 bg-white ">
+		<!-- TITLE -->
+        <h5 class="my-0 mr-md-auto font-weight-lighter">iXMaps :: concessioni mappate</h5>
+		<!-- PAGE NAVIGATION -->
+		<nav class="my-2 my-md-0 mr-md-3">
+			<a class="p-1 text-dark font-weight-lighter" style="font-size:18px" href="#footer">Fonti & Attributioni</a>
+		</nav>
+		<!-- EXTERNAL LINK -->
+		<a class="btn btn-outline-primary" href="..">up &rarr;</a>
+	</div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- Top Text Area 													 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+	<div class="container">
+		<div class=" mb-3 text-center">
+			<div class="mb-4">
+				<div style="margin-top:-1.5em">
+                    <h1 class="pricing-card-title">CONCESSIONI DEMANIALI 2021/2022<br><small class="text-muted">fonte dati: <a href='https://dati.mit.gov.it/catalog/dataset/?q=Concessioni+' target='_blank'>Ministero delle Infrastrutture</a> </small></h1>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="text-center" style="font-size:1.3em;margin:auto;margin-top:-1em;margin-bottom:1em;max-width:1024px">
+        Le mappe confrontono due versioni dello stesso dataset rilasciati dal Ministero delle Infrastrutture. Mentre quello del 2021 contiene più concessionie, ma molti senza informazioni sul canone, la versione del 2022 riporta un canone per tutte le concessioni, ma incompleto.</div>
+
+    </div>
+
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+    <!--                                                                 -->
+    <!-- F I L T E R   (acting om both maps)							 -->
+    <!--                                                                 -->
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+
+    <div class="text-center" style="margin-bottom:0em">
+        filtro:
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('TURISTICO RECREATIVO')">
+            TURISTICO RECREATIVO </a>
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('PRODUTTIVO')">
+            PRODUTTIVO </a>
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('DIPORTO')">
+            DIPORTO </a>
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('CANTIERISTICA')">
+            CANTIERISTICA </a>
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('PESCA')">
+            PESCA </a>
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses('TUTELA AMBIENTALE')">
+            TUTELA AMBIENTALE </a>
+        |
+        <a class="btn btn-default app-btn" role="button" href="javascript:ixmaps.filterClasses()">
+            tutti </a>
+
+    </div>
+
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+    <!--                                                                 -->
+    <!-- M A P S        												 -->
+    <!--                                                                 -->
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+
+    <div id="maps" style="width:95%;margin:auto;height:900px">
+    </div>
+
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+    <!--                                                                 -->
+    <!-- F L Y   T O   T A R G E T S          		    				 -->
+    <!--                                                                 -->
+    <!-- --------------------------------------------------------------- -->
+    <!-- --------------------------------------------------------------- -->
+
+    <div style="font-size:1.5em">
+        vai a:</br>
+        <a href="javascript:ixmaps.flyTo([44.42375004205729,8.785293413929274],14.37)">Genova</a> |
+        <a href="javascript:ixmaps.flyTo([41.7508241355329,12.357559204101564],10)">Roma</a> |
+        <a href="javascript:ixmaps.flyTo([44.10142047969553,9.842951571777864],14.83)">La Spezia</a> |
+        <a href="javascript:ixmaps.flyTo([40.83962778839816,14.268835853407237],15)">Napoli</a> |
+        <a href="javascript:ixmaps.flyTo([40.629587853312174,17.14004516601563],8)">Puglia</a> |
+        <a href="javascript:ixmaps.flyTo([38.14103736644331,15.420556640625002],7)">Sicilia e Calabria</a> |
+        <a href="javascript:ixmaps.flyTo([38.12354182854422,13.370751224742833],16)">Palermo</a>
+    </div>
+
+    <div style="font-size:1.3em;text-align:center;max-width:1024px;margin:auto">
+        <br>
+        Le mappe sopra mostrano le seguenti informazioni:
+        <ul style="text-align:left;margin:1em">
+            <li>Symboli colorati per tipologia di concessione e grandezza pari al canone<br> - aggregati per tipologia e griglia di 3 pixel dello schermo<br> - con opacità dinamica secono lo zoom della mappa</li>
+            <li>Punti per ogni concessione anche se manca il canone</li>
+            <li>Visualizzazione testuale del canone (scala &lt; 1:20000)</li>
+            <li>Visualizzazione delle strutture demaniali (scala &lt; 1:20000)<br> - pubblicati dal Ministaro delle Infrastrutture<br> - reso uttilizzabili da A.Borruso (onData)
+            </li>
+        </ul>
+    </div>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- F O O T E R          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+    <footer id="footer" class="container" style="margin-top:2em;padding:1em 1.5em;background:#f8f8f8">
+        <div class="row">
+            <div class="col-4">
+                <h5>Fonti</h5>
+                <ul class="list-unstyled text-small">
+                    <li>
+                        dati: <a href='https://dati.mit.gov.it/catalog/dataset/?q=Concessioni+' target='_blank'>Ministero delle Infrastrutture</a><br>
+                        Licenza: <a href='https://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>
+                    </li>
+                    <li>&nbsp;</li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <h5>Attribuzioni</h5>
+                <ul class="list-unstyled text-small">
+                    <li>Papa Parse - <span style="color:#888888">.csv parser integtegrato in data.js, usato per caricare e manipolare i dati dai siti ufficiali, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+                        Flat Admin Bootstrap Templates - <span style="color:#888888">HTML5 Bootstrap template alola base di questo dasboard, licenza: <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></span><br>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <h5>About</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="https://ixmaps.com">powered by iXMaps</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+	<!--                                                                 -->
+	<!-- C O D E	          		               					 	 -->
+	<!--                                                                 -->
+	<!-- --------------------------------------------------------------- -->
+	<!-- --------------------------------------------------------------- -->
+
+    <script type="text/javascript" src="https://gjrichter.github.io/pages/assets/lib/js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://gjrichter.github.io/pages/assets/lib/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript" src="../assets/lib/js/Chart.bundle.js"></script>
+
+ 	<script src="https://gjrichter.github.io/ixmaps_test/ui/js/htmlgui_api.js"></script>
+
+	<!-- Javascript -->
+	<script>
+
+		ixmaps.tmp = ixmaps.tmp || {};
+		ixmaps.tmp.markedClasses = null;
+        ixmaps.filterClasses = function(szClasses) {
+
+            szClasses = szClasses || "*";
+
+            ixmaps.iframe.exec("map1", "ixmaps.message('...')");
+            ixmaps.iframe.exec("map2", "ixmaps.message('...')");
+
+            ixmaps.iframe.exec("map1", "ixmaps.changeThemeStyle(null,'symbol_dot','filter:WHERE uso like " + szClasses + "','set')");
+            ixmaps.iframe.exec("map1", "ixmaps.changeThemeStyle(null,'symbol','filter:WHERE uso like " + szClasses + "','set')");
+            ixmaps.iframe.exec("map1", "ixmaps.changeThemeStyle(null,'text','filter:WHERE uso like " + szClasses + "','set')");
+
+            ixmaps.iframe.exec("map2", "ixmaps.changeThemeStyle(null,'symbol_dot','filter:WHERE uso like " + szClasses + "','set')");
+            ixmaps.iframe.exec("map2", "ixmaps.changeThemeStyle(null,'symbol','filter:WHERE uso like " + szClasses + "','set')");
+            ixmaps.iframe.exec("map2", "ixmaps.changeThemeStyle(null,'text','filter:WHERE uso like " + szClasses + "','set')");
+
+        }
+        /** test test test **/
+        ixmaps.map = function(szMap) {
+            if (ixmaps.embeddedApi) {
+                szMap = szMap || ixmaps.embeddedApi.szMap;
+                return new ixmaps.mapApi(szMap);
+			} else
+			if (szMap) {
+                return new ixmaps.mapApi(szMap);
+            } else {
+                return new ixmaps.mapApi(ixmaps.szMap);
+            }
+        };
+
+        ixmaps.flyTo = function(nCenterA, nZoom) {
+            ixmaps.iframe.exec("map1", "ixmaps.flyTo(null,[" + nCenterA.join(',') + "]," + nZoom + ")");
+            ixmaps.iframe.exec("map2", "ixmaps.flyTo(null,[" + nCenterA.join(',') + "]," + nZoom + ")");
+        };
+
+
+        $(document).ready(function() {
+            $("#maps").append(
+                '<iframe id="map1" width="48%" height="900px" frameborder="0" scrolling="no" marginwidth="2"></iframe>' +
+                '<iframe id="map2" width="48%" height="900px" frameborder="0" scrolling="no" marginwidth="2"></iframe>'
+            );
+            $("#map1").attr("src", "./index_embed_Concessioni_Canoni_2021_small.html");
+            $("#map2").attr("src", "./index_embed_Concessioni_Canoni_2022_small.html");
+        });
+
+	</script>
+
+
+</body>
+
+</html>

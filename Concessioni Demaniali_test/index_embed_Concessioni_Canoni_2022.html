@@ -51,15 +51,15 @@ $Log:index_only_map_embed.html,v $
 
 	<div id="sidebar_div" style="width:33%;float:right;">
 
-		<div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
+		<div style="font-family:open sans;text-align:left;margin:-0.5em 0.5em 0em 0em;">
 
 			<!-- ------------------------------------- -->
 			<!-- tìstatic info, header, ... 		   -->
 			<!-- ------------------------------------- -->
 
-			<h1>Concessioni Demaniali 2021</br>
+			<h1>Concessioni Demaniali 2022</br>
 				<h3 style="margin-top:-1.2em">tutte le concessioni colorati per uso</br>
-					<p style="font-size:0.9em;">dati: <a style="color:#0088dd" href="https://dati.mit.gov.it/catalog/dataset/concessioni-demaniali-marittime-a-maggio-2021" target="_blank">Ministero delle Infrastrutture</a>, trasformati da <a style="color:#0088dd" href="https://twitter.com/aborruso" target="_blank">A.Borruso</a></p>
+					<p style="font-size:0.9em;">dati: <a style="color:#0088dd" href="https://dati.mit.gov.it/catalog/dataset/concessioni-demaniali-marittime-a-maggio-2022" target="_blank">Ministero delle Infrastrutture</a>, <a style="color:#0088dd" href="https://twitter.com/aborruso" target="_blank">A.Borruso</a></p>
 					<div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
 						<span id="filter"></span>
 						<button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
@@ -454,14 +454,14 @@ $Log:index_only_map_embed.html,v $
 		var __concessioni =
 			ixmaps.layer("Concessioni", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ConcessioniDemaniali/concessioni.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ConcessioniDemaniali/concessioni-maggio_2022_epsg4326.csv.gz",
 					type: "csv",
 					process: process.toString(),
 					name: "processed_data"
 				})
-				.type("CHART|GLOW|SYMBOL|SIZEP3|SEQUENCE|STAR|SORT|UP|EXPAND|AGGREGATE|RELOCATE|CATEGORICAL|SIMPLELEGEND")
+				.type("CHART|GLOW|SYMBOL|SIZEP4|SEQUENCE|STAR|SORT|UP|EXPAND|AGGREGATE|RELOCATE|CATEGORICAL|SIMPLELEGEND")
 				.binding({
-					position: "ycoord|xcoord",
+					position: "Georeferenziazione",
 					value: "uso",
 					size: "canone"
 				})
@@ -470,7 +470,18 @@ $Log:index_only_map_embed.html,v $
 						"9",
 						"tableau"
 					],
-					fillopacity: "0.5",
+					values: [
+						"Vario",
+						"Turistico Ricreativo",
+						"Diporto Nautico",
+						"Cantieristica Navale",
+						"Pesca Ed Acquacoltura",
+						"Tutela Ambientale",
+						"Produttivo Ed Industriale",
+						"Mancante",
+						"Altri Usi Pubblici Ex Art 34 Del Cod Nav. Ex Art. 36 Reg. Cod. Nav."
+					],
+					fillopacity: "auto",
 					shadow: "false",
 					showdata: "true",
 					symbols: [
@@ -478,7 +489,7 @@ $Log:index_only_map_embed.html,v $
 					],
 					units: "€",
 					linewidth: "0.5",
-					normalsizevalue: "20000000",
+					normalsizevalue: "100000000",
 					valueupper: "1:50000",
 					gridwidthpx: "3",
 					glowlower: "1:10000",
@@ -498,7 +509,7 @@ $Log:index_only_map_embed.html,v $
 				})
 				.type("CHART|LABEL|TEXTONLY|MULTIPLE|UP|SIZEP4|CATEGORICAL|VALUES|SUM|NOLEGEND")
 				.binding({
-					position: "ycoord|xcoord",
+					position: "Georeferenziazione",
 					value: "$item$"
 				})
 				.style({
@@ -510,7 +521,7 @@ $Log:index_only_map_embed.html,v $
 					units: "€",
 					align: "2left",
 					refreshtimeout: "0",
-					normalsizevalue: "10000000",
+					normalsizevalue: "100000000",
 					scale: "1",
 					valuefield: "canone",
 					sizefield: "canone",

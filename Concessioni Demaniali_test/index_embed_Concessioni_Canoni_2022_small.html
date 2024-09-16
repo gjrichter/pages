@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : index_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:index_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:index_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embedable HTML map">
+    <meta name="keywords" content="ixmaps, map, embeddable, concessioni, demaniali, viz">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>iXMaps embed</title>
+
+</head>
+
+<body style='text-align:center;background:#FFFFFF'>
+
+	<!--========================================================================= -->
+
+	<script src="https://gjrichter.github.io/ixmaps_test/ui/js/htmlgui_api.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+		/**
+		 ** variables which can be set by url params 	
+		 **/
+		var __filter = "";
+		var __lat = null;
+		var __lon = null;
+		var __zoom = null;
+		var __scale_chart = 1;
+		var __legend = true;
+
+		/**
+		 ** strings used by the map 	
+		 **/
+
+		attribution =
+			"powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
+
+		/**
+		 ** get query params and adapt theme and project definitions 	
+		 **/
+
+		const params = new Proxy(new URLSearchParams(window.location.search), {
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+
+		if (params.filter) {
+			__filter = params.filter;
+		}
+
+		if (params.view) {
+			var latlonA = params.view.split('[')[1].split(']')[0].split(',');
+			__lat = latlonA[0];
+			__lon = latlonA[1];
+			__zoom = parseInt(params.view.split(',')[2]);
+			//setTimeout("ixmaps.setView(null,"+params.view+")",1000);
+		};
+
+		if (params.scale) {
+			__scale_chart = params.scale;
+		};
+
+		if (params.legend) {
+			__legend = params.legend;
+		};
+		// ---------------------------------------------------
+		// t h e   d a t a 
+		// ---------------------------------------------------
+
+		process = data => {
+			data.addColumn({
+				source: "scadenza",
+				destination: "scaduto"
+			}, (value) => {
+				var valueA = value.split("/");
+				var scad = new Date(valueA[2] + "/" + valueA[1] + "/" + valueA[0]);
+				var act = new Date();
+				return (Math.floor((act.getTime() - scad.getTime()) / (1000 * 60 * 60 * 24 * 356)));
+			});
+			data.addColumn({
+				source: "canone",
+				destination: "canone_classi"
+			}, (value) => {
+				if (value > 10000) {
+					return "Più di 10.000 euro";
+				} else if (value > 5000) {
+					return "5.000-10.000 euro";
+				} else if (value > 1000) {
+					return "1.000-5.000 euro";
+				} else if (value > 0) {
+					return "Fino a 1.000 euro";
+				}
+				return "non definito";
+			});
+		};
+
+		// ---------------------------------------------------
+		// t h e   l a y e r 
+		// ---------------------------------------------------
+
+		var __concessioni_dot =
+
+			ixmaps.layer("Concessioni", layer => layer
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ConcessioniDemaniali/concessioni-maggio_2022_epsg4326.csv.gz",
+					type: "csv",
+					process: process.toString(),
+					name: "processed_data"
+				})
+				.type("CHART|BUBBLE|CATEGORICAL|NOLEGEND")
+				.binding({
+					position: "Georeferenziazione",
+					value: "uso"
+				})
+				.style({
+					colorscheme: [
+						"9",
+						"tableau"
+					],
+					values: [
+						"Vario",
+						"Turistico Ricreativo",
+						"Diporto Nautico",
+						"Cantieristica Navale",
+						"Pesca Ed Acquacoltura",
+						"Tutela Ambientale",
+						"Produttivo Ed Industriale",
+						"Mancante",
+						"Altri Usi Pubblici Ex Art 34 Del Cod Nav. Ex Art. 36 Reg. Cod. Nav."
+					],
+					fillopacity: "0.7",
+					scale: 0.05,
+					chartupper: "1:100000",
+					name: "symbol_dot",
+					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.8em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
+				})
+				.meta({
+					title: "Concessioni demaniali 2021",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		var __concessioni =
+
+			ixmaps.layer("Concessioni", layer => layer
+				.data({
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/ConcessioniDemaniali/concessioni-maggio_2022_epsg4326.csv.gz",
+					type: "csv",
+					process: process.toString(),
+					name: "processed_data"
+				})
+				.type("CHART|GLOW|SYMBOL|SIZEP4|SEQUENCE|STAR|SORT|UP|EXPAND|AGGREGATE|RELOCATE|CATEGORICAL|SIMPLELEGEND|SUM")
+				.binding({
+					position: "Georeferenziazione",
+					value: "uso",
+					size: "canone"
+				})
+				.style({
+					colorscheme: [
+						"9",
+						"tableau"
+					],
+					values: [
+						"Vario",
+						"Turistico Ricreativo",
+						"Diporto Nautico",
+						"Cantieristica Navale",
+						"Pesca Ed Acquacoltura",
+						"Tutela Ambientale",
+						"Produttivo Ed Industriale",
+						"Mancante",
+						"Altri Usi Pubblici Ex Art 34 Del Cod Nav. Ex Art. 36 Reg. Cod. Nav."
+					],
+					fillopacity: "auto",
+					shadow: "false",
+					showdata: "true",
+					symbols: [
+						"circle"
+					],
+					units: "€",
+					linewidth: "0.5",
+					normalsizevalue: "50000000",
+					valueupper: "1:50000",
+					gridwidthpx: "3",
+					glowlower: "1:10000",
+					name: "symbol",
+					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.6em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
+				})
+				.meta({
+					title: "Concessioni demaniali marittime a maggio 2022",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		var __canoni =
+
+			ixmaps.layer("Canoni", layer => layer
+				.data({
+					name: "processed_data"
+				})
+				.type("CHART|LABEL|TEXTONLY|MULTIPLE|UP|SIZEP4|CATEGORICAL|VALUES|SUM|NOLEGEND")
+				.binding({
+					position: "Georeferenziazione",
+					value: "$item$"
+				})
+				.style({
+					colorscheme: [
+						"#dddddd"
+					],
+					fillopacity: "0.2",
+					showdata: "true",
+					units: "€",
+					align: "2left",
+					refreshtimeout: "0",
+					normalsizevalue: "100000000",
+					scale: "1",
+					valuefield: "canone",
+					sizefield: "canone",
+					textcolor: "#008800",
+					linecolor: [
+						"#888888"
+					],
+					valueupper: "1:50000",
+					chartupper: "1:20000",
+					valuescale: "1",
+					valuedecimals: "0",
+					name: "text",
+					tooltip: "<div style='white-space:nowrap'><h2 style='margin:0;font-size:1.8em'>{{categoria}}</h2><h2 style='margin-top:0;margin-bottom:0.5em;font-size:1.6em'>{{uso}}</h2><table><tr><td>Canone: </td><td><b style='font-size:1.5em'>{{canone}} €</b> &nbsp;(dovuto: {{dovuto}} €)</td></tr><tr><td>Scadenza: </td><td><b style='font-size:1.2em'>{{scadenza}}</b></td></tr><tr><td>Tipo: </td><td>{{tipologia}}</td></tr><tr><td>Amministr.: </td><td>{{amministr}}</td></tr></table></div>"
+				})
+				.meta({
+					title: "Concessioni demaniali 2022",
+					splash: "scaricando dati ..."
+				})
+			);
+
+		// ---------------------------------------------------
+		// e m b e d   t h e   m a p  
+		// ---------------------------------------------------
+
+		document.activeElement.appendChild(
+
+			ixmaps.embed("map_div", {
+					mapService: "leaflet_vt",
+					mapType: "VT_DATAVIZ",
+					mode: "pan",
+					width: "100%",
+					height: (window.innerHeight - 15) + "px",
+					legend: ((__legend == true) ? "true" : 0),
+					align: "center",
+					tools: "true",
+					search: "Italy",
+					name: "map2"
+				},
+				map => map
+				.view([__lat || 41.25938208069294, __lon || 12.979546358493344], __zoom || 6.31)
+				.options({
+					featurescaling: "true",
+					objectscaling: "dynamic",
+					normalSizeScale: "1000",
+					dynamicScalePow: "3",
+					flushChartDraw: "1000000",
+					basemapopacity: "0.7",
+					panhidden: "false"
+				})
+				.local("aggregated", "")
+				.local("loading data ...", "...")
+				.local("working ...", "&#9881;")
+				.require("../../ui/js/tools/tooltip_mustache.js")
+				.attribution(attribution)
+
+				.loadMap("https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/ConcessioniBalneari/oggetti_demaniali.svgz")
+
+				.layer(__concessioni_dot)
+				.layer(__concessioni)
+				.layer(__canoni)
+			)
+		);
+
+	</script>
+</body>
+
+</html>
