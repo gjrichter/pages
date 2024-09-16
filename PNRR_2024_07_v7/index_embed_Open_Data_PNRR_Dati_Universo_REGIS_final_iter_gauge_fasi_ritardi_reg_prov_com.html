@@ -205,36 +205,6 @@ $Log:index_only_map_embed.html,v $
 			<p><small><b>nota bene:</b><br> - si può clicare sui colori della leggenda per isolare 1 o più categorie<br>
 					- per evitare tempi di aggiornamento grafici lunghi, conviene zoomare un po', prima di attivare l'aggregazione al livello comunale<small></small></p>
 			-->
-				<p>Simboli nella visualizzazione dei singoli progetti:<br>
-					<img src="../../pages/PNRR/img/megafono.png" style="vertical-align:middle;height:16px"> in gara,
-					<img src="../../pages/PNRR/img/515345.png" style="vertical-align:middle;height:16px"> aggiudicato</p>
-
-				<table>
-					<tr>
-						<td>
-							<button onclick="sizeCharts(0.90)">-</button>
-						</td>
-						<td>
-							<span style="font-size:0.8em"> &nbsp; grandezza grafici &nbsp;</span>
-						</td>
-						<td>
-							<button onclick="sizeCharts(1.1)">+</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<button onclick="sizeTexts(0.90)">-</button>
-						</td>
-						<td>
-							<span style="font-size:0.8em"> &nbsp; grandezza testi &nbsp;</span>
-						</td>
-						<td>
-							<button onclick="sizeTexts(1.1)">+</button>
-						</td>
-					</tr>
-
-				</table>
-
 
 				<p style="font-size:0.9em;">
 					Crea <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup').html((ixmaps.szActualUrl));$('#popup').toggle()">link</a> condivisibile,
@@ -601,7 +571,7 @@ $Log:index_only_map_embed.html,v $
 			"powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
 		legend =
-			"<h1><b>PNRR<br>Universo REGIS - v7</b><h1><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul>";
+			"<div style='background:rgba(247, 246, 239,0.8);padding:0em 0em 0.1em 0.8em'><h1><b>PNRR<br>Universo REGIS - v7</b><h1><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul></div>";
         
         /**
          ** data prep
@@ -1235,7 +1205,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|BAR|STACKED|DOTTED|SIZE|NOSORT|VALUES|INLINETEXT|CATEGORICAL|AGGREGATE|RECT|RELOCATE|SUM|BOX|BOTTOMTITLE|NOLEGEND")
+				.type("CHART|BAR|STACKED|DOTTED|SIZE|XAXIS|NOSORT|VALUES|INLINETEXT|CATEGORICAL|AGGREGATE|RECT|RELOCATE|SUM|BOX|TITLE|NOLEGEND")
 				.style({
                     gridx: 3,
 					colorscheme: [
@@ -1287,18 +1257,18 @@ $Log:index_only_map_embed.html,v $
                         "collaudo",
                         "ritardi < 100 giorni",
                         "ritardi > 100 giorni"],
- 					xaxis: [
-						"progett.",
-                        "assegna.",
-                        "esecuzione",
-                        "collaudo"],
+					xaxis: [
+						"pro",
+                        "ass",
+                        "esec",
+                        "coll"],
 					showdata: "true",
                     align: "center",
 					sizefield: "$item$",
 					units: "progetti in",
 					scale: __scale_chart*2,
                     rangescale: "5",
-                    sizepow: "5",
+                    sizepow: "10",
 					linecolor: [
 						"RGB(39, 112, 182)"],
 					linewidth: "0.2",
@@ -1410,7 +1380,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Provincia"
 				})
 				.filter(__filter)
-				.type("CHART|BAR|STACKED|NOSORT|SIZEP3|AGGREGATE|SUM|BOX|BOTTOMTITLE|NOLEGEND")
+				.type("CHART|BAR|STACKED|DOTTED|XAXIS|NOSORT|SIZE|AGGREGATE|SUM|BOX|TITLE|NOLEGEND")
 				.style({
                     gridx: 3,
 					colorscheme: [
@@ -1430,14 +1400,15 @@ $Log:index_only_map_embed.html,v $
  						"RGBA(229, 212, 82, 0.5)",
                         "RGBA(239, 62, 82, 0.5)"],
 					fillopacity: "0.8", 
-					label: [
-						"progett.",
-                        "assegna.",
-                        "esecuzione",
-                        "collaudo"],
+					xaxis: [
+						"pro",
+                        "ass",
+                        "esec",
+                        "coll"],
 					showdata: "true",
                     align: "center",
 					sizefield: "projects_n",
+                    sizepow: "10",
 					units: "",
 					scale: __scale_chart*3,
 					linecolor: [
@@ -1490,7 +1461,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Descrizione Regione"
 				})
 				.filter(__filter)
-				.type("CHART|BAR|STACKED|NOSORT|SIZEP3|AGGREGATE|RECT|RELOCATE|SUM|BOX|BOTTOMTITLE|NOLEGEND")
+				.type("CHART|BAR|STACKED|XAXIS|NOSORT|SIZEP3|AGGREGATE|RECT|RELOCATE|SUM|BOX|TITLE|NOLEGEND")
 				.style({
                     gridx: 3,
 					colorscheme: [
@@ -1510,7 +1481,7 @@ $Log:index_only_map_embed.html,v $
  						"RGBA(229, 212, 82, 0.5)",
                         "RGBA(239, 62, 82, 0.5)"],
 					fillopacity: "0.9", 
-					label: [
+					xaxis: [
 						"progett.",
                         "assegna.",
                         "esecuzione",
