@@ -56,7 +56,7 @@ $Log:index_only_map_embed.html,v $
 		 **/
 
 		attribution =
-			"powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
+			"Concessioni Demaniali 2021<br>&nbsp;&nbsp;powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
 		/**
 		 ** get query params and adapt theme and project definitions 	
@@ -237,6 +237,8 @@ $Log:index_only_map_embed.html,v $
 
 		document.activeElement.appendChild(
 			ixmaps.embed("map_div", {
+					mapService: "leaflet_vt",
+					mapType: "VT_DATAVIZ_LIGHT",
 					mode: "pan",
 					width: "100%",
 					height: (window.innerHeight - 15) + "px",
@@ -247,7 +249,7 @@ $Log:index_only_map_embed.html,v $
 					name: "map1"
 				},
  				map => map
-				.view([__lat || 41.25938208069294, __lon || 12.979546358493344], __zoom || 6.31)
+				.view([__lat || 40.988554618729744, __lon || 12.774916955582258], __zoom || 6.20)
 				.options({
 					featurescaling: "true",
 					objectscaling: "dynamic",
