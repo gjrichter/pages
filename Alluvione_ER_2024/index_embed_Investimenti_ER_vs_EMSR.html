@@ -509,7 +509,7 @@ $Log:index_only_map_embed.html,v $
             "powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
         legend =
-            "<br><div style='background:rgba(247, 246, 239,0.8);padding:0.5em 0em 0.1em 0.8em'><h3>Stato di attuazione</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(253, 162, 81)'>&#9724;</span> in progettazione</li><li><span style='color:RGB(196, 213, 234)'>&#9724;</span> in corso</li><li><span style='color:RGB(96, 157, 197)'>&#9724;</span> concluso</li><li><span style='color:RGB(253, 204, 155)'>&#9724;</span> annullato</li></ul><h3>Aree invase dall'acqua - Copernicus</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(191, 234, 248)'>&#9724;</span> 2023</li><li><span style='color:RGB(128, 0, 0)'>&#9723;</span> 2024</li></ul></div>";
+            "<br><div style='background:rgba(247, 246, 239,0.8);padding:0.5em 0em 0.1em 0.8em'><h3>Stato di attuazione</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(253, 162, 81)'>&#9724;</span> in progettazione</li><li><span style='color:RGB(196, 213, 234)'>&#9724;</span> in corso</li><li><span style='color:RGB(96, 157, 197)'>&#9724;</span> concluso</li><li><span style='color:RGB(253, 204, 155)'>&#9724;</span> annullato</li></ul><h3>Aree invase dall'acqua - Copernicus</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(191, 234, 248)'>&#9724;</span> 2023</li><li><span style='color:RGB(128, 0, 0)'>&#9723;</span> 2024</li><li><span style='color:rgb(0,0,0)'>&mdash;</span> EMSR AOI</li></ul></div>";
 
         /**
          ** data prep
@@ -529,8 +529,8 @@ $Log:index_only_map_embed.html,v $
         // t h e   m a p   l a y e r 
         // ---------------------------------------------------
 
-        var __copernicus_EMSR_ER_01 =
-            ixmaps.layer("Copernicus_1")
+        var __copernicus_EMSR_ER_01_2023 =
+            ixmaps.layer("Copernicus_1_2023")
             .data({
                 url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Copernicus/EMSR/EMSR664_AOI01_DEL_MONIT01_observedEventA_v1.json",
                 type: "geojson",
@@ -551,8 +551,49 @@ $Log:index_only_map_embed.html,v $
             })
             .define()
 
-        var __copernicus_EMSR_ER_02 =
-            ixmaps.layer("Copernicus_2")
+		var __copernicus_EMSR_AOIS =
+		  ixmaps.layer("Copernicus_AOIS")
+			.data({ 
+			  url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Copernicus/EMSR/EMSR762_aois.json",
+			  type: "geojson",
+			  cache: "true"
+			})
+			.style({"type": "FEATURES",
+			  colorscheme: ["rgba(255,255,255,0)"],
+			  label: ["AOIS"],
+			  fillopacity: "0.6",
+			  linecolor: "#000000",		
+			  linewidth: "1",
+              tooltip: "{{name}}"
+			})
+			.meta({
+			  title: "COPERNICUS EMSR762 AOIS"
+			})
+			.define()		
+
+        var __copernicus_EMSR_ER_01_2024 =
+            ixmaps.layer("Copernicus_1_2024")
+            .data({
+                url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Copernicus/EMSR/EMSR762_AOI01_DEL_PRODUCT_observedEventA_v1.json",
+                type: "geojson",
+                cache: "true"
+            })
+            .style({
+                "type": "FEATURES",
+                colorscheme: ["rgba(0,128,256,0.1)"],
+                label: ["flooded areas"],
+                fillopacity: "0.1",
+                linecolor: "#880000",
+                linewidth: "1",
+                showdata: "true"
+            })
+            .meta({
+                title: "COPERNICUS EMSR762 AOI02"
+            })
+            .define()
+
+        var __copernicus_EMSR_ER_02_2024 =
+            ixmaps.layer("Copernicus_2_2024")
             .data({
                 url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Copernicus/EMSR/EMSR762_AOI02_DEL_PRODUCT_observedEventA_v1.json",
                 type: "geojson",
@@ -572,8 +613,8 @@ $Log:index_only_map_embed.html,v $
             })
             .define()
 
-        var __copernicus_EMSR_ER_03 =
-            ixmaps.layer("Copernicus_3")
+        var __copernicus_EMSR_ER_03_2024 =
+            ixmaps.layer("Copernicus_3_2024")
             .data({
                 url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/Copernicus/EMSR/EMSR762_AOI03_DEL_PRODUCT_observedEventA_v1.json",
                 type: "geojson",
@@ -729,7 +770,7 @@ $Log:index_only_map_embed.html,v $
                     valuefield: "IMPORTO_COMPLESSIVO",
                     "units": "€",
                     "showdata": "true",
-                    tooltip: "{{theme.item.data}}",
+                    tooltip: "<h3 style='white-space:nowrap'><b>{{COMUNE_GIS}}</b></h3>{{SOGGETTO_ATTUATORE}}{{theme.item.chart}}<p>{{DESCRIZIONE_DANNO_CRITICITA}}</p><p>{{DESCRIZIONE_INTERVENTO}}</p><p style='white-space:nowrap'><b>{{STATO_DI_ATTUAZIONE}}</b> {{DATA_DI_AGGIORNAMENTO}}</p>{{FONTE_DEL_DATO}}",
                     name: "chart"
                 })
                 .meta({
@@ -791,9 +832,11 @@ $Log:index_only_map_embed.html,v $
             .layer(__georef_reg)
             //.layer(__georef_mini)
 
-            .layer(__copernicus_EMSR_ER_01)
-            .layer(__copernicus_EMSR_ER_02)
-            .layer(__copernicus_EMSR_ER_03)
+            .layer(__copernicus_EMSR_ER_01_2023)
+            .layer(__copernicus_EMSR_AOIS)
+            .layer(__copernicus_EMSR_ER_01_2024)
+            .layer(__copernicus_EMSR_ER_02_2024)
+            .layer(__copernicus_EMSR_ER_03_2024)
 
             // -----------------------------		 
             // the data visualization layer 
