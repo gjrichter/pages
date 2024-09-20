@@ -124,11 +124,13 @@ $Log:index_Alluvioni_Emilia_Romagna.html,v $
 			  label: ["flooded areas"],
 			  fillopacity: "0.6",
 			  linecolor: "#0088ff",		
-			  linewidth: "0.1"
+			  linewidth: "0.1",
+              showdata: "true"        
 			})
 			.meta({
-			  title: "COPERNICUS EMSR ER 2024 02"
-			})
+			  title: "COPERNICUS EMSR EMSR664 AOI01",
+              tooltip: "{{theme.title}}{{theme.item.data}}"
+ 			})
 			.define()		
 
 		var __copernicus_EMSR_ER_02 =
@@ -143,10 +145,11 @@ $Log:index_Alluvioni_Emilia_Romagna.html,v $
 			  label: ["flooded areas"],
 			  fillopacity: "0.1",
 			  linecolor: "#880000",		
-			  linewidth: "1"
+			  linewidth: "1",
+              showdata: "true"        
 			})
 			.meta({
-			  title: "COPERNICUS EMSR ER 2024 02"
+			  title: "COPERNICUS EMSR762 AOI02"
 			})
 			.define()		
 
@@ -162,10 +165,11 @@ $Log:index_Alluvioni_Emilia_Romagna.html,v $
 			  label: ["flooded areas"],
 			  fillopacity: "0.1",
 			  linecolor: "#880000",		
-			  linewidth: "1"
+			  linewidth: "1",
+              showdata: "true"        
 			})
 			.meta({
-			  title: "COPERNICUS EMSR ER 2024 03"
+			  title: "COPERNICUS EMSR762 AOI03"
 			})
 			.define()		
 
@@ -206,10 +210,10 @@ $Log:index_Alluvioni_Emilia_Romagna.html,v $
             .local("aggregated", "")
             .local("loading data ...", "...")
             .local("working ...", "")
-            .require("../../ui/js/tools/tooltip_basic.js")
+            .require("../../ui/js/tools/tooltip_mustache.js")
             .legend(legend)         
             .attribution(attribution)
-
+                     
             // -----------------------------		 
             // the data visualization layer 
             // -----------------------------
