@@ -171,7 +171,9 @@ $Log:index_only_map_embed.html,v $
             con un finanziamento complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 
             <input id="sizeFieldCheckBox" type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="__toggleMultiple(this)"></input>
-				espandi posizioni multipli<br>
+				espandi posizioni multipli 
+            <input id="sizeFieldCheckBox" type="checkbox" style="accent-color:#888888;vertical-align:middle" onclick="__toggleAggregation(this)"></input>
+				aggrega<br>
         
             <div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
                 <span id="filter"></span>
@@ -179,7 +181,7 @@ $Log:index_only_map_embed.html,v $
             </div>
 
             <p style="font-size:0.9em">
-                Si consiglia di utilizzare <b>l'elenco sottostante</b> per <b>filtrare i progetti</b> sulla mappa. Per <b>condividere</b> i risultati, è possibile utilizzare questo <a style="color:#0088dd" href="javascript:void()" onclick="$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a>. Info sulla mappa <a style="color:#0088dd" href="javascript:void()" onclick="$('#info-overlay').show('slow')">qui</a>.
+                Si consiglia di utilizzare <b>l'elenco sottostante</b> per <b>filtrare i progetti</b> sulla mappa. Per <b>condividere</b> i risultati, è possibile utilizzare questo <a href="javascript:void()" onclick="$('#popup1').html((ixmaps.szActualUrl));$('#popup1').toggle()">link</a>. Info sulla mappa <a href="javascript:void()" onclick="$('#info-overlay').show('slow')">qui</a>.
             </p>
 
             <textarea id="popup1" style="font-size:1em;text-align:left;width:250px;height:150px;overflow:auto;background:transparent;display:none"></textarea>
@@ -187,7 +189,7 @@ $Log:index_only_map_embed.html,v $
             <div id="scroll-area" style="height:600px;overflow:auto;margin-top:0em">
 
                 <div id="show-facets-div" style="margin-right:0.5em"> </div>
-                mostra <a style="color:#0088dd" href="javascript:void()" onclick="$('#show-list-div').toggle();$('#list-overlay').toggle()">schede progetti</a> (max. 100)
+                mostra <a href="javascript:void()" onclick="$('#show-list-div').toggle();$('#list-overlay').toggle()">schede progetti</a> (max. 100)
                 <div id="show-list-div" style="margin-right:0.5em;display:none"> here must go the item list</div>
 
                 <!-- ------------------------------------- -->
@@ -195,12 +197,12 @@ $Log:index_only_map_embed.html,v $
                 <!-- ------------------------------------- -->
 
                 <hr>
-                <p style="font-size:1em;">Fonte dati:<br>WebGis della <a style="color:#0088dd" href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Regione Emilia Romagna</a> - Interventi di difesa idraulica, del suolo e bonifica finanziati con Ordinanze del Commissario Straordinario Ricostruzione</p>
+                <p style="font-size:1em;">Fonte dati:<br>WebGis della <a href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Regione Emilia Romagna</a> - Interventi di difesa idraulica, del suolo e bonifica finanziati con Ordinanze del Commissario Straordinario Ricostruzione</p>
 
-                <p style="font-size:1em;">Dati in forma usufruibile: <a style="color:#0088dd" href="" target="_blank">Andrea Borruso</a>
+                <p style="font-size:1em;">Dati in forma usufruibile: <a href="" target="_blank">Andrea Borruso</a>
                 </p>
                 
-                <p style="font-size:1em;">Aree invasi dall'acqua: <a style="color:#0088dd" href='https://rapidmapping.emergency.copernicus.eu/EMSR762' target='_blanc'>Copernicus EMSR</a></p>
+                <p style="font-size:1em;">Aree invasi dall'acqua: <a href='https://rapidmapping.emergency.copernicus.eu/EMSR762' target='_blanc'>Copernicus EMSR</a></p>
                 
             </div>
         </div>
@@ -252,7 +254,7 @@ $Log:index_only_map_embed.html,v $
             <div style="margin:1em;text-align:left;">
                 <p>Questa mappa visualizza lo stato degli <b>'Interventi di difesa idraulica'</b> nella Regione <b>Emilia Romagna</b> in seguito all'alluvione del maggio 2023  e gli confronta con la <b>mappatura delle aree invasi dell'acqua</b> censiti dal <b>'Copernicus Emergency Management Service - Rapid Mapping Activations'</b> (EMSR).</p>
                     
-                <p>La fonte di questi dati: <a style="color:#0088dd" href="https://rapidmapping.emergency.copernicus.eu/EMSR762" target="_blank">EMSR</a> (Copernicus Emergency Management Service - Rapid Mapping Activations) e il WebGis:  <a style="color:#0088dd"  href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Alluvione maggio 2023 - Interventi di difesa idraulica</a> della Regione Emilia Romgna dal quale sono stati 'liberati' i dati da <b>Andrea Borruso</b></p>
+                <p>La fonte di questi dati: <a href="https://rapidmapping.emergency.copernicus.eu/EMSR762" target="_blank">EMSR</a> (Copernicus Emergency Management Service - Rapid Mapping Activations) e il WebGis:  <a href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Alluvione maggio 2023 - Interventi di difesa idraulica</a> della Regione Emilia Romgna dal quale sono stati 'liberati' i dati da <b>Andrea Borruso</b></p>
                 
                 <p>Alcune note sull'utilizzo della mappa:</p>
 
@@ -337,6 +339,14 @@ $Log:index_only_map_embed.html,v $
 				ixmaps.changeThemeStyle(null,'chart','type:MULTIPLE','add');
 			} else {
 				ixmaps.changeThemeStyle(null,'chart','type:MULTIPLE','remove');
+			}
+		};
+
+ 		var __toggleAggregation = function(el) {
+			if (el.checked) {
+				ixmaps.changeThemeStyle(null,'chart','type:AGGREGATE','add');
+			} else {
+				ixmaps.changeThemeStyle(null,'chart','type:AGGREGATE','remove');
 			}
 		};
 
@@ -671,7 +681,7 @@ $Log:index_only_map_embed.html,v $
                     size: "IMPORTO_COMPLESSIVO"
                 })
                 .filter(__filter)
-                .type("CHART|BUBBLE|MULTIPLE|UP|CATEGORICAL|VALUES|LABEL|SIZE")
+                .type("CHART|BUBBLE|MULTIPLE|UP|CATEGORICAL|VALUES|LABEL|RECT|RELOCATE|SIZE")
                 .style({
                     "colorscheme": [
                         "4",
@@ -683,6 +693,8 @@ $Log:index_only_map_embed.html,v $
                     valuefield: "IMPORTO_COMPLESSIVO",
                     "units": "€",
                     "showdata": "true",
+                    normalsizevalue: "50000000",
+                    gridwidth: "50px",
                     tooltip: "<h3 style='white-space:nowrap'><b>{{COMUNE_GIS}}</b></h3>{{SOGGETTO_ATTUATORE}}{{theme.item.chart}}<p>{{DESCRIZIONE_DANNO_CRITICITA}}</p><p>{{DESCRIZIONE_INTERVENTO}}</p><p style='white-space:nowrap'><b>{{STATO_DI_ATTUAZIONE}}</b> {{DATA_DI_AGGIORNAMENTO}}</p>{{FONTE_DEL_DATO}}",
                     name: "chart"
                 })
