@@ -164,11 +164,14 @@ $Log:index_only_map_embed.html,v $
 
         <div style="font-family:open sans;text-align:left;margin:0.5em 0.5em 0em 0em;">
             
-            <h3><b>Interventi di difesa idraulica, del suolo e bonifica</b></h3> finanziati con Ordinanze del Commissario Straordinario Ricostruzione</br>
-
+            <h3><b>Interventi di difesa idraulica, del suolo e bonifica</b></h3>
+            
             Nel quadro della mappa ci sono attualmente visibile <span id="no_progetti" style="font-weight:bold;font-size:1.2em">...</span> progetti
             con un finanziamento complessivo di<br><span id="sum_importi" style="font-weight:bold;font-size:1.8em;line-height:1.5em">...</span>&nbsp; €<br>
 
+            <input id="sizeFieldCheckBox" type="checkbox" checked="checked" style="accent-color:#888888;vertical-align:middle" onclick="__toggleMultiple(this)"></input>
+				espandi posizioni multipli<br>
+        
             <div id="filter-div" style="margin-top:0.8em;margin-right:2em;font-size:0.9em;background-color:#F7F6EF;padding:0.2em;border-color:#aaaaaa;display:none">
                 <span id="filter"></span>
                 <button style="font-size:0.8em" onclick="ixmaps.message('rimuovo filtri ...');clearFilter();">x</button>
@@ -252,7 +255,7 @@ $Log:index_only_map_embed.html,v $
 
                 <ul style="text-align:left;margin-left:-1em">
                     <li>
-                        <p>Utilizza <b>l'elenco a destra</b> e <b>la mappa</b> per <b>filtrare</b> i progetti del PNRR. La lista e la mappa sono sincronizzate.</p>
+                        <p>Utilizza <b>l'elenco a destra</b> e <b>la mappa</b> per <b>filtrare</b> i progetti. La lista e la mappa sono sincronizzate.</p>
                     </li>
                     <li>
                         <p>Per <b>condividere</b> una <b>mappa personalizzata</b> con filtri e posizione, è possibile creare <b>un link</b> personalizzato</p>
@@ -303,17 +306,7 @@ $Log:index_only_map_embed.html,v $
 
         var sizeCharts = function(nFactor) {
             ixmaps.changeThemeStyle(null, 'chart', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'chart_prov', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'chart_reg', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'details', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'details_2', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'stato', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'stato_II', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'stato_prov', 'scale:' + nFactor, 'factor');
-            ixmaps.changeThemeStyle(null, 'stato_reg', 'scale:' + nFactor, 'factor');
-            //ixmaps.changeThemeStyle(null, 'province_sum', 'scale:' + nFactor, 'factor');
-            //ixmaps.changeThemeStyle(null, 'regioni_sum', 'scale:' + nFactor, 'factor');
-
+ 
             themesA = ixmaps.getThemes();
             for (i in themesA) {
                 if (themesA[i].szId.match(/chart|details/) && themesA[i].fVisible) {
@@ -333,20 +326,16 @@ $Log:index_only_map_embed.html,v $
             element.parent().prev().html("&bullet;");
         }
         var clearFilter = function(szFilter) {
-            ixmaps.changeThemeStyle(null, 'choropleth', 'filter', 'remove');
             ixmaps.changeThemeStyle(null, 'chart', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'chart_prov', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'chart_reg', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'details', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'province_sum', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'province_sum_2', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'regioni_sum', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'stato', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'stato_II', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'stato_prov', 'filter', 'remove');
-            ixmaps.changeThemeStyle(null, 'stato_reg', 'filter', 'remove');
-        }
-
+         }
+        
+ 		var __toggleMultiple = function(el) {
+			if (el.checked) {
+				ixmaps.changeThemeStyle(null,'chart','type:MULTIPLE','add');
+			} else {
+				ixmaps.changeThemeStyle(null,'chart','type:MULTIPLE','remove');
+			}
+		};
 
         // ---------------------------------------------------
         //
@@ -468,9 +457,9 @@ $Log:index_only_map_embed.html,v $
          **/
 
         var __filter = "";
-        var __lat = 44.43834416396983;
-        var __lon = 11.938447479543411;
-        var __zoom = 8.5;
+        var __lat = 44.340121497655446;
+        var __lon = 12.004976247062574;
+        var __zoom = 10;
         var __scale_chart = 1;
         var __legend = true;
 
@@ -509,7 +498,7 @@ $Log:index_only_map_embed.html,v $
             "powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
         legend =
-            "<br><div style='background:rgba(247, 246, 239,0.8);padding:0.5em 0em 0.1em 0.8em'><h3>Stato di attuazione</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(253, 162, 81)'>&#9724;</span> in progettazione</li><li><span style='color:RGB(196, 213, 234)'>&#9724;</span> in corso</li><li><span style='color:RGB(96, 157, 197)'>&#9724;</span> concluso</li><li><span style='color:RGB(253, 204, 155)'>&#9724;</span> annullato</li></ul><h3>Aree invase dall'acqua - Copernicus</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(191, 234, 248)'>&#9724;</span> 2023</li><li><span style='color:RGB(128, 0, 0)'>&#9723;</span> 2024</li><li><span style='color:rgb(0,0,0)'>&mdash;</span> EMSR AOI</li></ul></div>";
+            "<br><div style='background:rgba(247, 246, 239,0.8);padding:0.5em 0em 0.1em 0.8em'><h3>Stato di attuazione</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(253, 162, 81)'>&#9724;</span> in progettazione</li><li><span style='color:RGB(196, 213, 234)'>&#9724;</span> in corso</li><li><span style='color:RGB(96, 157, 197)'>&#9724;</span> concluso</li><li><span style='color:RGB(253, 204, 155)'>&#9724;</span> annullato</li></ul><h3>Aree invase dall'acqua - Copernicus</h3><ul style='list-style:none;text-indent:-3em;margin-top:0.2em'><li><span style='color:rgb(191, 234, 248)'>&#9724;</span> 2023</li><li><span style='color:RGB(128, 0, 0)'>&#9723;</span> 2024</li><li><span style='color:rgb(0,0,0)'>&mdash;</span> aree interessate 2024</li></ul></div>";
 
         /**
          ** data prep
@@ -758,7 +747,7 @@ $Log:index_only_map_embed.html,v $
                     size: "IMPORTO_COMPLESSIVO"
                 })
                 .filter(__filter)
-                .type("CHART|BUBBLE|CATEGORICAL|VALUES|SIZE")
+                .type("CHART|BUBBLE|MULTIPLE|UP|CATEGORICAL|VALUES|LABEL|SIZE")
                 .style({
                     "colorscheme": [
                         "4",
@@ -814,7 +803,8 @@ $Log:index_only_map_embed.html,v $
                 dynamicScalePow: "2.5",
                 flushChartDraw: "1000000",
                 basemapopacity: "0.1",
-                panhidden: "false"
+                freezeOnPan: "false",
+                hideOnPan: "false"
             })
             .local("aggregated", "")
             .local("loading data ...", "scaricando dati ...")
