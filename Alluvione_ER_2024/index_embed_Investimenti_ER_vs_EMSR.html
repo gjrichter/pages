@@ -68,6 +68,7 @@ $Log:index_only_map_embed.html,v $
 
         a {
             text-decoration: none;
+            color:#0088dd;
         }
 
     </style>
@@ -194,11 +195,13 @@ $Log:index_only_map_embed.html,v $
                 <!-- ------------------------------------- -->
 
                 <hr>
-                <p style="font-size:1em;">Fonte dati:<br><a style="color:#0088dd" href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Regione Emilia Romagna</a> - Interventi di difesa idraulica, del suolo e bonifica finanziati con Ordinanze del Commissario Straordinario Ricostruzione</p>
-
+                <p style="font-size:1em;">Fonte dati:<br>WebGis della <a style="color:#0088dd" href="https://servizimoka.regione.emilia-romagna.it/mokaApp/apps/ALLUVIONE23_IDRO/index.html" target="_blank">Regione Emilia Romagna</a> - Interventi di difesa idraulica, del suolo e bonifica finanziati con Ordinanze del Commissario Straordinario Ricostruzione</p>
 
                 <p style="font-size:1em;">Dati in forma usufruibile: <a style="color:#0088dd" href="" target="_blank">Andrea Borruso</a>
                 </p>
+                
+                <p style="font-size:1em;">Aree invasi dall'acqua: <a style="color:#0088dd" href='https://rapidmapping.emergency.copernicus.eu/EMSR762' target='_blanc'>Copernicus EMSR</a></p>
+                
             </div>
         </div>
 
@@ -518,6 +521,33 @@ $Log:index_only_map_embed.html,v $
         // t h e   m a p   l a y e r 
         // ---------------------------------------------------
 
+        /**
+        ** define static layer with reference shapes (Regione) 
+        **/
+
+        var __georef_reg =
+            ixmaps.layer("ITALIA_Regioni_2022", layer => layer
+                .data({
+                    url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/regioni_2022/Reg01012022_s_WGS84.topojson.gz",
+                    type: "topojson"
+                })
+                .binding({
+                    id: "COD_REG",
+                    position: "geometry"
+                })
+                .type("FEATURES|NOLEGEND")
+                .style({
+                    colorscheme: ["none"],
+                    linecolor: "black",
+                    linewidth: "0.3",
+                    sizefield: "Shape_Area"
+                })
+            );
+        
+        /**
+        ** define static layer with reference shapes (Copernicus EMSR 2023/2024) 
+        **/
+
         var __copernicus_EMSR_ER_01_2023 =
             ixmaps.layer("Copernicus_1_2023")
             .data({
@@ -625,112 +655,6 @@ $Log:index_only_map_embed.html,v $
 
 
         /**
-         ** define static layer with reference shapes (comuni, province, regioni ) 
-         **/
-
-        /* 1. centroids of 2011, by curtesy of Andrea Borruso */
-        var __georef_urban =
-            ixmaps.layer("ITALIA_Comuni_2022", layer => layer
-                .data({
-                    url: "https://raw.githubusercontent.com/aborruso/centroidiurbanfabric/master/output/ElencoUnitaAmministrative2011.geojson",
-                    type: "geojson"
-                })
-                .binding({
-                    id: "PRO_COM_T",
-                    position: "geometry"
-                })
-                .type("FEATURES|NOLEGEND")
-                .style({
-                    colorscheme: ["none"],
-                    linecolor: "none",
-                    linewidth: "1",
-                    scale: "0.0001"
-                })
-            );
-
-        /* 2. last istat data (2022), for changes since 2011 */
-        var __georef =
-            ixmaps.layer("ITALIA_Comuni_2022", layer => layer
-                .data({
-                    url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
-                    type: "topojson"
-                })
-                .binding({
-                    id: "PRO_COM_T",
-                    position: "geometry"
-                })
-                .type("FEATURES|NOLEGEND")
-                .style({
-                    colorscheme: ["none"],
-                    linecolor: "none",
-                    linewidth: "0.3",
-                    sizefield: "Shape_Area"
-                })
-            );
-
-
-        /* 3. last istat data (2022), province */
-        var __georef_prov =
-            ixmaps.layer("ITALIA_Province_2022", layer => layer
-                .data({
-                    url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2022/Prov01012022_g_WGS84.topojson.gz",
-                    type: "topojson"
-                })
-                .binding({
-                    id: "COD_PROV",
-                    position: "geometry"
-                })
-                .type("FEATURES|NOLEGEND")
-                .style({
-                    colorscheme: ["none"],
-                    linecolor: "black",
-                    linewidth: "0.1",
-                    sizefield: "Shape_Area",
-                    featureupper: "1:5000000"
-                })
-            );
-
-        /* 4. last istat data (2022), regioni */
-        var __georef_reg =
-            ixmaps.layer("ITALIA_Regioni_2022", layer => layer
-                .data({
-                    url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/regioni_2022/Reg01012022_s_WGS84.topojson.gz",
-                    type: "topojson"
-                })
-                .binding({
-                    id: "COD_REG",
-                    position: "geometry"
-                })
-                .type("FEATURES|NOLEGEND")
-                .style({
-                    colorscheme: ["none"],
-                    linecolor: "black",
-                    linewidth: "0.3",
-                    sizefield: "Shape_Area"
-                })
-            );
-
-        /* 5. miniatura d'Italia per ambito nazionale */
-        var __georef_mini =
-            ixmaps.layer("ITALIA_Regioni_2022", layer => layer
-                .data({
-                    url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/minimap/italia_miniatura.topojson",
-                    type: "topojson"
-                })
-                .binding({
-                    id: "COD_RIP",
-                    position: "geometry"
-                })
-                .type("FEATURES|NOLEGEND")
-                .style({
-                    colorscheme: ["rgba(155,155,155,0.3)"],
-                    linecolor: "none",
-                    linewidth: "1",
-                    sizefield: "Shape_Area"
-                })
-            );
-
-        /**
          ** visualizzation themes 
          **/
 
@@ -816,11 +740,7 @@ $Log:index_only_map_embed.html,v $
             // the geo reference layer 
             // -----------------------------
 
-            //.layer(__georef_urban)
-            //.layer(__georef)
-            //.layer(__georef_prov)
             .layer(__georef_reg)
-            //.layer(__georef_mini)
 
             .layer(__copernicus_EMSR_ER_01_2023)
             .layer(__copernicus_EMSR_AOIS)
