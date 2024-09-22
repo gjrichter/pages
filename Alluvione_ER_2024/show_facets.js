@@ -466,15 +466,6 @@ ixmaps.data = ixmaps.data || {};
 			// make facet content, different types
 			// ------------------------------------
 			
-			var localTextA = {};
-			localTextA.M1 = "M1 - Digitalizz., innov., competi., cultura e turismo";
-			localTextA.M2 = "M2 - Rivoluzione verde e trans. eco.";
-			localTextA.M3 = "M3 - Infrastrutture per una mobilità sostenibile";
-			localTextA.M4 = "M4 - Istruzione e ricerca";
-			localTextA.M5 = "M5 - Inclusione e coesione";
-			localTextA.M6 = "M6 - Salute";
- 
-
 			if (typeof (facetsA[i].min) != "undefined" &&
 				!isNaN(facetsA[i].min) &&
 				!isNaN(facetsA[i].max) &&
@@ -632,10 +623,6 @@ ixmaps.data = ixmaps.data || {};
 							}
 						}
 
-						if ( localTextA[szText] ){
-							szText = localTextA[szText];
-						}
-
 						// facet button with one unique value
 						// -----------------------------------
 						szHtml += '<a href="' + href + '">';
@@ -643,40 +630,19 @@ ixmaps.data = ixmaps.data || {};
 						if ((objThemeDefinition.field == facetsA[i].id)) {
 							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
 						}
-						if (szText.match(/M1C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[0],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';"></span>';
-						}
-						if (szText.match(/M2C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[1],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
-						}
-						if (szText.match(/M3C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[2],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
-						}
-						if (szText.match(/M4C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[3],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
-						}
-						if (szText.match(/M5C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[4],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
-						}
-						if (szText.match(/M6C/)){
-							var bgColor = hex2rgba(objTheme.colorScheme[5],0.3);
-							szHtml += '<span class="input-group-addon" id="btnGroupAddon" style="background:' + bgColor + ';background-opacity:0.5;"></span>';
-						}
 						
 						if (facetsA[i].type == "textual") {
 							if (fActiveFacet) {
 								value = szActiveFilter.split("\"")[3];
 								if ( value ){
 									value = value.replace("\/", "\\\/");
-									if ( value != "*" ){
-										var szTextA = eval("szText.split(/" + value + "/i)");
-										szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
-									}
+                                    valueA = value.split("|");
+                                    valueA.forEach( value => {
+                                         if ( value != "*" ){
+                                            var szTextA = eval("szText.split(/" + value + "/i)");
+                                            szText = szTextA.join("<span style='color:#000000;background:#ffff00;padding:0 0.2em;'>" + value + "</span>");
+                                        }
+                                    })
 								}
 							}
 						}
