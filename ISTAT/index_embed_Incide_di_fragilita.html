@@ -39,8 +39,9 @@ $Log:index_only_map_embed.html,v $
 			color: cornflowerblue;
 		}
 
-		li.active {
-			background-color: azure;
+		li.active a {
+			color: white;
+			background-color: black;
 		}
 
 		.sidebar {
@@ -67,7 +68,7 @@ $Log:index_only_map_embed.html,v $
 
 		<div id="sidebar_div" class="sidebar">
 			<ul>
-				<li class="select active">
+				<li class="select active" style="font-size:1.2em;line-height:1.2em">
 					<a href="javascript:ixmaps.map().replace('choropleth',__theme_1)"><b>Indice</b> di <b>Fragilità Comunale</b> - <b>2019</b><br> ISTAT - (decile)
 					</a>
 				</li>
@@ -121,7 +122,7 @@ $Log:index_only_map_embed.html,v $
 	<!--========================================================================= -->
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
-	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script src="https://gjrichter.github.io/ixmaps_test/ui/js/htmlgui_api.js"></script>
 
 	<!--========================================================================= -->
 
@@ -303,12 +304,11 @@ $Log:index_only_map_embed.html,v $
 				.type("CHOROPLETH|QUANTILE|DOPACITY")
 				.style({
 					colorscheme: [
-						"10",
-						"#36A6B1",
-						"#794073",
+						"15",
+						"#006364",
+						"#DA3F00",
 						"3colors",
-						"#DDA729"
-					],
+						"#E6E1BE"],
 					fillopacity: "1",
 					units: "",
 					showdata: "false",
@@ -366,7 +366,7 @@ $Log:index_only_map_embed.html,v $
 					value: "Indice di accessibilità ai servizi essenziali"
 				})
 				.filter("WHERE \"Tempo (TIME_PERIOD)\" = 2019")
-				.type("CHOROPLETH|DOPACITY")
+				.type("CHOROPLETH|DOPACITY|ZEROISNOTVALUE")
 				.style({
 					colorscheme: [
 						"7",
@@ -375,6 +375,7 @@ $Log:index_only_map_embed.html,v $
 						"3colors",
 						"#DDA729"
 					],
+					nodatacolor: "#A76C79",
 					fillopacity: "1",
 					units: "",
 					showdata: "false",
