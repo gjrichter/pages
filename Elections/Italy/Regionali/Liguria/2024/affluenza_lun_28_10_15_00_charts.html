@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+ 
+	<title>iXMaps Elezioni Liguria 2024</title>
+</head>
+ 
+<body>
+ 
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+ 
+	<!-- include the ixmaps API -->
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+ 
+	<script type="text/javascript" charset="utf-8">
+ 
+		// create and embed the map
+		// ! reference to "map-div", the hosting html div
+
+		ixmaps.embed("map-div", {
+			mapService: "leaflet_vt",
+			mapType: "VT_BASIC_LIGHT",
+			map: "../../maps/svg/maps/generic/mercator.svg",
+			name: "map_1",
+			mode: "info",
+			legend: "true",
+			tools: "true",
+			search: "Europe",
+			about: "test"
+		},
+		map => map
+		.options({
+			featurescaling: "true",
+			objectscaling: "dynamic",
+			normalSizeScale: "10000000",
+			flushChartDraw: "1000000",
+			basemapopacity: "0.5",
+			worksilent: "true",
+			loadsilent: "true",
+			hideOnPan: "false",
+			freezeOnPan: "false"
+		})
+		.local("working ...", "")
+		.require("../../ui/js/tools/tooltip_mustache.js")
+		.attribution("powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>")
+		.view({
+			center: {
+				lat: "44.215885595647215",
+				lng: "8.807503564783055"
+				},
+			zoom: "9.03059299730069"
+			})
+		.layer(ixmaps.layer("generic", layer => layer
+			.data({
+				url: "https://confini-amministrativi.it/api/v2/it/20200101/comuni.topo.json",
+				type: "topojson",
+				name: "data3263494301200831"
+				})
+			.filter("WHERE \"den_reg\" = \"Liguria\"")
+			.binding({
+				geo: "geometry",
+				id: "pro_com_t"
+				})
+			.type("FEATURE")
+			.style({
+				colorscheme: [
+					"#eeeeee"],
+				fillopacity: "0.1",
+				linecolor: [
+					"#dddddd"],
+				linewidth: "0.5",
+				title: "Comuni",
+				tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+				})
+		))
+		.layer(ixmaps.layer("generic", layer => layer
+			.data({
+				url: "https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/affluenza_comuni.csv",
+				type: "csv",
+				name: "data_affluenza"
+				})
+			.filter("WHERE \"orario\" = \"20241028150000\"")
+			.binding({
+				geo: "com_istat_code",
+                value: "votanti",
+				value100: "elettori_totali"
+				})
+			.type("CHOROPLETH|AGGREGATE|COMPATIBLE|SUM|DOPACITY")
+			.style({
+                colorscheme: [
+						"20",
+						"#36A6B1",
+						"#F94073",
+						"3colors",
+						"#DDA729"
+                ],
+				fillopacity: "1",
+                textcolor: "black",
+				units: "%",
+                aggregationfield: "comune",
+				title: "Affluenza alle 15:00 <br>Lunedì 28. ottobre",
+				tooltip: "{{comune}}<h2 style='margin-bottom:0'>{{theme.item.value}}&nbsp;%</h2>"
+				})
+		))
+        .layer(ixmaps.layer("generic", layer => layer
+			.data({
+				url: "https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/affluenza_comuni.csv",
+				type: "csv",
+				name: "data_affluenza"
+				})
+			.binding({
+				geo: "com_istat_code",
+                value: "votanti",
+				value100: "elettori_totali",
+                size: "elettori_totali",
+                title: "comune"
+				})
+			.type("CHART|PIE|AUTOCOMPLETE|SIZEP4|VALUES|AGGREGATE|COMPATIBLE|SUM")
+			.style({
+				filter: "WHERE \"orario\" = \"20241028150000\"",
+                colorscheme: [
+						"20",
+						"#36A6B1",
+						"#F94073",
+						"3colors",
+						"#DDA729"
+                ],
+				fillopacity: "1",
+                textcolor: "black",
+				shadow: "true",
+				units: "%",
+                aggregationfield: "comune",
+                labelfield: "comune",
+                labelupper: "1:250000",
+                shadowlower: "1:250000",
+                textscale: 0.5,
+				title: "Affluenza alle 15:00 <br>Lunedì 28. ottobre",
+                snippet: "la grandezza delle torte rappresenta<br>il numero di votanti per comune",
+				tooltip: "{{comune}}{{theme.item.chart}}<h2 style='margin-bottom:0'>{{theme.item.value}}&nbsp;%</h2>"
+				})
+		))
+             
+	);
+	</script>
+</body>
+</html>
