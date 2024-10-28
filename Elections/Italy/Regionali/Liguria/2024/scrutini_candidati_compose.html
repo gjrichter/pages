@@ -24,7 +24,7 @@
         
 		query_data = function(theme, options) {
 			var broker = new Data.Broker()
-			 .addSource("https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/comune/scrutini_risultati/csv/cand.csv", "csv")
+			 .addSource("https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/scrutini_comuni_candidati.csv", "csv")
             .addSource("https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/comune/scrutini_risultati/csv/main.csv", "csv")
 						
 			.realize(function(dataA) {
@@ -74,7 +74,7 @@
                 
                 pivot = data.pivot({
                     lead: "int_desc_com",
-                    keep: "int_desc_com",
+                    keep: "com_istat_code",
                     columns: "cogn",
                     value: "perc"
                 });
@@ -135,7 +135,7 @@
 			.filter("WHERE \"den_reg\" = \"Liguria\"")
 			.binding({
 				geo: "geometry",
-				id: "comune"
+				id: "pro_com_t"
 				})
 			.type("FEATURE")
 			.style({
@@ -156,7 +156,7 @@
 				name: "data_scrutini"
 				})
 			.binding({
-				geo: "int_desc_com",
+				geo: "com_istat_code",
                 values: [
                     "ORLANDO",
                     "BUCCI",
