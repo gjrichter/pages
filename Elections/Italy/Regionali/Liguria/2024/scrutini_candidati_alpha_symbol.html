@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+ 
+	<title>iXMaps Elezioni Liguria 2024</title>
+</head>
+ 
+<body>
+ 
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+ 
+	<!-- include the ixmaps API -->
+	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+ 
+	<script type="text/javascript" charset="utf-8">
+        
+		query_data = function(theme, options) {
+			var broker = new Data.Broker()
+			 .addSource("https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/scrutini_comuni_candidati.csv", "csv")
+            .addSource("https://raw.githubusercontent.com/ondata/elezioni_regionali_liguria_2024/refs/heads/main/dati/comune/scrutini_risultati/csv/main.csv", "csv")
+						
+			.realize(function(dataA) {
+				
+				var data = dataA[0];
+                
+				var comuneLookupA = dataA[1].lookupArray({
+					key: "_link",
+					value: "int_desc_com"
+				});
+				
+				var eletLookupA = dataA[1].lookupArray({
+					key: "_link",
+					value: "int_ele_t"
+				});
+				
+				var votcandLookupA = dataA[1].lookupArray({
+					key: "_link",
+					value: "int_tot_vot_cand"
+				});
+				
+				var votlisLookupA = dataA[1].lookupArray({
+					key: "_link",
+					value: "int_tot_vot_lis"
+				});
+				
+				dataA[0].addColumn({
+					source: "_link_main",
+					destination: "int_desc_com"
+				}, function(value) {
+					return (comuneLookupA[value]);
+				});
+				
+				dataA[0].addColumn({
+					source: "_link_main",
+					destination: "int_ele_t"
+				}, function(value) {
+					return (eletLookupA[value]);
+				});
+				
+				dataA[0].addColumn({
+					source: "_link_main",
+					destination: "int_tot_vot_cand"
+				}, function(value) {
+					return (votcandLookupA[value]);
+				});
+                
+                pivot = data.pivot({
+                    lead: "int_desc_com",
+                    keep: ["com_istat_code","int_tot_vot_cand"],
+                    columns: "cogn",
+                    value: "voti"
+                });
+
+                options.type = "jsonDB", ixmaps.setExternalData(pivot, options);
+			});
+		};
+        
+        comuneToUpper = function(data){
+            data.column("comune").map((value) => {
+                return String(value).toUpperCase();
+             })
+        };
+ 
+		// create and embed the map
+		// ! reference to "map-div", the hosting html div
+
+		ixmaps.embed("map-div", {
+			mapService: "leaflet_vt",
+			mapType: "VT_BASIC_LIGHT",
+			map: "../../maps/svg/maps/generic/mercator.svg",
+			name: "map_1",
+			mode: "info",
+			legend: "true",
+			tools: "true",
+			search: "Europe",
+			about: "test"
+		},
+		map => map
+		.options({
+			featurescaling: "true",
+			objectscaling: "dynamic",
+			normalSizeScale: "10000000",
+			flushChartDraw: "1000000",
+			basemapopacity: "0.5",
+			worksilent: "true",
+			loadsilent: "true",
+			hideOnPan: "false",
+			freezeOnPan: "false"
+		})
+		.local("working ...", "")
+        .require("https://d3js.org/d3.v3.min.js")
+        .require("https://gjrichter.github.io/pages/Elezioni_Europee_2024_scrutini/peaks/chart.js")
+		.require("../../ui/js/tools/tooltip_mustache.js")
+		.attribution("powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>")
+		.view({
+			center: {
+				lat: "44.215885595647215",
+				lng: "8.807503564783055"
+				},
+			zoom: "9.03059299730069"
+			})
+		.layer(ixmaps.layer("generic", layer => layer
+			.data({
+				url: "https://confini-amministrativi.it/api/v2/it/20200101/comuni.topo.json",
+				type: "topojson",
+				name: "data3263494301200831",
+                process: comuneToUpper.toString()
+				})
+			.filter("WHERE \"den_reg\" = \"Liguria\"")
+			.binding({
+				geo: "geometry",
+				id: "pro_com_t",
+                size: "shape_area"
+				})
+			.type("FEATURE")
+			.style({
+				colorscheme: [
+					"#eeeeee"],
+				fillopacity: "0.1",
+				linecolor: [
+					"#dddddd"],
+				linewidth: "0.5",
+				title: "Comuni",
+				tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+				})
+		))
+		.layer(ixmaps.layer("xxgeneric", layer => layer
+			.data({
+				query: query_data.toString(),
+				type: "ext",
+				name: "data_scrutini"
+				})
+			.binding({
+				geo: "com_istat_code",
+                values: [
+                    "ORLANDO",
+                    "BUCCI",
+                    "TOSCANO",
+                    "ROLLANDO",
+                    "ROSSON",
+                    "CELLA",
+                    "MORRA"
+                ],
+                value100: "int_tot_vot_cand",
+                alpha: "int_tot_vot_cand",
+                alpha100: "$density$"
+				})
+			.type("CHOROPLETH|DOMINANT|DOPACITY|SIMPLELEGEND")
+			.style({
+                colorscheme: [
+						"#D35F50",
+						"#5784C5",
+                        "gray",
+                        "orange",
+                        "orange",
+                        "orange",
+                        "gray",
+                        "gray"
+                ],
+                label: [
+                    "ORLANDO",
+                    "BUCCI",
+                    "TOSCANO",
+                    "ROLLANDO",
+                    "ROSSON",
+                    "FERRANDO",
+                    "CELLA",
+                    "MORRA"
+                ],
+				fillopacity: "1",
+                textcolor: "black",
+				units: "%",
+                valuedecimals: "1",
+                aggregationfield: "int_desc_com",
+                dopacitypow: 1.5,
+                dopacityscale: 5,
+				title: "Scrutini Regionale Liguria 2024",
+                description: "- colore: candidato in vantaggio<br><b>- intensità: densità dei votanti (totale)</b>",
+				tooltip: "<h2 style='margin-top:0'>{{int_desc_com}}</h2>{{theme.item.chart}}"
+				})
+		))
+        .layer(
+            ixmaps.theme("generic")
+            .data({
+                query: query_data.toString(),
+ 				type: "ext",
+				name: "data_scrutini"
+           })
+            .binding({
+				geo: "com_istat_code",
+                values: [
+                    "ORLANDO",
+                    "BUCCI",
+                    "TOSCANO",
+                    "ROLLANDO",
+                    "ROSSON",
+                    "CELLA",
+                    "MORRA"
+                ],
+                value100: "Total",
+                size: "Total"
+            })
+            .type("CHART|SYMBOL|SIZE|3D|SHADOW|VALUES|DOMINANT|SIMPLELEGEND")
+            .style({
+                userdraw:"pinnacleChart",
+                colorscheme: [
+						"#D35F50",
+						"#5784C5",
+                        "gray",
+                        "orange",
+                        "orange",
+                        "orange",
+                        "gray",
+                        "gray"
+                ],
+                label: [
+                    "ORLANDO",
+                    "BUCCI",
+                    "TOSCANO",
+                    "ROLLANDO",
+                    "ROSSON",
+                    "FERRANDO",
+                    "CELLA",
+                    "MORRA"
+                ],
+                fillopacity: "0.7",
+                sizepow: 1.3,
+                shadow: "false",
+                units: "%",
+                normalsizevalue: "50000",
+                scale: "0.8",
+                valuesupper: "1:1000000",
+                valuedecimals: "1",
+                minvaluesize: "14",
+                titlefield: "int_desc_com"
+            })
+            .meta({
+                title: "Europee 2024<h3>Partito vincente</h3><hr>",
+                description: "*) il colore indica il partito il risultato più alto,<br>l'intensità del colore è proporzionale alla densità del totale dei voti.<p>fonte: <a href='https://github.com/ondata/elezioni_europee_2024' target='_blank'>onData</a></p>",
+                tooltip: "<h2 style='margin:0'>{{int_desc_com}}</h2><hr><br>{{theme.item.chart}}"
+            })
+            .json()
+        )
+             
+             
+	);
+	</script>
+</body>
+</html>
