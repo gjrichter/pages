@@ -141,7 +141,7 @@ $Log:index_only_map_embed.html,v $
 			 }, map => map
                 .view({
                     center: {
-                        lat: "44.515885595647215",
+                        lat: "44.355885595647215",
                         lng: "8.807503564783055"
                         },
                     zoom: "9.03059299730069"
@@ -175,7 +175,7 @@ $Log:index_only_map_embed.html,v $
 							colorscheme: ["none"],
 							fillopacity: "0.5",
 							linecolor: "white",
-							linewidth: "0.02"
+							linewidth: "0.5"
 						})
 						.title("Comuni")
 					.json()
@@ -210,11 +210,9 @@ $Log:index_only_map_embed.html,v $
 							"PATTO CIVICO E RIFORMISTA PER ORLANDO - AZIONE CON CALENDA - PRI - REPUBBLICANI EUROPEI - PER - ALLEANZA CIVICA LIGURIA",
 							"ALLEANZA VERDI E SINISTRA - LISTA SANSA - POSSIBILE - EUROPA VERDE - SINISTRA ITALIANA",
 							"ALTERNATIVA POPOLARE CON BANDECCHI PER BUCCI PPE"],
-						value100: "Total",
-						alpha: "Total",
-						alpha100: "$density$"
+						value100: "Total"
 					})
-					.type("CHOROPLETH|DOMINANT|DOPACITYMAX|SIMPLELEGEND")
+					.type("CHOROPLETH|DOMINANT|PERCENTOFMEAN|DOPACITYMAX|SIMPLELEGEND")
 					.style({
 						colorscheme: [
 							"RGB(203,28,36)",
@@ -234,10 +232,10 @@ $Log:index_only_map_embed.html,v $
 							"PATTO CIVICO E RIFORMISTA PER ORLANDO ...",
 							"ALLEANZA VERDI E SINISTRA - LISTA SANSA ...",
 							"ALTERNATIVA POPOLARE CON BANDECCHI ..."],
-						fillopacity: "auto",
+						fillopacity: "1",
 						units: "%",
-						dopacitypow: 2,
-						dopacityscale: 3,
+						dopacitypow: 1,
+						dopacityscale: 1.5,
 						valuesupper: "1:1000000",
 						valuedecimals: "1",
 						aggregationfield: "com_istat_code",
@@ -245,7 +243,7 @@ $Log:index_only_map_embed.html,v $
 					})
 					.meta({
                         title: "Scrutini Regionale Liguria 2024",
-                        description: "- colore: candidato in vantaggio<br><b>- intensità: densità dei votanti (totale)</b>",
+                        description: "- colore: lista con <b>maggiore risultato relativo a se stessa</b><br>",
                         tooltip: "<h2 style='margin-top:0'>{{int_desc_com}}</h2>{{theme.item.chart}}"
 					})
 					.json()
@@ -266,12 +264,10 @@ $Log:index_only_map_embed.html,v $
 							"PATTO CIVICO E RIFORMISTA PER ORLANDO - AZIONE CON CALENDA - PRI - REPUBBLICANI EUROPEI - PER - ALLEANZA CIVICA LIGURIA",
 							"ALLEANZA VERDI E SINISTRA - LISTA SANSA - POSSIBILE - EUROPA VERDE - SINISTRA ITALIANA",
 							"ALTERNATIVA POPOLARE CON BANDECCHI PER BUCCI PPE"],
-						value100: "Total",
-						size: "Total"
+						value100: "Total"
 					})
-                    .type("CHART|USER|SIZE|3D|SHADOW|VALUES|DOMINANT|SIMPLELEGEND")
+					.type("CHART|SYMBOL|TEXTONLY|DOMINANT|VALUES|NOLEGEND")
 					.style({
-                        userdraw:"pinnacleChart",
 						colorscheme: [
 							"RGB(203,28,36)",
 							"#04c467",
@@ -287,28 +283,24 @@ $Log:index_only_map_embed.html,v $
 							"MOVIMENTO 5 STELLE 2050",
 							"FORZA ITALIA BERLUSCONI BUCCI PRESIDENTE PPE",
 							"GIORGIA MELONI PER BUCCI PRESIDENTE FRAT ...",
-							"PATTO CIVICO E RIFORMISTA PER ORLANDO - AZIONE CON CALENDA - PRI - REPUBBLICANI EUROPEI - PER - ALLEANZA CIVICA LIGURIA",
+							"PATTO CIVICO E RIFORMISTA PER ORLANDO ...",
 							"ALLEANZA VERDI E SINISTRA - LISTA SANSA ...",
 							"ALTERNATIVA POPOLARE CON BANDECCHI ..."],
-						fillopacity: "auto",
-                        sizepow: 2.3,
-                        shadow: "false",
+                        symbols: "label",
+						fillopacity: "1",
 						units: "%",
-                        normalsizevalue: "200000",
-                        scale: "0.8",
-						valuesupper: "1:1000000",
+						chartupper: "1:500000",
 						valuedecimals: "1",
-                        minvaluesize: "14",
 						aggregationfield: "com_istat_code",
 						titlefield: "int_desc_com"
 					})
 					.meta({
                         title: "Scrutini Regionale Liguria 2024",
-                        description: "- colore: lista con maggiore risultato<br><b>- altezza: numero votanti (totale)</b><p>fonte: <a href='https://github.com/ondata/elezioni_regionali_liguria_2024/blob/main/README.md#scrutini' target='_blank'>onData</a></p>",
+                        description: "- colore: lista con maggiore risultato<br><b>- intensità: segue il risultato</b>",
                         tooltip: "<h2 style='margin-top:0'>{{int_desc_com}}</h2>{{theme.item.chart}}"
-                    })
+					})
 					.json()
-				)
+                )
 			)
 		);
 		
