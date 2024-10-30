@@ -177,7 +177,7 @@ window.ixmaps = window.ixmaps || {};
 				.attr("style","fill:url(#"+(szGradientId+"R")+");stroke:"+szColor+";stroke-width:20;stroke-opacity:0.3;fill-opacity:"+szFillOpacity+";opacity:"+szOpacity+";");
 		}
 
-		if ( args.flag.match(/VALUES/) ){
+		if ( args.flag.match(/VALUES|TITLE/) ){
 
 			var nFontSize = Math.sqrt(nHeight)*10;
 
@@ -187,20 +187,22 @@ window.ixmaps = window.ixmaps || {};
 				var szTextOpacity = 1; // 0.2 + nValue/nMax;
 
 				// show the value on top of the peek
-				svg.append("text")
-					.attr("x", 100)
-					.attr("y", -nHeight-nFontSize*0.5)
-					.attr("style","font-family:arial;font-size:"+nFontSize+"px;text-anchor:middle;fill:none;fill-opacity:"+szTextOpacity+";stroke:white;stroke-width:"+nFontSize/7+"px;opacity:"+0.5+";pointer-events:none")
-					.text(szText);
-				svg.append("text")
-					.attr("x", 100)
-					.attr("y", -nHeight-nFontSize*0.5)
-					.attr("style","font-family:arial;font-size:"+nFontSize+"px;text-anchor:middle;fill:"+(args.theme.szValueColor || args.ccolor.lowColor || szColor)+";fill-opacity:"+szTextOpacity+";stroke:none;opacity:"+szOpacity+";pointer-events:none")
-					.text(szText);
+				if (args.flag.match(/VALUES/) ){
+                    svg.append("text")
+                        .attr("x", 100)
+                        .attr("y", -nHeight-nFontSize*0.5)
+                        .attr("style","font-family:arial;font-size:"+nFontSize+"px;text-anchor:middle;fill:none;fill-opacity:"+szTextOpacity+";stroke:white;stroke-width:"+nFontSize/7+"px;opacity:"+0.5+";pointer-events:none")
+                        .text(szText);
+                    svg.append("text")
+                        .attr("x", 100)
+                        .attr("y", -nHeight-nFontSize*0.5)
+                        .attr("style","font-family:arial;font-size:"+nFontSize+"px;text-anchor:middle;fill:"+(args.theme.szValueColor || args.ccolor.lowColor || szColor)+";fill-opacity:"+szTextOpacity+";stroke:none;opacity:"+szOpacity+";pointer-events:none")
+                        .text(szText);
+                }
 
 				// is there is a chart title defined, show it below the value
 				if (args.item.szTitle){
-					nFontSize /= 3;
+					nFontSize /= 3/(args.theme.nTextScale||1);
 					svg.append("text")
 						.attr("x", 100)
 						.attr("y", -nHeight-nFontSize*0.3)
