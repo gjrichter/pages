@@ -714,9 +714,10 @@ $Log:index_only_map_embed.html,v $
             })
             .binding({
                 value: "M.1|F.1",
+                value100: "Total.1",
                 position: "CODICE_ISTAT.1"
             })
-            .type("CHART|PIE|AUTO100|SIZE|AGGREGATE|NOLEGEND")
+            .type("CHART|PIE|SIZE|AGGREGATE|NOLEGEND")
             .style({
                 name: "chart1",
                 colorscheme: [
@@ -739,7 +740,11 @@ $Log:index_only_map_embed.html,v $
                 valuedecimals: "1",
                 sizepow: "3",
                 showdata: "true",
-                aggregationfield: "codice_regione.1",
+                aggregationscale: [
+                    "1:1", "CODICE_ISTAT.1",
+                    "1:200000", "codice_provincia.1",
+                    "1:2000000", "codice_regione.1"
+                ],
                 datafields: ["data_elezione_1","codice_regione.1"],
                 chartupper: "1:10000000"
             })
@@ -759,9 +764,10 @@ $Log:index_only_map_embed.html,v $
             })
             .binding({
                 value: "M.2|F.2",
+                value100: "Total.1",
                 position: "CODICE_ISTAT.1"
             })
-            .type("CHART|PIE|DONUT|THIN|AUTO100|SIZE|AGGREGATE|NOLEGEND")
+            .type("CHART|PIE|DONUT|THIN|SIZE|AGGREGATE|NOLEGEND")
             .style({
                 name: "chart2",
                 colorscheme: [
@@ -785,7 +791,11 @@ $Log:index_only_map_embed.html,v $
                 valuedecimals: "1",
                 sizepow: "3",
                 showdata: "true",
-                aggregationfield: "codice_regione.1",
+                aggregationscale: [
+                    "1:1", "CODICE_ISTAT.1",
+                    "1:200000", "codice_provincia.1",
+                    "1:2000000", "codice_regione.1"
+                ],
                 datafields: ["data_elezione_2","codice_regione.1"],
                 chartupper: "1:10000000"
             })
@@ -831,7 +841,11 @@ $Log:index_only_map_embed.html,v $
                 valuescale: "1.5",
                 valuedecimals: "1",
                 showdata: "true",
-                aggregationfield: "codice_regione.1",
+                aggregationscale: [
+                    "1:1", "CODICE_ISTAT.1",
+                    "1:200000", "codice_provincia.1",
+                    "1:2000000", "codice_regione.1"
+                ],
                 datafields: ["data_elezione_2"],
                 chartupper: "1:10000000",
             })
