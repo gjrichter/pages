@@ -328,6 +328,8 @@ $Log:index_only_map_embed.html,v $
                     ixmaps.hideLoading();
 
                     var ammcom = dataA[0];
+                    
+                    ammcom = ammcom.select("WHERE descrizione_carica like \"Sindac|Assess|Consigl\"");
 
                     var pivot = ammcom.pivot({
                         lead: "denominazione_comune",
@@ -339,6 +341,8 @@ $Log:index_only_map_embed.html,v $
                             "popolazione_censita_alla_data_elezione"
                         ]
                     });
+                    
+                    pivot = pivot.select("WHERE Total > 7");
 
                     var iTotal = pivot.column("Total").index;
                     var iF = pivot.column("F").index;
@@ -457,6 +461,8 @@ $Log:index_only_map_embed.html,v $
                             return row[iTotal1] + row[iTotal2];
                         }
                     );
+                    
+                    final = final.select("WHERE Total > 7");
 
                     ixmaps.setExternalData(final, {
                         type: "dbtable",
@@ -518,7 +524,7 @@ $Log:index_only_map_embed.html,v $
             );
 
         const nuts22 =
-            ixmaps.layer("nuts2", layer => layer
+            ixmaps.layer("nuts22", layer => layer
                 .data({
                     url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_2.geojson",
                     type: "geojson"
@@ -564,7 +570,7 @@ $Log:index_only_map_embed.html,v $
                     titlefield: "NUTS_NAME",
                     featureupper: "1:2000000",
                     featurelower: "1:500000",
-                    name: "nuts2"
+                    name: "nuts3"
                 })
             );
 
@@ -606,12 +612,12 @@ $Log:index_only_map_embed.html,v $
             .style({
                 name: "chart1",
                 colorscheme: [
-                     "#FF88d9",
+                     "#FF0069",
                 ],
                 label: [
                     "femmine"
                 ],
-                nodatacolor: "#ddddff",
+                nodatacolor: "black",
                 fillopacity: "1",
                 shadow: "false",
                 units: "%",
@@ -619,7 +625,7 @@ $Log:index_only_map_embed.html,v $
                 minaggregation: "3",
                 sizefield: "Total",
                 minvalue: "1",
-                textcolor: "#aa0029",
+                textcolor: "#ffffff",
                 textscale: "3",
                 fadenegative: 0.2,
                 linecolor: "white",
@@ -759,7 +765,7 @@ $Log:index_only_map_embed.html,v $
             .style({
                 name: "chart2",
                 colorscheme: [
-                    "none",
+                    "white",
                     "#FF0069",
                 ],
                 fillopacity: "1",
@@ -898,7 +904,7 @@ $Log:index_only_map_embed.html,v $
                 name: "chart2",
                 userdraw: "arrowChart",
                 colorscheme: [
-                    "#4466aa"
+                    "black"
                 ],
                 fillopacity: "0.4",
                 shadow: "false",
@@ -942,7 +948,7 @@ $Log:index_only_map_embed.html,v $
             .style({
                 name: "chart1",
                 colorscheme: [
-                    "#4444bb",
+                    "#000000",
                     "#FF0069"
                 ],
                 label: [
@@ -967,7 +973,7 @@ $Log:index_only_map_embed.html,v $
                 units: "",
                 units100: "",
                 refreshtimeout: "0",
-                scale: "1.25",
+                scale: "0.8",
                 rangescale: "2.5",
                 maxvalue: "auto",
                 offsetx: "-20",
@@ -982,16 +988,18 @@ $Log:index_only_map_embed.html,v $
                 valuedecimals: "0",
                 fadenegative: "1",
                 gridx: "2",
+                showdata: true,
                 aggregationscale: [
                     "1:1", "250px",
-                    "1:100000", "150px",
-                    "1:200000", "codice_regione.2"
+                    "1:500000", "codice_provincia.2",
+                    "1:2000000", "codice_regione.2"
                 ],
                 gridoffsety: "70",
                 align: "left",
             })
             .meta({
-                title: "Amministrazioni locali per sesso ed età"
+                title: "Amministrazioni locali per sesso ed età",
+                tooltip: "{{theme.item.chart}}{{theme.item.data}}"
             })
             .define();
 
