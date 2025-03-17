@@ -103,7 +103,7 @@ $Log:index_only_map_embed.html,v $
                         <a class="select" href="javascript:ixmaps.map().remove('chart1').remove('chart2').remove('chart3').add(nuts22).add(chart_pie_2022).add(chart_donut_2024).add(chart_arrow_f)">Cambiamento relativo ai dati del 2022</a>
                     </li>
                      <li>
-                        <a class="select" href="javascript:ixmaps.map().remove('nuts22').remove('chart1').remove('chart2').remove('chart3').add(chart_diff_arrow_f).add(chart_diff_arrow_m)">Fluttuazione al livello comunale 2022/2025</a>
+                        <a class="select" href="javascript:ixmaps.map().message('...');ixmaps.map().remove('nuts22').remove('chart1').remove('chart2').remove('chart3').add(chart_diff_arrow_f).add(chart_diff_arrow_m)">Fluttuazione al livello comunale 2022/2025</a>
                     </li>
                      <li>
                         <a class="select" href="javascript:ixmaps.map().remove('nuts22').remove('chart1').remove('chart2').remove('chart3').add(chart_curves_eta).changeThemeStyle('nuts2','linecolor:white')">Distribuzione dell'età degli amministratori locali al 2025, diviso per sesso </a>
@@ -597,16 +597,16 @@ $Log:index_only_map_embed.html,v $
         const chart_2024_aggregated =
             ixmaps.layer("ITALIA_Comuni_2022")
             .data({
-                query: query.toString(),
+                query: query_diff.toString(),
                 type: "ext",
-                name: "data",
+                name: "data_diff",
                 cache: true
             })
             .binding({
-                value: "F",
-                value100: "Total",
-                title: "denominazione_comune",
-                position: "CODICE_ISTAT"
+                value: "F.2",
+                value100: "Total.2",
+                title: "denominazione_comune.2",
+                position: "CODICE_ISTAT.2"
             })
             .type("CHART|PIE|AUTOCOMPLETE|SIZE|VALUES|ZEROISNOTVALUE|AGGREGATE|TEXTLEGEND")
             .style({
@@ -623,7 +623,7 @@ $Log:index_only_map_embed.html,v $
                 units: "%",
                 normalsizevalue: "500",
                 minaggregation: "3",
-                sizefield: "Total",
+                sizefield: "Total.2",
                 minvalue: "1",
                 textcolor: "#ffffff",
                 textscale: "3",
@@ -636,9 +636,9 @@ $Log:index_only_map_embed.html,v $
                 showdata: "true",
                 chartlower: "1:500000",
                 aggregationscale: [
-                    "1:1", "CODICE_ISTAT",
-                    "1:200000", "codice_provincia",
-                    "1:2000000", "codice_regione"
+                    "1:1", "CODICE_ISTAT.2",
+                    "1:200000", "codice_provincia.2",
+                    "1:2000000", "codice_regione.2"
                 ],
                 datafields: ["data_elezione","codice_regione"]
             })
@@ -652,17 +652,17 @@ $Log:index_only_map_embed.html,v $
         const chart_2024_comuni =
             ixmaps.layer("ITALIA_Comuni_2022")
             .data({
-                query: query.toString(),
+                query: query_diff.toString(),
                 type: "ext",
-                name: "data",
+                name: "data_diff",
                 cache: true
             })
             .binding({
-                value: "F",
-                value100: "Total",
-                size: "popolazione_censita_alla_data_elezione",
-                title: "denominazione_comune",
-                position: "CODICE_ISTAT"
+                value: "F.2",
+                value100: "Total.2",
+                size: "popolazione_censita_alla_data_elezione.2",
+                title: "denominazione_comune.2",
+                position: "CODICE_ISTAT.2"
             })
             .type("CHART|PIE|AUTOCOMPLETE|SIZE|VALUES|ZEROISNOTVALUE|BOX|BOTTOMTITLE|TEXTLEGEND")
             .style({
@@ -679,7 +679,7 @@ $Log:index_only_map_embed.html,v $
                 units: "%",
                 normalsizevalue: "100000",
                 minaggregation: "3",
-                sizefield: "Total.1",
+                sizefield: "Total.2",
                 minvalue: "1",
                 valuecolor: "#ffffff",
                 textcolor: "#000000",
@@ -693,7 +693,7 @@ $Log:index_only_map_embed.html,v $
                 valuedecimals: "0",
                 sizepow: "3",
                 showdata: "true",
-                datafields: "data_elezione",
+                datafields: "data_elezione_2",
                 chartupper: "1:500000"
             })
             .meta({
@@ -861,6 +861,7 @@ $Log:index_only_map_embed.html,v $
             ixmaps.layer("ITALIA_Comuni_2022")
             .data({
                 query: query_diff.toString(),
+                name: "data_diff",
                 type: "ext"
             })
             .binding({
@@ -894,12 +895,13 @@ $Log:index_only_map_embed.html,v $
                 valuescale: "2",
                 valuedecimals: "0",
                 sizepow: "2",
+                datafields: ["data_elezione_2"],
                 chartupper: "1:10000000"
             })
             .meta({
                 title: "<div style='background:rgba(245,244,238,0.9);padding:0.2em'>Fluttuazione</div>",
                 description: "<div style='width:70%;background:rgba(245,244,238,0.9);padding:0.5em'>Amministratori femminili o maschili in più o in meno tra Sindaci, Assessori e Consiglieri.<br>Dal 2022 al 2025</div>",
-                tooltip: "<div style='white-space:nowrap'><h2 style='margin:0'>{{theme.item.title}}</h2>{{theme.title}}{{theme.item.chart}}con l'elezione del <b><big>{{data_elezione_2}}</big><b></div>"
+                tooltip: "<div style='white-space:nowrap'><h2 style='margin:0'>{{theme.item.title}}</h2>{{theme.title}}{{theme.item.chart}}amministratori femminili in più<br>con l'elezione del <b><big>{{data_elezione_2}}</big><b></div>"
             })
             .define();
 
@@ -907,6 +909,7 @@ $Log:index_only_map_embed.html,v $
             ixmaps.layer("ITALIA_Comuni_2022")
             .data({
                 query: query_diff.toString(),
+                name: "data_diff",
                 type: "ext"
             })
             .binding({
@@ -940,11 +943,12 @@ $Log:index_only_map_embed.html,v $
                 valuescale: "2",
                 valuedecimals: "0",
                 sizepow: "2",
+                datafields: ["data_elezione_2"],
                 chartupper: "1:10000000"
             })
             .meta({
                 title: "Amministratori maschili",
-                tooltip: "<div style='white-space:nowrap'><h2 style='margin:0'>{{theme.item.title}}</h2>{{theme.title}}{{theme.item.chart}}con l'elezione del <b><big>{{data_elezione_2}}</big><b></div>"
+                tooltip: "<div style='white-space:nowrap'><h2 style='margin:0'>{{theme.item.title}}</h2>{{theme.title}}{{theme.item.chart}}amministratori maschili in più<br> con l'elezione del <b><big>{{data_elezione_2}}</big><b></div>"
             })
             .define();
 
