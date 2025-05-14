@@ -322,7 +322,7 @@ $Log:index_only_map_embed.html,v $
 
 				<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> ed <a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/mappa.html" target="_blank">istruzioni</a> per l'uso di questa mappa si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
 				
-				<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>25.07.2024 (v7)</b>	
+				<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>31.03.2025 (v9)</b>	
 				</p>
 
 			</div>
@@ -601,7 +601,7 @@ $Log:index_only_map_embed.html,v $
 			"powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
 		legend =
-			"<h1><b>PNRR<br>Universo REGIS - v7</b><h1><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul>";
+			"<h1><b>PNRR<br>Universo REGIS - v9</b><h1><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul>";
         
         /**
          ** data prep
@@ -732,7 +732,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_choropleth =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -772,7 +772,7 @@ $Log:index_only_map_embed.html,v $
 					name: "choropleth"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati comunali ..."
 				})
 			);
@@ -780,7 +780,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -837,7 +837,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					description: "nota bene: <b>Livello comunale</b> include <b>solo</b> i progetti direttamente associati ad un comune",
 					splash: "scaricando dati comunali ..."
 				})
@@ -846,7 +846,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_prov_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -889,7 +889,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_prov"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					description: "<b>nota bene:</b> L’aggregazione a livello provinciale include anche i progetti per tutti i comuni, ma non i progetto dell'ambito nazionale.",
 					splash: "scaricando dati ..."
 				})
@@ -899,7 +899,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_reg_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -942,7 +942,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_reg"
 				})
 				.meta({
-					title: "<b>PNRR<br>Universo REGIS - v7</b>",
+					title: "<b>PNRR<br>Universo REGIS - v9</b>",
 					description: "nota bene: <b>aggregazione a livello regionale</b>; include i progetti per <b>tutti i comuni</b> e dell’<b>ambito nazionale</b>.",
 					splash: "scaricando dati ..."
 				})
@@ -952,7 +952,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1001,7 +1001,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b><br>i singoli progetti",
+					title: "<b>PNRR - Universo REGIS - v9</b><br>i singoli progetti",
 					splash: "scaricando dati comunali ..."
 				})
 			);
@@ -1009,7 +1009,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_ICONS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1057,7 +1057,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_SUM =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1101,7 +1101,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati comunali ..."
 				})
 			);
@@ -1109,7 +1109,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_prov_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -1139,7 +1139,7 @@ $Log:index_only_map_embed.html,v $
 					name: "province_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1147,7 +1147,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM_2 =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1178,7 +1178,7 @@ $Log:index_only_map_embed.html,v $
 					name: "province_sum_2"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati comunali ..."
 				})
 			);
@@ -1186,7 +1186,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_REGIONI_SUM =
 			ixmaps.layer("ITALIA_Regioni_2022|ITALIA_miniatura", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_reg_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -1215,7 +1215,7 @@ $Log:index_only_map_embed.html,v $
 					name: "regioni_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v7</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					snippet: "include i progetti al livello regionale (tutti comuni) e del Ambito Nazionale",
 					splash: "scaricando dati ..."
 				})
@@ -1224,7 +1224,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1316,7 +1316,7 @@ $Log:index_only_map_embed.html,v $
 					name: "stato"
 				})
 				.meta({
-					title: "<span style='font-size:1.2em;white-space:nowrap'>Progetti per fase attuale e ritardi<br>PNRR - Universo REGIS - 25.07.2024</span>",
+					title: "<span style='font-size:1.2em;white-space:nowrap'>Progetti per fase attuale e ritardi<br>PNRR - Universo REGIS - 31.03.2025</span>",
 					splash: "scaricando dati comunali ...",
                     tooltip: "{{theme.title}}<h2>{{theme.item.title}}</h2>{{theme.item.chart}}"
 				})
@@ -1325,7 +1325,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO_II =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_iter_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data",
                     process: process.toString()
@@ -1377,7 +1377,7 @@ $Log:index_only_map_embed.html,v $
 					name: "stato_II",
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - 25.07.2024 (v7)</b><br>stato di avanzamento",
+					title: "<b>PNRR - Universo REGIS - 31.03.2025 (v9)</b><br>stato di avanzamento",
 					splash: "scaricando dati comunali ..."
 				})
 			);
@@ -1385,7 +1385,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_prov_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -1456,7 +1456,7 @@ $Log:index_only_map_embed.html,v $
 					name: "stato_prov"
 				})
 				.meta({
-					title: "<span style='font-size:1.2em;white-space:nowrap'>Progettiper fase attuale e ritardi<br>PNRR - Universo REGIS - 25.07.2024</span>",
+					title: "<span style='font-size:1.2em;white-space:nowrap'>Progettiper fase attuale e ritardi<br>PNRR - Universo REGIS - 31.03.2025</span>",
 					splash: "scaricando dati ...",
                     tooltip: "{{theme.title}}<h2>{{theme.item.title}}</h2>{{theme.item.chart}}"
 				})
@@ -1465,7 +1465,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2024_07_v7/PNRR_Localizzazione-Universo_REGIS_fintot_iter_pivot_reg_sub_avanz_v7.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -1552,7 +1552,7 @@ $Log:index_only_map_embed.html,v $
 					name: "stato_reg"
 				})
 				.meta({
-					title: "<span style='font-size:1.2em;white-space:nowrap'>Progettiper fase attuale e ritardi<br>PNRR - Universo REGIS - 25.07.2024</span>",
+					title: "<span style='font-size:1.2em;white-space:nowrap'>Progettiper fase attuale e ritardi<br>PNRR - Universo REGIS - 31.03.2025</span>",
 					splash: "scaricando dati ...",
                     tooltip: "{{theme.title}}<h2>{{theme.item.title}}</h2>{{theme.item.chart}}"
 				})
