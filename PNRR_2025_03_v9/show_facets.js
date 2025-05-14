@@ -625,7 +625,8 @@ ixmaps.data = ixmaps.data || {};
 						
 						var szText = facetsA[i].values[ii];
 						
-						if ((objThemeDefinition.field == facetsA[i].id)) {
+						if ((objThemeDefinition.field == facetsA[i].id) && 
+                            objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1] ) {
 							bgColor = hex2rgba(objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1],0.7);
 							if ( objTheme.szLabelA && objTheme.szValuesA ){
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
@@ -635,7 +636,7 @@ ixmaps.data = ixmaps.data || {};
 						if ( localTextA[szText] ){
 							szText = localTextA[szText];
 						}
-                        console.log("button: "+ii);
+
 						// facet button with one unique value
 						// -----------------------------------
 						szHtml += '<a href="' + href + '">';
@@ -722,8 +723,6 @@ ixmaps.data = ixmaps.data || {};
 
 		}
 		szHtml += "</div>";
-        
-        console.log(szHtml);
 		
 		$("#" + (szDiv || "facets")).html(szHtml);
 
