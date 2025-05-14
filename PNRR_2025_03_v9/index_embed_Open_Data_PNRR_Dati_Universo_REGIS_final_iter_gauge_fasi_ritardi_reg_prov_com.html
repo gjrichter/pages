@@ -438,8 +438,13 @@ $Log:index_only_map_embed.html,v $
 
 				ixmaps.data.fShowFacetValues = true;
 				//szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "Descrizione Submisura", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento", "stato di avanzamento","Tipologia procedura di attivazione"];
-				szFieldsA = null; //["missione", "Descrizione Submisura","Descrizione Fase Attuale Categorie","Descrizione Fase Attuale", "stato di avanzamento", "Ritardi", "Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento","Tipologia procedura di attivazione","Descrizione Fase Attuale Categorie"];
+				szFieldsA = ["missione", "Descrizione Submisura","Descrizione Fase Attuale Categorie","Descrizione Fase Attuale", "stato di avanzamento", "Ritardi", "Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento","Tipologia procedura di attivazione","Descrizione Fase Attuale Categorie"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map","NONUMERIC");
+                
+                console.log("=======================");
+                console.log(facetsA);
+                console.log("=======================");
+                
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 				
 				$('#show-list-div').hide();
