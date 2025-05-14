@@ -729,6 +729,8 @@ ixmaps.data = ixmaps.data || {};
 
 		}
 		szHtml += "</div>";
+        
+        console.log("all done !!!");
 		
 		$("#" + (szDiv || "facets")).html(szHtml);
 
