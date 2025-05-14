@@ -606,6 +606,8 @@ ixmaps.data = ixmaps.data || {};
 				var maxII = (facetsA[i].values.length < 12) ? facetsA[i].values.length : 10;
 
 				for (var ii = 0; ii < facetsA[i].values.length; ii++) {
+                    
+                    console.log(ii);
 					
 					if (facetsA[i].values[ii] != " ") {
 
