@@ -700,6 +700,8 @@ ixmaps.data = ixmaps.data || {};
 						szHtml += '</div>';
 						szHtml += '<div id="' + (szSafeId + "plus") + '" style="display:none">';
 					}
+                    
+                    console.log("done !!!");
 
 				}
 				szHtml += '</div>';
