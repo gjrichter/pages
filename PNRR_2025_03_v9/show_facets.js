@@ -635,7 +635,7 @@ ixmaps.data = ixmaps.data || {};
 						if ( localTextA[szText] ){
 							szText = localTextA[szText];
 						}
-
+                        console.log("button: "+ii);
 						// facet button with one unique value
 						// -----------------------------------
 						szHtml += '<a href="' + href + '">';
