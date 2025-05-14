@@ -610,6 +610,8 @@ ixmaps.data = ixmaps.data || {};
                     console.log(ii);
 					
 					if (facetsA[i].values[ii] != " ") {
+                        
+                        console.log("do !!");
 
 						// make the facet filter 
 						var szQuery = "WHERE \"" + facetsA[i].id + "\" = \"" + facetsA[i].values[ii] + "\"";
