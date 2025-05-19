@@ -493,11 +493,11 @@ $Log:index_only_map_embed.html,v $
 			if (themeObj.szFilter) {
 				var szFilterClipped = (themeObj.szFilter.length > 100) ? (themeObj.szFilter.substr(0, 100) + " ... ") : themeObj.szFilter;
 				$("#filter").html(szFilterClipped);
-				ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + szFilterClipped.split("WHERE")[1] + "</div>");
+				//ixmaps.setTitle("<div style='font-family:open sans;font-size:0.7em;color:black;padding:0.5em;background:rgba(247, 246, 239, 0.5);width:30%'><i class='fa fa-filter fa-fw'></i>filtro: " + szFilterClipped.split("WHERE")[1] + "</div>");
 				$("#filter-div").show();
 			} else {
 				$("#filter").html("");
-				ixmaps.setTitle("");
+				//ixmaps.setTitle("");
 				$("#filter-div").hide();
 			}
 
@@ -571,7 +571,7 @@ $Log:index_only_map_embed.html,v $
 			"powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>";
 
 		legend =
-			"<div style='background:rgba(247, 246, 239,0.8);padding:0em 0em 0.1em 0.8em'><h1><b>PNRR<br>Universo REGIS - v9</b></h1><h2>data di osservazione 31/03/2025</h2><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul></div>";
+			"<div style='background:rgba(247, 246, 239,0.8);padding:0em 0em 0.1em 0.8em'><h1 style='margin-bottom:0em'><b>PNRR - v9</b></h1><h3>data di osservazione 31/03/2025</h3><h2>fasi e ritardi dei progetti</h2><ul><li>grafica a barra con le fasi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:blue'>&#9723;</span> progettazione</li><li><span style='color:RGBA(39,112,182,0.2)'>&#9724;</span> attribuzione</li><li><span style='color:RGBA(39,112,182,0.8)'>&#9724;</span> esecuzione</li><li><span style='color:RGBA(39,112,182,1)'>&#9724;</span> collaudo</li></ul></li><li>ritardi: <ul style='list-style:none;text-indent:-3em'><li><span style='color:RGBA(229,212,82,1)'>&#9724;</span> < 100 giorni</li><li><span style='color:RGBA(239,62,82,0.6)'>&#9724;</span> > 100 giorni</li></ul></li></ul></div>";
         
         /**
          ** data prep
@@ -816,7 +816,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_importi_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -869,7 +869,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_importi_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -1079,7 +1079,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_importi_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -1202,10 +1202,11 @@ $Log:index_only_map_embed.html,v $
 				.binding({
 					position: "PROCOM",
                     value: "FaseRitardo",
+                    size: "importo",
 					title: "Descrizione Comune"
 				})
 				.filter(__filter)
-				.type("CHART|BAR|STACKED|DOTTED|SIZE|XAXIS|NOSORT|VALUES|INLINETEXT|CATEGORICAL|AGGREGATE|RECT|RELOCATE|SUM|BOX|TITLE|NOLEGEND")
+				.type("CHART|BAR|STACKED|DOTTED|SIZE|XAXIS|NOSORT|VALUES|INLINETEXT|CATEGORICAL|AGGREGATE|RECT|RELOCATE|SUM|CIRCULARBOX|TITLE|NOLEGEND")
 				.style({
                     gridx: 3,
 					colorscheme: [
@@ -1273,7 +1274,7 @@ $Log:index_only_map_embed.html,v $
 						"RGB(39, 112, 182)"],
 					linewidth: "0.2",
 					valuescale: "1",
-					boxopacity: "0",
+					boxopacity: "0.5",
 					bordercolor: "RGB(39, 112, 182)",
                     borderwidth: "0.005",
 					textcolor: "RGB(39, 112, 182)",
@@ -1355,28 +1356,28 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_importi_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
 				.binding({
 					position: "Provincia",
 					value: [
-                        "PROGETTAZIONE_n_NO",
-                        "PROGETTAZIONE_n_MENO_100",
-                        "PROGETTAZIONE_n_PIU_100",
+                        "PROGETTAZIONE_NO",
+                        "PROGETTAZIONE_MENO_100",
+                        "PROGETTAZIONE_PIU_100",
                         
-                        "ASSEGNAZIONE_n_NO",
-                        "ASSEGNAZIONE_n_MENO_100",
-                        "ASSEGNAZIONE_n_PIU_100",
+                        "ASSEGNAZIONE_NO",
+                        "ASSEGNAZIONE_MENO_100",
+                        "ASSEGNAZIONE_PIU_100",
                         
-                        "ESECUZIONE_n_NO",
-                        "ESECUZIONE_n_MENO_100",
-                        "ESECUZIONE_n_PIU_100",
+                        "ESECUZIONE_NO",
+                        "ESECUZIONE_MENO_100",
+                        "ESECUZIONE_PIU_100",
                         
-                        "COLLAUDO_n_NO",
-                        "COLLAUDO_n_MENO_100",
-                        "COLLAUDO_n_PIU_100"],
+                        "COLLAUDO_NO",
+                        "COLLAUDO_MENO_100",
+                        "COLLAUDO_PIU_100"],
 					title: "Descrizione Provincia"
 				})
 				.filter(__filter)
@@ -1407,7 +1408,7 @@ $Log:index_only_map_embed.html,v $
                         "coll"],
 					showdata: "true",
                     align: "center",
-					sizefield: "projects_n",
+					xxsizefield: "projects_n",
                     sizepow: "10",
 					units: "",
 					scale: __scale_chart*3,
@@ -1436,28 +1437,28 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_GAUGE_STATO_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_importi_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
 				.binding({
 					position: "Regione",
 					value: [
-                        "PROGETTAZIONE_n_NO",
-                        "PROGETTAZIONE_n_MENO_100",
-                        "PROGETTAZIONE_n_PIU_100",
+                        "PROGETTAZIONE_NO",
+                        "PROGETTAZIONE_MENO_100",
+                        "PROGETTAZIONE_PIU_100",
                         
-                        "ASSEGNAZIONE_n_NO",
-                        "ASSEGNAZIONE_n_MENO_100",
-                        "ASSEGNAZIONE_n_PIU_100",
+                        "ASSEGNAZIONE_NO",
+                        "ASSEGNAZIONE_MENO_100",
+                        "ASSEGNAZIONE_PIU_100",
                         
-                        "ESECUZIONE_n_NO",
-                        "ESECUZIONE_n_MENO_100",
-                        "ESECUZIONE_n_PIU_100",
+                        "ESECUZIONE_NO",
+                        "ESECUZIONE_MENO_100",
+                        "ESECUZIONE_PIU_100",
                         
-                        "COLLAUDO_n_NO",
-                        "COLLAUDO_n_MENO_100",
-                        "COLLAUDO_n_PIU_100"],
+                        "COLLAUDO_NO",
+                        "COLLAUDO_MENO_100",
+                        "COLLAUDO_PIU_100"],
 					title: "Descrizione Regione"
 				})
 				.filter(__filter)
@@ -1488,7 +1489,7 @@ $Log:index_only_map_embed.html,v $
                         "collaudo"],
 					showdata: "true",
                     align: "right",
-					sizefield: "projects_n",
+					xxsizefield: "projects_n",
 					units: "progetti in",
 					scale: __scale_chart*4,
 					linecolor: [
