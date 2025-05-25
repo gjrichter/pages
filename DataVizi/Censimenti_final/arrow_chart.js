@@ -186,21 +186,14 @@ window.ixmaps = window.ixmaps || {};
 
 			var nFontSize = nHeight/20*(args.theme.nValueScale||1); //Math.sqrt(nHeight)*4;
             
-            console.log(nFontSize);
-            console.log(">");
-            console.log(args.theme.nValueSizeMin*20);
-
 			// show only if fontsize is reasonable (fontsize is n * 20)
 			if ( args.flag.match(/ZOOM/) || nFontSize > ((args.theme.nValueSizeMin*20)||60) ){
 				var szText = (nValue).toFixed(0) + (args.theme.szUnits||"");
 				var szTextOpacity = 1; // 0.2 + nValue/nMax;
                 
-                console.log("xxx -> "+szText);
-
 				// show the value on top of the peek
 				if (args.flag.match(/VALUES/) ){
                     if (nValue > 0){
-                        console.log("text");
                         svg.append("text")
                             .attr("x", 0)
                             .attr("y", -nHeight/6.5-nFontSize*0.7)
