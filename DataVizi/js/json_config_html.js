@@ -153,15 +153,27 @@ $Log: theme_legend.js,v $
                 '\t\t.layer(ixmaps.layer("' + themeObj.layer + '", layer => layer\n';
 
             let data = {
-                url: String(themeObj.style.dbtableUrl),
                 type: String(themeObj.style.dbtableType),
                 name: String(themeObj.style.dbtable)
             };
+            if(themeObj.style.dbtableQuery){
+                data.query = String(themeObj.style.dbtableQuery);
+            }else
+            if(themeObj.style.dbtableUrl){
+                data.url = String(themeObj.style.dbtableUrl);
+            }
+            if(themeObj.style.dbtableProcess){
+                data.process = String(themeObj.style.dbtableProcess);
+            }        
+            
             let dataObj = new Config(data);
-            let szData = dataObj.getPrettyString().replace(/\n/g, "\n\t\t\t");;
+            let szData = dataObj.getPrettyString().replace(/\n/g, "\n\t\t\t");
+            szData = szData.replace(/\"\$/,"").replace(/\$\"/,"");
             szThemes +=
                 '\t\t\t.data(' + szData + ')\n';
 
+            delete themeObj.style.dbtableProcess;
+            delete themeObj.style.dbtableQuery;
             delete themeObj.style.dbtableUrl;
             delete themeObj.style.dbtableExt;
             delete themeObj.style.dbtableType;
