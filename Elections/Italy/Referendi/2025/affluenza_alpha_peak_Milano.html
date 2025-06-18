@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+ 
+	<title>Created by Composer</title>
+</head>
+ 
+<body style="margin:0;padding:0;">
+ 
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+ 
+	<!-- include the ixmaps API -->
+	<script src="https://gjrichter.github.io/ixmaps_test/ui/js/htmlgui_api.js"></script>
+ 
+	<script type="text/javascript" charset="utf-8">
+        
+		// define the data retrieving function
+        // ---------------------------------------
+		// loads the JSON data from the GIT ripository: aborruso/referendum_2025
+        // sets the path to the data per sezione
+        // reprocesses the JSON array -> ixmaps dbtable
+        
+        query_data = function (theme, options) {
+
+            var szUrl = "https://raw.githubusercontent.com/aborruso/referendum_2025/refs/heads/main/data/processing/CM/05/049/1450.json";
+
+            // -----------------------------------------------------------------------------------------------               
+            // read the raw scraping data
+            // ----------------------------------------------------------------------------------------------- 
+
+            var myfeed = Data.feed({"source":szUrl,"type":"json"}).load(function(mydata){
+                
+                // the array with the data for 'sezione' is at JSON path enti.enti_f
+                // so we take the raw JSON data myfeed.data and reprocess the JSON data with the correct path
+                
+                myfeed.__processJsonData(myfeed.data.enti.enti_f,{"type":"json"});
+                
+                // -----------------------------------------------------------------------------------------------               
+                // deploy the data
+                // ----------------------------------------------------------------------------------------------- 
+
+                ixmaps.setExternalData(myfeed.dbtable, {
+                    type: "dbtable",
+                    name: options.name
+                });
+
+            })
+            .error(function(e){alert("error loading data from:\n"+szUrl)});
+        };
+        
+		// create and embed the map
+        // ---------------------------------
+		// ! reference to "map-div", the hosting html div
+
+		ixmaps.embed("map-div", {
+			mapService: "leaflet_vt",
+			mapType: "OpenTopoMap",
+			map: "../../maps/svg/maps/generic/mercator.svg",
+			name: "map_1",
+			mode: "pan",
+			legend: "true",
+            align: "right",
+			tools: "true",
+			search: "Europe",
+			about: "test"
+		},
+		map => map
+		.options({
+			featurescaling: "true",
+			objectscaling: "true",
+			normalSizeScale: "500000",
+			flushChartDraw: "1000000",
+			flushPaintShape: "1000000",
+			basemapopacity: "0.2",
+			worksilent: "false",
+			loadsilent: "false",
+			hideOnPan:  "false",
+			freezeOnPan:"false",
+		})
+        .require("https://d3js.org/d3.v3.min.js")
+        .require("https://gjrichter.github.io/usercharts/d3/chart.js")
+ 		.require("../../ui/js/tools/tooltip_mustache.js")
+		.attribution("powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a>")
+		.view({
+            "center": {
+                "lat": "45.46674872907065",
+                "lng": "9.199534687607184"
+                },
+            "zoom": "12.486523716847111"
+			})
+                     
+        // layer 1) base geometries (used by choropleth and charts)
+                     
+		.layer(ixmaps.layer("SEZIONI", layer => layer
+			.data({
+				url: "https://s3.tebi.io/geometries/administrative_boundaries/italy/elections/precincts_italia.topojson",
+				type: "topojson",
+				name: "data_1748415984020_870",
+				cache: "true"
+				})
+			.binding({
+				geo: "geometry",
+				id: "SEZIONE"
+				})
+            .filter("WHERE PRO_COM = 15146")
+			.type("FEATURE")
+			.style({
+				colorscheme: [
+					"none"],
+				fillopacity: "0.1",
+				shadow: "false",
+				visible: "true",
+				showdata: "true",
+				units: "",
+				scale: "1",
+				sizepow: "2",
+				linecolor: [
+					"none"],
+				linewidth: "0.1",
+				valuescale: "1"
+				})
+			.meta({
+				title: "[title]",
+				snippet: "",
+				description: "",
+				name: "data_1748415984020_870",
+				tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+				})
+		))
+                     
+        // layer 2: choropleth
+                     
+		.layer(ixmaps.layer("SEZIONI", layer => layer
+			.data({
+				query: query_data.toString(),
+				type: "ext",
+				name: "data_risultati",
+				cache: "true"
+				})
+            .binding({
+                geo: "cod",
+                values: [
+                    "com_vot.3.vot_t"
+                ],
+                value100: "ele_t",
+                title: "desc"
+            })
+            .filter("WHERE ele_t > 100")
+            .type("CHOROPLETH|HEADTAIL|DOPACITYMAX|SIMPLELEGEND")
+            .style({
+                userdraw:"pinnacleChart",
+                colorscheme: [
+                        "8",
+                        "#F2e286",
+                        "#100050",
+                        "3colors",
+                        "#CC4878"
+                    ],
+                fillopacity: 0.6,
+                dopacitypow: 1,
+                dopacityscale: 1,
+                shadow: "false",
+                units: "%",
+                scale: "1",
+                showdata: "true"
+            })
+            .meta({
+                title: "Referendum 2025 <br> Affluenza per Sezoni",
+                description: "Bologna",
+                tooltip: "<h3 style='margin-top:0'>{{theme.title}}</h3><h4 style='margin-top:0.2em;margin-bottom:0.5em'>{{theme.item.title}}</h4>{{theme.item.chart}}{{theme.item.data}}"
+            })
+		))
+                     
+        // layer 3) chart (peaks)
+                     
+		.layer(ixmaps.layer("SEZIONI", layer => layer
+			.data({
+				query: query_data.toString(),
+				type: "ext",
+				name: "data_risultati",
+				cache: "true"
+				})
+            .binding({
+                geo: "cod",
+                values: [
+                    "com_vot.3.vot_t"
+                ],
+                value100: "ele_t",
+                title: "desc"
+            })
+            .filter("WHERE ele_t > 100")
+            .type("CHART|USER|SIZE|3D|SHADOW|VALUES|HEADTAIL|AGGREGATE|SUM|RECT|RELOCATE|SIMPLELEGEND")
+            .style({
+                userdraw:"pinnacleChart",
+                colorscheme: [
+                        "8",
+                        "#F2e286",
+                        "#100050",
+                        "3colors",
+                        "#CC4878"
+                    ],
+                fillopacity: 0.5,
+                sizepow: 0.5,
+                shadow: "false",
+                units: "%",
+                normalsizevalue: "120",
+                scale: "1",
+                rangescale: "1",
+                valuesupper: "1:1000000",
+                valuedecimals: "1",
+                minvaluevalue: "50",
+                gridwidth: "5px",
+                showdata: "true",
+                xxdatafields: ["Desc"]
+            })
+            .meta({
+                title: "Referendum 2025 <br> Affluenza per Sezoni",
+                description: "Milano - Sezioni elettorali (Gabriele Pinto)",
+                tooltip: "<h3 style='margin-top:0'>{{theme.title}}</h3><h4 style='margin-top:0.2em;margin-bottom:0.5em'>{{theme.item.title}}</h4>{{theme.item.chart}}{{theme.item.data}}"
+            })
+		))
+                     
+	);
+	</script>
+</body>
+</html>
