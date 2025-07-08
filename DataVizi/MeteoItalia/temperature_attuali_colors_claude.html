@@ -236,17 +236,21 @@
 
         function loadPeaksVisualization() {
             console.log('Caricamento visualizzazione picchi');
-            ixmaps.map().replace('chart', __temperature_peaks, 'silent');
+            ixmaps.map().message("...");
+            setTimeout(() => {ixmaps.map().replace('chart', __temperature_peaks, 'silent')},10);
+            ixmaps.htmlgui_onZoomAndPan();
         }
 
         function loadDotsVisualization() {
             console.log('Caricamento visualizzazione punti');
-            ixmaps.map().replace('chart', __temperature_dots, 'silent');
+            ixmaps.map().message("...");
+            setTimeout(() => {ixmaps.map().replace('chart', __temperature_dots, 'silent')},10);
         }
 
         function loadLabelsVisualization() {
             console.log('Caricamento visualizzazione etichette');
-            ixmaps.map().replace('chart', __temperature_label, 'silent');
+            ixmaps.map().message("...");
+            setTimeout(() => {ixmaps.map().replace('chart', __temperature_label, 'silent')},10);
         }
 
         function toggleCodeView() {
@@ -538,7 +542,7 @@
                     visible: "true",
                     showdata: "true",
                     units: "",
-                    scale: "0.6",
+                    scale: "0.2",
                     sizepow: "2",
                     valuescale: "1",
                     valuedecimals: "1",
@@ -564,7 +568,7 @@
                     geo: "stat.lat|stat.lon",
                     value: "prod.0.val.0.val"
                     })
-                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|VALUES")
+                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES")
                 .style({
                     colorscheme: __colorscheme,
                     ranges: __ranges,
@@ -574,11 +578,7 @@
                     visible: "true",
                     showdata: "true",
                     units: "",
-                    scale: "0.7",
-                    sizepow: "2",
-                    valuescale: "1",
-                    valuedecimals: "1",
-                    valuesupper: "1:1000000",
+                    scale: "0.15",
                     })
                 .meta({
                     title: "[title]",
@@ -601,23 +601,24 @@
                     value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
-                .type("CHART|LABEL|NOSIZE|SORT|UP|RANGES|VALUES|AGGREGATE|RECT|RELOCATE|MAX|BOX|BOTTOMTITLE")
+                .type("CHART|SYMBOL|GRIDSIZE|SORT|UP|RANGES|VALUES|AGGREGATE|RECT|RELOCATE|MAX|BOX|BOTTOMTITLE")
                 .style({
                     colorscheme: __colorscheme,
                     ranges: __ranges,
-                    symbols: ["label"],
+                    symbols: ["roundrect"],
                     linecolor: "black",
                     fillopacity: "1",
                     shadow: "true",
                     visible: "true",
                     showdata: "true",
                     units: "",
-                    scale: "6",
-                    sizepow: "2",
+                    scale: "0.7",
+                    sizepow: "10",
                     gridwidth: "30px",
                     valuecolor: "white",
-                    valuescale: "1.2",
+                    valuescale: "1.1",
                     valuedecimals: "1",
+                    textscale: "0.8",
                     boxcolor: "none",
                     bordercolor: "none",
                     boxupper: "1:1000000",
@@ -654,7 +655,7 @@
                     visible: "true",
                     showdata: "true",
                     units: "°",
-                    scale: "1.5",
+                    scale: "0.5",
                     rangescale: "0.5",
                     sizepow: "0.1",
                     valuescale: "1",
@@ -699,7 +700,7 @@
             .options({
                 featurescaling: "true",
                 objectscaling: "dynamic",
-                normalSizeScale: "100000",
+                normalSizeScale: "5000000",
                 dynamicSizePow: "10",
                 flushChartDraw: "1000000",
                 flushPaintShape: "1000000",
