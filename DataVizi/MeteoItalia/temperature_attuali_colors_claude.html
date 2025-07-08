@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mappa interattiva delle temperature in tempo reale in Italia">
+    <meta name="author" content="Data Viz Italia">
+    <meta name="keywords" content="temperature, Italia, meteo, mappa interattiva">
+    
+    <title>Data Viz Italia - Temperature in Tempo Reale</title>
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://gjrichter.github.io">
+    <link rel="preconnect" href="https://meteohub.mistralportal.it">
+    
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+    
+    <!-- CSS Site -->
+    <link rel="stylesheet" href="./css/site.css">
+ </head>
+
+<body>
+    <!-- Logo migliorato -->
+    <div class="logo" onclick="toggleCodeView()" role="button" tabindex="0" aria-label="Mostra codice HTML">
+        <div class="logo-text">
+            Data<br>
+            <span style="padding-left: 2px;">Viz</span>
+            <em style="font-style: italic;"> i</em>
+        </div>
+    </div>
+
+    <!-- Contenitore principale -->
+    <main>
+        <!-- Mappa -->
+        <div id="map_div" role="application" aria-label="Mappa interattiva delle temperature in Italia"></div>
+
+        <!-- Sidebar toggle (mobile) -->
+        <div class="sidebar" id="sidebar_toggle" style="background: none; box-shadow: none;">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Apri menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Sidebar principale -->
+        <aside class="sidebar" id="main_sidebar">
+            <div class="sidebar-content">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Chiudi menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z"/>
+                    </svg>
+                </button>
+                
+                <header>
+                    <h1>Temperature in Italia</h1>
+                    <p style="margin: 0; font-size: 0.9em; color: var(--secondary-color);">
+                        Fonte dati: <a href="https://meteohub.mistralportal.it/app/maps/observations" target="_blank" rel="noopener" class="source-link">Meteohub</a> di ItaliaMeteo
+                    </p>
+                </header>
+
+                <nav aria-label="Menu visualizzazione">
+                    <ul class="nav-menu">
+                        <li>
+                            <a href="#" onclick="loadTemperatureData()">Temperatura</a>
+                            <ul>
+                                <li><a href="#" class="active" onclick="setVisualizationMode('peaks')">Picchi</a></li>
+                                <li><a href="#" onclick="setVisualizationMode('dots')">Punti/Heatmap</a></li>
+                                <li><a href="#" onclick="setVisualizationMode('labels')">Etichette</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="controls">
+                    <label for="chart_size_slider" class="control-label">Grandezza grafici</label>
+                    <input type="range" 
+                           id="chart_size_slider" 
+                           class="slider" 
+                           min="0.1" 
+                           max="5" 
+                           step="0.01" 
+                           value="1"
+                           aria-label="Regola grandezza grafici">
+                </div>
+
+                <div class="statistics" id="statistics" aria-live="polite">
+                    <div class="loading"></div>
+                    <span class="sr-only">Caricamento statistiche...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay codice -->
+        <div class="code-overlay" id="code_overlay" style="display:none">
+            <div class="code-container">
+                <div class="code-header">
+                    <h2 style="margin: 0;">Codice HTML della Mappa</h2>
+                    <div class="code-actions">
+                        <a href="#" onclick="copyToClipboard()" title="Copia negli appunti">
+                            <i class="bi bi-clipboard"></i> Copia
+                        </a>
+                        <a href="#" onclick="saveAsFile()" title="Salva come file">
+                            <i class="bi bi-download"></i> Salva
+                        </a>
+                        <a href="#" onclick="closeCodeView()" title="Chiudi">
+                            <i class="bi bi-x-circle"></i> Chiudi
+                        </a>
+                    </div>
+                </div>
+                <div class="code-content">
+                    <pre id="code_display" class="hljs"></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps_flat/ixmaps/ui/js/htmlgui_flat.js"></script>
+    <script src="./js/facet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="./js/json_config.js"></script>
+    <script src="./js/json_config_html.js"></script>
+
+    <script>
+        // Variabili globali
+        let currentVisualizationMode = 'peaks';
+        let sidebarOpen = window.innerWidth > 768;
+        
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+            loadTemperatureData();
+            setupEventListeners();
+        });
+
+        // Funzioni principali
+        function initializePage() {
+            // Gestione responsive della sidebar
+            if (window.innerWidth <= 768) {
+                document.getElementById('main_sidebar').style.display = 'none';
+            }
+            
+            // Aggiorna la mappa quando si ridimensiona la finestra
+            window.addEventListener('resize', debounce(handleResize, 250));
+        }
+
+        function setupEventListeners() {
+            // Slider per la grandezza dei grafici
+            const slider = document.getElementById('chart_size_slider');
+            slider.addEventListener('input', debounce((event) => {
+                updateChartSize(event.target.value);
+             }, 100));
+
+            // Gestione accessibilità keyboard
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeCodeView();
+                }
+            });
+        }
+
+        function handleResize() {
+            const sidebar = document.getElementById('main_sidebar');
+            const mapDiv = document.getElementById('map_div');
+            
+            if (window.innerWidth <= 768) {
+                sidebar.style.display = 'none';
+                sidebarOpen = false;
+            } else {
+                sidebar.style.display = 'block';
+                sidebarOpen = true;
+            }
+            
+            // Aggiorna dimensioni mappa
+            if (typeof ixmaps !== 'undefined') {
+                ixmaps.map().resize();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main_sidebar');
+            sidebarOpen = !sidebarOpen;
+            
+            sidebar.style.display = sidebarOpen ? 'block' : 'none';
+            
+            // Aggiorna mappa dopo animazione
+            setTimeout(() => {
+                if (typeof ixmaps !== 'undefined') {
+                    ixmaps.map().resize();
+                }
+            }, 300);
+        }
+
+        function setVisualizationMode(mode) {
+            currentVisualizationMode = mode;
+            
+            // Aggiorna UI
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            // Implementa logica di visualizzazione
+            switch(mode) {
+                case 'peaks':
+                    loadPeaksVisualization();
+                    break;
+                case 'dots':
+                    loadDotsVisualization();
+                    break;
+                case 'labels':
+                    loadLabelsVisualization();
+                    break;
+            }
+        }
+
+        function updateChartSize(value) {
+            if (typeof ixmaps !== 'undefined') {
+                ixmaps.map().changeThemeStyle('chart', 'scale:' + value, 'set');
+            }
+        }
+
+        function loadTemperatureData() {
+            const statsDiv = document.getElementById('statistics');
+            statsDiv.innerHTML = '<div class="loading"></div><span>Caricamento dati temperatura...</span>';
+        }
+
+        function loadPeaksVisualization() {
+            console.log('Caricamento visualizzazione picchi');
+            ixmaps.map().replace('chart', __temperature_peaks, 'silent');
+        }
+
+        function loadDotsVisualization() {
+            console.log('Caricamento visualizzazione punti');
+            ixmaps.map().replace('chart', __temperature_dots, 'silent');
+        }
+
+        function loadLabelsVisualization() {
+            console.log('Caricamento visualizzazione etichette');
+            ixmaps.map().replace('chart', __temperature_label, 'silent');
+        }
+
+        function toggleCodeView() {
+            const overlay = document.getElementById('code_overlay');
+            overlay.style.display = (overlay.style.display === 'none' ? 'block' : 'none');
+            if (overlay.style.display === 'block') {
+                generateHtmlCode();
+            }
+        }
+
+        function closeCodeView() {
+            document.getElementById('code_overlay').style.display = 'none';
+            document.getElementById('code_display').textContent = "";
+        }
+
+        function generateHtmlCode() {
+            const codeDisplay = document.getElementById('code_display');
+            const projectCode = ixmaps.map().getProjectString();
+            const htmlCode = new Config(projectCode).getProjectHTML();
+           
+            codeDisplay.textContent = htmlCode;
+            // important to highlight every time code is generated in codeDisplay
+            delete codeDisplay.dataset.highlighted;
+            hljs.highlightElement(codeDisplay);
+        }
+
+        function copyToClipboard() {
+            const codeText = document.getElementById('code_display').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('Codice HTML copiato negli appunti!');
+            }).catch(err => {
+                console.error('Errore nella copia:', err);
+            });
+        }
+
+        function saveAsFile() {
+            const codeText = document.getElementById('code_display').textContent;
+            const blob = new Blob([codeText], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mappa_temperature.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Utility function per debounce
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Placeholder per le funzioni originali che verranno integrate
+        // Qui inseriresti la logica originale di ixmaps e le altre funzioni specifiche
+
+        // ---------------------------------------------------
+        // ---------------------------------------------------
+        //
+        // t h e   m a p 
+        //
+        // ---------------------------------------------------
+        // ---------------------------------------------------
+
+		ixmaps.statistics = function(szId) {
+
+			var themeObj = ixmaps.getThemeObj(szId);
+			var lastFilter = themeObj.szFilter || "";
+
+			var szFieldsA = ["prod.0.val.0.ref","prod.0.val.0.val"];
+ 			var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId);
+            
+			console.log("------------------");
+			console.log("------------------");
+			console.log("------------------");
+			console.log(facetsA);
+			console.log("------------------");
+			console.log("------------------");
+			console.log("------------------");
+            
+            const statsDiv = document.getElementById('statistics');
+            statsDiv.innerHTML = `
+                <strong>Dati aggiornati:</strong> ${new Date().toLocaleTimeString('it-IT')}<br>
+                <strong>Stazioni attive:</strong> ${facetsA[1].values.length}<br>
+                <strong>Temperatura media:</strong> ${(facetsA[1].sum/facetsA[1].values.length).toFixed(1)}°C<br>
+                <strong>Min/Max:</strong> ${facetsA[1].min.toFixed(1)}°C / ${facetsA[1].max.toFixed(1)}°C
+            `;
+ 
+			$("#statistics").append("<hr>le stazioni hanno trasmesso i valori in orari come segue:");
+            let szHtml ="";
+            for (var i in facetsA[0].values){
+                szHtml += "<br>" + facetsA[0].values[i].split('T')[1] + " - " +facetsA[0].valuesCount[facetsA[0].values[i]];   
+            } 
+			$("#statistics").append(szHtml);
+            
+		};
+         
+        ixmaps.htmlgui_onDrawTheme = function(szId) {
+             if (szId == "chart"){
+                ixmaps.statistics(szId);             
+            }
+        };
+        
+        ixmaps.htmlgui_onZoomAndPan = function() { 
+
+            var nOpacity = (ixmaps.getZoom() - 7) / 2;
+            ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
+            
+            var nMinValueSize = 20;
+            var nZoom = ixmaps.getZoom();
+            if (nZoom > 7){
+                nMinValueSize = 17;    
+            }
+            if (nZoom > 8){
+                nMinValueSize = 12;    
+            }
+            if (nZoom > 9){
+                nMinValueSize = 10;    
+            }
+            if (nZoom > 10){
+                nMinValueSize = 1;    
+            }
+            ixmaps.map().changeThemeStyle("chart","minvaluesize:"+nMinValueSize);
+
+        };
+
+        /**
+         ** ************************************
+         ** define the ixmaps themes and project
+         ** ************************************
+         **/
+
+        var __filter = "";
+        var __lat = null;
+        var __lon = null;
+        var __zoom = null;
+        var __scale_chart = 1;
+        var __legend = true;
+
+        /**
+         ** strings used by the map 	
+         **/
+
+        attribution =
+            "powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a> |&nbsp; <a href=\"javascript:__dataTheme()\" > html</a>";
+
+        /**
+         ** get query params and adapt theme and project definitions 	
+         **/
+
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+
+        if (params.filter) {
+            __filter = params.filter;
+        }
+
+        if (params.view) {
+            var latlonA = params.view.split('[')[1].split(']')[0].split(',');
+            __lat = latlonA[0];
+            __lon = latlonA[1];
+            __zoom = parseFloat(params.view.split(',')[2]);
+            //setTimeout("ixmaps.setView(null,"+params.view+")",1000);
+        };
+
+        if (params.scale) {
+            __scale_chart = params.scale;
+        };
+
+        if (params.legend) {
+            __legend = params.legend;
+        };
+
+        // ---------------------------------------------------
+        // e m b e d   t h e   m a p  
+        // ---------------------------------------------------
+
+         const nuts2 =
+            ixmaps.layer("nuts2", layer => layer
+                .type("FEATURES|SILENT|LOCKED|NOLEGEND")
+                .data({
+                    url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_2.geojson",
+                    type: "geojson"
+                })
+                .binding({
+                    id: "NUTS_ID"
+                })
+                .filter("WHERE CNTR_CODE = IT")
+                .style({
+                    colorscheme: [
+                        "white"
+                    ],
+                    fillopacity: "1",
+                    linecolor: "#F7F6EF",
+                    linewidth: "2",
+                    shadow: true,
+                    showdata: true,
+                    featurelower: "1:3000000",
+                    titlefield: "NUTS_NAME",
+                    name: "nuts2"
+                })
+            );
+
+        query_data = function(theme, options) {
+             
+            var date = new Date();
+            var uTime = date.getTime();
+
+            /* 2 hours to the past */
+            uTime -= 1000 * 60 * 60 * 3;
+
+            var sdate = new Date(uTime);
+
+            var year = sdate.getFullYear();
+            var month = sdate.getMonth() + 1;
+            var day = sdate.getDate();
+            var szStartDate = year + "-" + String("0" + month).slice(-2) + "-" + String("0" + day).slice(-2);
+            var hours = sdate.getHours();
+            var minutes = sdate.getMinutes();
+            var szStartTime = hours + ":00";
+             
+            year = date.getFullYear();
+            month = date.getMonth() + 1;
+            day = date.getDate();
+            var szEndDate = year + "-" + String("0" + month).slice(-2) + "-" + String("0" + day).slice(-2);
+            hours = date.getHours();
+            minutes = date.getMinutes();
+            var szEndTime = hours + ":" + minutes;
+             
+            var broker = new Data.Broker()
+
+                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B12101;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+
+                .realize(
+                    function(dataA) {
+
+                        var data = dataA[0];
+                        data.column("prod.0.val.0.val").map(function(value){
+                            return value - 273.15;
+                        })   
+
+                         ixmaps.setExternalData(data, {
+                            type: "dbtable",
+                            name: options.name
+                        });
+                    });
+        };
+
+        let __colorscheme = [
+                        "#88229A", "#9525A4", "#BC30C1", "#D938D6",
+                        "#F640ED", "#6B1E8E", "#551E8E", "#1E418E",
+                        "#1E538E", "#1E5C8E", "#1E669C", "#1E74B8",
+                        "#1E90F0", "#3FA6FE", "#6EBCFE", "#C3FEE5",
+                        "#AAEFCE", "#95D8B4", "#74B896", "#1DA63B",
+                        "#A7E423", "#D3F121", "#F4FB1F", "#F3DB26",
+                        "#F5C428", "#F59628", "#F17B25", "#E64B23",
+                        "#C63224", "#B4282D", "#871B1B", "#721B1B",
+                        "#B87373", "#EDA7A8", "#FAB9B9", "#FADDDD"
+        ];
+        let __ranges =  "-28,-26,-24,-22,-20,-18,-16,-14,-12,-10,-8,-6,-4,-2,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44";
+
+        var __temperature_dots =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val"
+                    })
+                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|VALUES")
+                .style({
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    fillopacity: "0.9",
+                    linecolor: "none",
+                    shadow: "false",
+                    visible: "true",
+                    showdata: "true",
+                    units: "",
+                    scale: "0.6",
+                    sizepow: "2",
+                    valuescale: "1",
+                    valuedecimals: "1",
+                    valuesupper: "1:1000000",
+                    })
+                .meta({
+                    title: "[title]",
+                    snippet: "",
+                    description: "",
+                    name: "chart",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
+        
+        var __temperature_dots_bg =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val"
+                    })
+                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|VALUES")
+                .style({
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    fillopacity: "0.01",
+                    linecolor: "none",
+                    shadow: "false",
+                    visible: "true",
+                    showdata: "true",
+                    units: "",
+                    scale: "0.7",
+                    sizepow: "2",
+                    valuescale: "1",
+                    valuedecimals: "1",
+                    valuesupper: "1:1000000",
+                    })
+                .meta({
+                    title: "[title]",
+                    snippet: "",
+                    description: "",
+                    name: "chart_bg",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
+        
+        var __temperature_label =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val",
+                    title: "stat.details.0.val"
+                    })
+                .type("CHART|LABEL|NOSIZE|SORT|UP|RANGES|VALUES|AGGREGATE|RECT|RELOCATE|MAX|BOX|BOTTOMTITLE")
+                .style({
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    symbols: ["label"],
+                    linecolor: "black",
+                    fillopacity: "1",
+                    shadow: "true",
+                    visible: "true",
+                    showdata: "true",
+                    units: "",
+                    scale: "6",
+                    sizepow: "2",
+                    gridwidth: "30px",
+                    valuecolor: "white",
+                    valuescale: "1.2",
+                    valuedecimals: "1",
+                    boxcolor: "none",
+                    bordercolor: "none",
+                    boxupper: "1:1000000",
+                    shadowlower: "1:1000000"
+                    })
+                .meta({
+                    title: "temperatura",
+                    snippet: "",
+                    description: "",
+                    name: "chart",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
+        
+         var __temperature_peaks =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val",
+                    title: "stat.details.0.val"
+                    })
+                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|MAX")
+                .style({
+                    userdraw: "pinnacleChart",
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    fillopacity: "0.7",
+                    shadow: "false",
+                    visible: "true",
+                    showdata: "true",
+                    units: "°",
+                    scale: "1.5",
+                    rangescale: "0.5",
+                    sizepow: "0.1",
+                    valuescale: "1",
+                    valuedecimals: "1",
+                    rangecentervalue: "0",
+                    minvaluesize: "20"
+                    })
+                .meta({
+                    title: "temperatura",
+                    snippet: "",
+                    description: "",
+                    name: "chart",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
+       
+        /**
+         **
+         ** create the interactive map an append it to the document 
+         **
+         **/
+
+        ixmaps.embed("map_div", {
+                mapService: "leaflet_vt",
+                mapType: "CartoDB - Positron",
+                map: "../../maps/svg/maps/generic/mercator.svg",
+                legend: ((__legend == true) ? "true" : 0),
+                align: "left",
+                mode: "pan",
+                about: "test",
+                search: "Italy"
+            },
+            map => map
+
+            .view({
+                "center": {
+                    "lat": __lat || "42.30234655149951",
+                    "lng": __lon || "13.987399620595363"
+                },
+                "zoom": __zoom || "6.27681771091248"
+            })
+            .options({
+                featurescaling: "true",
+                objectscaling: "dynamic",
+                normalSizeScale: "100000",
+                dynamicSizePow: "10",
+                flushChartDraw: "1000000",
+                flushPaintShape: "1000000",
+                basemapopacity: "0.5",
+                worksilent: "false",
+                loadsilent: "false",
+                hideOnPan:  "false",
+                freezeOnPan:"false",
+            })
+            .local("aggregated", "")
+            .local("... creating theme ...", "...")
+            .local("loading data ...", "scaricando dati ...")
+            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/ui/js/tools/tooltip_mustache.js")
+            .require("https://d3js.org/d3.v3.min.js")
+            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/usercharts/d3/chart.js")
+            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/usercharts/d3/arrow_chart.js")
+            .attribution(attribution)
+ 
+            // -----------------------------		 
+            // the data visualization layer 
+            // -----------------------------
+
+            .layer(nuts2)
+            .layer(__temperature_dots_bg)
+            .layer(__temperature_peaks)
+
+        );
+
+    </script>
+</body>
+</html>
