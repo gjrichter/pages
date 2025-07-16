@@ -38,7 +38,9 @@
     <!-- Contenitore principale -->
     <main>
         <!-- Mappa -->
-        <div id="map_div" role="application" aria-label="Mappa interattiva delle temperature in Italia"></div>
+        <div id="map_div" role="application" aria-label="Mappa interattiva delle temperature in Italia">
+            <div style="position:absolute;top:45%;left:35%">connecting to Internet ...</div>
+        </div>    
 
         <!-- Sidebar toggle (mobile) -->
         <div class="sidebar" id="sidebar_toggle" style="background: none; box-shadow: none;">
@@ -68,9 +70,9 @@
                 <nav aria-label="Menu visualizzazione">
                     <ul class="nav-menu">
                         <li>
-                            <a href="#" onclick="loadTemperatureData()">Temperatura</a>
                             <ul>
                                 <li><a href="#" class="active" onclick="setVisualizationMode('peaks')">Picchi</a></li>
+                                <li><a href="#" onclick="setVisualizationMode('arrows')">Frecce</a></li>
                                 <li><a href="#" onclick="setVisualizationMode('dots')">Punti/Heatmap</a></li>
                                 <li><a href="#" onclick="setVisualizationMode('labels')">Etichette</a></li>
                             </ul>
@@ -123,13 +125,18 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
-    <script src="https://gjrichter.github.io/ixmaps_flat/ixmaps/ui/js/htmlgui_flat.js"></script>
-    <script src="./js/facet.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps_flat/ui/js/htmlgui_flat.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps_flat/ui/js/tools/facet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="./js/json_config.js"></script>
-    <script src="./js/json_config_html.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps_flat/ui/js/tools/json_config.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps_flat/ui/js/tools/json_config_html.js"></script>
 
     <script>
+
+        if (!window.navigator.onLine || typeof(ixmaps) === 'undefined'){
+            //return;
+        }
+
         // Variabili globali
         let currentVisualizationMode = 'peaks';
         let sidebarOpen = window.innerWidth > 768;
@@ -214,6 +221,9 @@
                 case 'peaks':
                     loadPeaksVisualization();
                     break;
+                case 'arrows':
+                    loadArrowsVisualization();
+                    break;
                 case 'dots':
                     loadDotsVisualization();
                     break;
@@ -238,6 +248,13 @@
             console.log('Caricamento visualizzazione picchi');
             ixmaps.map().message("...");
             setTimeout(() => {ixmaps.map().replace('chart', __temperature_peaks, 'silent')},10);
+            ixmaps.htmlgui_onZoomAndPan();
+        }
+
+        function loadArrowsVisualization() {
+            console.log('Caricamento visualizzazione frecce');
+            ixmaps.map().message("...");
+            setTimeout(() => {ixmaps.map().replace('chart', __temperature_arrows, 'silent')},10);
             ixmaps.htmlgui_onZoomAndPan();
         }
 
@@ -357,7 +374,7 @@
 		};
          
         ixmaps.htmlgui_onDrawTheme = function(szId) {
-             if (szId == "chart"){
+             if (szId == "chart_bg"){
                 ixmaps.statistics(szId);             
             }
         };
@@ -403,7 +420,7 @@
          **/
 
         attribution =
-            "powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a> |&nbsp; <a href=\"javascript:__dataTheme()\" > html</a>";
+            "powered by <a href=\"http://ixmaps.com\" target=\"_blank\">iXMaps</a> |&nbsp; <a href=\"javascript:toggleCodeView()\" > html</a>";
 
         /**
          ** get query params and adapt theme and project definitions 	
@@ -577,6 +594,7 @@
                     shadow: "false",
                     visible: "true",
                     showdata: "true",
+                    xxchartlower: "1:1000000",
                     units: "",
                     scale: "0.15",
                     })
@@ -645,12 +663,12 @@
                     value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
-                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|MAX")
+                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
                 .style({
                     userdraw: "pinnacleChart",
                     colorscheme: __colorscheme,
                     ranges: __ranges,
-                    fillopacity: "0.7",
+                    fillopacity: "0.5",
                     shadow: "false",
                     visible: "true",
                     showdata: "true",
@@ -661,7 +679,49 @@
                     valuescale: "1",
                     valuedecimals: "1",
                     rangecentervalue: "0",
-                    minvaluesize: "20"
+                    minvaluesize: "20",
+                    gridwidth: "10px"
+                    })
+                .meta({
+                    title: "temperatura",
+                    snippet: "",
+                    description: "",
+                    name: "chart",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
+       
+         var __temperature_arrows =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val",
+                    title: "stat.details.0.val"
+                    })
+                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
+                .style({
+                    userdraw: "arrowChart",
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    fillopacity: "1",
+                    shadow: "false",
+                    visible: "true",
+                    showdata: "true",
+                    units: "°",
+                    scale: "1",
+                    rangescale: "1",
+                    sizepow: "0.13",
+                    valuescale: "1.5",
+                    valuedecimals: "1",
+                    rangecentervalue: "0",
+                    valuecolor: "#BC7A7A",
+                    minvaluesize: "20",
+                    gridwidth: "25px"
                     })
                 .meta({
                     title: "temperatura",
@@ -677,10 +737,9 @@
          ** create the interactive map an append it to the document 
          **
          **/
-
         ixmaps.embed("map_div", {
                 mapService: "leaflet_vt",
-                mapType: "CartoDB - Positron",
+                mapType: "ArcGIS - Topo",
                 map: "../../maps/svg/maps/generic/mercator.svg",
                 legend: ((__legend == true) ? "true" : 0),
                 align: "left",
@@ -713,10 +772,10 @@
             .local("aggregated", "")
             .local("... creating theme ...", "...")
             .local("loading data ...", "scaricando dati ...")
-            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/ui/js/tools/tooltip_mustache.js")
+            .require("https://gjrichter.github.io/ixmaps_flat/ui/js/tools/tooltip_mustache.js")
             .require("https://d3js.org/d3.v3.min.js")
-            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/usercharts/d3/chart.js")
-            .require("https://s3.eu-west-1.amazonaws.com/exp.ixmaps.com/flat/ixmaps/usercharts/d3/arrow_chart.js")
+            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/chart.js")
+            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/arrow_chart.js")
             .attribution(attribution)
  
             // -----------------------------		 
@@ -728,7 +787,6 @@
             .layer(__temperature_peaks)
 
         );
-
-    </script>
+     </script>
 </body>
 </html>
