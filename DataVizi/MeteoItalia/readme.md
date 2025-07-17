@@ -2,7 +2,7 @@
 
 Benvenuto nella mini webapp **Temperature Attuali in Italia**, uno strumento semplice e visivo per consultare in tempo reale le temperature nelle principali località italiane.
 
-🔗 **Accedi alla webapp**: [gjrichter.github.io/.../temperature_attuali_colors_claude.html](https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_colors_claude.html)
+🔗 **Accedi alla webapp**: [gjrichter.github.io/.../temperature_attuali_...](https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_colors_claude.html)
 
 ---
 
@@ -21,7 +21,7 @@ Questa applicazione mostra **una mappa dell’Italia** con le temperature attual
 Le misure utilizzate nella mappa vengono da **MeteoHub**, una piattaforma del progetto MISTRAL/CINECA/Protezione Civile, che raccoglie osservazioni da stazioni meteorologiche distribuite su tutto il territorio italiano.
 
 📍 **Link alla fonte**:  
-https://meteohub.mistralportal.it/app/maps/observations
+[https://meteohub.mistralportal.it/app/maps/observations](https://meteohub.mistralportal.it/app/maps/observations)
 
 ---
 
