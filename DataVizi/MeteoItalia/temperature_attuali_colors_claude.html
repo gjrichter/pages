@@ -247,7 +247,7 @@
         function loadPeaksVisualization() {
             console.log('Caricamento visualizzazione picchi');
             ixmaps.map().message("...");
-            setTimeout(() => {ixmaps.map().replace('chart', __temperature_peaks, 'silent')},10);
+            setTimeout(() => {ixmaps.map().replace('chart', __temperature_lolli, 'silent')},10);
             ixmaps.htmlgui_onZoomAndPan();
         }
 
@@ -734,6 +734,47 @@
                     })
             );
        
+         var __temperature_lolli =
+            ixmaps.layer("World Mercator", layer => layer
+                .data({
+                    query: query_data.toString(),
+                    name: "actual_temperature_data",
+                    cache: "true"
+                    })
+                .binding({
+                    geo: "stat.lat|stat.lon",
+                    value: "prod.0.val.0.val",
+                    title: "stat.details.0.val"
+                    })
+                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
+                .style({
+                    userdraw: "lolliChart",
+                    colorscheme: __colorscheme,
+                    ranges: __ranges,
+                    fillopacity: "1",
+                    shadow: "false",
+                    visible: "true",
+                    showdata: "true",
+                    units: "°",
+                    scale: "1",
+                    rangescale: "1.5",
+                    sizepow: "0.13",
+                    valuescale: "1.2",
+                    valuedecimals: "1",
+                    normalsizevalue: "33",
+                    rangecentervalue: "0",
+                    valuecolor: "#DC0000",
+                    minvaluevalue: "30",
+                    gridwidth: "20px"
+                    })
+                .meta({
+                    title: "Temperatura",
+                    snippet: "",
+                    description: "",
+                    name: "chart",
+                    tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+                    })
+            );
          var __temperature_arrows =
             ixmaps.layer("World Mercator", layer => layer
                 .data({
@@ -819,6 +860,7 @@
             .require("https://d3js.org/d3.v3.min.js")
             .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/chart.js")
             .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/arrow_chart.js")
+            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/lolli_chart.js")
             .attribution(attribution)
  
             // -----------------------------		 
@@ -827,7 +869,7 @@
 
             .layer(nuts2)
             .layer(__temperature_dots_bg)
-            .layer(__temperature_peaks)
+            .layer(__temperature_lolli)
 
         );
      </script>
