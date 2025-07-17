@@ -21,17 +21,7 @@ Questa applicazione mostra **una mappa dell’Italia** con le temperature attual
 Le misure utilizzate nella mappa vengono da **MeteoHub**, una piattaforma del progetto MISTRAL/CINECA/Protezione Civile, che raccoglie osservazioni da stazioni meteorologiche distribuite su tutto il territorio italiano.
 
 📍 **Link alla fonte**:  
-[https://meteohub.mistralportal.it/app/maps/observations](https://meteohub.mistralportal.it/app/maps/observations)
-
----
-
-## 🧰 Caratteristiche principali
-
-- ✅ Visualizzazione **a colpo d’occhio** delle temperature
-- ✅ Interfaccia minimale e leggera
-- ✅ Compatibile con desktop e dispositivi mobili
-- ✅ Nessuna installazione richiesta
-- ✅ Dati pubblici, aggiornati e affidabili
+[https://meteohub.mistralportal.it/app/maps/observations
 
 ---
 
