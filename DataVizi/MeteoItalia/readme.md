@@ -2,7 +2,7 @@
 
 Benvenuto nella mini webapp **Temperature Attuali in Italia**, uno strumento semplice e visivo per consultare in tempo reale le temperature nelle principali località italiane.
 
-🔗 **Accedi alla webapp**: [gjrichter.github.io/.../temperature_attuali_...](https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_colors_claude.html)
+🔗 **Accedi alla webapp**: [gjrichter.github.io/.../temperature_attuali.html](https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali.html)
 
 ---
 
