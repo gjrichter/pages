@@ -1,5 +1,7 @@
 # pages
 
+### [Data Viz *i*](https://gjrichter.github.io/pages/DataVizi/)
+
 [Presidential elections France 2022](https://gjrichter.github.io/pages/Elezioni_Francia_2020_primo_turno/)
 
 [Concessioni Demaniali ](https://gjrichter.github.io/pages/Concessioni Demaniali/), [2011 story map ](https://gjrichter.github.io/pages/scrollama/index_Concessioni_confronto.html)
