@@ -384,7 +384,7 @@
             var nOpacity = (ixmaps.getZoom() - 7) / 2;
             ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
             
-            var nMinValueSize = 20;
+            var nMinValueSize = 18;
             var nZoom = ixmaps.getZoom();
             if (nZoom > 7){
                 nMinValueSize = 17;    
@@ -757,16 +757,14 @@
                     showdata: "true",
                     units: "°",
                     scale: "1",
-                    rangescale: "1.5",
+                    rangescale: "1",
                     sizepow: "0.13",
                     valuescale: "1.2",
                     valuedecimals: "1",
-                    normalsizevalue: "33",
                     rangecentervalue: "0",
                     linecolor: "white",
                     linewidth: "0.2",
                     valuecolor: "#DC0000",
-                    minvaluevalue: "30",
                     gridwidth: "20px"
                     })
                 .meta({
@@ -857,6 +855,7 @@
             })
             .local("aggregated", "")
             .local("... creating theme ...", "...")
+            .local("working ...", "")
             .local("loading data ...", "scaricando dati ...")
             .require("https://gjrichter.github.io/ixmaps_flat/ui/js/tools/tooltip_mustache.js")
             .require("https://d3js.org/d3.v3.min.js")
