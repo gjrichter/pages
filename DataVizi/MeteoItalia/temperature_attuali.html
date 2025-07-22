@@ -240,6 +240,7 @@
         function updateChartSize(value) {
             if (typeof ixmaps !== 'undefined') {
                 ixmaps.map().changeThemeStyle('chart', 'minvaluesize:' + (20-value*10), 'set');
+                ixmaps.map().changeThemeStyle('chart', 'scale:' + (value/2), 'set');
             }
         }
 
