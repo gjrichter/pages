@@ -299,13 +299,8 @@
     }
 
     @media (max-width: 480px) {
-        .xxsidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
+        .sidebar-content {
             height: 100%;
-            border-radius: 0;
             overflow-y: auto;
         }
         .logo-text {
