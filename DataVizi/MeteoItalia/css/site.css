@@ -308,9 +308,6 @@
             border-radius: 0;
             overflow-y: auto;
         }
-.sidebar {
-    overflow-y: auto;
-}
         .logo-text {
             font-size: 28px;
         }
