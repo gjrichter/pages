@@ -41,7 +41,5 @@ TEST
 
 [elezioni politiche 2022 - gender maps ](https://gjrichter.github.io/pages/Elezioni_Politiche_2022_gender/index.html)
 
-
-
-
+[Sicily fire map ](https://gjrichter.github.io/pages/EFFIS_facets/index_embed_Terre_Percorse_dal_fuoco_2010_2022_comuni_commisariati_EFFIS_7d_final_topo_cursor.html)
 
