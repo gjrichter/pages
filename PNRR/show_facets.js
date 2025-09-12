@@ -191,6 +191,22 @@ ixmaps.data = ixmaps.data || {};
 		__setFacetFilter("");
 	};
 
+	// -----------------------------------------------
+	// set word cloud field name
+	// -----------------------------------------------
+	__szFilter = null;
+	__szDiv = null;
+	__facetsA = null;
+	__worldCloudField = null;
+	__makeWordCloud = function (szField) {
+		if ( __worldCloudField == szField ){
+			__worldCloudField = null;	
+		}else{
+			__worldCloudField = szField;
+		}
+		ixmaps.data.showFacets(__szFilter, __szDiv, __facetsA);
+	};
+	
 	var __makeHistogram = function (id, szRange) {
 
 		var rangeA = szRange.split(",");
@@ -335,6 +351,10 @@ ixmaps.data = ixmaps.data || {};
 
 	ixmaps.data.showFacets = function (szFilter, szDiv, facetsA) {
 		
+		__szFilter = szFilter;
+		__szDiv = szDiv;
+		__facetsA = facetsA;
+		
 		var fTest = true;
 		var sliderA = [];
 
@@ -406,6 +426,10 @@ ixmaps.data = ixmaps.data || {};
 			}
 
 			szHtml += fActiveFacet ? "<span style='float:right;margin-right:0em;padding-top:0em;'><i class='icon shareIcon share_bitly icon-cancel-circle' title='Share a short link' tabindex='-1'></i></span>" : "";
+			if ((facetsA[i].type == "textual") && !facetsA[i].values){
+				szHtml += "<a href='javascript:__makeWordCloud(\"" + (facetsA[i].id) + "\")'><span style='float:right;margin-right:0em;padding-top:0em;color:white'><i class='icon shareIcon share_bitly icon-cloud' title='Share a short link' tabindex='-1'></i></span></a>";
+			}
+			
 			szHtml += "</div>";
 			szHtml += fActiveFacet ? "</a>" : "";
 
@@ -426,6 +450,11 @@ ixmaps.data = ixmaps.data || {};
 				}else{
 					szHtml += '<div class="input-group" style="margin-bottom:0.5em" >';
 					szHtml += '</div>'
+				}
+				if ( facetsA[i].id == __worldCloudField ){
+					szTarget = "thisismywordcloud"+facetsA[i].id.replace(/[\W_]/g, "_");
+					szHtml += "<div id='"+szTarget+"'><div style='width:100%;text-align:center'><i class='icon shareIcon share_bitly icon-cloud' title='Share a short link' style='color:#888888;font-size:36px' tabindex='-1'></i><br><img src='./img/loading_blue.gif' style='height:28px'></div></div>";
+					setTimeout("ixmaps.data.makeWordCloud('"+objTheme.szId+"','"+facetsA[i].id+"','"+szTarget+"')",100);
 				}
 			}
 
@@ -592,7 +621,8 @@ ixmaps.data = ixmaps.data || {};
 						
 						var szText = facetsA[i].values[ii];
 						
-						if ((objThemeDefinition.field == facetsA[i].id)) {
+						if ((objThemeDefinition.field == facetsA[i].id) && 
+                            objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1] ) {
 							bgColor = hex2rgba(objTheme.colorScheme[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1],0.7);
 							if ( objTheme.szLabelA && objTheme.szValuesA ){
 								szText = objTheme.szLabelA[objTheme.nStringToValueA[facetsA[i].values[ii]] - 1];
