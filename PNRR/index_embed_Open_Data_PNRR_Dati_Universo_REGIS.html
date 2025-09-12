@@ -206,8 +206,8 @@ $Log:index_only_map_embed.html,v $
 			-->
 				
 				<p>Simboli nella visualizzazione dei singoli progetti:<br>
-					<img src="../../../pages/PNRR/img/megafono.png" style="vertical-align:middle;height:16px"> in gara,
-					<img src="../../../pages/PNRR/img/515345.png" style="vertical-align:middle;height:16px"> aggiudicato</p>
+					<img src="../../pages/PNRR/img/megafono.png" style="vertical-align:middle;height:16px"> in gara,
+					<img src="../../pages/PNRR/img/515345.png" style="vertical-align:middle;height:16px"> aggiudicato</p>
 
 				<table>
 					<tr>
@@ -254,7 +254,7 @@ $Log:index_only_map_embed.html,v $
 				</p>
 
 				<p style="font-size:0.9em;">
-					progetti <a style="color:#0088dd" href="javascript:void()" onclick='__setFacetFilter("WHERE \"stato di avanzamento\" in (in gara,aggiudicato)")'>in gara + aggiudicati</a>
+					progetti <a style="color:#0088dd" href="javascript:void()" onclick='__setFacetFilter("WHERE \"stato di avanzamento\" IN (in gara,aggiudicato)")'>in gara + aggiudicati</a>
 				</p>
 
 				<p style="font-size:0.9em;">
@@ -324,7 +324,7 @@ $Log:index_only_map_embed.html,v $
 
 				<p style="font-size:0.9em;"><a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/" target="_blank">Descrizione dei dati</a> ed <a style="color:#0088dd" href="https://pnrr.datibenecomune.it/fonti/regis/mappa.html" target="_blank">istruzioni</a> per l'uso di questa mappa si trovano su pagine dedicate dell'associazione <b>onData</b>.</p>
 				
-				<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>04.12.2023 (v4)</b>	
+				<p style="font-size:0.9em;">Link ai dati: <a style="color:#0088dd" href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-open-data.html?orderby=%40jcr%3Acontent%2FobservationDateInEvidence&sort=desc" target="_blank">ItaliaDomani Open Data PNRR</a>, data di osservazione: <b>31.03.2025 (v9)</b>	
 				</p>
 
 			</div>
@@ -340,13 +340,17 @@ $Log:index_only_map_embed.html,v $
 	<!--========================================================================= -->
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
-	<script src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
-	<script src="https://gjrichter.github.io/data.js/data.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps/ui/js/htmlgui_api.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/data.js/data.js"></script>
 	<script type="text/javascript" src="./format.js"></script>
 	<script type="text/javascript" src="./facet.js"></script>
 	<script type="text/javascript" src="./show_facets.js"></script>
 	<script type="text/javascript" src="./list.js"></script>
 
+	<script type="text/javascript" src="./show_word_cloud.js"></script>
+	<script src="./d3/d3.js" charset="utf-8"></script>
+	<script src="./d3/d3.layout.cloud.js"></script>
+	<script src="./d3/d3.wordcloud.js"></script>
 	<!--========================================================================= -->
 
 	<script type="text/javascript" charset="utf-8">
@@ -460,7 +464,8 @@ $Log:index_only_map_embed.html,v $
 				_LOG("=== statistics done ===");
 
 				ixmaps.data.fShowFacetValues = true;
-				szFieldsA = ["Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "missione", "Descrizione Submisura", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento", "stato di avanzamento","Tipologia procedura di attivazione"];
+				//szFieldsA = ["missione", "Descrizione Submisura", "stato di avanzamento", "Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento","Tipologia procedura di attivazione"];
+				szFieldsA = ["missione", "Descrizione Submisura",,"Descrizione Fase Attuale Categorie", "stato di avanzamento", "Ritardi", "Descrizione Regione", "Descrizione Provincia", "Descrizione Comune", "Soggetto attuatore", "Descrizione Misura", "CUP Descrizione Settore", "CUP Descrizione Categoria", "Sintesi progetto", "CUP", "CIG", "Denominazione Aggiudicatario", "tipo finanziamento","Tipologia procedura di attivazione","Descrizione Fase Attuale Categorie"];
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map","NONUMERIC");
 				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
 				
@@ -710,7 +715,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_choropleth =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -748,7 +753,7 @@ $Log:index_only_map_embed.html,v $
 					name: "choropleth"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -756,7 +761,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -810,7 +815,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9 03/2025</b>",
 					description: "nota bene: <b>Livello comunale</b> include <b>solo</b> i progetti direttamente associati ad un comune",
 					splash: "scaricando dati ..."
 				})
@@ -819,7 +824,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_reg =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_fintot_pivot_reg_sub_avanz_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -861,7 +866,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_reg"
 				})
 				.meta({
-					title: "<b>PNRR Universo REGIS - v4</b>",
+					title: "<b>PNRR Universo REGIS - v9 03/2025</b>",
 					description: "nota bene: <b>aggregazione a livello regionale</b>; include i progetti per <b>tutti i comuni</b> e dell’<b>ambito nazionale</b>.",
 					splash: "scaricando dati ..."
 				})
@@ -870,7 +875,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_REGIONI_SUM =
 			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_fintot_pivot_reg_sub_avanz_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_reg_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_reg"
 				})
@@ -898,7 +903,7 @@ $Log:index_only_map_embed.html,v $
 					name: "regioni_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					snippet: "include i progetti al livello regionale (tutti comuni) e del Ambito Nazionale",
 					splash: "scaricando dati ..."
 				})
@@ -908,7 +913,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -956,7 +961,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b><br>i singoli progetti",
+					title: "<b>PNRR - Universo REGIS - v9</b><br>i singoli progetti",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -964,7 +969,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_ICONS =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -978,8 +983,8 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					values: ["in gara","aggiudicato","progetto"],
 					symbols: [
-						"https://raw.githubusercontent.com/gjrichter/pages/main/PNRR/img/megafono.png",
-						"https://raw.githubusercontent.com/gjrichter/pages/main/PNRR/img/515345.png",
+						"../../../../pages/PNRR/img/megafono.png",
+						"../../../../pages/PNRR/img/515345.png",
 						"none"],
 					colorscheme: ["green"],
 					fillopacity: "0.0008",
@@ -1003,7 +1008,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details_3"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b><br>i singoli progetti",
+					title: "<b>PNRR - Universo REGIS - v9</b><br>i singoli progetti",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1011,7 +1016,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROJECTS_SUM =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1054,7 +1059,7 @@ $Log:index_only_map_embed.html,v $
 					name: "details_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1062,7 +1067,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_prov =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_fintot_pivot_prov_sub_avanz_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
@@ -1104,7 +1109,7 @@ $Log:index_only_map_embed.html,v $
 					name: "chart_prov"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9 03/2025</b>",
 					description: "<b>nota bene:</b> L’aggregazione a livello provinciale include anche i progetti per tutti i comuni, ma non i progetto dell'ambito nazionale.",
 					splash: "scaricando dati ..."
 				})
@@ -1113,13 +1118,13 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM =
 			ixmaps.layer("ITALIA_Province_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_fintot_pivot_prov_sub_avanz_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_fintot_iter_pivot_prov_sub_avanz_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data_prov"
 				})
 				.binding({
 					position: "Provincia",
-					value: "importo",
+					value:"importo",
 					title: "Descrizione Provincia"
 				})
 				.filter(__filter)
@@ -1142,7 +1147,7 @@ $Log:index_only_map_embed.html,v $
 					name: "province_sum"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1150,7 +1155,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_PROVINCE_SUM_2 =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1178,7 +1183,7 @@ $Log:index_only_map_embed.html,v $
 					name: "province_sum_2"
 				})
 				.meta({
-					title: "<b>PNRR - Universo REGIS - v4</b>",
+					title: "<b>PNRR - Universo REGIS - v9</b>",
 					splash: "scaricando dati ..."
 				})
 			);
@@ -1186,7 +1191,7 @@ $Log:index_only_map_embed.html,v $
 		var __CUP_PNRR_chart_pop =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
-					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2023_12_v4/PNRR_Localizzazione-Universo_REGIS_esteso_pop_cig_fintot_v4.csv.gz",
+					url: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/PNRR_2025_03_v9/PNRR_Localizzazione_esteso_pop_cig_fintot_iter_v9.csv.gz",
 					type: "csv",
 					name: "pnrr_data"
 				})
@@ -1247,14 +1252,14 @@ $Log:index_only_map_embed.html,v $
 				dynamicScalePow: "2.5",
 				flushChartDraw: "1000000",
 				basemapopacity: "0.1",
-				silent: "true",
-				panhidden: "false"
+				panhidden: "false",
+				silent: "true"
 			})
 			.local("aggregated", "")
-			.local("loading data ...", "scaricando dati ...")
-			.require("https://raw.githubusercontent.com/gjrichter/pages/main/PNRR_2023_12_v4/item_simple_pop.js")
+			//.local("loading data ...", "scaricando dati ...")
+			.require("https://raw.githubusercontent.com/gjrichter/pages/main/PNRR_2025_03_v9/item_simple_pop.js")
 			.attribution(attribution)
-
+			
 			// -----------------------------		 
 			// the geo reference layer 
 			// -----------------------------
