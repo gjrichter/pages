@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+index_embed_Marche_2025_candidati_alpha_diff_arrows.html
+
+DESCRIPTION:
+Interactive map visualization of the 2025 Marche Regional Election results
+showing vote differences between the two main candidates (Matteo Ricci and 
+Francesco Acquaroli) using directional arrow charts.
+
+FEATURES:
+- Choropleth background layer showing dominant candidate by municipality
+- Directional arrow charts indicating vote surplus for each candidate
+  * Right-pointing arrows (35°) for Acquaroli wins
+  * Left-pointing arrows (325°) for Ricci wins
+- Arrow size scaled by vote difference (sizepow: 2, normalsizevalue: 10000)
+- Dynamic zoom-based scaling for optimal visualization at different zoom levels
+- Basemap opacity increases with zoom level
+- Municipality polygons from ISTAT 2022 data (Marche region, COD_REG = 11)
+- Urban centroids from 2011 data for point positioning
+
+DATA SOURCE:
+- Election results: elezioni_marche_2025_TUTTI_RISULTATI_1759308600_con_istat.csv
+- Contains: provincia, comune, codice_istat, nome, voti, percentuale, popolazione
+- Geographic data: ISTAT municipalities (Com01012022) and provinces (Prov01012022)
+- Centroids: Andrea Borruso's urban fabric centroids (2011)
+
+VISUALIZATION LAYERS:
+1. __georef          - Municipality polygons (base geometry)
+2. __georef_urban    - Urban centroids for chart positioning
+3. __georef_prov     - Province boundaries
+4. __dominanza       - Choropleth showing dominant candidate
+5. __voti_diff_ACQUAROLI - Right-pointing arrows for Acquaroli surplus votes
+6. __voti_diff_RICCI     - Left-pointing arrows for Ricci surplus votes
+
+TECHNICAL DETAILS:
+- Custom user chart type: arrowChart (requires arrow_chart.js)
+- Data transformation: pivot tables for votes and percentages
+- Tooltip engine: Mustache templates
+- Map service: Leaflet Vector Tiles
+- Dynamic features: featurescaling, objectscaling
+
+DEPENDENCIES:
+- D3.js v3
+- ixmaps chart.js
+- ixmaps arrow_chart.js
+- ixmaps tooltip_mustache.js
+- htmlgui_flat.js
+
+$Author: guenter richter $
+$Date: 2025/10/02 $
+$Version: 1.0 $
+
+Licensed under CC-BY-4.0
+Data source: https://dati.elezioni.marche.it/votiPresidente.html
+
+********************************************************************** -->
+
+<head>
+	<!-- Basic Meta Tags -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Primary Meta Tags -->
+	<title>Elezioni Regionali Marche 2025 - Mappa Interattiva dei Voti | iXMaps</title>
+	<meta name="title" content="Elezioni Regionali Marche 2025 - Mappa Interattiva dei Voti">
+	<meta name="description" content="Visualizzazione interattiva dei risultati delle Elezioni Regionali Marche 2025. Confronto tra Matteo Ricci e Francesco Acquaroli con frecce direzionali che mostrano i voti in più per comune. Dati ufficiali da Regione Marche.">
+	<meta name="keywords" content="elezioni marche 2025, risultati elettorali, matteo ricci, francesco acquaroli, mappa elettorale, visualizzazione dati, elezioni regionali, marche, italia, voti per comune, dati aperti">
+	<meta name="author" content="Guenter Richter">
+	<meta name="language" content="Italian">
+	<meta name="robots" content="index, follow">
+	
+	<!-- Geographic Meta Tags -->
+	<meta name="geo.region" content="IT-57">
+	<meta name="geo.placename" content="Marche, Italia">
+	<meta name="geo.position" content="43.33;13.56">
+	<meta name="ICBM" content="43.33, 13.56">
+	
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://gjrichter.github.io/ixmaps/pages/Elezioni/index_embed_Marche_2025_candidati_alpha_diff_arrows.html">
+	<meta property="og:title" content="Elezioni Regionali Marche 2025 - Mappa Interattiva">
+	<meta property="og:description" content="Visualizzazione interattiva dei risultati elettorali con frecce direzionali che mostrano i voti in più per Ricci o Acquaroli in ogni comune. Dati ufficiali Regione Marche.">
+	<meta property="og:image" content="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_preview.png">
+	<meta property="og:locale" content="it_IT">
+	<meta property="og:site_name" content="iXMaps">
+	
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://gjrichter.github.io/ixmaps/pages/Elezioni/index_embed_Marche_2025_candidati_alpha_diff_arrows.html">
+	<meta name="twitter:title" content="Elezioni Regionali Marche 2025 - Mappa Interattiva">
+	<meta name="twitter:description" content="Visualizzazione interattiva con frecce direzionali dei voti in più per candidato in ogni comune delle Marche.">
+	<meta name="twitter:image" content="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_preview.png">
+	<meta name="twitter:creator" content="@grichter">
+	
+	<!-- Dublin Core -->
+	<meta name="DC.title" content="Elezioni Regionali Marche 2025 - Visualizzazione Voti">
+	<meta name="DC.creator" content="Guenter Richter">
+	<meta name="DC.subject" content="Elezioni, Marche, Visualizzazione Dati, Open Data">
+	<meta name="DC.description" content="Mappa interattiva delle elezioni regionali Marche 2025 con confronto tra candidati">
+	<meta name="DC.publisher" content="iXMaps">
+	<meta name="DC.date" content="2025-10-02">
+	<meta name="DC.type" content="InteractiveResource">
+	<meta name="DC.format" content="text/html">
+	<meta name="DC.language" content="it">
+	<meta name="DC.coverage" content="Marche, Italia">
+	
+	<!-- Data & License -->
+	<meta name="data-source" content="Regione Marche - dati.elezioni.marche.it">
+	<meta name="data-license" content="CC-BY-4.0">
+	<meta name="visualization-type" content="choropleth map, arrow charts, interactive cartography">
+	<meta name="data-year" content="2025">
+	<meta name="geographic-scope" content="municipal">
+	<meta name="municipalities-count" content="225">
+	
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+	<link rel="icon" type="image/png" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+	<link rel="stylesheet" href="https://gjrichter.github.io/pages/assets/material-design-select-dropdown/css/style.css">
+	<style>
+		label.field .psuedo_select {
+			color: white;
+		}
+
+		label.field.focused .psuedo_select ul {
+			background: #222222;
+		}
+
+	</style>
+	
+	<!-- JSON-LD Structured Data for AI/Search Engines -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "Elezioni Regionali Marche 2025 - Mappa Interattiva",
+		"description": "Visualizzazione interattiva dei risultati delle Elezioni Regionali Marche 2025 con confronto tra candidati tramite frecce direzionali",
+		"url": "https://gjrichter.github.io/ixmaps/pages/Elezioni/index_embed_Marche_2025_candidati_alpha_diff_arrows.html",
+		"applicationCategory": "DataVisualization",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript",
+		"author": {
+			"@type": "Person",
+			"name": "Guenter Richter"
+		},
+		"datePublished": "2025-10-02",
+		"inLanguage": "it-IT",
+		"spatialCoverage": {
+			"@type": "Place",
+			"name": "Marche",
+			"geo": {
+				"@type": "GeoCoordinates",
+				"latitude": 43.33,
+				"longitude": 13.56
+			},
+			"containedInPlace": {
+				"@type": "Country",
+				"name": "Italia"
+			}
+		},
+		"about": [
+			{
+				"@type": "Event",
+				"name": "Elezioni Regionali Marche 2025",
+				"eventStatus": "https://schema.org/EventScheduled",
+				"location": {
+					"@type": "AdministrativeArea",
+					"name": "Regione Marche"
+				},
+				"organizer": {
+					"@type": "Organization",
+					"name": "Regione Marche"
+				}
+			},
+			{
+				"@type": "Person",
+				"name": "Matteo Ricci",
+				"jobTitle": "Candidato Presidente"
+			},
+			{
+				"@type": "Person",
+				"name": "Francesco Acquaroli",
+				"jobTitle": "Candidato Presidente"
+			}
+		],
+		"isBasedOn": {
+			"@type": "Dataset",
+			"name": "Risultati Elettorali Marche 2025",
+			"description": "Dati ufficiali dei risultati elettorali per comune con popolazione",
+			"url": "https://dati.elezioni.marche.it/votiPresidente.html",
+			"license": "https://creativecommons.org/licenses/by/4.0/",
+			"creator": {
+				"@type": "Organization",
+				"name": "Regione Marche"
+			},
+			"distribution": {
+				"@type": "DataDownload",
+				"encodingFormat": "text/csv",
+				"contentUrl": "../../pages/Elezioni/data/elezioni_marche_2025_TUTTI_RISULTATI_1759308600_con_istat.csv"
+			},
+			"variableMeasured": [
+				"voti",
+				"percentuale",
+				"popolazione"
+			],
+			"spatialCoverage": "225 municipalities in Marche region"
+		},
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "EUR",
+			"availability": "https://schema.org/OnlineOnly"
+		},
+		"featureList": [
+			"Interactive choropleth map",
+			"Directional arrow charts showing vote differences",
+			"Dynamic zoom-based scaling",
+			"Municipal-level granularity (225 municipalities)",
+			"Population data integration",
+			"Real-time data tooltips"
+		],
+		"softwareRequirements": "JavaScript-enabled web browser",
+		"keywords": "elezioni, marche, 2025, visualizzazione dati, mappa interattiva, open data, cartografia, voti, risultati elettorali"
+	}
+	</script>
+</head>
+
+<body style='margin:0;padding:0;background-color:white;'>
+
+	<!--========================================================================= -->
+
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+
+	<script src="https://gjrichter.github.io/ixmaps_flat/ui/js/htmlgui_flat.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+
+		// ----------------------------
+		// D A T A   P R O V I D E R   
+		// ----------------------------
+
+		pivot_voti_2025 = function(theme, options) {
+			Data.broker()
+				.addSource("https://s3.tebi.io/data/elections/italy/regionali/elezioni_marche_2025_TUTTI_RISULTATI_1759308600_con_istat.csv", "csv")
+				.realize(
+					function(dataA) {
+						var data_2025 = dataA[0];
+						var selection = data_2025.select("WHERE nome = \"Matteo Ricci\" OR nome = \"Francesco Acquaroli\" OR nome = \"Beatrice Marinelli\" OR nome = \"Lidia Mangani\" OR nome = \"Francesco Gerardi\" OR nome = \"Claudio Bolletta\"");
+						var pivot = selection.pivot({
+							lead: ["codice_istat"],
+							keep: ["comune","popolazione"],
+							columns: ["nome"],
+							value: ["voti"]
+						});
+						pivot.column("Total").rename("Total_voti");
+						ixmaps.setExternalData(pivot, {
+							type: "dbtable",
+							name: options.name
+						});
+					});
+		};
+		pivot_percentuale_2025 = function(theme, options) {
+			Data.broker()
+				.addSource("https://s3.tebi.io/data/elections/italy/regionali/elezioni_marche_2025_TUTTI_RISULTATI_1759308600_con_istat.csv", "csv")
+				.realize(
+					function(dataA) {
+						var data_2025 = dataA[0];
+						var pivot = data_2025.pivot({
+							lead: ["codice_istat"],
+							keep: ["comune","popolazione"],
+							columns: ["nome"],
+							value: ["percentuale"]
+						});
+						ixmaps.setExternalData(pivot, {
+							type: "dbtable",
+							name: options.name
+						});
+					});
+		};
+
+		var attribution = "dati: <a href='https://www.transparency.org/en/cpi/2022' target='_blank'>Transparency International</a>, 	licenza: <a href='https://creativecommons.org/licenses/by/4.0/deed.it target='_blank'>CC-BY-4.0</a>"
+
+		// ----------------------------
+		// M A P   L A Y E R   
+		// ----------------------------
+
+		/* 1. centroids of 2011, by curtesy of Andrea Borruso */
+		var __georef_urban =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+				.data({
+					url: "https://raw.githubusercontent.com/aborruso/centroidiurbanfabric/master/output/ElencoUnitaAmministrative2011.geojson",
+					type: "geojson"
+				})
+				.binding({
+					id: "PRO_COM",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "none",
+					linewidth: "1",
+					scale: "0.0001"
+				})
+			);
+
+		/* 2. last istat data (2022), for changes since 2011 */
+		var __georef =
+			ixmaps.layer("ITALIA_Comuni_2022_poly", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
+					type: "topojson"
+				})
+				.filter("WHERE COD_REG = 11")
+				.binding({
+					id: "PRO_COM",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "none",
+					linewidth: "0.3",
+					sizefield: "Shape_Area",
+					showdata: "true",
+					tooltip: "{{theme.item.data}}"
+				})
+			);
+
+			var __georef_prov =
+			ixmaps.layer("ITALIA_Province_2022", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2022/Prov01012022_g_WGS84.topojson.gz",
+					type: "topojson"
+				})
+				.filter("WHERE COD_REG = 11")
+				.binding({
+					id: "COD_PROV",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND|SILENT")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "#aaaaaa",
+					linewidth: "0.5",
+					sizefield: "Shape_Area"
+ 				})
+			);
+
+		// ----------------------------
+		// D A T A   V I Z   T H E M E S   
+		// ----------------------------
+
+		var __dominanza =
+			ixmaps.layer("ITALIA_Comuni_2022_poly", layer => layer
+				.data({
+					query: pivot_percentuale_2025.toString(),
+					type: "ext",
+					name: "pivot_percentuale_2025"
+				})
+				.binding({
+					value: "Matteo Ricci|Francesco Acquaroli",
+					position: "codice_istat",
+					title: "comune"
+				})
+				.type("CHOROPLETH|DOMINANT|DOPACITYMAX")
+				.style({
+					colorscheme: ["red","#6774D5"],
+					label: ["Matteo Ricci","Francesco Acquaroli"],
+					units: "%",
+					showdata: "true",
+					dopacitypow: "0.5",
+					dopacityscale: "0.2"
+				})
+				.meta({
+					title: "<h1 style='margin:-0.5em 0 0.5em 0;'>Elezioni Regionali 2025</h1>",
+					snippet: "Fondo: Percentuali di voto",
+					tooltip: "<h2 style='margin:0 0 0.5em 0;'>{{theme.item.title}}</h2>{{theme.snippet}}{{theme.item.chart}}"
+				})
+			);
+
+		var __voti_diff_ACQUAROLI =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+			.data({
+					query: pivot_voti_2025.toString(),
+					type: "ext",
+					name: "pivot_voti_2025"
+				})
+				.binding({
+					value: "Matteo Ricci|Francesco Acquaroli",
+					position: "codice_istat",
+					title: "comune"
+				})
+			.type("CHART|USER|3D|DIFFERENCE|AGGREGATE|RECT|RELOCATE|SUM|VALUES|NONEGATIVE|BOX|BOTTOMTITLE|NOLEGEND")
+			.style({
+				name: "chart_right",
+				userdraw: "arrowChart",
+                colorscheme: [
+						"#FF7F70",
+						"#6794D5"
+                ],
+                label: [
+                    "Matteo Ricci",
+                    "Francesco Acquaroli"
+                ],
+                fillopacity: 1,
+                sizepow: 2,
+                normalsizevalue: 10000,
+				rotation: 35,
+                rangescale: 1,
+                shadow: "false",
+                units: "",
+				boxcolor: "none",
+				bordercolor: "none",
+				textscale: "0.5",
+				boxupper: "1:250000",
+				textcolor: "black",
+                valuesupper: "1:1000000",
+                valuedecimals: "0",
+                minvaluesize: "8",
+                aggregationfield: "comune",
+                titlefield: "comune",
+				showdata: "true",
+				datafields: ["comune","popolazione","Total_voti"]
+
+            })
+            .meta({
+                title: "Voti in più a favore candidato vincente *)",
+				tooltip: "{{theme.title}}{{theme.item.chart}}{{theme.item.title}}<br>voti totali: {{Total_voti}}"
+            })
+            .json()
+        )
+
+		var __voti_diff_RICCI =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+			.data({
+					query: pivot_voti_2025.toString(),
+					type: "ext",
+					name: "pivot_voti_2025"
+				})
+				.binding({
+					value: "Francesco Acquaroli|Matteo Ricci",
+					position: "codice_istat",
+					title: "comune"
+				})
+			.type("CHART|USER|3D|DIFFERENCE|AGGREGATE|RECT|RELOCATE|SUM|VALUES|NONEGATIVE|SIMPLELEGEND")
+			.style({
+				name: "chart_left",
+				userdraw: "arrowChart",
+            	colorscheme: [
+					"#6794D5",
+					"#FF7F70"
+                ],
+                label: [
+                    "Matteo Ricci",
+                    "Francesco Acquaroli"
+                ],
+                fillopacity: 1,
+                sizepow: 2,
+                normalsizevalue: 10000,
+				rotation: 325,
+                rangescale: 1,
+                shadow: "false",
+                units: "",
+                valuesupper: "1:1000000",
+                valuedecimals: "0",
+                minvaluesize: "8",
+                aggregationfield: "comune",
+                titlefield: "comune",
+				showdata: "true",
+				datafields: ["comune","popolazione","Total_voti"]
+            })
+            .meta({
+                title: "Voti in più a favore del candidato vincente *)",
+                description: "<br> *) l'frecce rappresentano i voti presi di più rispetto al altro candidato in questo comune<p>fonte: <a href='https://dati.elezioni.marche.it/votiPresidente.html' target='_blank'>Regione Marche</a></p>",
+                tooltip: "{{theme.title}}{{theme.item.chart}}{{theme.item.title}}<br>{{Total_voti}} voti totali"
+            })
+            .json()
+        )
+
+		// ----------------------------
+		// M A P   E M D E D D I N G
+		// ----------------------------
+
+		ixmaps.embed("map-div", {
+				mapService: "leaflet_vt",
+				mapType: "VT_TONER_LITE",
+				width: "100%",
+				height: (window.innerHeight - 20) + "px",
+				legend: "true",
+				mode: "pan"
+			},
+			map => map
+			.require("https://d3js.org/d3.v3.min.js")
+			.require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/chart.js")
+			.require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/arrow_chart.js")
+			.require("https://gjrichter.github.io/ixmaps_flat/ui/js/tools/tooltip_mustache.js")
+			.view({
+				"center": {
+					"lat": "43.3338794713509",
+					"lng": "13.558355937961478"
+				},
+				"zoom": "8.84491826354849"
+			})
+			.options({
+				featurescaling: "dynamic",
+				objectscaling: "dynamic",
+				normalSizeScale: "10000000",
+				panhidden: "false",
+				flushPaintShape: "1000000",
+				flushChartDraw: "1000000",
+				basemapopacity: "0"
+			})
+			.setScaleParam({
+				lineScaling: "0.008447027206420899",
+				normalSizeScale: "177165354",
+			})
+			.layer(__georef)
+			.layer(__georef_urban)
+			.layer(__georef_prov)
+			.layer(__dominanza)
+			.layer(__voti_diff_ACQUAROLI)
+			.layer(__voti_diff_RICCI)
+		)
+		// ----------------------------
+		// M A P   D Y N A M I C S  
+		// ----------------------------
+
+        ixmaps.htmlgui_onZoomAndPan = function() { 
+			var nOpacity = (ixmaps.getZoom() - 9) / 3;
+			ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
+
+            var nMinValueSize = 18;
+            var nZoom = ixmaps.getZoom();
+            if (nZoom > 7){
+                nMinValueSize = 8;    
+            }
+            if (nZoom > 8){
+                nMinValueSize = 7;    
+            }
+            if (nZoom > 9){
+                nMinValueSize = 6;    
+            }
+            if (nZoom > 10){
+                nMinValueSize = 1;    
+            }
+            ixmaps.map().changeThemeStyle("chart_left","minvaluesize:"+nMinValueSize);
+			ixmaps.map().changeThemeStyle("chart_right","minvaluesize:"+nMinValueSize);
+
+		};
+
+	</script>
+
+</body>
+
+</html>
