@@ -129,6 +129,170 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 			background: #222222;
 		}
 
+		/* Info Icon Button */
+		.info-icon {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			width: 40px;
+			height: 40px;
+			background: #2c3e50;
+			color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 24px;
+			font-weight: bold;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+			z-index: 10000;
+			transition: all 0.3s ease;
+			font-family: Georgia, serif;
+		}
+
+		.info-icon:hover {
+			background: #34495e;
+			transform: scale(1.1);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+		}
+
+		/* Info Popup */
+		.info-popup {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: white;
+			padding: 0;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+			z-index: 10001;
+			max-width: 600px;
+			max-height: 80vh;
+			overflow-y: auto;
+			animation: fadeIn 0.3s ease;
+		}
+
+		.info-popup.active {
+			display: block;
+		}
+
+		.info-popup-header {
+			background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+			color: white;
+			padding: 20px 25px;
+			border-radius: 12px 12px 0 0;
+			position: relative;
+		}
+
+		.info-popup-header h2 {
+			margin: 0;
+			font-size: 22px;
+			font-weight: 600;
+		}
+
+		.info-popup-close {
+			position: absolute;
+			top: 15px;
+			right: 20px;
+			background: none;
+			border: none;
+			color: white;
+			font-size: 28px;
+			cursor: pointer;
+			line-height: 1;
+			padding: 0;
+			width: 30px;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			transition: background 0.2s;
+		}
+
+		.info-popup-close:hover {
+			background: rgba(255,255,255,0.2);
+		}
+
+		.info-popup-content {
+			padding: 25px;
+			color: #333;
+			line-height: 1.6;
+		}
+
+		.info-popup-content h3 {
+			color: #2c3e50;
+			margin: 20px 0 10px 0;
+			font-size: 18px;
+		}
+
+		.info-popup-content h3:first-child {
+			margin-top: 0;
+		}
+
+		.info-popup-content p {
+			margin: 10px 0;
+		}
+
+		.info-popup-content ul {
+			margin: 10px 0;
+			padding-left: 20px;
+		}
+
+		.info-popup-content li {
+			margin: 8px 0;
+		}
+
+		.info-popup-content strong {
+			color: #2c3e50;
+		}
+
+		.info-popup-footer {
+			padding: 15px 25px;
+			background: #f8f9fa;
+			border-radius: 0 0 12px 12px;
+			font-size: 12px;
+			color: #666;
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.info-popup-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			z-index: 10000;
+		}
+
+		.info-popup-overlay.active {
+			display: block;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translate(-50%, -45%);
+			}
+			to {
+				opacity: 1;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+		.legend-item {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			margin-right: 5px;
+			border-radius: 2px;
+		}
+
 	</style>
 	
 	<!-- JSON-LD Structured Data for AI/Search Engines -->
@@ -229,6 +393,87 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 </head>
 
 <body style='margin:0;padding:0;background-color:white;'>
+
+	<!--========================================================================= -->
+
+	<!-- Info Icon -->
+	<div class="info-icon" onclick="toggleInfoPopup()" title="Informazioni sulla mappa">
+		i
+	</div>
+
+	<!-- Info Popup Overlay -->
+	<div class="info-popup-overlay" id="infoOverlay" onclick="toggleInfoPopup()"></div>
+
+	<!-- Info Popup -->
+	<div class="info-popup" id="infoPopup">
+		<div class="info-popup-header">
+			<h2>📊 Elezioni Regionali Marche 2025</h2>
+			<button class="info-popup-close" onclick="toggleInfoPopup()">&times;</button>
+		</div>
+		<div class="info-popup-content">
+			<h3>🗺️ Descrizione della Visualizzazione</h3>
+			<p>
+				Questa mappa interattiva mostra i risultati delle <strong>Elezioni Regionali delle Marche del 2025</strong>, 
+				con un focus sul confronto tra i due candidati principali: <strong>Matteo Ricci</strong> e <strong>Francesco Acquaroli</strong>.
+			</p>
+
+			<h3>📍 Come Leggere la Mappa</h3>
+			<p><strong>Colore di fondo (Choropleth):</strong></p>
+			<ul>
+				<li><span class="legend-item" style="background:#FF7F70;"></span> <strong>Rosso</strong> - Comuni dove ha vinto Matteo Ricci</li>
+				<li><span class="legend-item" style="background:#6794D5;"></span> <strong>Blu</strong> - Comuni dove ha vinto Francesco Acquaroli</li>
+				<li>L'intensità del colore indica la forza della dominanza (maggiore differenza percentuale = colore più intenso)</li>
+			</ul>
+
+			<p><strong>Frecce Direzionali:</strong></p>
+			<ul>
+				<li><strong>Frecce verso sinistra (←)</strong> - Indicano i voti in più per Matteo Ricci rispetto all'altro candidato</li>
+				<li><strong>Frecce verso destra (→)</strong> - Indicano i voti in più per Francesco Acquaroli rispetto all'altro candidato</li>
+				<li><strong>Dimensione delle frecce</strong> - Proporzionale alla differenza di voti (freccia più grande = maggior vantaggio)</li>
+			</ul>
+
+			<h3>🔍 Funzionalità Interattive</h3>
+			<ul>
+				<li><strong>Zoom dinamico:</strong> Usa la rotellina del mouse o i controlli per ingrandire/rimpicciolire</li>
+				<li><strong>Pan:</strong> Trascina la mappa per spostarti</li>
+				<li><strong>Tooltip:</strong> Passa il mouse sopra una freccia per vedere i dettagli del comune (nome, voti totali, popolazione)</li>
+				<li><strong>Scala automatica:</strong> Le frecce si ridimensionano automaticamente in base al livello di zoom per una migliore leggibilità</li>
+			</ul>
+
+			<h3>📈 Dati Visualizzati</h3>
+			<ul>
+				<li><strong>225 comuni</strong> della regione Marche</li>
+				<li><strong>6 candidati totali:</strong> Matteo Ricci, Francesco Acquaroli, Beatrice Marinelli, Lidia Mangani, Francesco Gerardi, Claudio Bolletta</li>
+				<li><strong>Dati demografici:</strong> Popolazione per ogni comune (fonte ISTAT)</li>
+				<li><strong>Risultati elettorali:</strong> Voti e percentuali per candidato e comune</li>
+			</ul>
+
+			<h3>🎯 Interpretazione</h3>
+			<p>
+				Le frecce rappresentano il <strong>vantaggio relativo</strong> del candidato vincente in ciascun comune. 
+				Una freccia grande indica un margine di vittoria significativo, mentre una freccia piccola indica 
+				una competizione più serrata. Questo aiuta a identificare rapidamente:
+			</p>
+			<ul>
+				<li>Le aree di maggiore forza per ciascun candidato</li>
+				<li>I comuni contesi (frecce più piccole)</li>
+				<li>La distribuzione geografica dei consensi</li>
+			</ul>
+
+			<h3>💡 Note Tecniche</h3>
+			<ul>
+				<li>La mappa usa coordinate geografiche ISTAT aggiornate al 2022</li>
+				<li>I centroidi urbani provengono dai dati di Andrea Borruso (2011)</li>
+				<li>La visualizzazione è ottimizzata per diversi livelli di zoom</li>
+				<li>L'opacità della mappa di base aumenta con lo zoom per migliorare il contesto geografico</li>
+			</ul>
+		</div>
+		<div class="info-popup-footer">
+			<strong>Fonte dati:</strong> <a href="https://dati.elezioni.marche.it/votiPresidente.html" target="_blank">Regione Marche - Elezioni 2025</a> | 
+			<strong>Licenza:</strong> CC-BY-4.0 | 
+			<strong>Realizzato con:</strong> <a href="https://ixmaps.com" target="_blank">iXMaps</a>
+		</div>
+	</div>
 
 	<!--========================================================================= -->
 
@@ -554,6 +799,35 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 			ixmaps.map().changeThemeStyle("chart_right","minvaluesize:"+nMinValueSize);
 
 		};
+
+		// ----------------------------
+		// I N F O   P O P U P   
+		// ----------------------------
+
+		function toggleInfoPopup() {
+			const popup = document.getElementById('infoPopup');
+			const overlay = document.getElementById('infoOverlay');
+			
+			if (popup.classList.contains('active')) {
+				popup.classList.remove('active');
+				overlay.classList.remove('active');
+			} else {
+				popup.classList.add('active');
+				overlay.classList.add('active');
+			}
+		}
+
+		// Close popup with Escape key
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'Escape') {
+				const popup = document.getElementById('infoPopup');
+				const overlay = document.getElementById('infoOverlay');
+				if (popup.classList.contains('active')) {
+					popup.classList.remove('active');
+					overlay.classList.remove('active');
+				}
+			}
+		});
 
 	</script>
 
