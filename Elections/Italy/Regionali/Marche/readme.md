@@ -9,6 +9,3 @@ Fonte: <a href="https://www.italiadomani.gov.it/content/sogei-ng/it/it/catalogo-
 
 
 
-<iframe id="map2" width="1024px" height="840" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://gjrichter.github.io/pages/PNRR_2025_03_v9/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_iter_gauge_fasi_ritardi_reg_prov_com.html?legend=1"></iframe>
-*mappa 2: fasi di attuazione e ritardi dei progetti*  --> [a schermo intero](https://gjrichter.github.io/pages/PNRR_2025_03_v9/index_embed_Open_Data_PNRR_Dati_Universo_REGIS_final_iter_gauge_fasi_ritardi_reg_prov_com.html)
-
