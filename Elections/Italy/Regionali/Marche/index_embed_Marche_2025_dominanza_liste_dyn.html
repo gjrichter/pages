@@ -159,6 +159,16 @@ $Log:ion_only_map_embed.html,v $
 			color: #2c3e50;
 		}
 
+		.info-popup-content kbd {
+			background: #f4f4f4;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			padding: 2px 6px;
+			font-family: monospace;
+			font-size: 0.9em;
+			box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+		}
+
 		.info-popup-footer {
 			padding: 15px 25px;
 			background: #f8f9fa;
@@ -204,12 +214,88 @@ $Log:ion_only_map_embed.html,v $
 			vertical-align: middle;
 		}
 
+		/* Mode Toggle Icon */
+		.mode-toggle {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			width: auto;
+			min-width: 60px;
+			height: 36px;
+			padding: 0 12px;
+			background: white;
+			color: #2c3e50;
+			border-radius: 8px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			font-size: 20px;
+			cursor: pointer;
+			z-index: 10000;
+			transition: all 0.3s ease;
+			border: 1px solid #2c3e50;
+		}
+
+		.mode-toggle:hover {
+			transform: translateY(-1px);
+			background: #f8f9fa;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.mode-toggle.info-mode {
+			border-color: #e74c3c;
+			color: #e74c3c;
+		}
+
+		.mode-toggle.info-mode:hover {
+			background: #fef5f5;
+		}
+
+		.mode-toggle .mode-icon {
+			font-size: 20px;
+			line-height: 1;
+			width: 20px;
+			height: 20px;
+		}
+
+		.mode-toggle .mode-icon svg {
+			width: 100%;
+			height: 100%;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.mode-toggle .mode-label {
+			font-size: 11px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-family: Arial, sans-serif;
+			line-height: 1;
+		}
+
 	</style>
 </head>
 
 <body style='margin:0;padding:0;background-color:white;'>
 
 	<!--========================================================================= -->
+
+	<!-- Mode Toggle Icon -->
+	<div class="mode-toggle" id="modeToggle" onclick="toggleInputMode()" title="Clicca per cambiare modalità">
+		<div class="mode-icon" id="modeIcon">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12 3L12 8M12 16L12 21M3 12L8 12M16 12L21 12"/>
+				<path d="M8 8L12 12L8 16M16 8L12 12L16 16"/>
+			</svg>
+		</div>
+		<div class="mode-label">PAN</div>
+	</div>
 
 	<!-- Info Icon -->
 	<div class="info-icon" onclick="toggleInfoPopup()" title="Informazioni sulla mappa">
@@ -277,6 +363,14 @@ $Log:ion_only_map_embed.html,v $
 
 			<h3>🔍 Funzionalità Interattive</h3>
 			<ul>
+				<li><strong>Modalità di interazione</strong> (bottone rettangolare in alto a sinistra):
+					<ul>
+						<li><strong>PAN</strong> - Naviga la mappa (trascina e zoom)</li>
+						<li><strong>INFO</strong> - Clicca sui comuni per visualizzare informazioni dettagliate</li>
+						<li>Il bottone cambia bordo da grigio scuro a rosso quando passa in modalità INFO</li>
+						<li>Premi <kbd>M</kbd> per cambiare modalità rapidamente</li>
+					</ul>
+				</li>
 				<li><strong>Selezione liste:</strong> Clicca sulla legenda per selezionare/deselezionare singole liste</li>
 				<li><strong>Confronto:</strong> Seleziona solo alcune liste per vedere la dominanza tra quelle scelte</li>
 				<li><strong>Zoom:</strong> Usa la rotellina del mouse per ingrandire e vedere i dettagli locali</li>
@@ -569,6 +663,47 @@ $Log:ion_only_map_embed.html,v $
 			ixmaps.map().changeThemeStyle("chart_right","minvaluesize:"+nMinValueSize);
 
 		};
+
+		// ----------------------------
+		// M O D E   T O G G L E
+		// ----------------------------
+
+		var currentMode = 'pan';
+
+		// SVG icons (outlined style)
+		const panIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L12 8M12 16L12 21M3 12L8 12M16 12L21 12"/><path d="M8 8L12 12L8 16M16 8L12 12L16 16"/></svg>';
+		const infoIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9"/><path d="M12 16L12 12"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></svg>';
+
+		function toggleInputMode() {
+			const modeButton = document.getElementById('modeToggle');
+			const modeIcon = document.getElementById('modeIcon');
+			const modeLabel = modeButton.querySelector('.mode-label');
+
+			if (currentMode === 'pan') {
+				// Switch to INFO mode
+				currentMode = 'info';
+				ixmaps.setMode('info');
+				modeIcon.innerHTML = infoIcon;
+				modeLabel.textContent = 'INFO';
+				modeButton.classList.add('info-mode');
+				modeButton.title = 'Modalità INFO - Clicca per tornare a PAN';
+			} else {
+				// Switch to PAN mode
+				currentMode = 'pan';
+				ixmaps.setMode('pan');
+				modeIcon.innerHTML = panIcon;
+				modeLabel.textContent = 'PAN';
+				modeButton.classList.remove('info-mode');
+				modeButton.title = 'Modalità PAN - Clicca per passare a INFO';
+			}
+		}
+
+		// Keyboard shortcut: press 'M' to toggle mode
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'm' || event.key === 'M') {
+				toggleInputMode();
+			}
+		});
 
 		// ----------------------------
 		// I N F O   P O P U P   
