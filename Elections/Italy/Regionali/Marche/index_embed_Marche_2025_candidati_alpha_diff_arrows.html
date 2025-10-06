@@ -748,8 +748,8 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 
             })
             .meta({
-                title: "Voti in più a favore candidato vincente *)",
-				tooltip: "{{theme.title}}{{theme.item.chart}}{{theme.item.title}}<br>voti totali: {{Total_voti}}"
+                title: "Voti in più a favore candidato vincente",
+				tooltip: "<h2 style='margin:0 0 0.5em 0;'>{{theme.item.title}}</h2>{{theme.item.chart}}<br>{{theme.title}}<br><br>voti totali: {{Total_voti}}"
             })
             .json()
         )
@@ -794,9 +794,9 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 				datafields: ["comune","popolazione","Total_voti"]
             })
             .meta({
-                title: "Voti in più a favore del candidato vincente *)",
+                title: "Voti in più a favore del candidato vincente",
                 description: "<br> *) l'frecce rappresentano i voti presi di più rispetto al altro candidato in questo comune<p>fonte: <a href='https://dati.elezioni.marche.it/votiPresidente.html' target='_blank'>Regione Marche</a></p>",
-                tooltip: "{{theme.title}}{{theme.item.chart}}{{theme.item.title}}<br>{{Total_voti}} voti totali"
+				tooltip: "<h2 style='margin:0 0 0.5em 0;'>{{theme.item.title}}</h2>{{theme.item.chart}}<br>{{theme.title}}<br><br>voti totali: {{Total_voti}}"
             })
             .json()
         )
