@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+
+<!-- **********************************************************************
+
+ion_only_map_embed.html
+
+$Comment: ixmaps map template; embedded version
+$Source : ion_only_map_embed.html,v $
+
+$InitialAuthor: guenter richter $
+$InitialDate: 2017/06/22 $
+$Author: guenter richter $
+$Id:ion_only_map_embed.html 1 2021-10-17 00:00:00Z Guenter Richter $
+
+licensed under CC-BY
+$Log:ion_only_map_embed.html,v $
+
+********************************************************************** -->
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>Elezioni Regionali Marche 2025 - Dominanza Liste | iXMaps</title>
+	<link rel="stylesheet" href="https://gjrichter.github.io/pages/assets/material-design-select-dropdown/css/style.css">
+	<style>
+		label.field .psuedo_select {
+			color: white;
+		}
+
+		label.field.focused .psuedo_select ul {
+			background: #222222;
+		}
+
+		/* Info Icon Button */
+		.info-icon {
+			position: fixed;
+			top: 30px;
+			right: 30px;
+			width: 30px;
+			height: 30px;
+			background: #bcc2c8;
+			color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 24px;
+			font-weight: bold;
+			cursor: pointer;
+			xxbox-shadow: 0 2px 8px rgba(0,0,0,0.3);
+			z-index: 10000;
+			transition: all 0.3s ease;
+			font-family: Georgia, serif;
+		}
+
+		.info-icon:hover {
+			background: #34495e;
+			transform: scale(1.1);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+		}
+
+		/* Info Popup */
+		.info-popup {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: white;
+			padding: 0;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+			z-index: 10001;
+			max-width: 650px;
+			max-height: 85vh;
+			overflow-y: auto;
+			animation: fadeIn 0.3s ease;
+		}
+
+		.info-popup.active {
+			display: block;
+		}
+
+		.info-popup-header {
+			background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+			color: white;
+			padding: 20px 25px;
+			border-radius: 12px 12px 0 0;
+			position: relative;
+		}
+
+		.info-popup-header h2 {
+			margin: 0;
+			font-size: 22px;
+			font-weight: 600;
+		}
+
+		.info-popup-close {
+			position: absolute;
+			top: 15px;
+			right: 20px;
+			background: none;
+			border: none;
+			color: white;
+			font-size: 28px;
+			cursor: pointer;
+			line-height: 1;
+			padding: 0;
+			width: 30px;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			transition: background 0.2s;
+		}
+
+		.info-popup-close:hover {
+			background: rgba(255,255,255,0.2);
+		}
+
+		.info-popup-content {
+			padding: 25px;
+			color: #333;
+			line-height: 1.6;
+			text-align: left;
+		}
+
+		.info-popup-content h3 {
+			color: #2c3e50;
+			margin: 20px 0 10px 0;
+			font-size: 18px;
+		}
+
+		.info-popup-content h3:first-child {
+			margin-top: 0;
+		}
+
+		.info-popup-content p {
+			margin: 10px 0;
+		}
+
+		.info-popup-content ul {
+			margin: 10px 0;
+			padding-left: 20px;
+		}
+
+		.info-popup-content li {
+			margin: 8px 0;
+		}
+
+		.info-popup-content strong {
+			color: #2c3e50;
+		}
+
+		.info-popup-content kbd {
+			background: #f4f4f4;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			padding: 2px 6px;
+			font-family: monospace;
+			font-size: 0.9em;
+			box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+		}
+
+		.info-popup-footer {
+			padding: 15px 25px;
+			background: #f8f9fa;
+			border-radius: 0 0 12px 12px;
+			font-size: 12px;
+			color: #666;
+			border-top: 1px solid #e0e0e0;
+			text-align: left;
+		}
+
+		.info-popup-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			z-index: 10000;
+		}
+
+		.info-popup-overlay.active {
+			display: block;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translate(-50%, -45%);
+			}
+			to {
+				opacity: 1;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+		.party-color {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			margin-right: 5px;
+			border-radius: 2px;
+			vertical-align: middle;
+		}
+
+		/* Mode Toggle Icon */
+		.mode-toggle {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			width: auto;
+			min-width: 60px;
+			height: 36px;
+			padding: 0 12px;
+			background: white;
+			color: #2c3e50;
+			border-radius: 8px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			font-size: 20px;
+			cursor: pointer;
+			z-index: 10000;
+			transition: all 0.3s ease;
+			border: 1px solid #2c3e50;
+		}
+
+		.mode-toggle:hover {
+			transform: translateY(-1px);
+			background: #f8f9fa;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.mode-toggle.info-mode {
+			border-color: #e74c3c;
+			color: #e74c3c;
+		}
+
+		.mode-toggle.info-mode:hover {
+			background: #fef5f5;
+		}
+
+		.mode-toggle .mode-icon {
+			font-size: 20px;
+			line-height: 1;
+			width: 20px;
+			height: 20px;
+		}
+
+		.mode-toggle .mode-icon svg {
+			width: 100%;
+			height: 100%;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.mode-toggle .mode-label {
+			font-size: 11px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-family: Arial, sans-serif;
+			line-height: 1;
+		}
+
+	</style>
+</head>
+
+<body style='margin:0;padding:0;background-color:white;'>
+
+	<!--========================================================================= -->
+
+	<!-- Mode Toggle Icon -->
+	<div class="mode-toggle" id="modeToggle" onclick="toggleInputMode()" title="Clicca per cambiare modalità">
+		<div class="mode-icon" id="modeIcon">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12 3L12 8M12 16L12 21M3 12L8 12M16 12L21 12"/>
+				<path d="M8 8L12 12L8 16M16 8L12 12L16 16"/>
+			</svg>
+		</div>
+		<div class="mode-label">PAN</div>
+	</div>
+
+	<!-- Info Icon -->
+	<div class="info-icon" onclick="toggleInfoPopup()" title="Informazioni sulla mappa">
+		i
+	</div>
+
+	<!-- Info Popup Overlay -->
+	<div class="info-popup-overlay" id="infoOverlay" onclick="toggleInfoPopup()"></div>
+
+	<!-- Info Popup -->
+	<div class="info-popup" id="infoPopup">
+		<div class="info-popup-header">
+			<h2>🗳️ Elezioni Regionali Marche 2025 - Dominanza Liste</h2>
+			<button class="info-popup-close" onclick="toggleInfoPopup()">&times;</button>
+		</div>
+		<div class="info-popup-content">
+			<h3>🗺️ Descrizione della Visualizzazione</h3>
+			<p>
+				Questa mappa interattiva mostra la <strong>dominanza delle singole liste elettorali</strong> nelle 
+				<strong>Elezioni Regionali delle Marche del 2025</strong>. A differenza della mappa dei candidati, 
+				qui vengono visualizzati i risultati delle <strong>17 liste</strong> che hanno partecipato alle elezioni.
+			</p>
+
+			<h3>📊 Liste Elettorali</h3>
+			<p><strong>Coalizione Centro-Sinistra (supporto a Matteo Ricci):</strong></p>
+			<ul>
+				<li><span class="party-color" style="background:red;"></span> <strong>PD - Partito Democratico</strong></li>
+				<li><span class="party-color" style="background:yellow;"></span> <strong>Movimento 5 Stelle 2050</strong></li>
+				<li><span class="party-color" style="background:green;"></span> <strong>Alleanza Verdi e Sinistra</strong></li>
+				<li><span class="party-color" style="background:orange;"></span> <strong>Progetto Civico Avanti con Ricci</strong></li>
+				<li><span class="party-color" style="background:orange;"></span> <strong>Progetto Marche Vive Matteo Ricci Presidente</strong></li>
+				<li><span class="party-color" style="background:orange;"></span> <strong>Pace Salute Lavoro</strong></li>
+			</ul>
+
+			<p><strong>Coalizione Centro-Destra (supporto a Francesco Acquaroli):</strong></p>
+			<ul>
+				<li><span class="party-color" style="background:#033969;"></span> <strong>Fratelli d'Italia</strong></li>
+				<li><span class="party-color" style="background:#00ddff;"></span> <strong>I Marchigiani per Acquaroli Presidente</strong></li>
+				<li><span class="party-color" style="background:#008888;"></span> <strong>Lega Salvini Marche</strong></li>
+				<li><span class="party-color" style="background:#03a3F7;"></span> <strong>Forza Italia Berlusconi</strong></li>
+				<li><span class="party-color" style="background:#00ddff;"></span> <strong>Civici Marche per Acquaroli Presidente</strong></li>
+				<li><span class="party-color" style="background:#00ddff;"></span> <strong>Liste Civiche Libertas Unione di Centro</strong></li>
+				<li><span class="party-color" style="background:#00ddff;"></span> <strong>Noi Moderati per Acquaroli</strong></li>
+			</ul>
+
+			<p><strong>Altri Candidati e Liste:</strong></p>
+			<ul>
+				<li><span class="party-color" style="background:#ff00dd;"></span> <strong>Evoluzione della Rivoluzione</strong></li>
+				<li><span class="party-color" style="background:#dd0000;"></span> <strong>PCI - Partito Comunista Italiano</strong></li>
+				<li><span class="party-color" style="background:gray;"></span> <strong>Forza del Popolo con Amore e Libertà</strong></li>
+				<li><span class="party-color" style="background:gray;"></span> <strong>Democrazia Sovrana Popolare DSP</strong></li>
+			</ul>
+
+			<h3>📍 Come Leggere la Mappa</h3>
+			<p><strong>Colore dei Comuni:</strong></p>
+			<ul>
+				<li>Ogni comune è colorato con il colore della <strong>lista che ha ottenuto più voti</strong> in quel territorio</li>
+				<li>L'<strong>intensità del colore</strong> rappresenta la forza della dominanza:
+					<ul>
+						<li>Colore più intenso = maggior percentuale di voti per quella lista</li>
+						<li>Colore più tenue = vittoria più contenuta</li>
+					</ul>
+				</li>
+			</ul>
+
+			<h3>🔍 Funzionalità Interattive</h3>
+			<ul>
+				<li><strong>Modalità di interazione</strong> (bottone rettangolare in alto a sinistra):
+					<ul>
+						<li><strong>PAN</strong> - Naviga la mappa (trascina e zoom)</li>
+						<li><strong>INFO</strong> - Clicca sui comuni per visualizzare informazioni dettagliate</li>
+						<li>Il bottone cambia bordo da grigio scuro a rosso quando passa in modalità INFO</li>
+						<li>Premi <kbd>M</kbd> per cambiare modalità rapidamente</li>
+					</ul>
+				</li>
+				<li><strong>Selezione liste:</strong> Clicca sulla legenda per selezionare/deselezionare singole liste</li>
+				<li><strong>Confronto:</strong> Seleziona solo alcune liste per vedere la dominanza tra quelle scelte</li>
+				<li><strong>Zoom:</strong> Usa la rotellina del mouse per ingrandire e vedere i dettagli locali</li>
+				<li><strong>Tooltip:</strong> Passa il mouse sui comuni per vedere:
+					<ul>
+						<li>Nome del comune</li>
+						<li>Popolazione</li>
+						<li>Percentuali di voto per tutte le liste</li>
+					</ul>
+				</li>
+			</ul>
+
+			<h3>📈 Analisi dei Dati</h3>
+			<p>La mappa permette di analizzare:</p>
+			<ul>
+				<li><strong>Geografia elettorale:</strong> Quali liste hanno maggior consenso in quali aree</li>
+				<li><strong>Frammentazione:</strong> Quanto il voto è distribuito tra le diverse liste</li>
+				<li><strong>Liste civiche:</strong> L'impatto delle liste locali rispetto ai partiti nazionali</li>
+				<li><strong>Differenze territoriali:</strong> Variazioni tra province e tra zone urbane/rurali</li>
+			</ul>
+
+			<h3>💡 Modalità d'Uso Avanzate</h3>
+			<ul>
+				<li><strong>Confronto bipartitico:</strong> Seleziona solo PD e FdI per vedere il confronto diretto tra i due principali partiti</li>
+				<li><strong>Analisi coalizioni:</strong> Seleziona tutte le liste di una coalizione per vedere la loro distribuzione</li>
+				<li><strong>Liste minori:</strong> Isola le liste più piccole per identificare i loro territori di forza</li>
+			</ul>
+
+			<h3>📊 Dati Visualizzati</h3>
+			<ul>
+				<li><strong>225 comuni</strong> della regione Marche</li>
+				<li><strong>17 liste elettorali</strong> partecipanti</li>
+				<li><strong>Dati demografici:</strong> Popolazione per ogni comune (fonte ISTAT)</li>
+				<li><strong>Risultati:</strong> Percentuali di voto per ogni lista in ogni comune</li>
+			</ul>
+		</div>
+		<div class="info-popup-footer">
+			<strong>Fonte dati:</strong> <a href="https://dati.elezioni.marche.it/votiPresidente.html" target="_blank">Regione Marche - Elezioni 2025</a> | 
+			<strong>Licenza:</strong> CC-BY-4.0 | 
+			<strong>Realizzato con:</strong> <a href="https://ixmaps.com" target="_blank">iXMaps</a>
+		</div>
+	</div>
+
+	<!--========================================================================= -->
+
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+
+	<script src="https://gjrichter.github.io/ixmaps_flat/ui/js/htmlgui_flat.js"></script>
+
+	<!--========================================================================= -->
+
+	<script type="text/javascript" charset="utf-8">
+
+		// ----------------------------
+		// D A T A   P R O V I D E R   
+		// ----------------------------
+
+		pivot_percentuali_2025 = function(theme, options) {
+			Data.broker()
+				.addSource("https://s3.tebi.io/data/elections/italy/regionali/elezioni_marche_2025_TUTTI_RISULTATI_1759308600_con_istat.csv", "csv")
+				.realize(
+					function(dataA) {
+						var data_2025 = dataA[0];
+						var pivot = data_2025.pivot({
+							lead: ["codice_istat"],
+							keep: ["comune","popolazione"],
+							columns: ["nome"],
+							value: ["percentuale"]
+						});
+						ixmaps.setExternalData(pivot, {
+							type: "dbtable",
+							name: options.name
+						});
+					});
+		};
+
+		// ----------------------------
+		// M A P   L A Y E R   
+		// ----------------------------
+
+		/* 1. centroids of 2011, by curtesy of Andrea Borruso */
+		var __georef_urban =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+				.data({
+					url: "https://raw.githubusercontent.com/aborruso/centroidiurbanfabric/master/output/ElencoUnitaAmministrative2011.geojson",
+					type: "geojson"
+				})
+				.binding({
+					id: "PRO_COM",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "none",
+					linewidth: "1",
+					scale: "0.0001"
+				})
+			);
+
+		/* 2. last istat data (2022), for changes since 2011 */
+		var __georef =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/comuni_2022/Com01012022_s_WGS84.topojson.gz",
+					type: "topojson"
+				})
+				.filter("WHERE COD_REG = 11")
+				.binding({
+					id: "PRO_COM",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "none",
+					linewidth: "0.3",
+					sizefield: "Shape_Area",
+					showdata: "true",
+					tooltip: "{{theme.item.data}}"
+				})
+			);
+
+		var __georef_prov =
+			ixmaps.layer("ITALIA_Province_2022", layer => layer
+				.data({
+					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2022/Prov01012022_g_WGS84.topojson.gz",
+					type: "topojson"
+				})
+				.filter("WHERE COD_REG = 11")
+				.binding({
+					id: "COD_PROV",
+					position: "geometry"
+				})
+				.type("FEATURES|NOLEGEND|SILENT")
+				.style({
+					colorscheme: ["none"],
+					linecolor: "white",
+					linewidth: "0.5",
+					sizefield: "Shape_Area"
+ 				})
+			);
+
+		var __dominanza =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+				.data({
+					query: pivot_percentuali_2025.toString(),
+					type: "ext"
+				})
+				.binding({
+					value: [
+						"PD - PARTITO DEMOCRATICO",
+						"MOVIMENTO 5 STELLE 2050",
+						"ALLEANZA VERDI E SINISTRA",
+						"PROGETTO CIVICO AVANTI CON RICCI",
+						"PROGETTO MARCHE VIVE MATTEO RICCI PRESIDENTE",
+						"PACE SALUTE LAVORO",
+						"GIORGIA MELONI PER ACQUAROLI - FRATELLI D'ITALIA",
+						"I MARCHIGIANI PER ACQUAROLI PRESIDENTE",
+						"LEGA SALVINI MARCHE",
+						"FORZA ITALIA BERLUSCONI",
+						"CIVICI MARCHE PER ACQUAROLI PRESIDENTE",
+						"LISTE CIVICHE LIBERTAS UNIONE DI CENTRO",
+						"NOI MODERATI PER ACQUAROLI",
+						"EVOLUZIONE DELLA RIVOLUZIONE",
+						"PCI - PARTITO COMUNISTA ITALIANO",
+						"FORZA DEL POPOLO CON AMORE E LIBERTA' GERARDI PRESIDENTE MARCHE",
+						"DEMOCRAZIA SOVRANA POPOLARE DSP CON MARCO RIZZO",
+					],
+					position: "codice_istat",
+					title: "comune"
+				})
+				.type("CHOROPLETH|COMPOSECOLOR|SUBTRACTIVE|DOPACITYMAX|SIMPLELEGEND")
+				.style({
+					colorscheme: [
+						"red",
+						"yellow",
+						"green",
+						"orange",
+						"orange",
+						"orange",
+						"blue",
+						"#00ddff",
+						"#008888",
+						"#03a3F7",
+						"#00ddff",
+						"#00ddff",
+						"#00ddff",
+						"#ff00dd",
+						"#dd0000",
+						"gray",
+						"gray",
+					],
+					label: [
+						"PD - PARTITO DEMOCRATICO",
+						"MOVIMENTO 5 STELLE 2050",
+						"ALLEANZA VERDI E SINISTRA",
+						"CIVICO AVANTI CON RICCI",
+						"MARCHE VIVE MATTEO RICCI",
+						"PACE SALUTE LAVORO",
+						"RATELLI D'ITALIA",
+						"I MARCHIGIANI PER ACQUAROLI",
+						"LEGA SALVINI MARCHE",
+						"FORZA ITALIA",
+						"CIVICI MARCHE PER ACQUAROLI",
+						"CIVICHE LIBERTAS ...",
+						"NOI MODERATI PER ACQUAROLI",
+						"EVOLUZIONE DELLA RIVOLUZIONE",
+						"PCI",
+						"FORZA DEL POPOLO ...'",
+						"DEMOCRAZIA SOVRANA POPOLARE",
+					],
+					units: "%",
+					showdata: "true",
+					brightness: "1.2",
+					dopacitypow: "1",
+					dopacityscale: "1"
+				})
+				.meta({
+					title: "<h1 style='margin:-0.5em 0 0.5em 0;'>Elezioni Regionali 2025</h1>",
+					snippet: "Risultato delle singole liste",
+					description: "<br>- nella mappa il <b>colori</b> sono <b>composti dai colori di tutte le liste</b> con l'intestità pari al loro <b>peso percentuale</b>.<br>"+
+								 "<br>- selezionando una lista si possono vedere i risultati della lista selezionata.<br>"+
+								 "<br>- si può selezionalre più di una lista per vedere la dominanza tra di loro.",
+					tooltip: "<h2 style='margin:0 0 0.5em 0;'>{{theme.item.title}}</h2>{{popolazione}} abitanti - {{theme.snippet}}<br><br>{{theme.item.chart}}"
+				})
+			);
+
+
+		
+			ixmaps.embed("map-div", {
+					mapService: "leaflet_vt",
+					width: "100%",
+					height: (window.innerHeight - 20) + "px",
+					legend: "true",
+					mode: "pan"
+				},
+				map => map
+			.require("https://gjrichter.github.io/ixmaps_flat/ui/js/tools/tooltip_mustache.js")
+				.local("actual selection", "<h3 style='margin:0 0 0.5em 0;'>selezione attuale</h3>")
+				.view({
+					"center": {
+						"lat": "43.3338794713509",
+						"lng": "13.558355937961478"
+					},
+					"zoom": "8.84491826354849"
+				})
+				.options({
+					featurescaling: "dynamic",
+					objectscaling: "dynamic",
+					normalSizeScale: "10000000",
+					panhidden: "false",
+					flushPaintShape: "1000000",
+					flushChartDraw: "1000000"
+				})
+				.setScaleParam({
+					lineScaling: "0.008447027206420899",
+					normalSizeScale: "177165354",
+				})
+				.layer(__georef)
+				.layer(__georef_prov)
+				.layer(__dominanza)
+			)
+
+
+		// ----------------------------
+		// U S E R   I N T E R F A C E
+		// ----------------------------
+
+        ixmaps.htmlgui_onZoomAndPan = function() { 
+			var nOpacity = (ixmaps.getZoom() - 9) / 3;
+			ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
+
+            var nMinValueSize = 18;
+            var nZoom = ixmaps.getZoom();
+            if (nZoom > 7){
+                nMinValueSize = 8;    
+            }
+            if (nZoom > 8){
+                nMinValueSize = 7;    
+            }
+            if (nZoom > 9){
+                nMinValueSize = 6;    
+            }
+            if (nZoom > 10){
+                nMinValueSize = 1;    
+            }
+            ixmaps.map().changeThemeStyle("chart_left","minvaluesize:"+nMinValueSize);
+			ixmaps.map().changeThemeStyle("chart_right","minvaluesize:"+nMinValueSize);
+
+		};
+
+		// ----------------------------
+		// M O D E   T O G G L E
+		// ----------------------------
+
+		var currentMode = 'info';
+
+		// SVG icons (outlined style)
+		const panIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L12 8M12 16L12 21M3 12L8 12M16 12L21 12"/><path d="M8 8L12 12L8 16M16 8L12 12L16 16"/></svg>';
+		const infoIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9"/><path d="M12 16L12 12"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></svg>';
+
+		function toggleInputMode() {
+			const modeButton = document.getElementById('modeToggle');
+			const modeIcon = document.getElementById('modeIcon');
+			const modeLabel = modeButton.querySelector('.mode-label');
+
+			if (currentMode === 'pan') {
+				// Switch to INFO mode
+				currentMode = 'info';
+				ixmaps.setMode('info');
+				modeIcon.innerHTML = infoIcon;
+				modeLabel.textContent = 'INFO';
+				modeButton.classList.add('info-mode');
+				modeButton.title = 'Modalità INFO - Clicca per tornare a PAN';
+			} else {
+				// Switch to PAN mode
+				currentMode = 'pan';
+				ixmaps.setMode('pan');
+				modeIcon.innerHTML = panIcon;
+				modeLabel.textContent = 'PAN';
+				modeButton.classList.remove('info-mode');
+				modeButton.title = 'Modalità PAN - Clicca per passare a INFO';
+			}
+		}
+
+		// Keyboard shortcut: press 'M' to toggle mode
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'm' || event.key === 'M') {
+				toggleInputMode();
+			}
+		});
+
+		// ----------------------------
+		// I N F O   P O P U P   
+		// ----------------------------
+
+		function toggleInfoPopup() {
+			const popup = document.getElementById('infoPopup');
+			const overlay = document.getElementById('infoOverlay');
+			
+			if (popup.classList.contains('active')) {
+				popup.classList.remove('active');
+				overlay.classList.remove('active');
+			} else {
+				popup.classList.add('active');
+				overlay.classList.add('active');
+			}
+		}
+
+		// Close popup with Escape key
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'Escape') {
+				const popup = document.getElementById('infoPopup');
+				const overlay = document.getElementById('infoOverlay');
+				if (popup.classList.contains('active')) {
+					popup.classList.remove('active');
+					overlay.classList.remove('active');
+				}
+			}
+		});
+
+	</script>
+
+</body>
+
+</html>
