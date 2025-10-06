@@ -24,7 +24,7 @@ Quasle lista ha preso più voti in un determinato comune
 
 
 
-## Territorietà delle liste
+## Territorialità delle liste
 
 Le percentuali delle liste decidono il colore composito
 
