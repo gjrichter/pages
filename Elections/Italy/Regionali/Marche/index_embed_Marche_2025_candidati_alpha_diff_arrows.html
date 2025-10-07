@@ -811,6 +811,8 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 				width: "100%",
 				height: (window.innerHeight - 20) + "px",
 				legend: "true",
+				scrollsafe: "true",
+				scrollsafesilent: "false",
 				mode: "pan"
 			},
 			map => map
@@ -942,9 +944,6 @@ Data source: https://dati.elezioni.marche.it/votiPresidente.html
 			}
 		});
 
-		ixmaps.htmlgui_onDrawTheme = function() { 
-			toggleInputMode();
-		};
 	</script>
 
 </body>
