@@ -2,8 +2,9 @@
 
 La mappa cerca di confrontare le zone **FUA**, decisivi per il **maxi incentivo** fino a **11.000 €**  ed il **pendolarismo per motivi di lavoro** secondo i dati del ISTAT riferiti al 31.12.2021
 
-<iframe src="https://gjrichter.github.io/pages/DataVizi/FUA/index_pendolari_2021_arcs_saldo_sum_FUA.html" height="800px">
+<iframe src="https://gjrichter.github.io/pages/DataVizi/FUA/index_pendolari_2021_arcs_saldo_sum_FUA.html" width="100%" height="800px">
 </iframe>
+
 
 
 
