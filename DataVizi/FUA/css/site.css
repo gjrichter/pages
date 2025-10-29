@@ -1,0 +1,189 @@
+
+    /* Logo migliorato */
+    .logo {
+        position: absolute;
+        top: 20px;
+        right: 6%;
+        z-index: 9999;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .logo:hover {
+        transform: scale(1.05);
+    }
+
+    .logo-text {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 32px;
+        line-height: 0.8;
+        font-weight: bold;
+        color: #D4AF37;
+        text-align: left;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Codice overlay migliorato */
+    .code-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 999999;
+        display: none;
+        backdrop-filter: blur(5px);
+    }
+
+    .code-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 1200px;
+        height: 80%;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .code-header {
+        padding: 15px 20px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .code-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .code-actions a {
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: var(--transition);
+    }
+
+    .code-actions a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .code-content {
+        flex: 1;
+        overflow: auto;
+        padding: 20px;
+    }
+
+    /* Scrollbar personalizzata */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #1e8a94;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            right: 10px;
+            top: 80px;
+            width: calc(100% - 20px);
+            max-width: none;
+            min-width: auto;
+        }
+
+        .logo {
+            right: 10px;
+            top: 10px;
+        }
+
+        .logo-text {
+            font-size: 36px;
+        }
+
+        .code-container {
+            width: 95%;
+            height: 90%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sidebar-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .logo-text {
+            font-size: 28px;
+        }
+    }
+
+    /* Loading animation */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 0.5em;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Accessibilità */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Focus styles per accessibilità */
+    button:focus,
+    a:focus,
+    input:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    /* Highlight.js personalizzato */
+    .hljs {
+        background: #f8f9fa;
+        border-radius: var(--border-radius);
+        padding: 15px;
+    }
