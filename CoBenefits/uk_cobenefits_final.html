@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<!-- **********************************************************************
+     UK CoBenefits - Final Integrated Visualization
+     
+     Description:
+     Interactive map visualization with all choropleth and chart themes
+     integrated and selectable via radio buttons.
+     
+     Features:
+     - Multiple choropleth themes (foreground)
+     - Multiple chart themes (background)
+     - Radio button selection for foreground and background
+     - Interactive facets for filtering
+     - Dynamic statistics
+     
+     Data Source: 
+     - UK CoBenefits data
+     ********************************************************************** -->
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="description" content="ixmaps UK co-benefits - final integrated visualization">
+	<meta name="author" content="guenter richter">
+	<title>UK CoBenefits - Final Integrated Visualization</title>
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+	<link rel="stylesheet" href="./css/sidebar.css">
+	<style>
+		#chart-size-slider {
+			-webkit-appearance: none;
+			appearance: none;
+			height: 6px;
+			background: #888;
+			border-radius: 3px;
+			outline: none;
+		}
+		#chart-size-slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 16px;
+			height: 16px;
+			background: #666;
+			border-radius: 50%;
+			cursor: pointer;
+		}
+		#chart-size-slider::-moz-range-thumb {
+			width: 16px;
+			height: 16px;
+			background: #666;
+			border-radius: 50%;
+			cursor: pointer;
+			border: none;
+		}
+		.theme-selector {
+			margin: 0.5em 0;
+			padding: 0.5em;
+			background: #f9f9f9;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			margin-right: 0;
+		}
+		.theme-selector label {
+			display: block;
+			margin: 0.3em 0;
+			cursor: pointer;
+		}
+		.theme-selector input[type="radio"] {
+			margin-right: 0.5em;
+		}
+		.theme-selector h3 {
+			margin: 0 0 0.5em 0;
+			font-size: 0.9em;
+			color: #666;
+		}
+		.custom-tooltip {
+			position: absolute;
+			background: white;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 6px 10px;
+			font-size: 0.85em;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+			z-index: 10000;
+			pointer-events: none;
+			white-space: nowrap;
+			color: #333;
+		}
+		.info-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 10000;
+			overflow-y: auto;
+		}
+		.info-overlay-content {
+			position: relative;
+			background: white;
+			margin: 2em auto;
+			padding: 2em;
+			max-width: 800px;
+			border-radius: 8px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			color: #333;
+			text-align: left;
+		}
+		.info-overlay-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 1.5em;
+			padding-bottom: 1em;
+			border-bottom: 2px solid #ddd;
+		}
+		.info-overlay h2 {
+			margin: 0;
+			color: #444;
+		}
+		.info-close-btn {
+			background: #f0f0f0;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 0.5em 1em;
+			cursor: pointer;
+			font-size: 0.9em;
+		}
+		.info-close-btn:hover {
+			background: #e0e0e0;
+		}
+		.info-section {
+			margin-bottom: 2em;
+		}
+		.info-section h3 {
+			color: #666;
+			margin-top: 0;
+			margin-bottom: 0.5em;
+			font-size: 1.3em;
+		}
+		.info-section p, .info-section ul {
+			line-height: 1.6;
+			margin: 0.5em 0;
+		}
+		.info-section ul {
+			padding-left: 1.5em;
+		}
+		.info-section a {
+			color: #0066cc;
+			text-decoration: none;
+		}
+		.info-section a:hover {
+			text-decoration: underline;
+		}
+		.info-button {
+			float: right;
+			background: transparent;
+			border: 1px solid #666;
+			border-radius: 50%;
+			width: 24px;
+			height: 24px;
+			padding: 0;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: bold;
+			color: #666;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 0.5em;
+			margin-top: 3px;
+			line-height: 1;
+		}
+		.info-button:hover {
+			background: #f0f0f0;
+			border-color: #333;
+			color: #333;
+		}
+	</style>
+</head>
+
+<body style='text-align:center;background:#F7F7F7'>
+
+	<div id="map-div" style="float:left;width:66%;height:95vh"></div>
+
+	<div id="sidebar_div" class="sidebar" style="width:33%;float:right;height:95vh;display:flex;flex-direction:column;text-align:left">
+		<div style="font-family:Verdana, Geneva, Tahoma, sans-serif;color:#404040;margin:0.5em 0.5em 0em 0em;display:flex;flex-direction:column;height:100%;overflow:hidden">
+			<div style="flex-shrink:0">
+				<h1 style="color:#888888;margin:0;display:inline">CoBenefits</h1>
+				<button class="info-button" onclick="showInfoOverlay()" title="Show information">i</button>
+				<div style="font-size:0.85em;color:#666;margin-top:0.2em">and co-costs of reaching net zero in the UK at <b>small area level</b></div>
+			</div>
+			<div style="margin:0.6em 0 1.2em 0;font-size:0.9em;"></div>			
+			<div style="flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;padding-right:0.5em">
+
+				<div style="margin:1em 0 1.2em 0;font-size:0.9em;">
+					<span>Total areas visible: </span><span id="no_progetti" style="font-weight:bold">...</span>
+				</div>
+
+				<div id="bar-summary" style="margin:0.6em 0 1.2em 0;padding-right:0"></div>
+
+			<!-- Theme Selection -->
+			<div class="theme-selector">
+				<h3>Foreground (Chart)</h3>
+				<label><input type="radio" name="foreground" value="none" checked onchange="updateForegroundTheme()"> none</label>
+				<label><input type="radio" name="foreground" value="chart_symbols_4" onchange="updateForegroundTheme()"> symbols of main benefits</label>
+				<label><input type="radio" name="foreground" value="chart_symbols_7" onchange="updateForegroundTheme()"> symbols of all benefits</label>
+				<label><input type="radio" name="foreground" value="chart_pie" onchange="updateForegroundTheme()"> ray chart</label>
+			</div>
+
+			<div id="chart-size-control" style="margin:0.6em 0 1.2em 0;padding:0.5em;background:#f9f9f9;border:1px solid #ddd;border-radius:4px;display:none">
+				<div style="display:flex;align-items:center;gap:0.5em">
+					<span style="font-size:0.9em">Chart size:</span>
+					<input type="range" id="chart-size-slider" min="0" max="2" step="0.05" value="1.0" style="flex:1;max-width:200px" oninput="updateChartSize(this.value)">
+					<span id="chart-size-value" style="font-size:0.85em;min-width:40px;text-align:right">1.0</span>
+				</div>
+			</div>
+
+				<div class="theme-selector">
+					<h3>Background (Choropleth)</h3>
+					<label><input type="radio" name="background" value="none" onchange="updateBackgroundTheme()"> none</label>
+					<label><input type="radio" name="background" value="choropleth_4fields" checked onchange="updateBackgroundTheme()"> significant main benefit or costs )*</label>
+					<label><input type="radio" name="background" value="choropleth_7fields" onchange="updateBackgroundTheme()"> significant benefits (all benefits + costs) )*</label>
+					<label><input type="radio" name="background" value="choropleth_ratio" onchange="updateBackgroundTheme()"> benefits/costs ratio</label>
+				</div>
+
+				<small> )* benefit which is most above the national mean  </small>
+
+				<div id="intensity-change-div" style="margin:0.6em 0 1.2em 0">
+					<div style="display:flex;align-items:center;gap:0.5em">
+						<span style="font-size:0.9em">Intensity:</span>
+						<button id="intensity-decrease" style="padding:0.3em 0.6em;font-size:0.85em;cursor:pointer;background:#f0f0f0;border:1px solid #ccc;border-radius:3px" onclick="changeChoroplethIntensity(0.9)">−</button>
+						<span id="intensity-value" style="min-width:40px;text-align:center;font-size:0.85em">3.5</span>
+						<button id="intensity-increase" style="padding:0.3em 0.6em;font-size:0.85em;cursor:pointer;background:#f0f0f0;border:1px solid #ccc;border-radius:3px" onclick="changeChoroplethIntensity(1.2)">+</button>
+					</div>
+				</div>
+
+				<div id="description-div" style="margin:0.6em 0 1.2em 0">
+					<p>Select foreground and background themes to combine different visualizations.</p>
+				</div>
+
+				<div id="show-facets-div" style="margin-right:0.5em"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Info Overlay -->
+	<div id="info-overlay" class="info-overlay" onclick="if(event.target.id === 'info-overlay') hideInfoOverlay()">
+		<div class="info-overlay-content" onclick="event.stopPropagation()">
+			<div class="info-overlay-header">
+				<h2>About this Visualization</h2>
+				<button class="info-close-btn" onclick="hideInfoOverlay()">Close</button>
+			</div>
+			
+			<div class="info-section">
+				<h3>Data Source</h3>
+				<p>This visualization uses data from the <strong>UK Co-Benefits Atlas</strong>, which provides comprehensive information about the co-benefits and co-costs of reaching net zero in the UK from 2025 to 2050 at the data zone level.</p>
+				<p>The data includes six key co-benefits: <strong>air quality</strong>, <strong>noise reduction</strong>, <strong>physical activity</strong>, <strong>excess cold</strong>, <strong>diet change</strong>, and <strong>dampness</strong>, along with associated <strong>costs</strong> including hassle costs, road repairs, congestion, and road safety.</p>
+				<p>For more information about the data and methodology, visit: <a href="https://ukcobenefitsatlas.net/" target="_blank">https://ukcobenefitsatlas.net/</a></p>
+			</div>
+
+			<div class="info-section">
+				<h3>Map Usage</h3>
+				<p>This interactive map allows you to explore UK co-benefits data through multiple visualization layers:</p>
+				<ul>
+					<li><strong>Foreground Themes (Chart):</strong> Visualize benefits and costs using symbol charts, pie charts, or ray charts. These themes enable area selection for filtering and analysis.</li>
+					<li><strong>Background Themes (Choropleth):</strong> Display dominant benefits or cost/benefit ratios across areas using color-coded choropleth maps with transparency based on household density.</li>
+					<li><strong>Interactive Features:</strong>
+						<ul>
+							<li>Use the chart size slider to adjust the scale of chart symbols</li>
+							<li>Adjust intensity controls to modify choropleth transparency</li>
+							<li>Filter data using the facets panel in the sidebar</li>
+							<li>View aggregated statistics in the bar charts showing total benefits, costs, and area counts</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="info-section">
+				<h3>PERCENTOFMEAN Theme Type</h3>
+				<p>The <strong>PERCENTOFMEAN</strong> theme type is used in the choropleth background themes to show which benefit is most above the national mean for each area.</p>
+				<p>This visualization type:</p>
+				<ul>
+					<li>Calculates the percentage above or below the national mean for each benefit category</li>
+					<li>Identifies the benefit with the highest percentage above the mean (the "dominant" benefit)</li>
+					<li>Uses color to represent the dominant benefit category</li>
+					<li>Uses transparency (alpha) based on household density to show areas with more or fewer households</li>
+				</ul>
+				<p>This allows you to quickly identify which co-benefit is most significant in each area relative to the national average, helping to understand regional patterns in the co-benefits of reaching net zero.</p>
+			</div>
+
+			<div class="info-section">
+				<h3>Connection Between Map and Sidebar</h3>
+				<p>The map and sidebar are dynamically connected:</p>
+				<ul>
+					<li><strong>Theme Selection:</strong> Radio buttons in the sidebar control which themes are displayed on the map. Foreground (chart) and background (choropleth) themes can be selected independently.</li>
+					<li><strong>Statistics and Bars:</strong> The sidebar displays real-time statistics based on currently visible map areas. Bar charts show:
+						<ul>
+							<li>Total benefits broken down by category (air quality, noise, physical activity, etc.)</li>
+							<li>Total costs with component breakdown</li>
+							<li>Area counts by cost/benefit ratio class (when ratio choropleth is selected)</li>
+						</ul>
+					</li>
+					<li><strong>Filtering:</strong> The facets panel allows you to filter map data by various attributes. When filters are applied, both the map and sidebar statistics update to reflect only the filtered areas.</li>
+					<li><strong>Interactive Controls:</strong> Sliders and buttons in the sidebar directly affect map visualization:
+						<ul>
+							<li>Chart size slider adjusts the scale of chart symbols on the map</li>
+							<li>Intensity buttons modify the transparency of choropleth layers</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="info-section">
+				<h3>Libraries, Tools, and Licenses</h3>
+				<p>This visualization uses the following technologies and libraries:</p>
+				<ul>
+					<li><strong>ixmaps</strong> - Interactive mapping framework for creating and managing map visualizations</li>
+					<li><strong>jQuery</strong> (v3.6.3) - JavaScript library for DOM manipulation and event handling
+						<ul>
+							<li>License: MIT License</li>
+							<li>Source: <a href="https://jquery.com/" target="_blank">https://jquery.com/</a></li>
+						</ul>
+					</li>
+					<li><strong>D3.js</strong> - Data visualization library for creating interactive charts and graphs
+						<ul>
+							<li>License: BSD 3-Clause License</li>
+							<li>Source: <a href="https://d3js.org/" target="_blank">https://d3js.org/</a></li>
+						</ul>
+					</li>
+					<li><strong>Leaflet</strong> - Open-source JavaScript library for mobile-friendly interactive maps
+						<ul>
+							<li>License: BSD 2-Clause License</li>
+							<li>Source: <a href="https://leafletjs.com/" target="_blank">https://leafletjs.com/</a></li>
+						</ul>
+					</li>
+					<li><strong>TopoJSON</strong> - Extension of GeoJSON for encoding topology
+						<ul>
+							<li>License: BSD 3-Clause License</li>
+						</ul>
+					</li>
+				</ul>
+				<p><strong>Data License:</strong> Data from the UK Co-Benefits Atlas is used in accordance with the terms and conditions specified at <a href="https://ukcobenefitsatlas.net/" target="_blank">https://ukcobenefitsatlas.net/</a></p>
+				<p><strong>Visualization License:</strong> This interactive visualization is provided for educational and research purposes. Please refer to the original data source for data usage terms.</p>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps_flat/ui/js/ixmaps.js"></script>
+	<script type="text/javascript" src="../js/format.js"></script>
+	<script type="text/javascript" src="../js/facet.js"></script>
+	<script type="text/javascript" src="../js/show_facets.js"></script>
+	<script type="text/javascript" src="../js/show_word_cloud.js"></script>
+	<script type="text/javascript" src="../js/d3/d3.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../js/d3/d3.layout.cloud.js"></script>
+	<script type="text/javascript" src="../js/d3/d3.wordcloud.js"></script>
+
+	<script type="text/javascript">
+		// ============================================================
+		// Global Variables
+		// ============================================================
+		
+		/** @type {Object} Map instance handle stored after embedding */
+		var __map = null;
+		
+		/** @type {Object} Store all theme definitions for dynamic loading */
+		var themeDefinitions = {};
+
+		// ============================================================
+		// UI Helper Functions
+		// ============================================================
+		
+		/**
+		 * Shows the info overlay
+		 */
+		function showInfoOverlay() {
+			document.getElementById('info-overlay').style.display = 'block';
+			document.body.style.overflow = 'hidden'; // Prevent background scrolling
+		}
+
+		/**
+		 * Hides the info overlay
+		 */
+		function hideInfoOverlay() {
+			document.getElementById('info-overlay').style.display = 'none';
+			document.body.style.overflow = 'auto'; // Restore scrolling
+		}
+		
+		/**
+		 * Gets the current slider value for chart scale
+		 * @returns {string} Current slider value as string
+		 */
+		function getSliderScaleValue(){
+			var slider = document.getElementById('chart-size-slider');
+			return slider ? slider.value : "1.0";
+		}
+
+		/**
+		 * Shows a custom tooltip with white background
+		 * @param {HTMLElement} element - The element that triggered the tooltip
+		 * @param {string} text - The tooltip text
+		 * @param {MouseEvent} event - The mouse event
+		 */
+		function showCustomTooltip(element, text, event) {
+			// Remove any existing tooltip
+			var existingTooltip = document.querySelector('.custom-tooltip');
+			if (existingTooltip) {
+				existingTooltip.remove();
+			}
+			
+			// Create tooltip
+			var tooltip = document.createElement('div');
+			tooltip.className = 'custom-tooltip';
+			tooltip.textContent = text;
+			document.body.appendChild(tooltip);
+			
+			// Position tooltip
+			var x = event.pageX + 10;
+			var y = event.pageY + 10;
+			
+			// Adjust if tooltip goes off screen
+			if (x + tooltip.offsetWidth > window.innerWidth) {
+				x = event.pageX - tooltip.offsetWidth - 10;
+			}
+			if (y + tooltip.offsetHeight > window.innerHeight) {
+				y = event.pageY - tooltip.offsetHeight - 10;
+			}
+			
+			tooltip.style.left = x + 'px';
+			tooltip.style.top = y + 'px';
+			
+			// Store reference on element
+			element._tooltip = tooltip;
+		}
+
+		/**
+		 * Hides the custom tooltip
+		 * @param {HTMLElement} element - The element that triggered the tooltip
+		 */
+		function hideCustomTooltip(element) {
+			if (element._tooltip) {
+				element._tooltip.remove();
+				element._tooltip = null;
+			}
+		}
+
+		/**
+		 * Updates the chart size based on slider value
+		 * @param {number} scaleValue - Scale value (range: 0 to 2)
+		 */
+		var updateChartSize = function(scaleValue) {
+			document.getElementById('chart-size-value').textContent = parseFloat(scaleValue).toFixed(2);
+			// Apply the scale to all active themes
+			var foreground = document.querySelector('input[name="foreground"]:checked').value;
+			var background = document.querySelector('input[name="background"]:checked').value;
+			
+			// Foreground is chart, background is choropleth
+			if (foreground !== 'none') {
+				var foregroundThemeName = getThemeNameByType(foreground);
+				if (foregroundThemeName) {
+					ixmaps.map().changeThemeStyle(foregroundThemeName, 'scale:' + scaleValue);
+				}
+			}
+			if (background !== 'none') {
+				ixmaps.map().changeThemeStyle('choropleth', 'scale:' + scaleValue);
+			}
+		};
+
+		/**
+		 * Gets the current dopacityscale value from the choropleth theme
+		 * @returns {number} Current dopacityscale value or default 4
+		 */
+		function getChoroplethIntensity() {
+			var choroplethTheme = ixmaps.getThemeDefinitionObj('choropleth');
+			if (choroplethTheme && choroplethTheme.style && choroplethTheme.style.dopacityscale) {
+				return parseFloat(choroplethTheme.style.dopacityscale) || 4;
+			}
+			return 4; // Default value
+		}
+
+		/**
+		 * Changes the choropleth intensity (dopacityscale) by multiplying with the specified factor
+		 * @param {number} factor - Multiplicative factor (1.2 to increase, 0.9 to decrease)
+		 */
+		function changeChoroplethIntensity(factor) {
+			if (!__map) return;
+			
+			var background = document.querySelector('input[name="background"]:checked').value;
+			if (background === 'none') {
+				return; // No choropleth theme active
+			}
+			
+			var currentIntensity = getChoroplethIntensity();
+			var newIntensity = currentIntensity * factor;
+			
+			// Apply minimum and maximum bounds (optional, but good practice)
+			if (newIntensity < 0.1) newIntensity = 0.1;
+			if (newIntensity > 10) newIntensity = 10;
+			
+			// Update the choropleth theme
+			ixmaps.map().changeThemeStyle('choropleth', 'dopacityscale:' + newIntensity.toFixed(1));
+			
+			// Update the display value
+			document.getElementById('intensity-value').textContent = newIntensity.toFixed(1);
+		}
+
+		/**
+		 * Gets the theme name based on type (choropleth or chart)
+		 * Exception: chart_bubbles uses "cost-benefit-ratio-chart"
+		 */
+		function getThemeNameByType(themeValue) {
+			if (themeValue.startsWith('choropleth_')) {
+				return 'choropleth';
+			} else if (themeValue === 'chart_bubbles') {
+				return 'cost-benefit-ratio-chart';
+			} else if (themeValue.startsWith('chart_')) {
+				return 'chart';
+			}
+			return null;
+		}
+
+		/**
+		 * Updates foreground theme (chart) - completely independent
+		 * Manages the visible chart theme that can be changed by radio buttons
+		 * When 'none' is selected, adds chart_invisible with name 'chart' for bar data
+		 */
+		function updateForegroundTheme() {
+			if (!__map) return;
+			
+			var foreground = document.querySelector('input[name="foreground"]:checked').value;
+			var themeName = 'chart'; // Chart theme always uses 'chart' name
+			
+			if (foreground === 'none') {
+				// Add invisible chart theme with name 'chart' for bar data
+				if (!themeDefinitions['chart_invisible']) return;
+				var themeDef = themeDefinitions['chart_invisible']();
+				
+				// Set theme name to 'chart'
+				if (!themeDef.meta) themeDef.meta = {};
+				if (!themeDef.style) themeDef.style = {};
+				themeDef.meta.name = themeName;
+				themeDef.style.name = themeName;
+				
+				// Add or replace with invisible theme
+				ixmaps.map().add(themeDef, 'replace|silent');
+				
+				// Hide chart size slider (no visible chart theme)
+				document.getElementById('chart-size-control').style.display = 'none';
+			} else {
+				// Get theme definition
+				var actualThemeName = getThemeNameByType(foreground);
+				if (!actualThemeName || !themeDefinitions[foreground]) return;
+				var themeDef = themeDefinitions[foreground]();
+				
+				// Set theme name to 'chart' (visible chart theme)
+				if (!themeDef.meta) themeDef.meta = {};
+				if (!themeDef.style) themeDef.style = {};
+				themeDef.meta.name = themeName;
+				themeDef.style.name = themeName;
+				// Ensure it's visible
+				if (!themeDef.style) themeDef.style = {};
+				themeDef.style.visible = 'true';
+				
+				// Add or replace theme using add() with replace flag
+				ixmaps.map().add(themeDef, 'replace|silent');
+				
+				// Set scale
+				var scaleValue = getSliderScaleValue();
+				ixmaps.map().changeThemeStyle(themeName, 'scale:' + scaleValue);
+				
+				// Show chart size slider (visible chart theme active)
+				document.getElementById('chart-size-control').style.display = 'block';
+			}
+		}
+
+		/**
+		 * Updates background theme (choropleth) - completely independent
+		 */
+		function updateBackgroundTheme() {
+			if (!__map) return;
+			
+			var background = document.querySelector('input[name="background"]:checked').value;
+			var themeName = 'choropleth';
+			
+			if (background === 'none') {
+				// Remove theme
+				ixmaps.map().remove(themeName);
+				// Hide intensity controls
+				document.getElementById('intensity-change-div').style.display = 'none';
+			} else {
+				// Get theme definition
+				if (!themeDefinitions[background]) return;
+				var themeDef = themeDefinitions[background]();
+				
+				// Set theme name
+				if (!themeDef.meta) themeDef.meta = {};
+				if (!themeDef.style) themeDef.style = {};
+				themeDef.meta.name = themeName;
+				themeDef.style.name = themeName;
+				
+				// Add or replace theme using add() with replace flag (like reference file)
+				ixmaps.map().add(themeDef, 'replace|silent');
+				
+				// Set scale
+				var scaleValue = getSliderScaleValue();
+				ixmaps.map().changeThemeStyle(themeName, 'scale:' + scaleValue);
+				
+				// Show and update intensity controls
+				document.getElementById('intensity-change-div').style.display = 'block';
+				setTimeout(function() {
+					var currentIntensity = getChoroplethIntensity();
+					document.getElementById('intensity-value').textContent = currentIntensity.toFixed(1);
+				}, 150);
+				
+				// Update statistics with timeout to ensure theme is loaded
+				setTimeout(function() {
+					ixmaps.statistics("cost-benefit-ratio-chart");
+				}, 100);
+			}
+		}
+
+		// ============================================================
+		// Data Configuration
+		// ============================================================
+		
+		/**
+		 * Data query function: merges Level_1.csv with lookups.csv
+		 * Adds lookup columns and calculates costs and benefits_cost_ratio columns
+		 */
+		query_data_merged = function(theme, options) {
+			var broker = new Data.Broker()
+				.addSource("https://data.s3.tebi.io/uk_cobenefits/Level_1.csv", "csv")
+				.addSource("https://data.s3.tebi.io/uk_cobenefits/lookups.csv", "csv")
+				.realize(function(dataA) {
+					var level1_data = dataA[0];
+					var lookups_data = dataA[1];
+					
+					// Get the key column from Level_1.csv
+					var level1KeyCol = level1_data.column('small_area');
+					if (!level1KeyCol) {
+						console.error("Key column 'small_area' not found in Level_1.csv");
+						return;
+					}
+					
+					var keyColumnIndex = level1KeyCol.index;
+					
+					// Get column names from lookups.csv (excluding the key column)
+					var lookupColumns = lookups_data.columnNames();
+					
+					// Add each column from lookups.csv to Level_1.csv using lookupArray
+					lookupColumns.forEach(function(colName) {
+						if (colName && colName.trim() !== '' && colName !== 'small_area') {
+							var lookupArray = lookups_data.lookupArray({
+								key: "small_area",
+								value: colName
+							});
+							
+							level1_data.addColumn({destination: colName}, function(row) {
+								var keyValue = String(row[keyColumnIndex]);
+								return lookupArray[keyValue] || null;
+							});
+						}
+					});
+					
+					// Add calculated column: costs
+					var hassleCol = level1_data.column('hassle_costs');
+					var roadRepairsCol = level1_data.column('road_repairs');
+					var congestionCol = level1_data.column('congestion');
+					var roadSafetyCol = level1_data.column('road_safety');
+					
+					if (hassleCol && roadRepairsCol && congestionCol && roadSafetyCol) {
+						level1_data.addColumn({
+							source: ['hassle_costs', 'road_repairs', 'congestion', 'road_safety'],
+							destination: 'costs'
+						}, function(hassle_costs, road_repairs, congestion, road_safety) {
+							var hassle = parseFloat(hassle_costs.replace(/,/g, '.')) || 0;
+							var repairs = parseFloat(road_repairs.replace(/,/g, '.')) || 0;
+							var congestion = parseFloat(congestion.replace(/,/g, '.')) || 0;
+							var safety = parseFloat(road_safety.replace(/,/g, '.')) || 0;
+							return hassle + repairs + congestion + safety;
+						});
+					}
+					
+					// Add calculated column: benefits_cost_ratio
+					var airQualityCol = level1_data.column('air_quality');
+					var noiseCol = level1_data.column('noise');
+					var physicalActivityCol = level1_data.column('physical_activity');
+					var excessColdCol = level1_data.column('excess_cold');
+					var dietChangeCol = level1_data.column('diet_change');
+					var dampnessCol = level1_data.column('dampness');
+					var costsCol = level1_data.column('costs');
+					
+					if (airQualityCol && noiseCol && physicalActivityCol && excessColdCol && dietChangeCol && dampnessCol && costsCol) {
+						level1_data.addColumn({
+							source: ['air_quality', 'noise', 'physical_activity', 'excess_cold', 'diet_change', 'dampness', 'costs'],
+							destination: 'benefits_cost_ratio'
+						}, function(air_quality, noise, physical_activity, excess_cold, diet_change, dampness, costs) {
+							var air = parseFloat(String(air_quality).replace(/,/g, '.')) || 0;
+							var noiseVal = parseFloat(String(noise).replace(/,/g, '.')) || 0;
+							var physical = parseFloat(String(physical_activity).replace(/,/g, '.')) || 0;
+							var cold = parseFloat(String(excess_cold).replace(/,/g, '.')) || 0;
+							var diet = parseFloat(String(diet_change).replace(/,/g, '.')) || 0;
+							var damp = parseFloat(String(dampness).replace(/,/g, '.')) || 0;
+							var costsVal = parseFloat(String(costs).replace(/,/g, '.')) || 0;
+							
+							var totalBenefits = air + noiseVal + physical + cold + diet + damp;
+							
+							if (costsVal === 0 || costsVal === null || isNaN(costsVal)) {
+								return totalBenefits > 0 ? null : 0;
+							}
+							
+							return totalBenefits / -costsVal;
+						});
+					}
+					
+					ixmaps.setExternalData(level1_data, {
+						type: "dbtable",
+						name: options.name
+					});
+				});
+		};
+
+		// ============================================================
+		// Statistics and Facet Functions
+		// ============================================================
+		
+		/**
+		 * Statistics callback: calculates and displays counts for visible areas
+		 */
+		ixmaps.statistics = function(szId) {
+			var themeObj = ixmaps.getThemeObj(szId);
+			if (!themeObj) {
+				return;
+			}
+			
+			var lastFilter = themeObj.szFilter || "";
+			
+			ixmaps.data.fShowFacetValues = false;
+			szFieldsA = null;
+			
+			// Get facets from the theme
+			facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
+			
+			let nCount = 0;
+			if (facetsA && facetsA.length && facetsA[0]) {
+				nCount = facetsA[0].nValuesSum || facetsA[0].nCount || 0;
+			}
+			
+			if (!nCount && themeObj.itemA && themeObj.itemA.length) {
+				for (let i in themeObj.itemA) {
+					if (themeObj.itemA[i] && themeObj.itemA[i].dbIndexA) {
+						nCount += themeObj.itemA[i].dbIndexA.length;
+					}
+				}
+			}
+			
+			if (!nCount && themeObj.indexA && themeObj.indexA.length) {
+				nCount = themeObj.indexA.length;
+			}
+			
+			var pois = nCount ? ixmaps.__formatValue(nCount, 0, "BLANK") : String(nCount || 0);
+			$("#no_progetti").html(pois);
+
+			// Render bar charts - always render when chart theme updates
+			// Get data from 'chart' theme (which is either visible chart or chart_invisible when 'none' selected)
+			// and always use cost-benefit-ratio-chart for ratio class counts
+			if (szId === "chart_ivisible" || szId === "cost-benefit-ratio-chart") {
+				// Get chart theme with name 'chart' (visible chart or invisible chart_invisible)
+				var chartThemeObj = ixmaps.getThemeObj("chart_invisible");
+				var bubblesThemeObj = ixmaps.getThemeObj("cost-benefit-ratio-chart"); // Always present, invisible
+				
+				// Calculate sum values for chart parts
+				var SUMS = {
+					"air_quality": 0,
+					"noise": 0,
+					"physical_activity": 0,
+					"excess_cold": 0,
+					"diet_change": 0,
+					"dampness": 0,
+					"costs": 0
+				};
+				var COLORS = {
+					"air_quality": "#00dddd",
+					"noise": "#ff00ff",
+					"physical_activity": "#dddd00",
+					"excess_cold": "#92ABCF",
+					"diet_change": "#ff8800",
+					"dampness": "#669389",
+					"costs": "#000000"
+				};
+				var LABELS = {
+					"air_quality": "Air quality",
+					"noise": "Noise",
+					"physical_activity": "Physical activity",
+					"excess_cold": "Excess cold",
+					"diet_change": "Diet change",
+					"dampness": "Dampness",
+					"costs": "Costs"
+				};
+				var UNITS = "m£"; // million GBP
+
+				// Calculate sums from theme parts
+				var COST_COMPONENTS = {
+					"hassle_costs": 0,
+					"road_repairs": 0,
+					"congestion": 0,
+					"road_safety": 0
+				};
+				var COST_LABELS = {
+					"hassle_costs": "Hassle costs",
+					"road_repairs": "Road repairs",
+					"congestion": "Congestion",
+					"road_safety": "Road safety"
+				};
+				
+				try {
+					// Get sums from partsA array - each part has nSum property
+					if (chartThemeObj && chartThemeObj.partsA && chartThemeObj.partsA.length >= 7) {
+						// The chart has 7 parts in order: air_quality, noise, physical_activity, excess_cold, diet_change, dampness, costs
+						var partKeys = ["air_quality", "noise", "physical_activity", "excess_cold", "diet_change", "dampness", "costs"];
+						for (var i = 0; i < 7 && i < chartThemeObj.partsA.length; i++) {
+							if (chartThemeObj.partsA[i] && typeof chartThemeObj.partsA[i].nSum !== "undefined") {
+								SUMS[partKeys[i]] = chartThemeObj.partsA[i].nSum || 0;
+							}
+						}
+					}
+					// Fallback: try nOrigSumA if partsA doesn't have nSum
+					else if (chartThemeObj && chartThemeObj.nOrigSumA && chartThemeObj.nOrigSumA.length >= 7) {
+						var partKeys = ["air_quality", "noise", "physical_activity", "excess_cold", "diet_change", "dampness", "costs"];
+						for (var i = 0; i < 7 && i < chartThemeObj.nOrigSumA.length; i++) {
+							SUMS[partKeys[i]] = chartThemeObj.nOrigSumA[i] || 0;
+						}
+					}
+					
+					// Calculate individual cost components from facets
+					try {
+						if (facetsA && facetsA.length) {
+							for (var f = 0; f < facetsA.length; f++) {
+								var facet = facetsA[f];
+								if (facet.id && COST_COMPONENTS.hasOwnProperty(facet.id)) {
+									if (facet.type === 'numeric' && typeof facet.sum !== "undefined") {
+										COST_COMPONENTS[facet.id] = facet.sum || 0;
+									}
+									else if (facet.type === 'textual' && typeof facet.nValuesSum !== "undefined") {
+										COST_COMPONENTS[facet.id] = facet.nValuesSum || 0;
+									}
+									else if (facet.valuesCount) {
+										var sum = 0;
+										for (var val in facet.valuesCount) {
+											var count = facet.valuesCount[val];
+											var numVal = parseFloat(String(val).replace(/,/g, '.')) || 0;
+											sum += numVal * count;
+										}
+										COST_COMPONENTS[facet.id] = sum;
+									}
+								}
+							}
+						}
+					} catch(e) {
+						console.warn('Error calculating cost components from facets:', e);
+					}
+				} catch(e) {
+					console.warn('Error calculating sums from theme parts:', e);
+				}
+
+				// Render stacked bar chart
+				try {
+					// Calculate totals for stacked bar (benefits) and single bar (costs)
+					var benefitsTotal = SUMS.air_quality + SUMS.noise + SUMS.physical_activity + SUMS.excess_cold + SUMS.diet_change + SUMS.dampness;
+					var costsTotal = SUMS.costs;
+					var maxValue = Math.max(benefitsTotal, costsTotal);
+					maxValue = maxValue || 1;
+					
+					var benefitsOrder = ["air_quality", "noise", "physical_activity", "excess_cold", "diet_change", "dampness"];
+					
+					var barHTML = '<div style="font-size:0.85em">';
+					
+					// Stacked bar for benefits
+					var formattedBenefitsTotal = benefitsTotal ? ixmaps.__formatValue(benefitsTotal, 0, "BLANK") : "0";
+					
+					barHTML += '<div style="margin-bottom:0.6em">';
+					barHTML += '<div style="display:flex;justify-content:space-between;margin-bottom:0.2em">';
+					barHTML += '<span style="font-weight:bold">Total Benefits</span>';
+					barHTML += '<span style="font-weight:bold">' + formattedBenefitsTotal + ' ' + UNITS + '</span>';
+					barHTML += '</div>';
+					
+					barHTML += '<div style="width:100%;height:24px;background:#f0f0f0;border-radius:3px;overflow:hidden;display:flex;flex-direction:row;margin-right:0.5em">';
+					
+					var segmentWidths = [];
+					benefitsOrder.forEach(function(key) {
+						var segmentWidth = benefitsTotal > 0 ? Math.round((SUMS[key] / benefitsTotal) * 100) : 0;
+						segmentWidths.push({key: key, width: segmentWidth});
+					});
+					
+					segmentWidths.forEach(function(segment) {
+						if (segment.width > 0) {
+							var formattedValue = SUMS[segment.key] ? ixmaps.__formatValue(SUMS[segment.key], 0, "BLANK") : "0";
+							var percentage = benefitsTotal > 0 ? ((SUMS[segment.key] / benefitsTotal) * 100).toFixed(1) : "0";
+							var tooltip = LABELS[segment.key] + ': ' + formattedValue + ' ' + UNITS + ' (' + percentage + '% of total benefits)';
+							var segmentId = 'benefit-segment-' + segment.key;
+							barHTML += '<div id="' + segmentId + '" data-tooltip="' + tooltip.replace(/"/g, '&quot;') + '" style="width:' + segment.width + '%;height:100%;background:' + COLORS[segment.key] + ';opacity:0.8;position:relative;border-right:1px solid rgba(255,255,255,0.3);cursor:pointer"></div>';
+						}
+					});
+					
+					barHTML += '</div>';
+					
+					barHTML += '<div style="font-size:0.75em;margin-top:0.3em;display:flex;flex-wrap:wrap;gap:0.5em">';
+					benefitsOrder.forEach(function(key) {
+						var formattedValue = SUMS[key] ? ixmaps.__formatValue(SUMS[key], 0, "BLANK") : "0";
+						barHTML += '<span><span style="display:inline-block;width:8px;height:8px;background:' + COLORS[key] + ';margin-right:4px"></span>' + LABELS[key] + ': ' + formattedValue + ' ' + UNITS + '</span>';
+					});
+					barHTML += '</div>';
+					barHTML += '</div>';
+					
+					// Single bar for costs
+					var costsWidth = maxValue ? Math.round((costsTotal / maxValue) * 100) : 0;
+					var formattedCostsTotal = costsTotal ? ixmaps.__formatValue(costsTotal, 0, "BLANK") : "0";
+					
+					barHTML += '<div style="margin-bottom:0.4em">';
+					barHTML += '<div style="display:flex;justify-content:space-between;margin-bottom:0.2em">';
+					barHTML += '<span>' + LABELS.costs + '</span>';
+					barHTML += '<span style="font-weight:bold">' + formattedCostsTotal + ' ' + UNITS + '</span>';
+					barHTML += '</div>';
+					barHTML += '<div style="width:100%;height:24px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-right:0.5em">';
+					var costsTooltip = LABELS.costs + ': ' + formattedCostsTotal + ' ' + UNITS;
+					if (costsTotal > 0 && benefitsTotal > 0) {
+						var costPercentage = ((costsTotal / benefitsTotal) * 100).toFixed(1);
+						costsTooltip += ' (' + costPercentage + '% of total benefits)';
+					}
+					barHTML += '<div id="costs-bar" data-tooltip="' + costsTooltip.replace(/"/g, '&quot;') + '" style="width:' + costsWidth + '%;height:100%;background:' + COLORS.costs + ';opacity:0.7;cursor:pointer"></div>';
+					barHTML += '</div>';
+					// Caption listing cost components
+					barHTML += '<div style="font-size:0.75em;margin-top:0.3em;display:flex;flex-wrap:wrap;gap:0.5em">';
+					var costComponentOrder = ["hassle_costs", "road_repairs", "congestion", "road_safety"];
+					costComponentOrder.forEach(function(key) {
+						var value = COST_COMPONENTS[key] || 0;
+						var formattedValue = value ? ixmaps.__formatValue(value, 0, "BLANK") : "0";
+						barHTML += '<span><span style="display:inline-block;width:8px;height:8px;background:#000000;margin-right:4px"></span>' + COST_LABELS[key] + ': ' + formattedValue + ' ' + UNITS + '</span>';
+					});
+					barHTML += '</div>';
+					barHTML += '</div>';
+					
+					// Show "Areas by cost/benefit ratio" bar only when background theme "Benefits/Costs Ratio" is selected
+					var backgroundRadio = document.querySelector('input[name="background"]:checked');
+					if (backgroundRadio && backgroundRadio.value === 'choropleth_ratio') {
+						// Calculate counts per benefits_cost_ratio class using bubbles theme
+						var ratioClasses = {
+							"0-1": {label: "More costs than benefits", color: "#ff0000", count: 0},
+							"1-1.5": {label: "25% more benefits", color: "#ff8800", count: 0},
+							"1.5-2": {label: "50% more benefits", color: "#ffdd00", count: 0},
+							"2+": {label: "Huge benefits", color: "#006600", count: 0}
+						};
+						
+						try {
+							if (bubblesThemeObj && bubblesThemeObj.partsA && bubblesThemeObj.partsA.length >= 4) {
+								var classKeys = ["0-1", "1-1.5", "1.5-2", "2+"];
+								for (var i = 0; i < 4 && i < bubblesThemeObj.partsA.length; i++) {
+									var part = bubblesThemeObj.partsA[i];
+									var classKey = classKeys[i];
+									if (part && typeof part.nCount !== 'undefined') {
+										ratioClasses[classKey].count = part.nCount || 0;
+									} else if (bubblesThemeObj.exactCountA && bubblesThemeObj.exactCountA[i] !== undefined) {
+										ratioClasses[classKey].count = bubblesThemeObj.exactCountA[i] || 0;
+									}
+								}
+							}
+						} catch(e) {
+							console.warn('Error calculating counts per ratio class:', e);
+						}
+						
+						// Render counts bar chart
+						var countTotal = ratioClasses["0-1"].count + ratioClasses["1-1.5"].count + ratioClasses["1.5-2"].count + ratioClasses["2+"].count;
+						var maxCount = Math.max(ratioClasses["0-1"].count, ratioClasses["1-1.5"].count, ratioClasses["1.5-2"].count, ratioClasses["2+"].count);
+						maxCount = maxCount || 1;
+						
+						barHTML += '<div style="margin-top:1em;padding-top:1em;border-top:1px solid #ddd">';
+						barHTML += '<div style="display:flex;justify-content:space-between;margin-bottom:0.2em">';
+						barHTML += '<span style="font-weight:bold">Areas by cost/benefit ratio</span>';
+						barHTML += '<span style="font-weight:bold">' + (countTotal ? ixmaps.__formatValue(countTotal, 0, "BLANK") : "0") + ' areas</span>';
+						barHTML += '</div>';
+						
+						barHTML += '<div style="width:100%;height:24px;background:#f0f0f0;border-radius:3px;overflow:hidden;display:flex;flex-direction:row;margin-right:0.5em">';
+						
+						var classOrder = ["0-1", "1-1.5", "1.5-2", "2+"];
+						classOrder.forEach(function(classKey) {
+							var classData = ratioClasses[classKey];
+							var segmentWidth = countTotal > 0 ? Math.round((classData.count / countTotal) * 100) : 0;
+							if (segmentWidth > 0) {
+								var formattedCount = classData.count ? ixmaps.__formatValue(classData.count, 0, "BLANK") : "0";
+								var percentage = countTotal > 0 ? ((classData.count / countTotal) * 100).toFixed(1) : "0";
+								var tooltip = classData.label + ': ' + formattedCount + ' areas (' + percentage + '% of total areas)';
+								var ratioId = 'ratio-segment-' + classKey;
+								barHTML += '<div id="' + ratioId + '" data-tooltip="' + tooltip.replace(/"/g, '&quot;') + '" style="width:' + segmentWidth + '%;height:100%;background:' + classData.color + ';opacity:0.8;position:relative;border-right:1px solid rgba(255,255,255,0.3);cursor:pointer"></div>';
+							}
+						});
+						
+						barHTML += '</div>';
+						
+						barHTML += '<div style="font-size:0.75em;margin-top:0.3em;display:flex;flex-wrap:wrap;gap:0.5em">';
+						classOrder.forEach(function(classKey) {
+							var classData = ratioClasses[classKey];
+							var formattedValue = classData.count ? ixmaps.__formatValue(classData.count, 0, "BLANK") : "0";
+							barHTML += '<span><span style="display:inline-block;width:8px;height:8px;background:' + classData.color + ';margin-right:4px"></span>' + classData.label + ': ' + formattedValue + '</span>';
+						});
+						barHTML += '</div>';
+						barHTML += '</div>';
+					}
+					
+					barHTML += '</div>';
+					document.getElementById('bar-summary').innerHTML = barHTML;
+					
+					// Attach tooltip event handlers to bar segments
+					setTimeout(function() {
+						// Benefits segments
+						benefitsOrder.forEach(function(key) {
+							var segmentId = 'benefit-segment-' + key;
+							var element = document.getElementById(segmentId);
+							if (element) {
+								var tooltipText = element.getAttribute('data-tooltip');
+								element.addEventListener('mouseenter', function(e) {
+									showCustomTooltip(element, tooltipText, e);
+								});
+								element.addEventListener('mouseleave', function() {
+									hideCustomTooltip(element);
+								});
+								element.addEventListener('mousemove', function(e) {
+									if (element._tooltip) {
+										var x = e.pageX + 10;
+										var y = e.pageY + 10;
+										if (x + element._tooltip.offsetWidth > window.innerWidth) {
+											x = e.pageX - element._tooltip.offsetWidth - 10;
+										}
+										if (y + element._tooltip.offsetHeight > window.innerHeight) {
+											y = e.pageY - element._tooltip.offsetHeight - 10;
+										}
+										element._tooltip.style.left = x + 'px';
+										element._tooltip.style.top = y + 'px';
+									}
+								});
+							}
+						});
+						
+						// Costs bar
+						var costsBar = document.getElementById('costs-bar');
+						if (costsBar) {
+							var costsTooltipText = costsBar.getAttribute('data-tooltip');
+							costsBar.addEventListener('mouseenter', function(e) {
+								showCustomTooltip(costsBar, costsTooltipText, e);
+							});
+							costsBar.addEventListener('mouseleave', function() {
+								hideCustomTooltip(costsBar);
+							});
+							costsBar.addEventListener('mousemove', function(e) {
+								if (costsBar._tooltip) {
+									var x = e.pageX + 10;
+									var y = e.pageY + 10;
+									if (x + costsBar._tooltip.offsetWidth > window.innerWidth) {
+										x = e.pageX - costsBar._tooltip.offsetWidth - 10;
+									}
+									if (y + costsBar._tooltip.offsetHeight > window.innerHeight) {
+										y = e.pageY - costsBar._tooltip.offsetHeight - 10;
+									}
+									costsBar._tooltip.style.left = x + 'px';
+									costsBar._tooltip.style.top = y + 'px';
+								}
+							});
+						}
+						
+						// Ratio class segments (only if ratio bar is shown)
+						var backgroundRadio = document.querySelector('input[name="background"]:checked');
+						if (backgroundRadio && backgroundRadio.value === 'choropleth_ratio') {
+							var classOrder = ["0-1", "1-1.5", "1.5-2", "2+"];
+							classOrder.forEach(function(classKey) {
+								var ratioId = 'ratio-segment-' + classKey;
+								var element = document.getElementById(ratioId);
+								if (element) {
+									var tooltipText = element.getAttribute('data-tooltip');
+									element.addEventListener('mouseenter', function(e) {
+										showCustomTooltip(element, tooltipText, e);
+									});
+									element.addEventListener('mouseleave', function() {
+										hideCustomTooltip(element);
+									});
+									element.addEventListener('mousemove', function(e) {
+										if (element._tooltip) {
+											var x = e.pageX + 10;
+											var y = e.pageY + 10;
+											if (x + element._tooltip.offsetWidth > window.innerWidth) {
+												x = e.pageX - element._tooltip.offsetWidth - 10;
+											}
+											if (y + element._tooltip.offsetHeight > window.innerHeight) {
+												y = e.pageY - element._tooltip.offsetHeight - 10;
+											}
+											element._tooltip.style.left = x + 'px';
+											element._tooltip.style.top = y + 'px';
+										}
+									});
+								}
+							});
+						}
+					}, 10);
+				} catch(e) {
+					console.warn('Error rendering bar chart:', e);
+				}
+			}
+
+			if(1 || nCount > 0){
+				ixmaps.data.showFacets(lastFilter, "show-facets-div", facetsA);
+				$("#show-facets-div").show();
+			}else{
+				$("#show-facets-div").hide();
+			}
+		};
+
+		// ============================================================
+		// Theme Drawing Hook
+		// ============================================================
+		
+		/**
+		 * Hooks into the theme drawing process to automatically update statistics
+		 */
+		(function hookStatistics(){
+			var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
+			ixmaps.htmlgui_onDrawTheme = function(szId){
+				try{ if (old_onDrawTheme){ old_onDrawTheme(szId); } }catch(e){}
+				
+				// Apply slider scale value to the themes
+				var scaleValue = getSliderScaleValue();
+				try{
+					ixmaps.map().changeThemeStyle(szId, 'scale:' + scaleValue);
+				}catch(e){}
+				
+				// Update statistics
+				ixmaps.statistics(szId);
+			};
+		})();
+
+		// ============================================================
+		// Initialization
+		// ============================================================
+		
+		/**
+		 * Initializes the application with all theme definitions
+		 */
+		(function init(){
+			// Base layer
+			var ukAreasBaseLayer = ixmaps.layer("uk_areas_layer")
+				.data({
+					"url": "https://data.s3.tebi.io/uk_cobenefits/uk_areas_ext.topojson",
+					"type": "topojson",
+					"name": "data_1768120590558",
+					"cache": "true"
+				})
+				.binding({
+					"geo": "geometry",
+					"value": "$item$",
+					"id": "small_area",
+					"size": "area"
+				})
+				.type("FEATURE")
+				.style({
+					"colorscheme": ["#eeeeee"],
+					"fillopacity": "0.1",
+					"shadow": "false",
+					"visible": "true",
+					"showdata": "true",
+					"units": "",
+					"scale": "1",
+					"sizepow": "2",
+					"linecolor": ["none"],
+					"linewidth": "0.5",
+					"valuescale": "1"
+				})
+				.meta({
+					"title": "uk_areas",
+					"snippet": "",
+					"description": "",
+					"name": "uk_areas",
+					"showdata": "true",
+					"tooltip": "{{theme.item.data}}"
+				})
+				.define();
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['choropleth_4fields'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|costs",
+						"value100": "households"
+					})
+					.type("CHOROPLETH|DOMINANT|PERCENTOFMEAN|DENSITY|HORZ|DOPACITYMAX|NOLEGEND")
+					.style({
+						"colorscheme": ["#00bbee", "#ff00ff", "#dddd00", "#000000"],
+						"label": ["Air quality", "Noise", "Physical activity", "costs"],
+						"weights": ["1", "1", "1", "-1"],
+						"fillopacity": "1",
+						"shadow": "false",
+						"visible": "true",
+						"showdata": "true",
+						"units": "",
+						"scale": "1",
+						"sizepow": "2",
+						"brightness": "1.2",
+						"alphafield100": "$density$",
+						"dopacitypow": "2",
+						"dopacityscale": "5",
+						"nodatacolor": "none",
+						"valuescale": "1",
+						"valuedecimals": "0"
+					})
+					.meta({
+						"title": "4 Fields Choropleth",
+						"snippet": "",
+						"description": "",
+						"name": "choropleth_4fields",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}"
+					})
+					.define();
+			};
+			
+			// Choropleth Theme 1: 4 Fields (default, loaded initially)
+			// Note: Theme will be named "choropleth" (type-based name)
+			var choropleth4Fields = themeDefinitions['choropleth_4fields']();
+			// Update the name to use type-based naming
+			if (choropleth4Fields.meta) {
+				choropleth4Fields.meta.name = 'choropleth';
+			}
+			if (choropleth4Fields.style) {
+				choropleth4Fields.style.name = 'choropleth';
+			}
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['choropleth_7fields'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|excess_cold|diet_change|dampness|costs",
+						"value100": "households"
+					})
+					.type("CHOROPLETH|DOMINANT|PERCENTOFMEAN|DENSITY|HORZ|DOPACITYMAX|SIMPLELEGEND")
+					.style({
+						"colorscheme": ["#00dddd", "#ff00ff", "#dddd00", "#92ABCF", "#ff8800", "#669389", "#000000"],
+						"label": ["Air quality", "Noise", "Physical activity", "Excess cold", "Diet change", "Dampness", "costs"],
+						"weights": ["1", "1", "1", "1", "1", "1", "-1"],
+						"fillopacity": "1",
+						"shadow": "false",
+						"visible": "true",
+						"showdata": "true",
+						"units": "",
+						"scale": "1",
+						"sizepow": "2",
+						"alphafield100": "$density$",
+						"dopacitypow": "2",
+						"dopacityscale": "5",
+						"nodatacolor": "none",
+						"valuescale": "1",
+						"valuedecimals": "0"
+					})
+					.meta({
+						"title": "Overrepresented benefit",
+						"snippet": "",
+						"description": "",
+						"name": "choropleth_7fields",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}"
+					})
+					.define();
+			};
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['choropleth_ratio'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "benefits_cost_ratio"
+					})
+					.type("CHOROPLETH|RANGES|DOPACITYMAX|SIMPLELEGEND")
+					.style({
+						"colorscheme": ["red", "orange", "yellow", "green"],
+						"ranges": "0,1,1.5,2,100",
+						"label": ["more costs than benefits", "25% more benefits", "50% more benefits", "huge benefits"],
+						"fillopacity": "1",
+						"alphafield": "households",
+						"alphafield100": "$density$",
+						"shadow": "false",
+						"visible": "true",
+						"showdata": "true",
+						"datafields": "local_authority,small_area,benefits_cost_ratio",
+						"units": "",
+						"scale": "1",
+						"sizepow": "2",
+						"dopacitypow": "2",
+						"dopacityscale": "4",
+						"nodatacolor": "none",
+						"valuescale": "1",
+						"valuedecimals": "0"
+					})
+					.meta({
+						"title": "<h2 style='margin:0;'>Benefits / costs ratio</h2>",
+						"snippet": "",
+						"description": "",
+						"name": "choropleth_ratio",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}{{theme.item.data}}"
+					})
+					.define();
+			};
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['chart_symbols_4'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|costs"
+					})
+					.type("CHART|SYMBOL|SEQUENCE|STAR|SIZE|VALUES|VALUEBACKGROUND|AGGREGATE|RECT|RELOCATE|SUM|CIRCULARBOX|BOTTOMTITLE|NOLEGEND")
+					.style({
+						"colorscheme": ["#0088dd", "#ff88dd", "#eeee00", "#000000"],
+						"label": ["air quality benefits", "noise reduction benefits", "physical activity benefits", "costs"],
+						"fillopacity": "0.5",
+						"cache": "false",
+						"shadow": "true",
+						"symbols": [
+							"../../pages/City/symbols/air-quality-svgrepo-com.svg",
+							"../../pages/City/symbols/noise-svgrepo-com.svg",
+							"../../pages/City/symbols/physical-activity-svgrepo-com.svg",
+							"../../pages/City/symbols/hassle-costs-svgrepo-com.svg"
+						],
+						"weights": ["1", "1", "1", "-1"],
+						"fillopacity": "1",
+						"shadow": "false",
+						"visible": "true",
+						"boxcolor": "#ffffff",
+						"bordercolor": "#444444",
+						"boxmargin": "0",
+						"boxopacity": "0.00008",
+						"textscale": "0.8",
+						"textcolor": "#000000",
+						"titleupper": "1:50000",
+						"valuesupper": "1:10000",
+						"showdata": "true",
+						"units": "m£",
+						"legendunits": "million GBP",
+						"scale": getSliderScaleValue(),
+						"sizepow": "3",
+						"dopacitypow": "1.5",
+						"dopacityscale": "2",
+						"nodatacolor": "none",
+						"rangescale": "1.1",
+						"valuescale": "1",
+						"valuedecimals": "1",
+						"aggregationscale": [
+							"1:1", "50px",
+							"1:500000", "local_authority",
+							"1:2000000", "50px"
+						]
+					})
+					.meta({
+						"title": "Co-benefits of reaching net zero in the UK<br>from 2025 to 2050 at the data zone level across the UK",
+						"snippet": "",
+						"description": "",
+						"name": "chart_symbols_4",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}"
+					})
+					.define();
+			};
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['chart_symbols_7'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|excess_cold|diet_change|dampness|costs"
+					})
+					.type("CHART|SYMBOL|SEQUENCE|STAR|x|SIZE|VALUES|VALUEBACKGROUND|AGGREGATE|RECT|RELOCATE|SUM|CIRCULARBOX|BOTTOMTITLE|NOLEGEND")
+					.style({
+						"colorscheme": ["#00dddd", "#ff00ff", "#dddd00", "#92ABCF", "#ff8800", "#669389", "#000000"],
+						"label": ["Air quality", "Noise", "Physical activity", "Excess cold", "Diet change", "Dampness", "costs"],
+						"weights": ["1", "1", "1", "1", "1", "1", "-1"],
+						"fillopacity": "0.5",
+						"cache": "false",
+						"shadow": "true",
+						"symbols": [
+							"../../pages/City/symbols/air-quality-svgrepo-com.svg",
+							"../../pages/City/symbols/noise-svgrepo-com.svg",
+							"../../pages/City/symbols/physical-activity-svgrepo-com.svg",
+							"../../pages/City/symbols/hassle-costs-svgrepo-com.svg"
+						],
+						"fillopacity": "1",
+						"shadow": "false",
+						"visible": "true",
+						"boxcolor": "#ffffff",
+						"bordercolor": "#444444",
+						"boxmargin": "0",
+						"boxopacity": "0.00008",
+						"textscale": "0.8",
+						"textcolor": "#000000",
+						"titleupper": "1:50000",
+						"valuesupper": "1:10000",
+						"showdata": "true",
+						"units": "m£",
+						"legendunits": "million GBP",
+						"scale": getSliderScaleValue(),
+						"sizepow": "3",
+						"dopacitypow": "1.5",
+						"dopacityscale": "2",
+						"nodatacolor": "none",
+						"rangescale": "1.1",
+						"valuescale": "1",
+						"valuedecimals": "1",
+						"aggregationscale": [
+							"1:1", "50px",
+							"1:500000", "local_authority",
+							"1:2000000", "50px"
+						]
+					})
+					.meta({
+						"title": "Co-benefits of reaching net zero in the UK<br>from 2025 to 2050 at the data zone level across the UK",
+						"snippet": "",
+						"description": "",
+						"name": "chart_symbols_7",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}"
+					})
+					.define();
+			};
+
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['chart_pie'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|excess_cold|diet_change|dampness|costs"
+					})
+					.type("CHART|PIE|STARBURST|RAYS|BOW|SORT|SIZE|AGGREGATE|RECT|RELOCATE|SUM|CIRCULARBOX|BOTTOMTITLE|NOLEGEND")
+					.style({
+						"colorscheme": ["#00dddd", "#ff00ff", "#dddd00", "#92ABCF", "#ff8800", "#669389", "#888888"],
+						"label": ["Air quality", "Noise", "Physical activity", "Excess cold", "Diet change", "Dampness", "costs"],
+						"weights": ["1", "1", "1", "1", "1", "1", "-1"],
+						"fillopacity": "0.5",
+						"cache": "false",
+						"shadow": "true",
+						"symbols": [
+							"../../pages/City/symbols/air-quality-svgrepo-com.svg",
+							"../../pages/City/symbols/noise-svgrepo-com.svg",
+							"../../pages/City/symbols/physical-activity-svgrepo-com.svg",
+							"../../pages/City/symbols/hassle-costs-svgrepo-com.svg"
+						],
+						"fillopacity": "1",
+						"shadow": "false",
+						"visible": "true",
+						"boxcolor": "#ffffff",
+						"bordercolor": "#444444",
+						"boxmargin": "0",
+						"boxopacity": "0.00008",
+						"textscale": "0.8",
+						"textcolor": "#000000",
+						"titleupper": "1:50000",
+						"valuesupper": "1:10000",
+						"showdata": "true",
+						"units": "m£",
+						"legendunits": "million GBP",
+						"scale": getSliderScaleValue(),
+						"linewidth": "0.3",
+						"sizepow": "3",
+						"dopacitypow": "1.5",
+						"dopacityscale": "2",
+						"nodatacolor": "none",
+						"rangescale": "1.1",
+						"valuescale": "1",
+						"valuedecimals": "1",
+						"aggregationscale": [
+							"1:1", "50px",
+							"1:500000", "local_authority",
+							"1:2000000", "50px"
+						]
+					})
+					.meta({
+						"title": "Co-benefits of reaching net zero in the UK<br>from 2025 to 2050 at the data zone level across the UK",
+						"snippet": "",
+						"description": "",
+						"name": "chart_pie",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>{{theme.item.chart}}"
+					})
+					.define();
+			};
+
+			// Store invisible chart theme for "none" selection (enables area selections for facets)
+			themeDefinitions['chart_invisible'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "air_quality|noise|physical_activity|excess_cold|diet_change|dampness|costs"
+					})
+					.type("CHART|PIE|STARBURST|RAYS|BOW|SORT|SIZE|AGGREGATE|RECT|RELOCATE|SUM|NOLEGEND")
+					.style({
+						"colorscheme": "none",
+						"label": ["Air quality", "Noise", "Physical activity", "Excess cold", "Diet change", "Dampness", "costs"],
+						"weights": ["1", "1", "1", "1", "1", "1", "-1"],
+						"fillopacity": "0",
+						"cache": "false",
+						"shadow": "false",
+						"visible": "true",
+						"boxcolor": "#ffffff",
+						"bordercolor": "#444444",
+						"boxmargin": "0",
+						"boxopacity": "0",
+						"textscale": "0.8",
+						"textcolor": "#000000",
+						"titleupper": "1:50000",
+						"valuesupper": "1:10000",
+						"showdata": "true",
+						"units": "m£",
+						"legendunits": "million GBP",
+						"scale": getSliderScaleValue(),
+						"linewidth": "0",
+						"sizepow": "3",
+						"dopacitypow": "1.5",
+						"dopacityscale": "2",
+						"nodatacolor": "none",
+						"rangescale": "1.1",
+						"valuescale": "1",
+						"valuedecimals": "1",
+						"aggregationscale": [
+							"1:1", "50px",
+							"1:500000", "local_authority",
+							"1:2000000", "50px"
+						]
+					})
+					.meta({
+						"title": "Invisible chart theme for area selections",
+						"snippet": "",
+						"description": "",
+						"name": "chart_invisible",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}"
+					})
+					.define();
+			};
+			// Store theme builder functions for dynamic loading
+			themeDefinitions['chart_bubbles'] = function() {
+				return ixmaps.layer("uk_areas_layer")
+					.data({
+						"query": query_data_merged.toString(),
+						"type": "ext",
+						"name": "data_merged",
+						"cache": "true"
+					})
+					.binding({
+						"geo": "small_area",
+						"value": "benefits_cost_ratio",
+						"size": "households"
+					})
+					.type("CHART|DOTS|RANGES|SIZE|COUNT|NOLEGEND")
+					.style({
+						"colorscheme": ["red", "orange", "yellow", "green"],
+						"ranges": "0,1,1.5,2,100",
+						"label": ["more costs than benefits", "25% more benefits", "50% more benefits", "huge benefits"],
+						"fillopacity": "0.00007",
+						"shadow": "false",
+						"visible": "true",
+						"showdata": "true",
+						"datafields": "local_authority,small_area,benefits_cost_ratio,households",
+						"units": "",
+						"scale": getSliderScaleValue(),
+						"sizepow": "2",
+						"nodatacolor": "none",
+						"valuescale": "1",
+						"valuedecimals": "1",
+						"aggregationscale": [
+							"1:1", "50px",
+							"1:500000", "local_authority",
+							"1:2000000", "50px"
+						]
+					})
+					.meta({
+						"title": "Population by benefits/cost ratio",
+						"snippet": "",
+						"description": "",
+						"name": "chart_bubbles",
+						"tooltip": "<h2 style='margin:0;'>{{local_authority}}</h2>{{small_area}}<br>Ratio: {{benefits_cost_ratio}}<br>Households: {{households}}"
+					})
+					.define();
+			};
+
+			// Initialize cost-benefit-ratio-chart theme that must always be present for bar animations
+			var chartBubbles = themeDefinitions['chart_bubbles']();
+			if (chartBubbles.meta) {
+				chartBubbles.meta.name = 'cost-benefit-ratio-chart';
+			}
+			if (chartBubbles.style) {
+				chartBubbles.style.name = 'cost-benefit-ratio-chart';
+			}
+			var chartInvisible = themeDefinitions['chart_invisible']();
+			if (chartInvisible.meta) {
+				chartInvisible.meta.name = 'chart_invisible';
+			}
+			if (chartInvisible.style) {
+				chartInvisible.style.name = 'chart_invisible';
+			}
+
+			var nuts1 = ixmaps.layer("nuts_1", layer => layer
+			.data({
+				url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2021_4326_LEVL_1.geojson",
+				type: "geojson",
+				name: "DBTABLE53526541",
+				cache: "true"
+				})
+			.binding({
+				geo: "geometry",
+				value: "$item$",
+				id: "NUTS_ID"
+				})
+			.type("FEATURES|NOLEGEND")
+			.style({
+				filter: "WHERE CNTR_CODE = GB",
+				colorscheme: [
+					"rgba(255,255,255,0.2)"],
+				shadow: "false",
+				visible: "true",
+				units: "",
+				scale: "1",
+				sizepow: "2",
+				linecolor: [
+					"#888888"],
+				linewidth: "0.6",
+				valuescale: "1"
+				})
+			.meta({
+				title: "layer",
+				snippet: "",
+				description: "",
+				name: "nuts_1",
+				tooltip: ""
+				})
+		);
+
+		var nuts2 = ixmaps.layer("nuts_2", layer => layer
+			.data({
+				url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2021_4326_LEVL_2.geojson",
+				type: "geojson",
+				name: "DBTABLE12296011",
+				cache: "true"
+				})
+			.binding({
+				geo: "geometry",
+				value: "$item$",
+				id: "NUTS_ID"
+				})
+			.type("FEATURES|NOLEGEND")
+			.style({
+				filter: "WHERE CNTR_CODE = UK",
+				colorscheme: [
+					"rgba(255,255,255,0.2)"],
+				shadow: "false",
+				visible: "true",
+				units: "",
+				scale: "1",
+				sizepow: "2",
+				linecolor: [
+					"#888888"],
+				linewidth: "0.2",
+				valuescale: "1"
+				})
+			.meta({
+				title: "nuts_2",
+				snippet: "",
+				description: "",
+				name: "nuts_2",
+				tooltip: ""
+				})
+		);
+		var nuts3 = ixmaps.layer("nuts_3", layer => layer
+			.data({
+				url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2021_4326_LEVL_3.geojson",
+				type: "geojson",
+				name: "DBTABLE57367384",
+				cache: "true"
+				})
+			.binding({
+				geo: "geometry",
+				value: "$item$",
+				id: "NUTS_ID"
+				})
+			.type("FEATURES|NOLEGEND")
+			.style({
+				filter: "WHERE CNTR_CODE = UK",
+				colorscheme: [
+					"rgba(255,255,255,0.2)"],
+				shadow: "false",
+				visible: "true",
+				units: "",
+				scale: "1",
+				sizepow: "2",
+				linecolor: [
+					"#888888"],
+				linewidth: "0.2",
+				valuescale: "1"
+				})
+			.meta({
+				title: "layer",
+				snippet: "",
+				description: "",
+				name: "nuts_3",
+				tooltip: ""
+				})
+		);
+
+
+
+
+			// Embed the ixmaps map
+			ixmaps.Map("map-div", {
+				mapService: "leaflet_vt",
+				mapType: "VT_BASIC_LIGHT",
+				map: "../../maps/svg/maps/generic/mercator.svg",
+				name: "map_uk_cobenefits",
+				mode: "pan",
+				legend: "open",
+				tools: "true",
+				search: "Europe",
+				about: "UK CoBenefits"
+			}, function(map){ 
+				__map = map; 
+				return map
+					.options({
+						featurescaling: "true",
+						objectscaling: "dynamic",
+						normalSizeScale: "50000000",
+						dynamicScalePow: "12",
+						flushChartDraw: "1000000",
+						flushPaintShape: "1000000",
+						basemapopacity: "0.9",
+						worksilent: "false",
+						loadsilent: "false",
+						hideOnPan: "false",
+						freezeOnPan: "false"
+					})
+					.attribution("")
+					.view({ 
+						center: { lat: "54.13713950647458", lng: "-2" }, 
+						zoom: "6.194696907589089" 
+					})
+					// Add all layers
+					.layer(ukAreasBaseLayer)
+					.layer(nuts1)
+					.layer(nuts2)
+					.layer(nuts3)	
+					.layer(choropleth4Fields)
+					.layer(chartInvisible)
+					.layer(chartBubbles);
+				
+			});
+			
+			// Initialize themes based on default radio selections
+			// This ensures the invisible foreground theme is loaded if "none" is selected
+			setTimeout(function() {
+				// Hide chart size slider initially if "none" is selected
+				var foreground = document.querySelector('input[name="foreground"]:checked').value;
+				if (foreground === 'none') {
+					document.getElementById('chart-size-control').style.display = 'none';
+				}
+				
+				updateForegroundTheme();
+				updateBackgroundTheme();
+				// Initialize intensity display
+				setTimeout(function() {
+					var background = document.querySelector('input[name="background"]:checked').value;
+					if (background !== 'none') {
+						var currentIntensity = getChoroplethIntensity();
+						document.getElementById('intensity-value').textContent = currentIntensity.toFixed(1);
+					}
+				}, 200);
+			}, 100);
+		})();
+
+	</script>
+
+</body>
+
+</html>
