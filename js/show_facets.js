@@ -41,9 +41,16 @@ ixmaps.data = ixmaps.data || {};
 		const nPopA = [];
 		const nTickA = [];
 		let nTickVal = nMin;
+		// For small ranges, preserve decimal precision in tick values
+		const preserveDecimals = (nMax - nMin) < 10;
 		for (let i = 0; i < nTicks + 1; i++) {
 			nPopA[i] = 0;
-			nTickA[i] = Math.floor(szFlag.match(/LOG/) ? (Math.exp(nTickVal)) : nTickVal);
+			if (szFlag.match(/LOG/)) {
+				nTickA[i] = Math.exp(nTickVal);
+			} else {
+				// For small ranges, keep decimal precision; for larger ranges, use floor
+				nTickA[i] = preserveDecimals ? nTickVal : Math.floor(nTickVal);
+			}
 			nTickVal += nPop;
 		}
 		
@@ -102,29 +109,32 @@ ixmaps.data = ixmaps.data || {};
 			const newField = newFieldMatch ? newFieldMatch[1] : null;
 
 			// Remove any existing filter for the same field (use robust matching)
-			window.__facetFilterA = window.__facetFilterA.filter((filterPart) => {
+			ixmaps.data.facetsFilterA = ixmaps.data.facetsFilterA.filter((filterPart) => {
 				const match = filterPart.match(/"([^"]+)"/);
 				const fieldInFilter = match ? match[1] : null;
 				return fieldInFilter !== newField;
 			});
 
-			window.__facetFilterA.push(szFilter);
+			ixmaps.data.facetsFilterA.push(szFilter);
+			
+			// Track the most recently activated facet field
+			ixmaps.data.facetsLastActiveField = newField;
 		}
 
 		// Build final filter: Combine base filter + facet filters
 		let finalFilterParts = [];
 		
 		// Add base filter if exists
-		if (window.__baseFilter && window.__baseFilter.length > 0) {
-			const baseParts = window.__baseFilter.split(/WHERE /)[1];
+		if (ixmaps.data.facetsBaseFilter && ixmaps.data.facetsBaseFilter.length > 0) {
+			const baseParts = ixmaps.data.facetsBaseFilter.split(/WHERE /)[1];
 			if (baseParts) {
 				finalFilterParts.push(baseParts);
 			}
 		}
 		
 		// Add facet filters
-		if (window.__facetFilterA.length > 0) {
-			finalFilterParts.push(window.__facetFilterA.join(" AND "));
+		if (ixmaps.data.facetsFilterA.length > 0) {
+			finalFilterParts.push(ixmaps.data.facetsFilterA.join(" AND "));
 		}
 		
 		// Combine all filter parts
@@ -152,15 +162,17 @@ ixmaps.data = ixmaps.data || {};
 	// set a range filter for a data field
 	// if a range is already active on this data field, remove this range before
 	// --------------------------------------------------------------------------
-	const __setRangeFilter = (szField, szRange, min, max) => {
+		const __setRangeFilter = (szField, szRange, min, max) => {
 		const rangeA = szRange.split(",");
 		const szFilter = `WHERE "${szField}" BETWEEN ${rangeA[0]} AND ${rangeA[1]}`;
 		// delete filter with same field (use robust matching)
-		window.__facetFilterA = window.__facetFilterA.filter((filterPart) => {
+		ixmaps.data.facetsFilterA = ixmaps.data.facetsFilterA.filter((filterPart) => {
 			const match = filterPart.match(/"([^"]+)"/);
 			const fieldInFilter = match ? match[1] : null;
 			return fieldInFilter !== szField;
 		});
+		// Track the most recently activated facet field
+		ixmaps.data.facetsLastActiveField = szField;
 		__setFacetFilter(szFilter);
 	};
 
@@ -170,11 +182,13 @@ ixmaps.data = ixmaps.data || {};
 	const __setFilter = (szField, szFilter) => {
 		const szQuery = `WHERE "${szField}" like "${szFilter}"`;
 		// delete filter with same field (use robust matching)
-		window.__facetFilterA = window.__facetFilterA.filter((filterPart) => {
+		ixmaps.data.facetsFilterA = ixmaps.data.facetsFilterA.filter((filterPart) => {
 			const match = filterPart.match(/"([^"]+)"/);
 			const fieldInFilter = match ? match[1] : null;
 			return fieldInFilter !== szField;
 		});
+		// Track the most recently activated facet field
+		ixmaps.data.facetsLastActiveField = szField;
 		__setFacetFilter(szFilter.length ? szQuery : "");
 	};
 
@@ -183,7 +197,7 @@ ixmaps.data = ixmaps.data || {};
 	// -----------------------------------------------
 	const __removeFacets = (szField) => {
 		// Robust field name extraction from filter string
-		window.__facetFilterA = window.__facetFilterA.filter((filterPart) => {
+		ixmaps.data.facetsFilterA = ixmaps.data.facetsFilterA.filter((filterPart) => {
 			// Extract field name from filter part using regex
 			// Handle various filter formats: "field" = "value", "field" BETWEEN x AND y, etc.
 			const match = filterPart.match(/"([^"]+)"/);
@@ -197,12 +211,15 @@ ixmaps.data = ixmaps.data || {};
 	};
 
 	// -----------------------------------------------
-	// Initialize state variables on window for global access and persistence
+	// Initialize facet state in ixmaps.data namespace
 	// -----------------------------------------------
-	window.__facetFilterA = window.__facetFilterA || [];  // Array of active facet filter parts
-	window.__baseFilter = window.__baseFilter || "";      // Initial filter (non-facet, preserved)
-	window.__rangesA = window.__rangesA || [];            // Range data for numeric facets
-	window.__queryA = window.__queryA || [];              // Filter queries for click handlers
+	ixmaps.data.facetsFilterA = ixmaps.data.facetsFilterA || [];  // Array of active facet filter parts
+	ixmaps.data.facetsBaseFilter = ixmaps.data.facetsBaseFilter || "";  // Initial filter (non-facet, preserved)
+	ixmaps.data.facetsRangesA = ixmaps.data.facetsRangesA || [];  // Range data for numeric facets
+	ixmaps.data.facetsQueryA = ixmaps.data.facetsQueryA || [];  // Filter queries for click handlers
+	ixmaps.data.facetsLastActiveField = ixmaps.data.facetsLastActiveField || null;  // Track most recently activated facet field
+	ixmaps.data.facetsSortActiveFirst = ixmaps.data.facetsSortActiveFirst !== undefined ? ixmaps.data.facetsSortActiveFirst : true;  // Toggle to sort active facets first
+	ixmaps.data.facetsCurrentA = ixmaps.data.facetsCurrentA || null;  // Current facets array for rendering
 	
 	// Module-only state (not exposed globally)
 	let __oldFilter = "";
@@ -216,8 +233,8 @@ ixmaps.data = ixmaps.data || {};
 	// -----------------------------------------------
 	const __separateBaseFilter = (szFilter, facetsA) => {
 		if (!szFilter || !szFilter.match(/WHERE/)) {
-			window.__baseFilter = "";
-			window.__facetFilterA = [];
+			ixmaps.data.facetsBaseFilter = "";
+			ixmaps.data.facetsFilterA = [];
 			return;
 		}
 		
@@ -248,9 +265,9 @@ ixmaps.data = ixmaps.data || {};
 			}
 		}
 		
-		// Store separated filters on window for persistence
-		window.__baseFilter = baseFilterParts.length ? ("WHERE " + baseFilterParts.join(" AND ")) : "";
-		window.__facetFilterA = facetFilterParts;
+		// Store separated filters in ixmaps.data for persistence
+		ixmaps.data.facetsBaseFilter = baseFilterParts.length ? ("WHERE " + baseFilterParts.join(" AND ")) : "";
+		ixmaps.data.facetsFilterA = facetFilterParts;
 	};
 	
 	const __makeWordCloud = (szField) => {
@@ -266,8 +283,8 @@ ixmaps.data = ixmaps.data || {};
 
 		const rangeA = szRange.split(",");
 
-		// Look up by sliderId in __rangesA (which uses original field name as key)
-		const rangeData = window.__rangesA[Object.keys(window.__rangesA).find(key => 
+		// Look up by sliderId in rangesA (which uses original field name as key)
+		const rangeData = ixmaps.data.facetsRangesA[Object.keys(ixmaps.data.facetsRangesA).find(key => 
 			key.replace(/ |\W/g, "_") === sliderId || key === sliderId
 		)];
 
@@ -281,7 +298,25 @@ ixmaps.data = ixmaps.data || {};
 			const min = rangeData.min;
 			const max = rangeData.max;
 			const fieldId = rangeData.id;
+			const range = max - min;
+			
+			// For small ranges, check if we have many unique values (likely decimals)
 			let nTicks = Math.min(40, (max - min + 1));
+			if (range < 10 && rangeData.data && rangeData.data.length > 0) {
+				// Count unique values to detect decimal precision
+				const uniqueValues = new Set(rangeData.data.map(v => typeof v === 'number' ? v : parseFloat(v)));
+				const uniqueCount = uniqueValues.size;
+				// If we have many unique values relative to range, increase ticks
+				// Aim for at least one bin per 0.1 unit, or use unique count if reasonable
+				if (uniqueCount > nTicks * 2) {
+					// Use more ticks to preserve decimal detail
+					nTicks = Math.min(40, Math.max(nTicks, Math.ceil(uniqueCount / 2)));
+					// For very small ranges, ensure we have enough bins for decimal precision
+					if (range < 1) {
+						nTicks = Math.min(40, Math.max(nTicks, Math.ceil(range * 10)));
+					}
+				}
+			}
 			nTicks = (nTicks >= 5) ? nTicks : 40;
 			const nStep = (max - min) / nTicks;
 			if (nStep > 1 && nStep < 2) {
@@ -374,6 +409,23 @@ ixmaps.data = ixmaps.data || {};
 
 			// Separate base filter from facet filters
 			__separateBaseFilter(szFilter, facetsA);
+			
+			// Sort facets if requested: put active facets first (only if multiple active)
+			if (ixmaps.data.facetsSortActiveFirst){
+				// Count active facets
+				var activeCount = facetsA.filter(function(f){ return f.isActive; }).length;
+				
+				// Only sort if more than one active facet
+				if (activeCount > 1){
+					facetsA.sort(function(a, b){
+						// Active facets come first
+						if (a.isActive && !b.isActive) return -1;
+						if (!a.isActive && b.isActive) return 1;
+						// Otherwise maintain original order
+						return 0;
+					});
+				}
+			}
 
 			const sliderA = [];
 			const objThemeDefinition = ixmaps.data.objThemeDefinition;
@@ -428,10 +480,10 @@ ixmaps.data = ixmaps.data || {};
 
 		// create an array of the filter to pass them to the executing function
 		// to avoid problems with special characters " and '
-		window.__queryA.length = 0;  // Clear array instead of creating new one
+		ixmaps.data.facetsQueryA.length = 0;  // Clear array instead of creating new one
 
-		// Store facets globally for access by index
-		window.__currentFacetsA = facetsA;
+		// Store facets for access by index
+		ixmaps.data.facetsCurrentA = facetsA;
 		
 		// loop over facets array and create HTML to show the facets
 		//
@@ -458,7 +510,7 @@ ixmaps.data = ixmaps.data || {};
 			const szMax = ixmaps.formatValue(facetsA[i].max, 2, "BLANK");
 
 			// Use facet index to avoid any escaping issues with special characters
-			const removeAttr = fActiveFacet ? ` onclick="__removeFacets(window.__currentFacetsA[${i}].id); return false;" style='cursor:pointer;color:white'` : "";
+			const removeAttr = fActiveFacet ? ` onclick="__removeFacets(ixmaps.data.facetsCurrentA[${i}].id); return false;" style='cursor:pointer;color:white'` : "";
 			szHtml += fActiveFacet ? `<a ${removeAttr}>` : "";
 			szHtml += "<div style='font-family:arial;font-size:1.1em;text-align:left;padding:0.5em 0.5em 0.5em 0.5em;margin:1em 0 0.4em 0;background:" + bgColor + ";border-radius:5px;color:white'>";
 			szHtml += facetsA[i].id;
@@ -473,7 +525,7 @@ ixmaps.data = ixmaps.data || {};
 
 			szHtml += fActiveFacet ? "<span style='float:right;margin-right:0em;padding-top:0em;'><i class='icon shareIcon share_bitly icon-cancel-circle' title='Share a short link' tabindex='-1'></i></span>" : "";
 			if ((facetsA[i].type == "textual") && !facetsA[i].values){
-				szHtml += `<a onclick="__makeWordCloud(window.__currentFacetsA[${i}].id); return false;" style='cursor:pointer'><span style='float:right;margin-right:0em;padding-top:0em;color:white'><i class='icon shareIcon share_bitly icon-cloud' title='Share a short link' tabindex='-1'></i></span></a>`;
+				szHtml += `<a onclick="__makeWordCloud(ixmaps.data.facetsCurrentA[${i}].id); return false;" style='cursor:pointer'><span style='float:right;margin-right:0em;padding-top:0em;color:white'><i class='icon shareIcon share_bitly icon-cloud' title='Share a short link' tabindex='-1'></i></span></a>`;
 			}
 			
 			szHtml += "</div>";
@@ -489,9 +541,9 @@ ixmaps.data = ixmaps.data || {};
 				const inputId = szSafeId + "query";
 				szHtml += '<div class="input-group" style="margin-bottom:0.5em;margin-left:0.1em;width:100%" >';
 				szHtml += `<input id="${inputId}" type="text" class="form-control" style="background:transparent;border:none" value="${value}" placeholder="${placeholder}" data-facet-index="${i}"`;
-				szHtml += ` onKeyUp="if(event.which == 13){var value = this.value; __setFilter(window.__currentFacetsA[this.getAttribute('data-facet-index')].id, value);}">`;
+				szHtml += ` onKeyUp="if(event.which == 13){var value = this.value; __setFilter(ixmaps.data.facetsCurrentA[this.getAttribute('data-facet-index')].id, value);}">`;
 				szHtml += '<span class="input-group-btn" style="float:right;margin-left:-0.5em;margin-right:0.2em;">';
-				szHtml += `<button class="btn btn-search" style="border:none" type="button" onclick="var input=document.getElementById('${inputId}'); __setFilter(window.__currentFacetsA[input.getAttribute('data-facet-index')].id, input.value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>`;
+				szHtml += `<button class="btn btn-search" style="border:none" type="button" onclick="var input=document.getElementById('${inputId}'); __setFilter(ixmaps.data.facetsCurrentA[input.getAttribute('data-facet-index')].id, input.value);"><i class="icon shareIcon share_bitly icon-search" title="Search by text" tabindex="-1"></i> </button>`;
 				szHtml += '</span></input>';
 				szHtml += '</div>'
 			}else{
@@ -504,7 +556,7 @@ ixmaps.data = ixmaps.data || {};
 			// Use index-based approach to avoid escaping issues
 			const facetIdx = i;
 			setTimeout(() => {
-				ixmaps.data.makeWordCloud(objTheme.szId, window.__currentFacetsA[facetIdx].id, szTarget);
+				ixmaps.data.makeWordCloud(objTheme.szId, ixmaps.data.facetsCurrentA[facetIdx].id, szTarget);
 			}, 100);
 		}
 			}
@@ -533,8 +585,8 @@ ixmaps.data = ixmaps.data || {};
 				// make min/max slider
 				// ---------------------------------
 				
-				if (!window.__rangesA[facetsA[i].id] || !fActiveFacet) {
-					window.__rangesA[facetsA[i].id] = {
+				if (!ixmaps.data.facetsRangesA[facetsA[i].id] || !fActiveFacet) {
+					ixmaps.data.facetsRangesA[facetsA[i].id] = {
 						min: facetsA[i].min,
 						max: facetsA[i].max,
 						data: facetsA[i].data,
@@ -542,10 +594,22 @@ ixmaps.data = ixmaps.data || {};
 					};
 				}
 
-				const min = window.__rangesA[facetsA[i].id].min;
-				const max = window.__rangesA[facetsA[i].id].max;
-				const szMin = ixmaps.formatValue(window.__rangesA[facetsA[i].id].min, 2, "BLANK");
-				const szMax = ixmaps.formatValue(window.__rangesA[facetsA[i].id].max, 2, "BLANK");
+				const min = ixmaps.data.facetsRangesA[facetsA[i].id].min;
+				const max = ixmaps.data.facetsRangesA[facetsA[i].id].max;
+				
+				// Parse active filter to get actual slider values if filter is active
+				let sliderMin = facetsA[i].min;
+				let sliderMax = facetsA[i].max;
+				if (fActiveFacet && szActiveFilter && szActiveFilter.match(/BETWEEN/)) {
+					const betweenMatch = szActiveFilter.match(/BETWEEN\s+([\d.]+)\s+AND\s+([\d.]+)/i);
+					if (betweenMatch) {
+						sliderMin = parseFloat(betweenMatch[1]);
+						sliderMax = parseFloat(betweenMatch[2]);
+					}
+				}
+				
+				const szMin = ixmaps.formatValue(sliderMin, 2, "BLANK");
+				const szMax = ixmaps.formatValue(sliderMax, 2, "BLANK");
 
 				const href = "#";
 				const bgColor = "#eeeeee";
@@ -559,7 +623,25 @@ ixmaps.data = ixmaps.data || {};
 					const fOnMap = (objThemeDefinition.field == facetsA[i].id);
 
 					const sliderId = szSafeId;
+					const range = max - min;
+					
+					// For small ranges, check if we have many unique values (likely decimals)
 					let nTicks = Math.min(40, (max - min + 1));
+					if (range < 10 && facetsA[i].data && facetsA[i].data.length > 0) {
+						// Count unique values to detect decimal precision
+						const uniqueValues = new Set(facetsA[i].data.map(v => typeof v === 'number' ? v : parseFloat(v)));
+						const uniqueCount = uniqueValues.size;
+						// If we have many unique values relative to range, increase ticks
+						// Aim for at least one bin per 0.1 unit, or use unique count if reasonable
+						if (uniqueCount > nTicks * 2) {
+							// Use more ticks to preserve decimal detail
+							nTicks = Math.min(40, Math.max(nTicks, Math.ceil(uniqueCount / 2)));
+							// For very small ranges, ensure we have enough bins for decimal precision
+							if (range < 1) {
+								nTicks = Math.min(40, Math.max(nTicks, Math.ceil(range * 10)));
+							}
+						}
+					}
 					nTicks = (nTicks >= 5) ? nTicks : 40;
 
 					let nStep = (max - min) / nTicks;
@@ -569,7 +651,7 @@ ixmaps.data = ixmaps.data || {};
 
 					const szScale = ((max - min) < 40) ? "" : "LOG";
 
-					const barA = __getScatterArray(window.__rangesA[facetsA[i].id].data, min, max, nTicks, szScale);
+					const barA = __getScatterArray(ixmaps.data.facetsRangesA[facetsA[i].id].data, min, max, nTicks, szScale);
 					let maxHeight = 0;
 					barA.count.forEach((height) => {
 						maxHeight = Math.max(maxHeight, height);
@@ -603,7 +685,7 @@ ixmaps.data = ixmaps.data || {};
 					const szClearHighlight = "$(this).css(\"border\",\"\");";
 
 					szHtml += `<div style='display:inline-block;width:${width}px;background-color:${color};height:${1 + (height * scale)}px;' `;
-					szHtml += ` data-toggle='tooltip' title='${szTooltip}' data-facet-index='${i}' data-range='${bMin},${bMax}' onclick="__setRangeFilter(window.__currentFacetsA[this.getAttribute('data-facet-index')].id, this.getAttribute('data-range'), 0, 0)"`;
+					szHtml += ` data-toggle='tooltip' title='${szTooltip}' data-facet-index='${i}' data-range='${bMin},${bMax}' onclick="__setRangeFilter(ixmaps.data.facetsCurrentA[this.getAttribute('data-facet-index')].id, this.getAttribute('data-range'), 0, 0)"`;
 					szHtml += fActive ? ` onmouseover='${szHighlight}' onmouseout='${szClearHighlight}'>` : ">";
 					szHtml += "</div>";
 						//szHtml += "<div style='display:inline-block;width:" + width + "px;background-color:" + color + ";height:" + (1 + (height * scale)) + "px;' data-toggle='tooltip' title='" + (szbMin + ' - ' + szbMax) + "'></div>";
@@ -613,9 +695,20 @@ ixmaps.data = ixmaps.data || {};
 					// make slider
 					// ---------------------------------
 
-				// Calculate step for slider
-				const range = max - min;
-				const step = range < 100 ? 1 : Math.pow(10, Math.floor(Math.log10(range / 100)));
+				// Calculate step for slider (range already declared above)
+				// For small ranges with decimals, use finer step
+				let step;
+				if (range < 1) {
+					// For very small ranges, use 0.01 or 0.001 depending on range
+					step = range < 0.1 ? 0.001 : 0.01;
+				} else if (range < 10) {
+					// For small ranges, use 0.1 or 0.01 depending on range
+					step = range < 1 ? 0.01 : 0.1;
+				} else if (range < 100) {
+					step = 1;
+				} else {
+					step = Math.pow(10, Math.floor(Math.log10(range / 100)));
+				}
 				
 				sliderA.push({
 					id: sliderId,
@@ -625,8 +718,8 @@ ixmaps.data = ixmaps.data || {};
 					max: max,
 					step: step,
 					ticks: nTicks,
-					currentMin: facetsA[i].min,
-					currentMax: facetsA[i].max
+					currentMin: sliderMin,
+					currentMax: sliderMax
 				});
 				
 				// Dual handle HTML5 range slider (using overlapping technique from test_slider.html)
@@ -639,8 +732,8 @@ ixmaps.data = ixmaps.data || {};
 				szHtml += '<div style="position:relative;height:33px;max-width:210px;margin-left:1em;">';
 				szHtml += '<div class="slider-track" style="position:absolute;height:8px;border-radius:4px;background:#ddd;top:8px;width:100%;z-index:1;"></div>';
 				szHtml += `<div class="slider-range" id="${sliderId}_range" style="position:absolute;height:8px;border-radius:4px;background:#888;top:8px;z-index:1;"></div>`;
-				szHtml += `<input type="range" class="dual-slider" id="${sliderId}_min" min="${min}" max="${max}" value="${facetsA[i].min}" step="${step}" style="position:absolute;left:0;top:11px;width:100%;height:8px;background:transparent;margin:0;-webkit-appearance:none;pointer-events:none;" data-slider-id="${sliderId}" data-field="${facetsA[i].id}"/>`;
-				szHtml += `<input type="range" class="dual-slider" id="${sliderId}_max" min="${min}" max="${max}" value="${facetsA[i].max}" step="${step}" style="position:absolute;left:0;top:11px;width:100%;height:8px;background:transparent;margin:0;-webkit-appearance:none;pointer-events:none;" data-slider-id="${sliderId}" data-field="${facetsA[i].id}"/>`;
+				szHtml += `<input type="range" class="dual-slider" id="${sliderId}_min" min="${min}" max="${max}" value="${sliderMin}" step="${step}" style="position:absolute;left:0;top:11px;width:100%;height:8px;background:transparent;margin:0;-webkit-appearance:none;pointer-events:none;" data-slider-id="${sliderId}" data-field="${facetsA[i].id}"/>`;
+				szHtml += `<input type="range" class="dual-slider" id="${sliderId}_max" min="${min}" max="${max}" value="${sliderMax}" step="${step}" style="position:absolute;left:0;top:11px;width:100%;height:8px;background:transparent;margin:0;-webkit-appearance:none;pointer-events:none;" data-slider-id="${sliderId}" data-field="${facetsA[i].id}"/>`;
 				szHtml += '</div>';
 				szHtml += '</div>';
 
@@ -672,8 +765,8 @@ ixmaps.data = ixmaps.data || {};
 					const szQuery = `WHERE "${facetsA[i].id}" = "${facetsA[i].values[ii]}"`;
 
 					// make href, pass filter by filter array to avoid " or ' conflicts
-					window.__queryA.push(szQuery);
-					const href = `javascript:__setFacetFilter(window.__queryA[${window.__queryA.length - 1}]);`;
+					ixmaps.data.facetsQueryA.push(szQuery);
+					const href = `javascript:__setFacetFilter(ixmaps.data.facetsQueryA[${ixmaps.data.facetsQueryA.length - 1}]);`;
 
 						// how often is the value in the column
 						const nCount = facetsA[i].valuesCount ? facetsA[i].valuesCount[facetsA[i].values[ii]] : null;
@@ -699,7 +792,7 @@ ixmaps.data = ixmaps.data || {};
 
 						// facet button with one unique value
 						// -----------------------------------
-						szHtml += '<a href="' + href + '">';
+						szHtml += '<a href="' + href + '" style="text-decoration:none">';
 						szHtml += '<div class="input-group" style="margin-bottom:0em;width:100%">';
 						
 						if (facetsA[i].type == "textual") {
@@ -714,7 +807,7 @@ ixmaps.data = ixmaps.data || {};
 								}
 							}
 						}
-						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;border:none;border-bottom:solid #dddddd 0.1px;border-radius:0;"> <i class="icon shareIcon share_bitly icon-filter" style="float:left;margin-left:-0.5em;margin-right:1em;padding-top:0.2em;color:#888888;display:none" title="filter by this" tabindex="-1"></i><span style="margin-left:-0.5em;float:left;white-space:normal;text-align:left;margin-top:0.2em">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px">' + szCount + '</span></button>';
+						szHtml += '<button type="button" class="btn btn-block btn-primary " style="width:100%;border:none;border-bottom:solid rgba(128,128,128,0.3) 0.1px;border-radius:0;"> <i class="icon shareIcon share_bitly icon-filter" style="float:left;margin-left:-0.5em;margin-right:1em;padding-top:0.2em;color:#888888;display:none" title="filter by this" tabindex="-1"></i><span style="margin-left:-0.5em;float:left;white-space:normal;text-align:left;margin-top:0.2em">' + szText + '</span><span class="badge badge-primary badge-pill pull-right" style="top:0.1em;right:-0.25em;float:right;text-align:right;font-size:18px">' + szCount + '</span></button>';
 						
 						bgColor = "rgba(208,208,208,1)";
 						if (objTheme.nParts > 1) {
@@ -762,8 +855,18 @@ ixmaps.data = ixmaps.data || {};
 		szHtml += "</div>";
 		$("#"+szDiv).html(szHtml);
 		
-		if ($(".facet-active")[0]){
-			$("#"+szDiv).parent().scrollTop($(".facet-active")[0].offsetTop-$("#"+szDiv)[0].offsetTop)+"px";
+			// Scroll to the most recently activated facet
+		if (ixmaps.data.facetsLastActiveField){
+			// Find the facet with the matching field name and scroll to it
+			var targetFacet = $(".facet-active").filter(function(){
+				var headerText = $(this).find('div').first().text();
+				// Handle cases where the header might have "name: min - max" or just "name"
+				var fieldName = headerText.split(':')[0].trim();
+				return fieldName === ixmaps.data.facetsLastActiveField;
+			})[0];
+			if (targetFacet){
+				$("#"+szDiv).parent().scrollTop(targetFacet.offsetTop-$("#"+szDiv)[0].offsetTop)+"px";
+			}
 		}
 		
 		// Initialize HTML5 dual range sliders (using technique from test_slider.html)
@@ -783,7 +886,8 @@ ixmaps.data = ixmaps.data || {};
 					let maxVal = parseFloat(sliderMax.value);
 
 					// Prevent overlap (maintain minimum gap)
-					const minGap = slider.step || 1;
+					// For small ranges, use the step value; for larger ranges, use at least 1
+					const minGap = slider.step || (slider.max - slider.min < 10 ? 0.1 : 1);
 					if (minVal > maxVal - minGap) {
 						minVal = maxVal - minGap;
 						sliderMin.value = minVal;
@@ -799,9 +903,9 @@ ixmaps.data = ixmaps.data || {};
 					sliderRange.style.left = percent1 + '%';
 					sliderRange.style.width = (percent2 - percent1) + '%';
 					
-					// Update numeric labels (raw values, no formatting)
-					if (minLabel) minLabel.textContent = minVal;
-					if (maxLabel) maxLabel.textContent = maxVal;
+					// Update numeric labels with proper formatting
+					if (minLabel) minLabel.textContent = ixmaps.formatValue ? ixmaps.formatValue(minVal, 2, "BLANK") : minVal;
+					if (maxLabel) maxLabel.textContent = ixmaps.formatValue ? ixmaps.formatValue(maxVal, 2, "BLANK") : maxVal;
 				};
 
 				// Apply filter when slider is released
@@ -863,8 +967,18 @@ ixmaps.data = ixmaps.data || {};
 	window.__makeWordCloud = __makeWordCloud;
 	window.__HighlightFacetItems = __HighlightFacetItems;
 	
-	// Note: State variables (__queryA, __facetFilterA, __rangesA, __baseFilter) 
-	// are already initialized on window at module level (lines 186-189)
+	// Toggle function to switch between sorted and unsorted facet display
+	const __toggleSortActiveFacets = function(){
+		ixmaps.data.facetsSortActiveFirst = !ixmaps.data.facetsSortActiveFirst;
+		// Re-render facets with new sort order
+		if (__szFilter !== null && __szDiv && __facetsA){
+			ixmaps.data.showFacets(__szFilter, __szDiv, __facetsA);
+		}
+	};
+	window.__toggleSortActiveFacets = __toggleSortActiveFacets;
+	
+	// Note: State variables (facetsQueryA, facetsFilterA, facetsRangesA, facetsBaseFilter, etc.) 
+	// are now initialized in ixmaps.data namespace (lines 206-216)
 
 	/**
 	 * end of namespace
