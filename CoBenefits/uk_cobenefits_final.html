@@ -478,9 +478,9 @@
 		function getChoroplethIntensity() {
 			var choroplethTheme = ixmaps.getThemeDefinitionObj('choropleth');
 			if (choroplethTheme && choroplethTheme.style && choroplethTheme.style.dopacityscale) {
-				return parseFloat(choroplethTheme.style.dopacityscale) || 4;
+				return parseFloat(choroplethTheme.style.dopacityscale) || 10;
 			}
-			return 4; // Default value
+			return 10; // Default value
 		}
 
 		/**
@@ -602,6 +602,10 @@
 				if (!themeDef.style) themeDef.style = {};
 				themeDef.meta.name = themeName;
 				themeDef.style.name = themeName;
+
+				// Set zoomdependent choropleth opacity
+				var nOpacity = 10/(ixmaps.getZoom()-5);
+				themeDef.style.dopacityscale = nOpacity;
 				
 				// Add or replace theme using add() with replace flag (like reference file)
 				ixmaps.map().add(themeDef, 'replace|silent');
@@ -1138,6 +1142,31 @@
 				// Update statistics
 				ixmaps.statistics(szId);
 			};
+
+			var opacityTimeout = null;
+			function setOpacity(nOpacity){
+				if(opacityTimeout) clearTimeout(opacityTimeout);
+				opacityTimeout = setTimeout(function(){
+					ixmaps.map().changeThemeStyle("choropleth", 'dopacityscale:' + (nOpacity));
+				}, 100);
+				// Update the display value
+				document.getElementById('intensity-value').textContent = nOpacity.toFixed(1);
+
+			}
+
+			var old_onZoomAndPan = ixmaps.htmlgui_onZoomAndPan;
+			var lastZoom = 0;
+			ixmaps.htmlgui_onZoomAndPan = function(){
+				if(lastZoom == ixmaps.getZoom()) return;
+				lastZoom = ixmaps.getZoom();
+
+				var nOpacity = (ixmaps.getZoom() - 7) / 3;
+            	ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
+
+				nOpacity = 15/(ixmaps.getZoom()-5);
+				setOpacity(nOpacity);
+			};
+
 		})();
 
 		// ============================================================
@@ -1215,7 +1244,7 @@
 						"brightness": "1.2",
 						"alphafield100": "$density$",
 						"dopacitypow": "2",
-						"dopacityscale": "5",
+						"dopacityscale": "10",
 						"nodatacolor": "none",
 						"valuescale": "1",
 						"valuedecimals": "0"
@@ -1269,7 +1298,7 @@
 						"sizepow": "2",
 						"alphafield100": "$density$",
 						"dopacitypow": "2",
-						"dopacityscale": "5",
+						"dopacityscale": "10",
 						"nodatacolor": "none",
 						"valuescale": "1",
 						"valuedecimals": "0"
@@ -1313,7 +1342,7 @@
 						"scale": "1",
 						"sizepow": "2",
 						"dopacitypow": "2",
-						"dopacityscale": "4",
+						"dopacityscale": "10",
 						"nodatacolor": "none",
 						"valuescale": "1",
 						"valuedecimals": "0"
@@ -1670,7 +1699,7 @@
 				sizepow: "2",
 				linecolor: [
 					"#888888"],
-				linewidth: "0.6",
+				linewidth: "0.5",
 				valuescale: "1"
 				})
 			.meta({
@@ -1706,7 +1735,7 @@
 				sizepow: "2",
 				linecolor: [
 					"#000000"],
-				linewidth: "0.5",
+				linewidth: "0.3",
 				valuescale: "1"
 				})
 			.meta({
@@ -1741,7 +1770,7 @@
 				sizepow: "2",
 				linecolor: [
 					"#000000"],
-				linewidth: "0.3",
+				linewidth: "0.2",
 				valuescale: "1"
 				})
 			.meta({
@@ -1785,14 +1814,14 @@
 					})
 					.attribution("")
 					.view({ 
-						center: { lat: "54.13713950647458", lng: "-2" }, 
-						zoom: "6.194696907589089" 
+						center: { lat: "54.6508282135903", lng: "-4.298348770932814" }, 
+						zoom: "6.115103760510509" 
 					})
 					// Add all layers
 					.layer(ukAreasBaseLayer)
 					.layer(nuts1)
 					.layer(nuts2)
-					.layer(nuts3)	
+					//.layer(nuts3)	
 					.layer(choropleth4Fields)
 					.layer(chartInvisible)
 					.layer(chartBubbles);
