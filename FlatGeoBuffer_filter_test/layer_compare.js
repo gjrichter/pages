@@ -226,7 +226,7 @@ $Log: layer_compare.js,v $
             .data({
                 type: "ext",
                 name: "dataquery_flatgeobuffer",
-                ext: "http://data.ixmaps.com.s3.amazonaws.com/TestData/istat_basi_territoriali_2011_indicatore_joined.fgb"
+                ext: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TestData/istat_basi_territoriali_2011_indicatore_joined.fgb"
             })
             .type("FEATURE")
             .binding({
@@ -248,7 +248,7 @@ $Log: layer_compare.js,v $
             .data({
                 type: "ext",
                 name: "dataquery_flatgeobuffer_2",
-                ext: "http://data.ixmaps.com.s3.amazonaws.com/TestData/istat_basi_territoriali_2021_indicatore_joined.fgb"
+                ext: "https://s3.eu-west-1.amazonaws.com/data.ixmaps.com/TestData/istat_basi_territoriali_2021_indicatore_joined.fgb"
             })
             .type("FEATURE")
             .binding({
