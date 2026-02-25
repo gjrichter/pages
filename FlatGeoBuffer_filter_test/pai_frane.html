@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ixmaps embed example">
+	<meta name="author" content="guenter richter">
+	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
+
+	<title>Created by Composer</title>
+</head>
+
+<body style="margin:0;padding:0;">
+
+	<!-- here goes the map -->
+	<div id="map-div"></div>
+
+	<!-- include the ixmaps API -->
+	<script src="https://gjrichter.github.io/ixmaps_flat/ixmaps.js"></script>
+	<script src="./js/dataprovider_flatgeobuffer_test.js"></script>
+
+	<script type="text/javascript" charset="utf-8">
+
+		// ---------------------------------------------------
+		// t h e   l a y e r 
+		// ---------------------------------------------------
+
+		var __polygons =
+			ixmaps.layer("Polygons", layer => layer
+				.data({
+					type: "ext",
+					name: "dataquery_flatgeobuffer",
+					url: "https://s3.fr-par.scw.cloud/ixmaps.data/test%20only/pai_frane_wgs84.fgb"
+				})
+				.binding({
+					geo: "geometry",
+					value: "per_fr_ita"
+				})
+				.type("FEATURE|CHOROPLETH|CATEGORICAL")
+				.style({
+					colorscheme: [
+						"#F5CA41",
+						"#E69902",
+						"#E60001",						
+						"#730000",
+						"#FFFF72",
+						"gray",
+					],
+					values: [
+						"Moderata P1",
+						"Media P2",
+						"Elevata P3",
+						"Molto elevata P4",	
+						"Aree di Attenzione AA"
+					],
+					fillopacity: "0.9",
+					shadow: "false",
+					visible: "true",
+					showdata: "true",
+					units: "",
+					scale: "1",
+					sizepow: "2",
+					linecolor: [
+						"#888888"
+					],
+					linewidth: "0.1",
+					featureupper: "1:200000",
+					valuescale: "1"
+				})
+				.meta({
+					title: "PAI - Frane e pericolosità",
+					snippet: "",
+					description: "",
+					name: "PAI - Frane e pericolosità",
+					tooltip: "{{theme.item.data}}"
+				})
+				.define()
+			);
+
+		// ---------------------------------------------------
+		// t h e   m a p 
+		// ---------------------------------------------------
+
+		// create and embed the map
+		// ! reference to "map-div", the hosting html div
+
+		let _map = ixmaps.Map("map-div", {
+			mapService: "leaflet_vt",
+			mapType: "VT_TOPO_SHINY",
+			map: "../../maps/svg/maps/generic/mercator.svg",
+			name: "map_1",
+			mode: "pan",
+			legend: "true",
+			tools: "true",
+			search: "Europe",
+			about: "test"
+		});
+		_map.options({
+			featurescaling: "dynamic",
+			objectscaling: "dynamic",
+			normalSizeScale: "20000000",
+			flushChartDraw: "1000000",
+			flushPaintShape: "1000000",
+			dynamiclabel: "false",
+			basemapopacity: "0.5",
+			worksilent: "false",
+			loadsilent: "false",
+			hideOnPan: "false",
+			freezeOnPan: "false",
+		});
+		_map.attribution("");
+		_map.view({
+			"center": {
+				"lat": "41.49549158301073",
+				"lng": "14.863127471817673"
+			},
+			"zoom": "6.26640264824977"
+		});
+
+		_map.layer(__polygons);
+
+	</script>
+</body>
+
+</html>
