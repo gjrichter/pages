@@ -161,14 +161,18 @@ window.ixmaps = window.ixmaps || {};
 
 		// No previous bounds: let the theme load normally, don’t trigger refresh here
 		if (!__oldBounds) {
-			ixmaps.htmlgui_onZoomAndPan_old(nZoom);
+			if (ixmaps.htmlgui_onZoomAndPan_old) {
+				ixmaps.htmlgui_onZoomAndPan_old(nZoom);
+			}
 			return;
 		}
 
 		// Still inside last loaded bbox: no refetch
 		if (__boundsInsideOld(bounds)) {
 			ixmaps.setTitle("");
-			ixmaps.htmlgui_onZoomAndPan_old(nZoom);
+			if (ixmaps.htmlgui_onZoomAndPan_old) {
+				ixmaps.htmlgui_onZoomAndPan_old(nZoom);
+			}
 			return;
 		}
 
