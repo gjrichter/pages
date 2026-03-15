@@ -220,6 +220,49 @@
 				.define()
 			);
 
+		// ---------------------------------------------------
+		// U R L   p a r a m s   ( v i e w )
+		// ---------------------------------------------------
+
+		// Legge lat/lng/zoom dall'URL; se presenti sovrascrivono il view di default
+		var _urlParams = new URLSearchParams(window.location.search);
+		var _initView = {
+			center: {
+				lat: _urlParams.get("lat") || "41.49549158301073",
+				lng: _urlParams.get("lng") || "14.863127471817673"
+			},
+			zoom: _urlParams.get("zoom") || "6.26640264824977"
+		};
+
+		// Aggiorna l'URL senza ricaricare la pagina (debounced)
+		var _updateUrlTimer = null;
+		function updateUrlFromView() {
+			try {
+				var c = ixmaps.getCenter();
+				var z = ixmaps.getZoom();
+				if (!c || z == null) return;
+				var params = new URLSearchParams(window.location.search);
+				params.set("lat", c.lat.toFixed(6));
+				params.set("lng", c.lng.toFixed(6));
+				params.set("zoom", z.toFixed(4));
+				history.replaceState(null, "", "?" + params.toString());
+			} catch(e) {}
+		}
+
+		function hookUrlUpdate() {
+			var _prev = ixmaps.htmlgui_onZoomAndPan;
+			ixmaps.htmlgui_onZoomAndPan = function(nZoom) {
+				try {
+					if (_prev) _prev.call(this, nZoom);
+				} catch(e) {
+					_TRACE("error in htmlgui_onZoomAndPan");
+					_TRACE(e);
+				}
+				clearTimeout(_updateUrlTimer);
+				_updateUrlTimer = setTimeout(updateUrlFromView, 400);
+			};
+		}
+
 		// create and embed the map
 		// ! reference to "map-div", the hosting html div
 
@@ -248,15 +291,15 @@
 			freezeOnPan: "false",
 		});
 		_map.attribution("<h1>Civici visibili con scala minore di 1:15000 !</h1>");
-		_map.view({
-			"center": {
-				"lat": "41.49549158301073",
-				"lng": "14.863127471817673"
-			},
-			"zoom": "6.26640264824977"
-		});
+		_map.view(_initView);
 
 		_map.layer(__civici);
+
+		// Aggancia l'aggiornamento URL al pan/zoom, dopo che la mappa è pronta
+		if (typeof _map.then === "function") {
+			_map.then(function() { hookUrlUpdate(); updateUrlFromView(); });
+		}
+		setTimeout(function() { hookUrlUpdate(); updateUrlFromView(); }, 1000);
 
 		// Sposta overlay e pulsante in fondo al body dopo il caricamento mappa, così restano sopra
 		function moveInfoOnTop() {
