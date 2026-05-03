@@ -32,6 +32,33 @@
 	<title>Airbnb listings by host - cities selector with facets</title>
 	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
 	<link rel="stylesheet" href="./css/sidebar.css">
+	<style>
+		#chart-size-slider {
+			-webkit-appearance: none;
+			appearance: none;
+			height: 6px;
+			background: #888;
+			border-radius: 3px;
+			outline: none;
+		}
+		#chart-size-slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 16px;
+			height: 16px;
+			background: #666;
+			border-radius: 50%;
+			cursor: pointer;
+		}
+		#chart-size-slider::-moz-range-thumb {
+			width: 16px;
+			height: 16px;
+			background: #666;
+			border-radius: 50%;
+			cursor: pointer;
+			border: none;
+		}
+	</style>
 </head>
 
 <body style='text-align:center;background:#F7F7F7'>
@@ -69,7 +96,7 @@
 	</div>
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps_flat/ui/js/htmlgui_flat.js"></script>
+	<script type="text/javascript" src="https://gjrichter.github.io/ixmaps-flat/ui/js/htmlgui_flat.js"></script>
 	<script type="text/javascript" src="../js/format.js"></script>
 	<script type="text/javascript" src="../js/facet.js"></script>
 	<script type="text/javascript" src="../js/show_facets.js"></script>
@@ -289,7 +316,6 @@
 				];
 
 				facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId, "map");
-				console.log(facetsA);
 				
 				let nCount = 0;
 				// Try to get count from facets
@@ -418,7 +444,7 @@
 			document.getElementById('city-select').addEventListener('change', onCityChange);
 
 			// Embed the ixmaps map
-			ixmaps.embed("map-div", {
+			ixmaps.Map("map-div", {
 				mapService: "leaflet_vt",           // Use Leaflet vector tiles
 				mapType: "CartoDB - Positron", // Base map style
 				name: "map_airbnb_all_hosts",
