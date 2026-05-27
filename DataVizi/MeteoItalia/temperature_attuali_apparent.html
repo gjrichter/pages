@@ -200,13 +200,46 @@
             margin-right: 3px;
         }
 
-        /* Mobile bottom bar — theme switcher */
+        /* Mobile bars */
+        .mobile-top-bar,
         .mobile-bottom-bar { display: none; }
 
         @media (max-width: 768px) {
-            /* Shrink map so it doesn't hide behind the bottom bar */
+            /* Shrink map to fit between top (36px) and bottom (46px) bars */
             #map_div {
-                height: calc(100vh - 46px) !important;
+                margin-top: 36px;
+                height: calc(100vh - 36px - 46px) !important;
+            }
+
+            /* Top bar — title + observation time */
+            .mobile-top-bar {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 36px;
+                background: rgba(255,255,255,0.97);
+                border-bottom: 1px solid #d4d4d4;
+                z-index: 99999;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                padding: 0 12px;
+                font-size: 12.5px;
+            }
+            .mtb-title {
+                font-weight: 600;
+                color: #222;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .mtb-sep { color: #ccc; }
+            .mtb-period {
+                color: #777;
+                white-space: nowrap;
+                font-variant-numeric: tabular-nums;
             }
 
             /* Move logo above the bottom bar */
@@ -431,6 +464,13 @@
             </div>
         </div>
         
+        <!-- Mobile top bar -->
+        <div class="mobile-top-bar" id="mobile_top_bar">
+            <span class="mtb-title"  id="mtb_title">Temperatura misurata</span>
+            <span class="mtb-sep">·</span>
+            <span class="mtb-period" id="mtb_period">—</span>
+        </div>
+
         <!-- Mobile bottom bar -->
         <nav class="mobile-bottom-bar" aria-label="Selezione visualizzazione">
             <button class="mbb-btn active" data-mode="peaks"          onclick="setVisualizationMode('peaks')">Misurate</button>
@@ -530,6 +570,12 @@
             }, 300);
         }
 
+        const _modeLabels = {
+            peaks:          'Temperatura misurata',
+            peaks_apparent: 'Temperatura percepita',
+            humidity:       'Umidità'
+        };
+
         function setVisualizationMode(mode) {
             currentVisualizationMode = mode;
 
@@ -537,6 +583,10 @@
             document.querySelectorAll('[data-mode]').forEach(el => {
                 el.classList.toggle('active', el.dataset.mode === mode);
             });
+
+            // Update mobile top bar title
+            const mtbTitle = document.getElementById('mtb_title');
+            if (mtbTitle) mtbTitle.textContent = _modeLabels[mode] || 'Temperature in Italia';
             
             // Implementa logica di visualizzazione
             switch(mode) {
@@ -715,6 +765,9 @@
 			console.log("------------------");
 			console.log("------------------");
             
+            const mtbPeriod = document.getElementById('mtb_period');
+            if (mtbPeriod) mtbPeriod.textContent = __periodo.replace(' - ', '–');
+
             const statsDiv = document.getElementById('statistics');
             statsDiv.innerHTML = `
                 <strong>Dati aggiornati:</strong> ${new Date().toLocaleTimeString('it-IT')}<br>
