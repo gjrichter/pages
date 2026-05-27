@@ -23,9 +23,354 @@
     
     <!-- CSS Site -->
     <link rel="stylesheet" href="./css/site.css">
+    
+    <style>
+        /* Info Button - Bottom Right */
+        .info-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: #2c3e50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            transition: all 0.3s ease;
+            border: 2px solid #e0e0e0;
+            font-family: Georgia, serif;
+        }
+
+        .info-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+            background: #f8f9fa;
+        }
+
+        /* Info Popup */
+        .info-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            z-index: 100001;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            flex-direction: column;
+        }
+
+        .info-popup.active {
+            display: flex;
+        }
+
+        .info-popup-header {
+            background: linear-gradient(135deg, #1e90f0 0%, #1e538e 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 16px 16px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-popup-header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-popup-header .icon {
+            font-size: 32px;
+        }
+
+        .info-popup-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .info-popup-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .info-popup-content {
+            padding: 30px;
+            color: #333;
+            line-height: 1.7;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .info-popup-content h3 {
+            color: #1e90f0;
+            margin: 25px 0 12px 0;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-popup-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .info-popup-content p {
+            margin: 12px 0;
+        }
+
+        .info-popup-content ul {
+            margin: 12px 0;
+            padding-left: 25px;
+        }
+
+        .info-popup-content li {
+            margin: 10px 0;
+        }
+
+        .info-popup-content strong {
+            color: #1e538e;
+            font-weight: 600;
+        }
+
+        .info-popup-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e64b23;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #1e90f0;
+        }
+
+        .temp-scale {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .temp-scale-item {
+            display: inline-block;
+            width: 30px;
+            height: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .info-popup-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-radius: 0 0 16px 16px;
+            font-size: 13px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        }
+
+        .info-popup-footer a {
+            color: #1e90f0;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .info-popup-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .info-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+        }
+
+        .info-popup-overlay.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -48%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e6f3ff;
+            color: #1e538e;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
  </head>
 
 <body>
+    <!-- Info Button -->
+    <div class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni">
+        i
+    </div>
+
+    <!-- Info Popup Overlay -->
+    <div class="info-popup-overlay" id="infoOverlay" onclick="toggleInfoPopup()"></div>
+
+    <!-- Info Popup -->
+    <div class="info-popup" id="infoPopup">
+        <div class="info-popup-header">
+            <h2><span class="icon">🌡️</span> Temperature in Tempo Reale - Italia</h2>
+            <button class="info-popup-close" onclick="toggleInfoPopup()" aria-label="Chiudi">&times;</button>
+        </div>
+        <div class="info-popup-content">
+            <h3>📊 Descrizione</h3>
+            <p>
+                Questa mappa interattiva visualizza le <strong>temperature in tempo reale</strong> rilevate dalle 
+                stazioni meteorologiche distribuite sul territorio italiano. I dati provengono da 
+                <strong>MeteoHub</strong> di ItaliaMeteo e vengono aggiornati automaticamente ogni ora.
+            </p>
+
+            <div class="info-section">
+                <strong>🎯 Caratteristica principale:</strong> Calcolo della <strong>temperatura percepita</strong> 
+                (apparent temperature) che combina temperatura reale, umidità relativa e velocità del vento 
+                per fornire la sensazione termica effettiva.
+            </div>
+
+            <h3>🗺️ Modalità di Visualizzazione</h3>
+            <p>Seleziona diverse modalità dal menu laterale:</p>
+            <ul>
+                <li><span class="feature-badge">Picchi</span> <strong>Temperature misurate</strong> - Visualizzazione con grafici a colonna che mostrano i valori di temperatura</li>
+                <li><span class="feature-badge">Apparent</span> <strong>Temperature sentite</strong> - Mostra la temperatura percepita considerando vento e umidità</li>
+                <li><span class="feature-badge">Heatmap</span> <strong>Punti/Heatmap</strong> - Visualizzazione a punti con gradiente termico</li>
+                <li><span class="feature-badge">Griglia</span> <strong>Griglia con medie</strong> - Aggregazione per celle con temperature medie</li>
+                <li><span class="feature-badge">Umidità</span> <strong>Griglia con umidità</strong> - Visualizzazione dell'umidità relativa</li>
+            </ul>
+
+            <h3>🌡️ Scala Cromatica</h3>
+            <p>Le temperature sono rappresentate con una scala di colori che va dal viola (molto freddo) al rosso intenso (molto caldo):</p>
+            <div class="temp-scale">
+                <span>-28°C</span>
+                <div class="temp-scale-item" style="background:#88229A"></div>
+                <div class="temp-scale-item" style="background:#1E418E"></div>
+                <div class="temp-scale-item" style="background:#1E90F0"></div>
+                <div class="temp-scale-item" style="background:#C3FEE5"></div>
+                <div class="temp-scale-item" style="background:#1DA63B"></div>
+                <div class="temp-scale-item" style="background:#F4FB1F"></div>
+                <div class="temp-scale-item" style="background:#F59628"></div>
+                <div class="temp-scale-item" style="background:#E64B23"></div>
+                <div class="temp-scale-item" style="background:#871B1B"></div>
+                <div class="temp-scale-item" style="background:#FADDDD"></div>
+                <span>+44°C</span>
+            </div>
+
+            <h3>🧮 Calcolo Temperatura Percepita</h3>
+            <p>La <strong>temperatura apparente</strong> (apparent temperature) viene calcolata con la formula:</p>
+            <div class="info-section">
+                <code>AT = T + 0.33×e - 0.70×v - 4</code>
+                <p style="margin-top:10px;font-size:0.9em">
+                    dove:<br>
+                    <strong>T</strong> = temperatura dell'aria (°C)<br>
+                    <strong>e</strong> = pressione di vapore (hPa) calcolata da temperatura e umidità relativa<br>
+                    <strong>v</strong> = velocità del vento (m/s)
+                </p>
+                <p style="margin-top:10px;font-size:0.9em">
+                    La temperatura apparente è una misura della temperatura che tiene conto dell'effetto del vento e dell'umidità sulla sensazione termica.
+                </p>
+                <p style="margin-top:10px;font-size:0.9em">Per calcolare la temperatura apparente viene applicata la formula di Steadman (versione semplificata).</p>
+                <p style="margin-top:10px;font-size:0.9em">La formula BOM/Steadman è quella più usata nelle app meteo australiane e in molte europee perché funziona sia per caldo che per freddo.</p>
+            </div>
+
+            <h3>📡 Dati Utilizzati</h3>
+            <ul>
+                <li><strong>B12101</strong> - Temperatura dell'aria a 2 metri (°C)</li>
+                <li><strong>B13003</strong> - Umidità relativa a 2 metri (%)</li>
+                <li><strong>B11002</strong> - Velocità del vento a 10 metri (m/s)</li>
+            </ul>
+
+            <h3>⚙️ Funzionalità Interattive</h3>
+            <ul>
+                <li><strong>Zoom</strong> - Usa la rotellina del mouse o i controlli per ingrandire</li>
+                <li><strong>Pan</strong> - Trascina la mappa per spostarti</li>
+                <li><strong>Tooltip</strong> - Passa il mouse sulle stazioni per vedere i dettagli</li>
+                <li><strong>Slider</strong> - Regola la dimensione dei grafici dal menu laterale<hr>
+                    <em>Nota: <b>non</b> regola l'altezza dei grafici direttamente, ma <b>riduce l'amplificazione</b> dei valori grandi cosi sonso più visibili i valori piccoli.</em></li>
+                <li><strong>Statistiche</strong> - Visualizza min, max e media nel pannello laterale</li>
+            </ul>
+
+            <h3>🔄 Aggiornamento Dati</h3>
+            <p>
+                I dati vengono scaricati dall'API di MeteoHub con un intervallo temporale di <strong>3 ore precedenti</strong> 
+                rispetto all'orario corrente. La mappa si aggiorna automaticamente per mostrare le condizioni più recenti.
+            </p>
+
+            <h3>💡 Come Utilizzare</h3>
+            <ol>
+                <li>Seleziona una modalità di visualizzazione dal menu laterale</li>
+                <li>Regola la grandezza dei grafici con lo slider</li>
+                <li>Naviga la mappa per esplorare le diverse zone d'Italia</li>
+                <li>Passa il mouse sulle stazioni per vedere i valori esatti</li>
+                <li>Osserva le statistiche nel pannello per avere una visione d'insieme</li>
+            </ol>
+        </div>
+        <div class="info-popup-footer">
+            <strong>Fonte dati:</strong> <a href="https://meteohub.mistralportal.it/app/maps/observations" target="_blank" rel="noopener">MeteoHub - ItaliaMeteo</a> | 
+            <strong>Licenza:</strong> CC-BY Compliant | 
+            <strong>Visualizzazione:</strong> <a href="https://ixmaps.com" target="_blank" rel="noopener">iXMaps</a> - Data Viz Italia
+        </div>
+    </div>
+
     <!-- Logo migliorato -->
     <div class="logo" onclick="toggleCodeView()" role="button" tabindex="0" aria-label="Mostra codice HTML">
         <div class="logo-text">
@@ -71,18 +416,20 @@
                     <ul class="nav-menu">
                         <li>
                             <ul>
-                                <li><a href="#" class="active" onclick="setVisualizationMode('peaks')">Picchi delle temperature</a></li>
-                                <li><a href="#" onclick="setVisualizationMode('peaks_apparent')">Temperature sentite (apparent t.)</a></li>
+                                <li><a href="#" class="active" onclick="setVisualizationMode('peaks')">Temperature misurate</a></li>
+                                <li><a href="#" onclick="setVisualizationMode('peaks_apparent')">Temperature percepite</a></li>
+                                <!--
                                 <li><a href="#" onclick="setVisualizationMode('dots')">Punti/Heatmap</a></li>
                                 <li><a href="#" onclick="setVisualizationMode('labels')">Griglia con medie</a></li>
-                                <li><a href="#" onclick="setVisualizationMode('humidity')">Griglia con umidità</a></li>
+                                -->
+                                <li><a href="#" onclick="setVisualizationMode('humidity')">Umidità</a></li>
                             </ul>
                         </li>
                     </ul>
                 </nav>
 
                 <div class="controls">
-                    <label for="chart_size_slider" class="control-label">Grandezza grafici</label>
+                    <label for="chart_size_slider" class="control-label">- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grafici &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +</label>
                     <input type="range" 
                            id="chart_size_slider" 
                            class="slider" 
@@ -130,12 +477,12 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@master/ui/js/htmlgui_flat.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@master/ui/js/tools/facet.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps-flat/ui/js/htmlgui_flat.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps-flat/ui/js/tools/facet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@master/ui/ui/js/tools/json_config.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@master/ui/ui/js/tools/json_config_html.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gjrichter/data.js@latest/data.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps-flat/ui/js/tools/json_config.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps-flat/ui/js/tools/json_config_html.js"></script>
+    <script src="https://gjrichter.github.io/ixmaps-flat/../data.js/data.js"></script>
 
     <script>
 
@@ -262,6 +609,7 @@
             ixmaps.map().message("...");
             setTimeout(() => {
                 ixmaps.map().replace('chart', __temperature_lolli, 'silent')
+                ixmaps.map().remove('chart_bg')
                 ixmaps.map().add(__temperature_dots_bg, 'silent')
             },10);
             ixmaps.htmlgui_onZoomAndPan();
@@ -287,8 +635,11 @@
 
         function loadDotsVisualization() {
             console.log('Caricamento visualizzazione punti');
+            ixmaps.map().remove('chart_bg');
             ixmaps.map().message("...");
-            setTimeout(() => {ixmaps.map().replace('chart', __temperature_dots, 'silent')},10);
+            setTimeout(() => {
+                ixmaps.map().replace('chart', __temperature_dots, 'silent');
+            },10);
         }
 
         function loadLabelsVisualization() {
@@ -552,7 +903,8 @@
              
             var broker = new Data.Broker()
 
-                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B12101;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                //.addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B12101;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                .addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/meteohub/temperature_B12101.json", "json")
 
                 .realize(
                     function(dataA) {
@@ -599,7 +951,8 @@
              
             var broker = new Data.Broker()
 
-                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B13003;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                //.addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B13003;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                .addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/meteohub/humidity_B13003.json", "json")
 
                 .realize(
                     function(dataA) {
@@ -644,11 +997,12 @@
              
             var broker = new Data.Broker()
 
-                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B12101;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
-
-                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B13003;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
-            
-                .addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B11002;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,10000,0,0&reliabilityCheck=true&last=true&ts=1753376742036", "json")
+                //.addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B12101;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                .addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/meteohub/temperature_B12101.json", "json")
+                //.addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B13003;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,2000,0,0&reliabilityCheck=true&last=true&ts=1751462143620", "json")
+                .addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/meteohub/humidity_B13003.json", "json")
+                //.addSource("https://meteohub.mistralportal.it/api/observations?q=reftime:%20%3E="+szStartDate+"%20"+szStartTime+",%3C="+szEndDate+"%20"+szEndTime+";product:B11002;license:CCBY_COMPLIANT;timerange:254,0,0;level:103,10000,0,0&reliabilityCheck=true&last=true&ts=1753376742036", "json")
+                .addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/meteohub/wind_B11002.json", "json")
             
                .realize(
                     function(dataA) {
@@ -756,7 +1110,7 @@
                     geo: "stat.lat|stat.lon",
                     value: "prod.0.val.0.val"
                     })
-                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES")
+                .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|NOLEGEND")
                 .style({
                     colorscheme: __colorscheme,
                     ranges: __ranges,
@@ -807,7 +1161,7 @@
                     scale: "0.35",
                     })
                 .meta({
-                    title: "Temprature sentite<br><span style='font-size:0.6em;line-height:0.2em'><b>fondo: </b>peso di humidità e bassa ventilazione</span>",
+                    title: "<div style='font-size:0.8em;line-height:1em'><b>fondo: </b>Variazione della temperatura misurata a causa del peso di humidità e bassa ventilazione</div>",
                     snippet: "",
                     description: "",
                     name: "chart_bg",
@@ -1044,7 +1398,7 @@
                     title: "stat.details.0.val"
                     })
                 .filter("WHERE apparent_temperature <= 50")         
-                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX|UNDEFINEDISNOTVALUE")
+                .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX|UNDEFINEDISNOTVALUE|NOLEGEND")
                 .style({
                     userdraw: "lolliChart",
                     colorscheme: __colorscheme,
@@ -1066,7 +1420,7 @@
                     gridwidth: "20px"
                     })
                 .meta({
-                    title: "Temperatura",
+                    title: "Temperatura sentita",
                     snippet: "",
                     description: "",
                     name: "chart",
@@ -1155,11 +1509,11 @@
             .local("... creating theme ...", "...")
             .local("working ...", "")
             .local("loading data ...", "scaricando dati ...")
-            .require("https://gjrichter.github.io/ixmaps_flat/ui/js/tools/tooltip_mustache.js")
+            .require("https://gjrichter.github.io/ixmaps-flat/ui/js/tools/tooltip_mustache.js")
             .require("https://d3js.org/d3.v3.min.js")
-            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/chart.js")
-            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/arrow_chart.js")
-            .require("https://gjrichter.github.io/ixmaps_flat/usercharts/d3/lolli_chart.js")
+            .require("https://gjrichter.github.io/ixmaps-flat/usercharts/d3/chart.js")
+            .require("https://gjrichter.github.io/ixmaps-flat/usercharts/d3/arrow_chart.js")
+            .require("https://gjrichter.github.io/ixmaps-flat/usercharts/d3/lolli_chart.js")
             .attribution(attribution)
  
             // -----------------------------		 
@@ -1171,6 +1525,37 @@
             .layer(__temperature_lolli)
 
         );
+     </script>
+
+     <script>
+        // ----------------------------
+        // I N F O   P O P U P
+        // ----------------------------
+
+        function toggleInfoPopup() {
+            const popup = document.getElementById('infoPopup');
+            const overlay = document.getElementById('infoOverlay');
+            
+            if (popup.classList.contains('active')) {
+                popup.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                popup.classList.add('active');
+                overlay.classList.add('active');
+            }
+        }
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const popup = document.getElementById('infoPopup');
+                const overlay = document.getElementById('infoOverlay');
+                if (popup.classList.contains('active')) {
+                    popup.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            }
+        });
      </script>
 </body>
 </html>
