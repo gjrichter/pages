@@ -25,283 +25,257 @@
     <link rel="stylesheet" href="./css/site.css">
     
     <style>
-        /* Info Button - Bottom Right */
+        /* Info Button — inline next to sidebar title */
         .info-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: white;
-            color: #2c3e50;
-            border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            color: #666;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 10000;
-            transition: all 0.3s ease;
-            border: 2px solid #e0e0e0;
+            border: 1px solid #bbb;
             font-family: Georgia, serif;
+            transition: color 0.15s, border-color 0.15s;
+            user-select: none;
+            vertical-align: middle;
+            margin-left: 7px;
+            position: relative;
+            top: -2px;
+            flex-shrink: 0;
         }
-
         .info-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-            background: #f8f9fa;
+            color: #111;
+            border-color: #888;
         }
 
-        /* Info Popup */
+        /* Overlay backdrop */
+        .info-popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 10000;
+        }
+        .info-popup-overlay.active { display: block; }
+
+        /* Panel */
         .info-popup {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 0;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            background: #fff;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.14);
             z-index: 100001;
-            max-width: 700px;
-            max-height: 90vh;
+            width: min(620px, 94vw);
+            max-height: 88vh;
             overflow: hidden;
-            animation: fadeIn 0.3s ease;
             flex-direction: column;
         }
+        .info-popup.active { display: flex; }
 
-        .info-popup.active {
-            display: flex;
-        }
-
+        /* Header */
         .info-popup-header {
-            background: linear-gradient(135deg, #1e90f0 0%, #1e538e 100%);
-            color: white;
-            padding: 25px 30px;
-            border-radius: 16px 16px 0 0;
+            padding: 16px 20px 14px;
+            border-bottom: 1px solid #e4e4e4;
             position: sticky;
             top: 0;
+            background: #fafafa;
             z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
         .info-popup-header h2 {
             margin: 0;
-            font-size: 26px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+            letter-spacing: 0.01em;
         }
-
-        .info-popup-header .icon {
-            font-size: 32px;
-        }
-
         .info-popup-close {
             position: absolute;
-            top: 20px;
-            right: 25px;
-            background: rgba(255,255,255,0.2);
+            top: 12px;
+            right: 14px;
+            background: none;
             border: none;
-            color: white;
-            font-size: 28px;
+            color: #888;
+            font-size: 20px;
             cursor: pointer;
             line-height: 1;
-            padding: 0;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: color 0.15s;
         }
+        .info-popup-close:hover { color: #222; }
 
-        .info-popup-close:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
+        /* Scrollable body */
         .info-popup-content {
-            padding: 30px;
+            padding: 18px 20px;
             color: #333;
-            line-height: 1.7;
+            font-size: 13.5px;
+            line-height: 1.65;
             overflow-y: auto;
             flex: 1;
         }
-
         .info-popup-content h3 {
-            color: #1e90f0;
-            margin: 25px 0 12px 0;
-            font-size: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #333;
+            margin: 20px 0 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid #e8e8e8;
+            padding-bottom: 4px;
         }
-
-        .info-popup-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .info-popup-content p {
-            margin: 12px 0;
-        }
-
-        .info-popup-content ul {
-            margin: 12px 0;
-            padding-left: 25px;
-        }
-
-        .info-popup-content li {
-            margin: 10px 0;
-        }
-
-        .info-popup-content strong {
-            color: #1e538e;
-            font-weight: 600;
-        }
-
+        .info-popup-content h3:first-child { margin-top: 0; }
+        .info-popup-content p { margin: 6px 0; }
+        .info-popup-content ul,
+        .info-popup-content ol { margin: 6px 0; padding-left: 22px; }
+        .info-popup-content li { margin: 5px 0; }
+        .info-popup-content strong { color: #111; font-weight: 600; }
         .info-popup-content code {
-            background: #f4f4f4;
-            padding: 2px 6px;
+            background: #f3f3f3;
+            padding: 1px 5px;
             border-radius: 3px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            color: #e64b23;
+            font-size: 0.88em;
+            color: #555;
         }
-
         .info-section {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #1e90f0;
+            background: #f7f7f7;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #bbb;
         }
 
+        /* Colour scale */
         .temp-scale {
             display: flex;
             align-items: center;
-            gap: 5px;
-            margin: 10px 0;
+            gap: 3px;
+            margin: 8px 0;
             flex-wrap: wrap;
         }
-
         .temp-scale-item {
             display: inline-block;
-            width: 30px;
-            height: 20px;
+            width: 26px;
+            height: 14px;
             border: 1px solid #ddd;
         }
-
-        .info-popup-footer {
-            padding: 20px 30px;
-            background: #f8f9fa;
-            border-radius: 0 0 16px 16px;
-            font-size: 13px;
+        .temp-scale span {
+            font-size: 11px;
             color: #666;
-            border-top: 1px solid #e0e0e0;
-            position: sticky;
-            bottom: 0;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
         }
 
+        /* Footer */
+        .info-popup-footer {
+            padding: 10px 20px;
+            background: #fafafa;
+            border-top: 1px solid #e4e4e4;
+            font-size: 12px;
+            color: #666;
+        }
         .info-popup-footer a {
-            color: #1e90f0;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .info-popup-footer a:hover {
+            color: #444;
             text-decoration: underline;
         }
+        .info-popup-footer a:hover { color: #000; }
 
-        .info-popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 10000;
-        }
-
-        .info-popup-overlay.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -48%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        .feature-badge {
+        /* Mode tag */
+        .mode-tag {
             display: inline-block;
-            padding: 4px 10px;
-            background: #e6f3ff;
-            color: #1e538e;
-            border-radius: 4px;
-            font-size: 0.85em;
+            font-size: 11px;
             font-weight: 600;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            color: #555;
+            background: #efefef;
+            border-radius: 3px;
+            padding: 1px 6px;
+            margin-right: 3px;
+        }
+
+        /* Mobile bottom bar — theme switcher */
+        .mobile-bottom-bar { display: none; }
+
+        @media (max-width: 768px) {
+            /* Shrink map so it doesn't hide behind the bottom bar */
+            #map_div {
+                height: calc(100vh - 46px) !important;
+            }
+
+            .mobile-bottom-bar {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 46px;
+                background: rgba(255,255,255,0.97);
+                border-top: 1px solid #d4d4d4;
+                z-index: 99999;
+                align-items: stretch;
+            }
+            .mbb-btn {
+                flex: 1;
+                background: none;
+                border: none;
+                border-right: 1px solid #e2e2e2;
+                font-size: 12.5px;
+                color: #555;
+                cursor: pointer;
+                font-family: inherit;
+                padding: 0 6px;
+                transition: background 0.12s, color 0.12s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .mbb-btn:last-child { border-right: none; }
+            .mbb-btn.active {
+                background: #f0f0f0;
+                color: #111;
+                font-weight: 600;
+            }
+            .mbb-btn:active { background: #e6e6e6; }
         }
     </style>
  </head>
 
 <body>
-    <!-- Info Button -->
-    <div class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni">
-        i
-    </div>
-
     <!-- Info Popup Overlay -->
     <div class="info-popup-overlay" id="infoOverlay" onclick="toggleInfoPopup()"></div>
 
     <!-- Info Popup -->
     <div class="info-popup" id="infoPopup">
         <div class="info-popup-header">
-            <h2><span class="icon">🌡️</span> Temperature in Tempo Reale - Italia</h2>
+            <h2>Temperature in Tempo Reale — Italia</h2>
             <button class="info-popup-close" onclick="toggleInfoPopup()" aria-label="Chiudi">&times;</button>
         </div>
         <div class="info-popup-content">
-            <h3>📊 Descrizione</h3>
+
+            <h3>Descrizione</h3>
             <p>
-                Questa mappa interattiva visualizza le <strong>temperature in tempo reale</strong> rilevate dalle 
-                stazioni meteorologiche distribuite sul territorio italiano. I dati provengono da 
-                <strong>MeteoHub</strong> di ItaliaMeteo e vengono aggiornati automaticamente ogni ora.
+                Mappa delle <strong>temperature rilevate in tempo reale</strong> dalle stazioni meteorologiche
+                distribuite sul territorio italiano. I dati provengono da <strong>MeteoHub</strong> (ItaliaMeteo)
+                e coprono le 3 ore precedenti all'orario corrente.
+                La modalità <em>temperatura percepita</em> combina temperatura, umidità relativa e velocità
+                del vento per restituire la sensazione termica effettiva.
             </p>
 
-            <div class="info-section">
-                <strong>🎯 Caratteristica principale:</strong> Calcolo della <strong>temperatura percepita</strong> 
-                (apparent temperature) che combina temperatura reale, umidità relativa e velocità del vento 
-                per fornire la sensazione termica effettiva.
-            </div>
-
-            <h3>🗺️ Modalità di Visualizzazione</h3>
-            <p>Seleziona diverse modalità dal menu laterale:</p>
+            <h3>Modalità di visualizzazione</h3>
             <ul>
-                <li><span class="feature-badge">Picchi</span> <strong>Temperature misurate</strong> - Visualizzazione con grafici a colonna che mostrano i valori di temperatura</li>
-                <li><span class="feature-badge">Apparent</span> <strong>Temperature sentite</strong> - Mostra la temperatura percepita considerando vento e umidità</li>
-                <li><span class="feature-badge">Heatmap</span> <strong>Punti/Heatmap</strong> - Visualizzazione a punti con gradiente termico</li>
-                <li><span class="feature-badge">Griglia</span> <strong>Griglia con medie</strong> - Aggregazione per celle con temperature medie</li>
-                <li><span class="feature-badge">Umidità</span> <strong>Griglia con umidità</strong> - Visualizzazione dell'umidità relativa</li>
+                <li><span class="mode-tag">Misurate</span> Grafici a colonna con la temperatura dell'aria</li>
+                <li><span class="mode-tag">Percepite</span> Temperatura apparente (vento + umidità)</li>
+                <li><span class="mode-tag">Umidità</span> Umidità relativa per cella aggregata</li>
             </ul>
 
-            <h3>🌡️ Scala Cromatica</h3>
-            <p>Le temperature sono rappresentate con una scala di colori che va dal viola (molto freddo) al rosso intenso (molto caldo):</p>
+            <h3>Scala cromatica</h3>
             <div class="temp-scale">
-                <span>-28°C</span>
+                <span>−28°C</span>
                 <div class="temp-scale-item" style="background:#88229A"></div>
                 <div class="temp-scale-item" style="background:#1E418E"></div>
                 <div class="temp-scale-item" style="background:#1E90F0"></div>
@@ -315,59 +289,38 @@
                 <span>+44°C</span>
             </div>
 
-            <h3>🧮 Calcolo Temperatura Percepita</h3>
-            <p>La <strong>temperatura apparente</strong> (apparent temperature) viene calcolata con la formula:</p>
+            <h3>Temperatura percepita — formula</h3>
             <div class="info-section">
-                <code>AT = T + 0.33×e - 0.70×v - 4</code>
-                <p style="margin-top:10px;font-size:0.9em">
-                    dove:<br>
-                    <strong>T</strong> = temperatura dell'aria (°C)<br>
-                    <strong>e</strong> = pressione di vapore (hPa) calcolata da temperatura e umidità relativa<br>
-                    <strong>v</strong> = velocità del vento (m/s)
+                <code>AT = T + 0.33·e − 0.70·v − 4</code>
+                <p style="margin-top:8px">
+                    <strong>T</strong> temperatura aria (°C) &nbsp;·&nbsp;
+                    <strong>e</strong> pressione di vapore (hPa) &nbsp;·&nbsp;
+                    <strong>v</strong> velocità vento (m/s)
                 </p>
-                <p style="margin-top:10px;font-size:0.9em">
-                    La temperatura apparente è una misura della temperatura che tiene conto dell'effetto del vento e dell'umidità sulla sensazione termica.
-                </p>
-                <p style="margin-top:10px;font-size:0.9em">Per calcolare la temperatura apparente viene applicata la formula di Steadman (versione semplificata).</p>
-                <p style="margin-top:10px;font-size:0.9em">La formula BOM/Steadman è quella più usata nelle app meteo australiane e in molte europee perché funziona sia per caldo che per freddo.</p>
+                <p>Formula BOM/Steadman (versione semplificata), valida sia per caldo che per freddo.</p>
             </div>
 
-            <h3>📡 Dati Utilizzati</h3>
+            <h3>Variabili usate</h3>
             <ul>
-                <li><strong>B12101</strong> - Temperatura dell'aria a 2 metri (°C)</li>
-                <li><strong>B13003</strong> - Umidità relativa a 2 metri (%)</li>
-                <li><strong>B11002</strong> - Velocità del vento a 10 metri (m/s)</li>
+                <li><strong>B12101</strong> — Temperatura aria a 2 m (°C)</li>
+                <li><strong>B13003</strong> — Umidità relativa a 2 m (%)</li>
+                <li><strong>B11002</strong> — Velocità vento a 10 m (m/s)</li>
             </ul>
 
-            <h3>⚙️ Funzionalità Interattive</h3>
+            <h3>Note sull'interazione</h3>
             <ul>
-                <li><strong>Zoom</strong> - Usa la rotellina del mouse o i controlli per ingrandire</li>
-                <li><strong>Pan</strong> - Trascina la mappa per spostarti</li>
-                <li><strong>Tooltip</strong> - Passa il mouse sulle stazioni per vedere i dettagli</li>
-                <li><strong>Slider</strong> - Regola la dimensione dei grafici dal menu laterale<hr>
-                    <em>Nota: <b>non</b> regola l'altezza dei grafici direttamente, ma <b>riduce l'amplificazione</b> dei valori grandi cosi sonso più visibili i valori piccoli.</em></li>
-                <li><strong>Statistiche</strong> - Visualizza min, max e media nel pannello laterale</li>
+                <li>Rotellina o pinch per lo zoom · trascina per spostarti</li>
+                <li>Hover sulle stazioni per il tooltip con i valori esatti</li>
+                <li>Lo slider nel menu laterale non scala direttamente l'altezza dei grafici,
+                    ma riduce l'amplificazione dei valori alti, rendendo più leggibili
+                    le stazioni con valori bassi</li>
             </ul>
 
-            <h3>🔄 Aggiornamento Dati</h3>
-            <p>
-                I dati vengono scaricati dall'API di MeteoHub con un intervallo temporale di <strong>3 ore precedenti</strong> 
-                rispetto all'orario corrente. La mappa si aggiorna automaticamente per mostrare le condizioni più recenti.
-            </p>
-
-            <h3>💡 Come Utilizzare</h3>
-            <ol>
-                <li>Seleziona una modalità di visualizzazione dal menu laterale</li>
-                <li>Regola la grandezza dei grafici con lo slider</li>
-                <li>Naviga la mappa per esplorare le diverse zone d'Italia</li>
-                <li>Passa il mouse sulle stazioni per vedere i valori esatti</li>
-                <li>Osserva le statistiche nel pannello per avere una visione d'insieme</li>
-            </ol>
         </div>
         <div class="info-popup-footer">
-            <strong>Fonte dati:</strong> <a href="https://meteohub.mistralportal.it/app/maps/observations" target="_blank" rel="noopener">MeteoHub - ItaliaMeteo</a> | 
-            <strong>Licenza:</strong> CC-BY Compliant | 
-            <strong>Visualizzazione:</strong> <a href="https://ixmaps.com" target="_blank" rel="noopener">iXMaps</a> - Data Viz Italia
+            Dati: <a href="https://meteohub.mistralportal.it/app/maps/observations" target="_blank" rel="noopener">MeteoHub — ItaliaMeteo</a>
+            &nbsp;·&nbsp; Licenza CC-BY &nbsp;·&nbsp;
+            Visualizzazione: <a href="https://ixmaps.com" target="_blank" rel="noopener">iXMaps</a> / Data Viz Italia
         </div>
     </div>
 
@@ -406,7 +359,7 @@
                 </button>
                 
                 <header>
-                    <h1>Temperature in Italia</h1>
+                    <h1>Temperature in Italia<span class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni" role="button" tabindex="0">i</span></h1>
                     <p style="margin: 0; font-size: 0.9em; color: var(--secondary-color);">
                         Fonte dati: <a href="https://meteohub.mistralportal.it/app/maps/observations" target="_blank" rel="noopener" class="source-link">Meteohub</a> di ItaliaMeteo
                     </p>
@@ -416,13 +369,13 @@
                     <ul class="nav-menu">
                         <li>
                             <ul>
-                                <li><a href="#" class="active" onclick="setVisualizationMode('peaks')">Temperature misurate</a></li>
-                                <li><a href="#" onclick="setVisualizationMode('peaks_apparent')">Temperature percepite</a></li>
+                                <li><a href="#" class="active" data-mode="peaks"          onclick="setVisualizationMode('peaks')">Temperature misurate</a></li>
+                                <li><a href="#"              data-mode="peaks_apparent" onclick="setVisualizationMode('peaks_apparent')">Temperature percepite</a></li>
                                 <!--
                                 <li><a href="#" onclick="setVisualizationMode('dots')">Punti/Heatmap</a></li>
                                 <li><a href="#" onclick="setVisualizationMode('labels')">Griglia con medie</a></li>
                                 -->
-                                <li><a href="#" onclick="setVisualizationMode('humidity')">Umidità</a></li>
+                                <li><a href="#"              data-mode="humidity"       onclick="setVisualizationMode('humidity')">Umidità</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -471,8 +424,13 @@
             </div>
         </div>
         
-        
-        
+        <!-- Mobile bottom bar -->
+        <nav class="mobile-bottom-bar" aria-label="Selezione visualizzazione">
+            <button class="mbb-btn active" data-mode="peaks"          onclick="setVisualizationMode('peaks')">Misurate</button>
+            <button class="mbb-btn"        data-mode="peaks_apparent" onclick="setVisualizationMode('peaks_apparent')">Percepite</button>
+            <button class="mbb-btn"        data-mode="humidity"       onclick="setVisualizationMode('humidity')">Umidità</button>
+        </nav>
+
     </main>
 
     <!-- Scripts -->
@@ -506,8 +464,14 @@
             // Gestione responsive della sidebar
             if (window.innerWidth <= 768) {
                 document.getElementById('main_sidebar').style.display = 'none';
+                // Let leaflet redraw into the height-corrected map div
+                setTimeout(() => {
+                    if (typeof ixmaps !== 'undefined') {
+                        ixmaps.map().resize();
+                    }
+                }, 300);
             }
-            
+
             // Aggiorna la mappa quando si ridimensiona la finestra
             window.addEventListener('resize', debounce(handleResize, 250));
         }
@@ -561,13 +525,11 @@
 
         function setVisualizationMode(mode) {
             currentVisualizationMode = mode;
-            
-            // Aggiorna UI
-            document.querySelectorAll('.nav-menu a').forEach(link => {
-                link.classList.remove('active');
+
+            // Sync sidebar links and mobile bottom bar by data-mode
+            document.querySelectorAll('[data-mode]').forEach(el => {
+                el.classList.toggle('active', el.dataset.mode === mode);
             });
-            
-            event.target.classList.add('active');
             
             // Implementa logica di visualizzazione
             switch(mode) {
