@@ -451,7 +451,7 @@
                 </nav>
 
                 <div class="controls">
-                    <label for="chart_size_slider" class="control-label">- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grafici &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +</label>
+                    <label for="chart_size_slider" class="control-label">evidenzia valori alti</label>
                     <input type="range" 
                            id="chart_size_slider" 
                            class="slider" 
@@ -641,9 +641,10 @@
         }
 
         function updateChartSize(value) {
+            var v = 5.1 - parseFloat(value); // invertito: sinistra = evidenzia valori alti
             if (typeof ixmaps !== 'undefined') {
-                ixmaps.map().changeThemeStyle('chart', 'minvaluesize:' + (20-value*10), 'set');
-                ixmaps.map().changeThemeStyle('chart', 'sizepow:' + (value/10), 'set');
+                ixmaps.map().changeThemeStyle('chart', 'minvaluesize:' + (20 - v*10), 'set');
+                ixmaps.map().changeThemeStyle('chart', 'sizepow:' + (v/10), 'set');
             }
         }
 
