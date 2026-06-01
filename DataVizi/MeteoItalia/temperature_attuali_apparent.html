@@ -347,6 +347,34 @@
                 <li><strong>B11002</strong> — Velocità vento a 10 m (m/s)</li>
             </ul>
 
+            <h3>Filtro valori non plausibili (outlier)</h3>
+            <p>
+                I dati grezzi delle stazioni possono contenere <strong>valori non plausibili</strong>
+                per malfunzionamenti del sensore o errori di trasmissione.
+                Prima della visualizzazione viene applicato un algoritmo a due fasi:
+            </p>
+            <div class="info-section">
+                <strong>Fase 1 — Filtro statistico globale (IQR)</strong>
+                <p style="margin-top:6px">
+                    Calcola i quartili Q1 e Q3 di tutte le temperature e definisce la fascia di accettabilità:<br>
+                    <code>min = Q1 − 3 × IQR</code> &nbsp;·&nbsp; <code>max = Q3 + 3 × IQR</code><br>
+                    dove <strong>IQR = Q3 − Q1</strong>. Valori fuori fascia vengono esclusi.
+                </p>
+            </div>
+            <div class="info-section">
+                <strong>Fase 2 — Filtro spaziale (confronto con le stazioni vicine)</strong>
+                <p style="margin-top:6px">
+                    Per ogni stazione vengono cercate le stazioni entro <strong>80 km</strong>;
+                    se la sua temperatura si discosta di più di <strong>8°C</strong> dalla mediana
+                    locale, la stazione è esclusa come outlier spaziale.
+                </p>
+                <p style="margin-top:4px;font-size:0.92em;color:#555">
+                    Esempio: una stazione a +33°C circondata da stazioni a ~20°C
+                    viene automaticamente esclusa, anche se 33°C sarebbe plausibile altrove in Italia.
+                </p>
+            </div>
+            <p>Il numero di stazioni escluse è indicato nel pannello laterale accanto a <strong>Stazioni attive</strong>.</p>
+
             <h3>Note sull'interazione</h3>
             <ul>
                 <li>Rotellina o pinch per lo zoom · trascina per spostarti</li>
