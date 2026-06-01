@@ -653,13 +653,18 @@
             statsDiv.innerHTML = '<div class="loading"></div><span>Caricamento dati temperatura...</span>';
         }
 
+        function _applySlider() {
+            updateChartSize(document.getElementById('chart_size_slider').value);
+        }
+
         function loadPeaksVisualization() {
             console.log('Caricamento visualizzazione picchi');
             ixmaps.map().message("...");
             setTimeout(() => {
-                ixmaps.map().replace('chart', __temperature_lolli, 'silent')
-                ixmaps.map().remove('chart_bg')
-                ixmaps.map().add(__temperature_dots_bg, 'silent')
+                ixmaps.map().replace('chart', __temperature_lolli, 'silent');
+                ixmaps.map().remove('chart_bg');
+                ixmaps.map().add(__temperature_dots_bg, 'silent');
+                _applySlider();
             },10);
             ixmaps.htmlgui_onZoomAndPan();
         }
@@ -671,6 +676,7 @@
             setTimeout(() => {
                 ixmaps.map().replace('chart', __temperature_lolli_apparent, 'silent|direct');
                 ixmaps.map().add(__stress_temperature_dots_bg, 'silent|direct');
+                _applySlider();
             },10);
             ixmaps.htmlgui_onZoomAndPan();
         }
@@ -678,7 +684,10 @@
         function loadArrowsVisualization() {
             console.log('Caricamento visualizzazione frecce');
             ixmaps.map().message("...");
-            setTimeout(() => {ixmaps.map().replace('chart', __temperature_arrows, 'silent')},10);
+            setTimeout(() => {
+                ixmaps.map().replace('chart', __temperature_arrows, 'silent');
+                _applySlider();
+            },10);
             ixmaps.htmlgui_onZoomAndPan();
         }
 
@@ -688,6 +697,7 @@
             ixmaps.map().message("...");
             setTimeout(() => {
                 ixmaps.map().replace('chart', __temperature_dots, 'silent');
+                _applySlider();
             },10);
         }
 
@@ -697,6 +707,7 @@
             setTimeout(() => {
                 ixmaps.map().replace('chart', __temperature_meanrect, 'silent');
                 ixmaps.map().add(__temperature_dots_bg, 'silent|direct');
+                _applySlider();
             },10);
         }
 
@@ -706,6 +717,7 @@
             setTimeout(() => {
                 ixmaps.map().replace('chart', __temperature_humidity, 'silent');
                 ixmaps.map().remove('chart_bg');
+                _applySlider();
             },10);
         }
 
