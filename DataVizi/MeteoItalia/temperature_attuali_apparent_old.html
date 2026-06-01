@@ -756,29 +756,32 @@
 
 			var szFieldsA = ["prod.0.val.0.ref","prod.0.val.0.val"];
  			var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', szFieldsA, szId);
-
-            // Statistiche temperatura dal lookup filtrato (outlier già esclusi)
-            var filtLU = window.__last_filteredTempLU || {};
-            var tempVals = Object.values(filtLU).filter(function(v){return v!==null && !isNaN(v);});
-            var tempCount = tempVals.length;
-            var tempSum = 0, tempMin = Infinity, tempMax = -Infinity;
-            tempVals.forEach(function(v){ tempSum+=v; if(v<tempMin)tempMin=v; if(v>tempMax)tempMax=v; });
-            var nOutliers = facetsA[1] ? (facetsA[1].values.length - tempCount) : 0;
+            
+			console.log("------------------");
+			console.log("------------------");
+			console.log("------------------");
+			console.log(facetsA);
+			console.log("------------------");
+			console.log("------------------");
+			console.log("------------------");
+            
+            const mtbPeriod = document.getElementById('mtb_period');
+            if (mtbPeriod) mtbPeriod.textContent = __periodo.replace(' - ', '–');
 
             const statsDiv = document.getElementById('statistics');
             statsDiv.innerHTML = `
                 <strong>Dati aggiornati:</strong> ${new Date().toLocaleTimeString('it-IT')}<br>
                 <strong>Periodo richiesto:</strong> ${__periodo}<br>
-                <strong>Stazioni attive:</strong> ${tempCount}${nOutliers > 0 ? ' <span style="color:#e64b23;font-size:0.9em">('+nOutliers+' outlier esclusi)</span>' : ''}<br>
-                <strong>Temperatura media:</strong> ${tempCount ? (tempSum/tempCount).toFixed(1) : '-'}°C<br>
-                <strong>Min/Max:</strong> ${tempCount ? tempMin.toFixed(1) : '-'}°C / ${tempCount ? tempMax.toFixed(1) : '-'}°C
+                <strong>Stazioni attive:</strong> ${facetsA[1].values.length}<br>
+                <strong>Temperatura media:</strong> ${(facetsA[1].sum/facetsA[1].values.length).toFixed(1)}°C<br>
+                <strong>Min/Max:</strong> ${facetsA[1].min.toFixed(1)}°C / ${facetsA[1].max.toFixed(1)}°C
             `;
-
+ 
 			$("#statistics").append("<hr>le stazioni hanno trasmesso i valori in orari come segue:");
             let szHtml ="";
             for (var i in facetsA[0].values){
-                szHtml += "<br>" + facetsA[0].values[i].split('T')[1] + " - " +facetsA[0].valuesCount[facetsA[0].values[i]];
-            }
+                szHtml += "<br>" + facetsA[0].values[i].split('T')[1] + " - " +facetsA[0].valuesCount[facetsA[0].values[i]];   
+            } 
 			$("#statistics").append(szHtml);
             
 		};
@@ -826,99 +829,6 @@
         var __legend = true;
         
         var __periodo = "";
-
-        // ===================================
-        // Rilevamento outlier
-        // ===================================
-        var __outlier_enabled = true;
-        var __outlier_IQR_mult = 3.0;      // moltiplicatore IQR (più alto = meno aggressivo)
-        var __outlier_spatial_km = 80;     // raggio ricerca vicini spaziali (km)
-        var __outlier_spatial_k = 8;       // max vicini per check spaziale
-        var __outlier_spatial_delta = 8;   // max diff dalla mediana dei vicini (°C)
-
-        function _median(arr) {
-            var s = arr.slice().sort(function(a,b){return a-b;});
-            var m = Math.floor(s.length/2);
-            return s.length%2 ? s[m] : (s[m-1]+s[m])/2;
-        }
-
-        function computeFilteredLookup(tempLU, latLU, lonLU) {
-            if (!__outlier_enabled) return tempLU;
-            var ids = Object.keys(tempLU);
-            var validVals = ids.map(function(id){return tempLU[id];})
-                              .filter(function(v){return v!==null && !isNaN(v);});
-            if (validVals.length < 8) return tempLU;
-
-            // Filtro globale IQR
-            var sorted = validVals.slice().sort(function(a,b){return a-b;});
-            var n = sorted.length;
-            var q1 = sorted[Math.floor(n*0.25)];
-            var q3 = sorted[Math.floor(n*0.75)];
-            var iqr = q3 - q1;
-            var lo = q1 - __outlier_IQR_mult * iqr;
-            var hi = q3 + __outlier_IQR_mult * iqr;
-
-            // Stazioni valide dopo IQR (con coordinate)
-            var stations = [];
-            ids.forEach(function(id) {
-                var v = tempLU[id];
-                var lat = parseFloat(latLU ? latLU[id] : NaN);
-                var lon = parseFloat(lonLU ? lonLU[id] : NaN);
-                if (v!==null && !isNaN(v) && v>=lo && v<=hi && !isNaN(lat) && !isNaN(lon)) {
-                    stations.push({id:id, v:v, lat:lat, lon:lon});
-                }
-            });
-
-            // Griglia spaziale a celle 1°
-            var grid = {};
-            stations.forEach(function(st) {
-                var gk = Math.floor(st.lat)+','+Math.floor(st.lon);
-                if (!grid[gk]) grid[gk] = [];
-                grid[gk].push(st);
-            });
-
-            // Rilevamento outlier spaziali
-            var spatialOutliers = new Set();
-            stations.forEach(function(st) {
-                var neighbors = [];
-                var gLat = Math.floor(st.lat), gLon = Math.floor(st.lon);
-                for (var dlat=-2; dlat<=2; dlat++) {
-                    for (var dlon=-2; dlon<=2; dlon++) {
-                        var cell = grid[(gLat+dlat)+','+(gLon+dlon)];
-                        if (!cell) continue;
-                        cell.forEach(function(other) {
-                            if (other.id===st.id) return;
-                            var dLt=(other.lat-st.lat)*Math.PI/180;
-                            var dLn=(other.lon-st.lon)*Math.PI/180;
-                            var a=Math.sin(dLt/2)*Math.sin(dLt/2)+
-                                  Math.cos(st.lat*Math.PI/180)*Math.cos(other.lat*Math.PI/180)*
-                                  Math.sin(dLn/2)*Math.sin(dLn/2);
-                            var dist=6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-                            if (dist<=__outlier_spatial_km) neighbors.push({d:dist,v:other.v});
-                        });
-                    }
-                }
-                if (neighbors.length < 3) return;
-                neighbors.sort(function(a,b){return a.d-b.d;});
-                var nearVals=neighbors.slice(0,__outlier_spatial_k).map(function(x){return x.v;});
-                var med=_median(nearVals);
-                if (Math.abs(st.v-med) > __outlier_spatial_delta) spatialOutliers.add(st.id);
-            });
-
-            // Lookup filtrato
-            var result = {}, nRemoved = 0;
-            ids.forEach(function(id) {
-                var v = tempLU[id];
-                if (v===null || isNaN(v) || v<lo || v>hi || spatialOutliers.has(id)) {
-                    result[id] = null; nRemoved++;
-                } else {
-                    result[id] = v;
-                }
-            });
-            console.log('Outlier: IQR ['+lo.toFixed(1)+','+hi.toFixed(1)+
-                        '] spaziali:'+spatialOutliers.size+' totale:'+nRemoved+'/'+ids.length);
-            return result;
-        }
 
         /**
          ** strings used by the map 	
@@ -1024,17 +934,7 @@
                         var data = dataA[0];
                         data.column("prod.0.val.0.val").map(function(value){
                             return value - 273.15;
-                        });
-
-                        var _tLU = data.lookupArray({key:"stat.details.0.val", value:"prod.0.val.0.val"});
-                        var _laLU = data.lookupArray({key:"stat.details.0.val", value:"stat.lat"});
-                        var _loLU = data.lookupArray({key:"stat.details.0.val", value:"stat.lon"});
-                        var _fLU = computeFilteredLookup(_tLU, _laLU, _loLU);
-                        window.__last_filteredTempLU = _fLU;
-                        data.addColumn({source:"stat.details.0.val", destination:"temperature_ok"}, function(id){
-                            var v = _fLU[id];
-                            return (v !== undefined) ? v : null;
-                        });
+                        })   
 
                          ixmaps.setExternalData(data, {
                             type: "dbtable",
@@ -1133,10 +1033,7 @@
                         temperature.column("prod.0.val.0.val").map(function(value){
                             return value - 273.15;
                         });
-                        var _tLU_raw = temperature.lookupArray({key:"stat.details.0.val",value:"prod.0.val.0.val"});
-                        var _laLU_ap = temperature.lookupArray({key:"stat.details.0.val",value:"stat.lat"});
-                        var _loLU_ap = temperature.lookupArray({key:"stat.details.0.val",value:"stat.lon"});
-                        var tempLookUp = computeFilteredLookup(_tLU_raw, _laLU_ap, _loLU_ap);
+                        var tempLookUp = temperature.lookupArray({key:"stat.details.0.val",value:"prod.0.val.0.val"});
                         
                         var humidity = dataA[1];
                         var humidLookUp = humidity.lookupArray({key:"stat.details.0.val",value:"prod.0.val.0.val"});
@@ -1197,7 +1094,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok"
+                    value: "prod.0.val.0.val"
                     })
                 .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|VALUES")
                 .style({
@@ -1233,7 +1130,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok"
+                    value: "prod.0.val.0.val"
                     })
                 .type("CHART|BUBBLE|GLOW|NOSIZE|RANGES|NOLEGEND")
                 .style({
@@ -1303,7 +1200,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok",
+                    value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
                 .type("CHART|SYMBOL|GRIDSIZE|SORT|UP|RANGES|VALUES|AGGREGATE|RECT|RELOCATE|MAX|BOX|BOTTOMTITLE")
@@ -1347,7 +1244,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok",
+                    value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
                 .type("CHART|SYMBOL|GRIDSIZE|SORT|UP|RANGES|VALUES|AGGREGATE|RECT|MEAN|BOX|BOTTOMTITLE")
@@ -1436,7 +1333,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok",
+                    value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
                 .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
@@ -1476,10 +1373,10 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok",
+                    value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
-                .filter("WHERE temperature_ok <= 50")         
+                .filter("WHERE prod.0.val.0.val <= 50")         
                 .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
                 .style({
                     userdraw: "lolliChart",
@@ -1491,16 +1388,16 @@
                     showdata: "true",
                     units: "°",
                     legendunits: "°C",
-                    scale: "0.7",
+                    scale: "1",
                     rangescale: "1",
-                    sizepow: "0.4",
+                    sizepow: "0.13",
                     valuescale: "1.2",
                     valuedecimals: "1",
                     rangecentervalue: "0",
                     linecolor: "white",
                     linewidth: "0.2",
                     valuecolor: "#DC0000",
-                    gridwidth: "25px"
+                    gridwidth: "20px"
                     })
                 .meta({
                     title: "Temperatura",
@@ -1533,16 +1430,16 @@
                     visible: "true",
                     showdata: "true",
                     units: "°",
-                    scale: "0.5",
+                    scale: "1",
                     rangescale: "1.5",
-                    sizepow: "0.5",
+                    sizepow: "0.13",
                     valuescale: "1.2",
                     valuedecimals: "1",
                     rangecentervalue: "0",
                     linecolor: "white",
                     linewidth: "0.2",
                     valuecolor: "#DC0000",
-                    gridwidth: "25px"
+                    gridwidth: "20px"
                     })
                 .meta({
                     title: "Temperatura sentita",
@@ -1561,7 +1458,7 @@
                     })
                 .binding({
                     geo: "stat.lat|stat.lon",
-                    value: "temperature_ok",
+                    value: "prod.0.val.0.val",
                     title: "stat.details.0.val"
                     })
                 .type("CHART|USER|3D|SHADOW|SIZE|RANGES|VALUES|AGGREGATE|RELOCATE|MAX")
