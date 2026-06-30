@@ -87,6 +87,30 @@ file statici su CDN.
 
 ---
 
+## Calcolo della temperatura apparente
+
+La temperatura apparente (AT) usa la formula semplificata **BOM/Steadman**, valida
+sia per il caldo che per il freddo:
+
+```
+AT = Ta + 0.33·e − 0.70·v − 4
+```
+
+- **Ta** — temperatura dell'aria (°C)
+- **v** — velocità del vento a 10 m (m/s)
+- **e** — pressione di vapore (hPa), ricavata da temperatura e umidità relativa:
+
+```
+e = (RH / 100) · 6.105 · exp( 17.27·Ta / (237.7 + Ta) )
+```
+
+L'umidità (tramite `e`) **alza** la temperatura percepita, il vento la **abbassa**.
+Bastano quindi temperatura, umidità e vento — variabili presenti in **quasi tutte**
+le stazioni — quindi la modalità *Temperature percepite* copre molti più punti del
+WBGT, che richiede in più la radiazione solare.
+
+---
+
 ## Calcolo del WBGT
 
 Per ogni stazione che dispone del dato di radiazione solare:
