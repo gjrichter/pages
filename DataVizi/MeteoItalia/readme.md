@@ -1,62 +1,172 @@
-# 🌡️ Temperature Attuali in Italia — Visualizzazione Interattiva
+# WBGT — Stress Termico Italia
 
-Benvenuto nella mini webapp **Temperature Attuali in Italia**, uno strumento semplice e visivo per consultare in tempo reale le temperature nelle principali località italiane.
+Mappa interattiva dell'Italia in tempo reale che mostra l'indice di stress da
+calore **WBGT (Wet Bulb Globe Temperature, ISO 7243)**, costruita con ixMaps.
 
-🔗 **Accedi alla webapp**: [gjrichter.github.io/.../temperature_attuali.html](https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_apparent.html)
-
----
-
-## 📌 Cos'è questa WebApp?
-
-Questa applicazione mostra **una mappa dell’Italia** con le temperature attuali rappresentate tramite **colori graduati**. È pensata per chi desidera una panoramica immediata e intuitiva della situazione meteo nel paese.
-
-- Ogni punto sulla mappa rappresenta una località.
-- Il colore di ogni punto indica la temperatura attuale (dal blu per il freddo al rosso per il caldo).
-- I dati provengono da una rete di stazioni al suolo e sono aggiornati in tempo reale.
+**Mappa live:** <https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_wbgt_kde.html>
+**File:** `stage/live/temperature_attuali_wbgt_kde.html`
 
 ---
 
-## 🧮 Fonte dei dati
+## Cosa mostra
 
-Le misure utilizzate nella mappa vengono da **MeteoHub**, una piattaforma del progetto MISTRAL/CINECA/Protezione Civile, che raccoglie osservazioni da stazioni meteorologiche distribuite su tutto il territorio italiano.
-
-📍 **Link alla fonte**:  
-[https://meteohub.mistralportal.it/app/maps/observations
-
----
-
-## 🖱️ Note sull’utilizzo
-
-Questa mappa offre **diverse modalità di visualizzazione** per aiutare a interpretare meglio le condizioni meteo:
-
-- 🔴 **Punti di calore**: evidenziano località con temperature elevate.
-- 🟠 **Visuale media a griglia**: mostra una mappa interpolata delle temperature medie, con una griglia che si adatta automaticamente allo **zoom**.
-
-Inoltre, puoi **generare una versione personalizzata della mappa** da integrare in altre pagine web o presentazioni:
-
-- Clicca sull’icona **`<html>`** in basso a destra **oppure** sul logo **"Data Vizi"**.
-- Apparirà un **popup** contenente un **codice HTML funzionante** che riproduce esattamente lo stato attuale della mappa interattiva.
-- Il codice può essere copiato e incollato in qualsiasi file `.html` e **funzionerà direttamente in un browser, senza bisogno di un server o installazioni aggiuntive**.
-
-💡 Questo rende facilissimo **creare mappe tematiche personalizzate**, ad esempio per una città specifica o per mostrare un particolare fenomeno locale.
+All'apertura la mappa parte in modalità **WBGT**: ogni stazione è un grafico a
+lollipop colorato secondo le fasce di rischio ISO 7243, sovrapposto a un campo
+**KDE** (interpolazione spaziale) colorato con le stesse fasce. L'utente può
+passare a tre altre modalità: Temperature misurate, Temperature percepite,
+Umidità.
 
 ---
 
-## 🧠 Dietro le quinte
+## Catena dati
 
-La webapp è realizzata con:
+I dati provengono dall'**API REST di MeteoHub** (Agenzia ItaliaMeteo —
+`https://meteohub.agenziaitaliameteo.it/api/observations`), la piattaforma
+meteorologica nazionale che aggrega oltre 4000 stazioni e 3 milioni di
+osservazioni giornaliere. L'endpoint accetta una query sul `reftime` (timestamp
+in **UTC**) e sul codice prodotto BUFR, restituendo le ultime osservazioni in JSON.
 
-- **HTML/CSS/JavaScript** puro
-- **Mappa SVG** dinamica e interattiva
-- **Visualizzazioni adattive** a seconda dello zoom
-- **Dati live** da stazioni al suolo (la mappa chiede le ultime segnalazione dalle stazioni non più vecchio di 3 ore)
+Una **GitHub Action** (`fetch-meteohub-data.yml`, repo `data`) interroga l'API
+**ogni ora** filtrando esplicitamente la **licenza `CCBY_COMPLIANT`** (solo dati
+ridistribuibili con attribuzione, CC-BY), con `reliabilityCheck=true` e `last=true`
+per prendere il valore più recente e verificato di ciascuna stazione. Scarica
+quattro variabili BUFR, le salva come file JSON nel repo `data` e li commit-pusha;
+da lì sono servite via **CDN jsDelivr** (cache globale) e consumate dalla mappa
+insieme a un `metadata.json` con l'ora dell'ultimo aggiornamento.
+
+| Codice BUFR | Variabile | Uso |
+|-------------|-----------|-----|
+| `B12101` | Temperatura aria a 2 m | Ta |
+| `B13003` | Umidità relativa a 2 m | RH → Tnw |
+| `B11002` | Velocità vento a 10 m | v → Tg |
+| `B14198` | Irradiazione solare (W/m²) | S → Tg |
+
+La pipeline è completamente serverless: nessun backend, solo l'Action schedulata +
+file statici su CDN.
 
 ---
 
-## 📬 Feedback o suggerimenti?
+## Calcolo del WBGT
 
-Questa è una mini-app sperimentale. Se hai feedback o vuoi suggerire miglioramenti, puoi contattare l'autore tramite GitHub: [gjrichter](https://github.com/gjrichter)
+Per ogni stazione che dispone del dato di radiazione solare:
+
+```
+WBGT = 0.7·Tnw + 0.2·Tg + 0.1·Ta
+```
+
+- **Tnw** — bulbo umido naturale, formula di Stull (2011), accuratezza ±0.3 °C
+- **Tg** — temperatura del globo, approssimazione di Liljegren: `Tg = T + 0.0146·S − 0.70·v`
+- **Ta** — temperatura dell'aria secca
+
+Le stazioni **senza dato solare** (necessario per Tg) non vengono calcolate →
+circa **226 stazioni attive**. Questo è il motivo per cui il WBGT copre meno
+stazioni della temperatura percepita.
+
+### Filtri qualità
+
+Prima del calcolo:
+
+1. **Filtro outlier IQR globale** — `min = Q1 − 3·IQR`, `max = Q3 + 3·IQR`
+2. **Filtro spaziale** — stazioni che si discostano di più di 8 °C dalla mediana
+   delle vicine entro 80 km vengono escluse
+3. **Umidità** — valori `> 105%` o `< 0%` scartati come errori di sensore
 
 ---
 
-**Buona esplorazione del meteo!**
+## Le quattro modalità
+
+| Modalità | Variabile | KDE |
+|----------|-----------|-----|
+| Temperature misurate | temperatura aria | anomalie (campo rosso sopra la media) |
+| Temperature percepite | temperatura apparente (BOM/Steadman) | anomalie |
+| Umidità | umidità relativa, celle aggregate | nessuno |
+| **WBGT** | stress termico ISO 7243 | fasce di rischio |
+
+### KDE adattivo
+
+- In modalità **WBGT** il KDE interpola i **valori assoluti** e li colora con le
+  fasce di rischio ISO 7243.
+- In **Misurate / Percepite** il KDE interpola le **anomalie** (deviazione % dalla
+  media) con un campo rosso, ma con un **inviluppo a soglia assoluta** (vedi sotto).
+- La legenda nel sidebar — etichetta, swatch colore e descrizione — **cambia
+  automaticamente** con il tema attivo.
+- In **Umidità** il blocco KDE viene nascosto (lì non c'è interpolazione).
+
+### Inviluppo a soglia assoluta (KDE anomalie)
+
+Il KDE delle anomalie normalizzava la deviazione dividendo per la media
+(`(T − media) / |media| · 100`). Questo **amplificava** le anomalie a basse
+temperature: una differenza di 3 °C valeva ~60% in inverno (media 5 °C) contro
+~10% in estate (media 30 °C), facendo apparire rosso scuro anche senza calore reale.
+
+Per mediare, il campo viene moltiplicato per un **inviluppo basato sulla temperatura
+assoluta locale** interpolata:
+
+```
+env = clamp( (T_locale − T_LO) / (T_HI − T_LO), 0, 1 )   con T_LO = 24 °C, T_HI = 33 °C
+valore_KDE = deviazione · env
+```
+
+- sotto **24 °C** l'inviluppo è 0 → la cella **non viene disegnata**
+- sopra **33 °C** l'inviluppo è 1 → comportamento pieno
+- in mezzo, intensità proporzionale al calore reale
+
+Il rosso scuro richiede quindi **sia** un'anomalia positiva **sia** una temperatura
+realmente alta. Esempi:
+
+| Scenario | media → picco | deviazione | inviluppo | risultato |
+|----------|---------------|-----------|-----------|-----------|
+| Freddo | 5 → 8 °C | 60% | 0.00 | non disegnato |
+| Mite | 22 → 27 °C | 23% | 0.33 | 7.6 (chiaro) |
+| Caldo | 33 → 37 °C | 12% | 1.00 | 12 (moderato) |
+| Afa | 30 → 40 °C | 33% | 1.00 | 33 (rosso scuro) |
+
+Le soglie `KDE_T_LO` / `KDE_T_HI` sono costanti regolabili nel codice.
+
+---
+
+## Fasce di rischio ISO 7243
+
+Colori del KDE in modalità WBGT:
+
+| Colore | WBGT | Rischio |
+|--------|------|---------|
+| 🔵 `#4575b4` | &lt; 18 °C | nessun rischio |
+| 🟢 `#66bd63` | 18–25 °C | rischio basso |
+| 🟠 `#fdae61` | 25–28 °C | rischio moderato |
+| 🔴 `#a50026` | 28–30 °C | rischio alto |
+| 🟣 `#4d0026` | &gt; 30 °C | molto alto / pericoloso |
+
+---
+
+## WBGT vs Temperatura apparente
+
+| | AT (BOM/Steadman) | WBGT (ISO 7243) |
+|---|---|---|
+| **Uso** | comfort percepito, bollettini | sicurezza lavoro / sport |
+| **Radiazione solare** | no | sì (temperatura globo) |
+| **Vento** | esplicito | implicito (bulbo umido) |
+| **Umidità** | pressione vapore | bulbo umido |
+| **Soglie normative** | no | sì |
+
+Il WBGT può risultare **più basso** sia della temperatura apparente sia della
+temperatura misurata: con aria secca e ventilata il bulbo umido scende molto
+sotto l'aria secca, perché la sudorazione raffredda in modo efficiente. È questo
+che lo rende l'indice corretto per valutare il rischio fisiologico (usato da
+medici del lavoro, eserciti, comitati olimpici).
+
+---
+
+## Dettagli UI
+
+- **Legenda WBGT dedicata** (TEXTLEGEND) con formula, variabili e fasce di rischio
+- **Pannello statistiche mode-aware** — "WBGT medio", conteggio stazioni attive,
+  stazioni escluse riportate come "senza dato solare" (non outlier)
+- **Slider** opacità e smoothing del KDE; slider "evidenzia valori alti"
+- **Popup informativo** con la spiegazione completa di WBGT, formula, filtri e
+  fonti dati
+- **Asset ixMaps** serviti via jsDelivr CDN
+
+---
+
+*Dati: MeteoHub — ItaliaMeteo (licenza CC-BY) · Visualizzazione: iXMaps / Data Viz Italia*
