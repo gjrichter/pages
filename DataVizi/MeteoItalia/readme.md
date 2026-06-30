@@ -3,8 +3,49 @@
 Mappa interattiva dell'Italia in tempo reale che mostra l'indice di stress da
 calore **WBGT (Wet Bulb Globe Temperature, ISO 7243)**, costruita con ixMaps.
 
-**Mappa live:** <https://gjrichter.github.io/pages/DataVizi/MeteoItalia/temperature_attuali_wbgt_kde.html>
+**Mappa live:** <https://gjrichter.github.io/stage/live/temperature_attuali_wbgt_kde.html>
 **File:** `stage/live/temperature_attuali_wbgt_kde.html`
+
+---
+
+## Intento della mappa
+
+L'obiettivo è andare oltre la semplice temperatura dell'aria e mostrare **come
+cambia la pressione del caldo** sul corpo umano, mettendo a confronto sulla stessa
+mappa diversi livelli di lettura della situazione termica:
+
+- **Temperatura misurata** — il dato grezzo dell'aria, il punto di partenza.
+- **Temperatura percepita (apparente)** — quanto caldo si *sente* davvero, perché
+  umidità e vento modificano la sensazione rispetto al termometro.
+- **WBGT (ISO 7243)** — un indice normato di **stress da calore** per ambienti
+  outdoor (lavoro, sport), che pesa l'evaporazione (bulbo umido), la radiazione
+  solare (temperatura del globo) e l'aria.
+  (un grazie a Lorenza Perrone per il suo suggerimento di integrazione WBGT)
+
+Passando da una modalità all'altra si vede **come la stessa giornata si trasforma**:
+una temperatura moderata può nascondere uno stress elevato in presenza di alta
+umidità e sole intenso, mentre aria secca e ventilata possono ridurre lo stress
+reale anche con temperature alte. Confrontare *misurata → percepita/WBGT* rende
+visibile questa differenza, che è ciò che conta per la salute delle persone.
+
+**Target:** offrire una lettura immediata del rischio termico in Italia. I due
+indici servono pubblici diversi:
+
+- la **temperatura apparente** è orientata al **comfort e all'attività fisica**
+  (sport, vita all'aperto, popolazione generale): risponde a "quanto sarà
+  faticoso e sgradevole muoversi con questo caldo?";
+- il **WBGT** è lo standard normato per la **sicurezza sul lavoro** (medicina del
+  lavoro, cantieri, agricoltura, forze armate): risponde a "quando va ridotto o
+  sospeso il lavoro all'aperto?", con soglie ufficiali di azione.
+
+Avere entrambi sulla stessa mappa permette a ciascun pubblico di leggere la
+situazione con l'indice giusto per il proprio scopo.
+
+Tutti i modelli di stress sono calcolabili perché **MeteoHub serve tutti i valori
+necessari** (temperatura, umidità, vento e radiazione solare) dalla stessa rete di
+stazioni. Un'unica differenza pratica: il **WBGT ha meno punti** delle altre
+modalità, perché la **radiazione solare è misurata solo da un sottoinsieme di
+stazioni** — e senza quel dato la temperatura del globo non è calcolabile.
 
 ---
 
