@@ -22,24 +22,203 @@ $Log:index_only_map_embed.html,v $
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="ixmaps embed example">
+	<meta name="description" content="FUA (Aree Urbane Funzionali) e spostamenti giornalieri per lavoro 2021 - mappa interattiva">
 	<meta name="author" content="guenter richter">
+	<meta name="keywords" content="FUA, pendolarismo, ISTAT, Italia, mappa interattiva">
+
+	<title>Data Viz Italia - FUA e Pendolarismo 2021</title>
+
+	<!-- Preconnect per performance -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net">
+	<link rel="preconnect" href="https://raw.githubusercontent.com">
+
+	<!-- CSS Libraries -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
 	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
-	
+
     <!-- CSS Site -->
     <link rel="stylesheet" href="./css/site.css">
 
 	<style>
-		.button {
-			font-family: monospace;
-			text-decoration: none;
-			border: #888 solid 1px;
-			padding: 0.2em 0.55em 0.3em 0.55em;
-			border-radius: 20px;
-			width: 1em;
-			color: #888;
+		/* Info Button — inline accanto al titolo della sidebar */
+		.info-button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 18px;
+			height: 18px;
+			background: #fff;
+			color: #666;
+			border-radius: 50%;
+			font-size: 11px;
+			font-weight: 700;
+			cursor: pointer;
+			border: 1px solid #bbb;
+			font-family: Georgia, serif;
+			transition: color 0.15s, border-color 0.15s;
+			user-select: none;
+			vertical-align: middle;
+			margin-left: 7px;
+			position: relative;
+			top: -2px;
+			flex-shrink: 0;
 		}
 
+		.info-button:hover {
+			color: #111;
+			border-color: #888;
+		}
+
+		/* Overlay backdrop */
+		.info-popup-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.35);
+			z-index: 100000;
+		}
+
+		.info-popup-overlay.active {
+			display: block;
+		}
+
+		/* Panel */
+		.info-popup {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			border: 1px solid #e5e7eb;
+			border-radius: 12px;
+			box-shadow: 0 10px 34px rgba(0, 0, 0, 0.12);
+			z-index: 100001;
+			width: min(620px, 94vw);
+			max-height: 88vh;
+			overflow: hidden;
+			flex-direction: column;
+		}
+
+		.info-popup.active {
+			display: flex;
+		}
+
+		.info-popup-header {
+			padding: 16px 20px 14px;
+			border-bottom: 1px solid #eef0f2;
+			position: sticky;
+			top: 0;
+			background: #f7f8f9;
+			z-index: 10;
+		}
+
+		.info-popup-header h2 {
+			margin: 0;
+			font-size: 15px;
+			font-weight: 600;
+			color: #222;
+			letter-spacing: 0.01em;
+		}
+
+		.info-popup-close {
+			position: absolute;
+			top: 12px;
+			right: 14px;
+			background: none;
+			border: none;
+			color: #888;
+			font-size: 20px;
+			cursor: pointer;
+			line-height: 1;
+			padding: 2px 4px;
+			border-radius: 3px;
+			transition: color 0.15s;
+		}
+
+		.info-popup-close:hover {
+			color: #222;
+		}
+
+		.info-popup-content {
+			padding: 18px 20px;
+			color: #333;
+			font-size: 13.5px;
+			line-height: 1.65;
+			overflow-y: auto;
+			flex: 1;
+		}
+
+		.info-popup-content h3 {
+			color: #0b0d0f;
+			margin: 22px 0 6px;
+			font-size: 11px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			border-bottom: 1px solid #e9ebef;
+			padding-bottom: 5px;
+		}
+
+		.info-popup-content h3:first-child {
+			margin-top: 0;
+		}
+
+		.info-popup-content p {
+			margin: 6px 0;
+		}
+
+		.info-popup-content ul,
+		.info-popup-content ol {
+			margin: 6px 0;
+			padding-left: 22px;
+		}
+
+		.info-popup-content li {
+			margin: 5px 0;
+		}
+
+		.info-popup-content strong {
+			color: #0b0d0f;
+			font-weight: 600;
+		}
+
+		.info-section {
+			background: #f4f8fd;
+			padding: 11px 14px;
+			border-radius: 9px;
+			margin: 10px 0;
+			border-left: 3px solid #3182bd;
+		}
+
+		.info-popup-footer {
+			padding: 11px 20px;
+			background: #f6f7f9;
+			border-top: 1px solid #e9ebef;
+			font-size: 12px;
+			color: #5b6470;
+		}
+
+		.info-popup-footer a {
+			color: #08519c;
+			text-decoration: none;
+		}
+
+		.info-popup-footer a:hover {
+			text-decoration: underline;
+		}
+
+		.ref {
+			text-decoration: underline;
+		}
+
+		em {
+			color: black;
+		}
+
+		/* Toggle switch (checkbox pillola) */
 		.toggle .handle {
 			position: relative;
 			top: -20px;
@@ -48,10 +227,8 @@ $Log:index_only_map_embed.html,v $
 			width: 50px;
 			height: 27px;
 			background-color: none;
-			border: #888 solid 1px;
+			border: var(--ink-3) solid 1px;
 			border-radius: 19px;
-			-webkit-border-radius: 19px;
-			-moz-border-radius: 19px
 		}
 
 		.toggle .handle:after,
@@ -64,214 +241,317 @@ $Log:index_only_map_embed.html,v $
 			height: 23px;
 			content: "";
 			background-color: none;
-			border: #888 solid 1px;
+			border: var(--ink-3) solid 1px;
 			border-radius: 30px;
-			-webkit-transition: all .25s ease-in-out;
-			-moz-transition: all .25s ease-in-out;
 			transition: all .25s ease-in-out;
-			-webkit-border-radius: 30px;
-			-moz-border-radius: 30px
 		}
 
 		.toggle input[type=checkbox]:disabled+.handle,
 		.toggle input[type=checkbox]:disabled+.handle:after,
-		.toggle input[type=checkbox]:disabled+.handle:before,
-		.toggle input[type=radio]:disabled+.handle,
-		.toggle input[type=radio]:disabled+.handle:after,
-		.toggle input[type=radio]:disabled+.handle:before {
+		.toggle input[type=checkbox]:disabled+.handle:before {
 			background-color: #e6e9ed;
-			filter: alpha(opacity=60);
 			opacity: .6
 		}
 
-		.toggle input[type=checkbox]:checked+.handle:before,
-		.toggle input[type=radio]:checked+.handle:before {
+		.toggle input[type=checkbox]:checked+.handle:before {
 			display: none;
-			xxwidth: 50px;
-			background-color: #444
+			background-color: var(--blue)
 		}
 
-		.toggle input[type=checkbox]:checked+.handle:after,
-		.toggle input[type=radio]:checked+.handle:after {
-			background-color: #848796;
+		.toggle input[type=checkbox]:checked+.handle:after {
+			background-color: var(--blue);
+			border-color: var(--blue);
 			left: 24px;
 		}
 
-		.ref {
-			text-decoration: underline;
+		/* Enhanced legend */
+		.legend-scale-title {
+			font-size: 0.85em;
+			font-weight: 600;
+			margin-bottom: 0.5em;
+			color: var(--ink);
 		}
 
-		em {
-			color: black;
+		.legend-scale-bar {
+			height: 20px;
+			background: linear-gradient(to right, #ff4444, #ffaa44, #44dd44);
+			border-radius: 3px;
+			margin: 0.5em 0;
+			position: relative;
 		}
 
-	.chart-title {
-		font-size: 1.2em;
-		line-height: 1em;
-		font-weight: 300;
-		margin-bottom: 0.2em;
-		margin-top: 2em;
-		border-top: #888 solid 1px;
-		padding-top: 1em;
-	}
+		.legend-scale-labels {
+			display: flex;
+			justify-content: space-between;
+			font-size: 0.75em;
+			color: var(--ink-2);
+			margin-top: 0.3em;
+		}
 
-	.legend-toggle {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 24px;
-		height: 24px;
-		background: none;
-		border: none;
-		cursor: pointer;
-		transition: opacity 0.2s ease;
-		text-decoration: none;
-		opacity: 0.5;
-	}
+		/* Search box */
+		.search-box {
+			margin: 0;
+			position: relative;
+		}
 
-	.legend-toggle:hover {
-		opacity: 1;
-	}
-
-	.legend-toggle svg {
-		width: 20px;
-		height: 20px;
-		stroke: #888;
-		fill: none;
-		stroke-width: 2;
-		stroke-linecap: round;
-		transition: transform 0.3s ease;
-	}
-
-	.legend-toggle.collapsed svg {
-		transform: rotate(180deg);
-	}
-
-	/* Sidebar Styles */
-	.sidebar {
-		position: fixed;
-		top: 0;
-		right: 0;
-		width: 380px;
-		height: 100vh;
-		background: rgba(255, 255, 255, 0.95);
-		box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
-		z-index: 9999;
-		transition: transform 0.3s ease;
-		overflow-y: auto;
-		transform: translateX(0);
-		xxborder-radius: 12px 0 0 12px;
-		border: 1px solid #eee;
-	}
-
-	.sidebar-content {
-		padding: 20px;
-		font-size: 0.85em;
-		max-width: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
-		box-sizing: border-box;
-	}
-
-	.sidebar-content h1 {
-		font-size: 1.15em !important;
-		max-width: 100%;
-		word-wrap: break-word;
-	}
-
-	.sidebar-content p {
-		font-size: 0.95em;
-		max-width: 100%;
-		word-wrap: break-word;
-	}
-
-	.sidebar-content div {
-		max-width: 100%;
-		box-sizing: border-box;
-	}
-
-	.sidebar-content .toggle {
-		max-width: 100%;
-		overflow: hidden;
-	}
-
-	.sidebar-toggle {
-		position: absolute;
-		top: 20px;
-		left: 20px;
-		background: rgba(0, 0, 0, 0.1);
-		border: none;
-		border-radius: 8px;
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		z-index: 10000;
-	}
-
-	.sidebar-toggle:hover {
-		background: rgba(0, 0, 0, 0.2);
-		transform: scale(1.1);
-	}
-
-	#sidebar_toggle {
-		position: fixed;
-		top: 10px;
-		right: 10px;
-		width: auto;
-		height: auto;
-		z-index: 10001;
-		display: none;
-	}
-
-	#sidebar_toggle .sidebar-toggle {
-		position: static;
-		background: rgba(255, 255, 255, 0.95);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-		border: 1px solid rgba(0, 0, 0, 0.1);
-		color: #333;
-	}
-
-	#sidebar_toggle .sidebar-toggle:hover {
-		background: white;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-		transform: scale(1.1);
-		color: #000;
-	}
-
-	#main_sidebar.hidden {
-		transform: translateX(100%);
-	}
-
-	/* Mobile responsive */
-	@media (max-width: 768px) {
-		.sidebar {
+		.search-box input {
 			width: 100%;
-			max-width: 380px;
+			padding: 0.6em 2.5em 0.6em 0.8em;
+			border: 1px solid var(--line);
+			border-radius: var(--r-ctrl);
+			font-size: 0.9em;
+			box-sizing: border-box;
+			font: inherit;
 		}
 
-		#main_sidebar {
-			transform: translateX(100%);
+		.search-box input:focus {
+			outline: 2px solid var(--blue-2);
+			outline-offset: 2px;
 		}
 
-		#main_sidebar.active {
-			transform: translateX(0);
+		.search-clear {
+			position: absolute;
+			right: 0.5em;
+			top: 50%;
+			transform: translateY(-50%);
+			background: none;
+			border: none;
+			cursor: pointer;
+			font-size: 1.2em;
+			color: var(--ink-3);
+			padding: 0.2em;
+			display: none;
 		}
-	}
+
+		.search-clear.visible {
+			display: block;
+		}
+
+		.search-clear:hover {
+			color: var(--ink);
+		}
+
+		/* Search results dropdown */
+		.search-results {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: #fff;
+			border: 1px solid var(--line);
+			border-top: none;
+			border-radius: 0 0 var(--r-ctrl) var(--r-ctrl);
+			max-height: 200px;
+			overflow-y: auto;
+			z-index: 1000;
+			display: none;
+			box-shadow: var(--sh-float);
+		}
+
+		.search-results.visible {
+			display: block;
+		}
+
+		.search-result-item {
+			padding: 0.6em 0.8em;
+			cursor: pointer;
+			border-bottom: 1px solid var(--line);
+			font-size: 0.9em;
+			transition: background 0.2s ease;
+		}
+
+		.search-result-item:hover,
+		.search-result-item:focus {
+			background: var(--soft);
+			outline: none;
+		}
+
+		.search-result-item:last-child {
+			border-bottom: none;
+		}
+
+		.search-result-name {
+			font-weight: 600;
+			color: var(--ink);
+		}
+
+		.search-result-details {
+			font-size: 0.85em;
+			color: var(--ink-2);
+			margin-top: 0.2em;
+		}
+
+		/* Export buttons */
+		.export-buttons {
+			margin-top: 0;
+			display: flex;
+			gap: 0.5em;
+			flex-wrap: wrap;
+		}
+
+		.export-btn {
+			flex: 1;
+			min-width: 120px;
+			padding: 0.6em 1em;
+			background: var(--blue);
+			color: white;
+			border: none;
+			border-radius: var(--r-ctrl);
+			cursor: pointer;
+			font-size: 0.85em;
+			font: inherit;
+			transition: all 0.2s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.3em;
+		}
+
+		.export-btn:hover {
+			background: var(--azure-ink);
+			transform: translateY(-1px);
+			box-shadow: var(--sh-soft);
+		}
+
+		.export-btn:active {
+			transform: translateY(0);
+		}
+
+		.export-btn:disabled {
+			background: var(--ink-3);
+			cursor: not-allowed;
+			opacity: 0.6;
+		}
+
+		/* Loading indicator */
+		.loading-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255, 255, 255, 0.95);
+			z-index: 100000;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			transition: opacity 0.3s ease, visibility 0.3s ease;
+		}
+
+		.loading-overlay.hidden {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		.loading-spinner {
+			width: 50px;
+			height: 50px;
+			border: 4px solid var(--line);
+			border-top: 4px solid var(--blue);
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+			margin-bottom: 1em;
+		}
+
+		.loading-text {
+			color: var(--ink);
+			font-size: 1.1em;
+			margin-top: 1em;
+		}
+
 	</style>
 
 
 </head>
 
-<body style="max-width: 1024px;margin:auto;font-family:open sans;font-size:22px">
+<body>
 
-	<div id="map"></div>
+	<!-- Info Popup Overlay -->
+	<div class="info-popup-overlay" id="infoOverlay" onclick="toggleInfoPopup()"></div>
 
-	<!-- Sidebar toggle (pulsante per riaprire) -->
-	<div id="sidebar_toggle">
+	<!-- Info Popup -->
+	<div class="info-popup" id="infoPopup">
+		<div class="info-popup-header">
+			<h2>FUA — Aree Urbane Funzionali e Pendolarismo</h2>
+			<button class="info-popup-close" onclick="toggleInfoPopup()" aria-label="Chiudi">&times;</button>
+		</div>
+		<div class="info-popup-content">
+
+			<h3>Cosa sono le FUA?</h3>
+			<p>
+				Le <strong>FUA (Functional Urban Areas)</strong> o "Aree Urbane Funzionali" sono zone geografiche che includono una città e l'area circostante con cui ha forti legami economici e sociali. Sono definite in base ai flussi di pendolarismo giornaliero per lavoro.
+			</p>
+
+			<h3>Dati visualizzati</h3>
+			<p>
+				Questa mappa interattiva visualizza gli <strong>spostamenti giornalieri per motivi di lavoro</strong> tra i comuni italiani, basandosi sui dati della <a href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank" rel="noopener">Matrice di Pendolarismo ISTAT</a> riferiti al <strong>31 dicembre 2021</strong>.
+			</p>
+			<p>
+				Il dataset analizza oltre <strong>500.000 relazioni</strong> tra comuni, mostrando dove le persone vivono e dove lavorano.
+			</p>
+
+			<h3>Come leggere la mappa</h3>
+			<ul>
+				<li><strong>Archi (linee curve):</strong> flussi di pendolari tra due comuni — lo spessore indica il numero di persone che si spostano</li>
+				<li><strong>Cerchi verdi:</strong> comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
+				<li><strong>Cerchi rossi:</strong> comuni con saldo negativo (più persone partono per lavoro di quante arrivano)</li>
+				<li><strong>Anelli neri:</strong> spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
+			</ul>
+
+			<h3>Interazione</h3>
+			<ul>
+				<li><strong>Zoom:</strong> rotellina del mouse o pinch per ingrandire</li>
+				<li><strong>Pan:</strong> trascina la mappa per spostarti</li>
+				<li><strong>Click:</strong> clicca sui comuni o sugli archi per vedere i dettagli</li>
+				<li><strong>Controlli:</strong> usa gli slider e le checkbox nella sidebar per regolare la visualizzazione</li>
+			</ul>
+
+			<h3>Insights chiave</h3>
+			<p>La mappa permette di identificare:</p>
+			<ul>
+				<li>I <strong>poli di attrazione lavorativa</strong> (grandi città con molti pendolari in entrata)</li>
+				<li>Le <strong>città dormitorio</strong> (comuni residenziali da cui partono molti lavoratori)</li>
+				<li>Le <strong>connessioni più forti</strong> tra aree urbane</li>
+				<li>Le <strong>FUA più estese</strong> e integrate</li>
+			</ul>
+
+			<div class="info-section">
+				<strong>📌 Nota</strong>
+				<p style="margin-top:6px">
+					I dati si riferiscono al <strong>31 dicembre 2021</strong>, durante il periodo pandemico, e potrebbero riflettere i cambiamenti nelle modalità di lavoro (smart working) emersi con la pandemia COVID-19.
+				</p>
+			</div>
+
+		</div>
+		<div class="info-popup-footer">
+			Dati: <a href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank" rel="noopener">ISTAT — Matrice Pendolarismo</a>
+			&nbsp;·&nbsp; <a href="https://www.istat.it/comunicato-stampa/aggiornamento-delle-fua-aree-funzionali-urbane/" target="_blank" rel="noopener">FUA 2021</a>
+			&nbsp;·&nbsp; Licenza CC-BY
+			&nbsp;·&nbsp; Visualizzazione: <a href="https://ixmaps.com" target="_blank" rel="noopener">iXMaps</a>
+		</div>
+	</div>
+
+	<!-- Loading overlay -->
+	<div id="loading_overlay" class="loading-overlay">
+		<div class="loading-spinner"></div>
+		<div class="loading-text">Caricamento dati...</div>
+		<div style="font-size: 0.8em; color: var(--ink-2); margin-top: 0.5em;">Analizzando oltre 500.000 relazioni tra comuni</div>
+	</div>
+
+	<!-- Logo -->
+	<div class="logo" onclick="toggleCodeView()" role="button" tabindex="0" aria-label="Mostra codice HTML">
+		<div class="logo-text">
+			Data<br>
+			<span style="padding-left: 2px;">Viz</span>
+			<em style="font-style: italic;"> i</em>
+		</div>
+	</div>
+
+	<div id="map_div"></div>
+
+	<!-- Sidebar toggle (mobile / sidebar chiusa) -->
+	<div class="sidebar" id="sidebar_toggle" style="background: none; box-shadow: none; border: none;">
 		<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Apri menu">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
 				<path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
@@ -281,133 +561,153 @@ $Log:index_only_map_embed.html,v $
 
 	<!-- Sidebar principale -->
 	<aside class="sidebar" id="main_sidebar">
-		<div class="sidebar-content">
+		<div class="sidebar-content" style="width:100%;flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;">
 			<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Chiudi menu">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
 					<path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
 				</svg>
 			</button>
 
-			<!-- DataVizi -->
-			<div class="logo" onclick="toggleCodeView()" role="button" tabindex="0" aria-label="Mostra codice HTML">
-				<div class="logo-text">
-					Data<br>
-					<span style="padding-left: 2px;">Viz</span>
-					<em style="font-style: italic;"> i</em>
+			<header>
+				<h1 style="font-size:1.3em;">FUA e Pendolarismo 2021<span class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni" role="button" tabindex="0">i</span></h1>
+				<p style="margin: 0; font-size: 0.9em; color: var(--secondary-color);">
+					Aree Urbane Funzionali e spostamenti per lavoro — fonte: <a href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank" rel="noopener" class="source-link">ISTAT</a> (31/12/2021)
+				</p>
+			</header>
+
+			<div class="controls">
+				<div class="legend-scale-title">Legenda elementi</div>
+				<p style="margin:0.3em 0;font-size:0.85em;"><strong>Archi (linee curve):</strong> spostamenti tra comuni</p>
+				<p style="margin:0.3em 0;font-size:0.85em;">
+					<strong style="color:green">● Verde:</strong> più pendolari in <em>arrivo</em><br>
+					<strong style="color:red">● Rosso:</strong> più pendolari in <em>uscita</em><br>
+					<strong style="color:#444444">○ Anello nero:</strong> spostamenti <em>intra comunali</em>
+				</p>
+				<div class="legend-scale-title" style="margin-top:0.9em;">Saldo pendolari</div>
+				<div class="legend-scale-bar"></div>
+				<div class="legend-scale-labels">
+					<span>Uscita</span>
+					<span>Bilanciato</span>
+					<span>Arrivo</span>
 				</div>
 			</div>
-			
-			<div style="position:relative;margin-top:2em">
-				<header style="padding:1em 0.5em 0 0.5em;">
-					<div style="display:flex;justify-content:space-between;align-items:flex-start;">
-						<h1 style="margin:0 0 0.5em 0;color:#000000;font-weight:600;line-height:1.2;flex:1;"><span style="color: #380;">FUA</span> (Functional Urban Areas o <span style="color: #380;">"Aree Urbane Funzionali")</span><br>e Spostamenti giornalieri 2021</h1>
-					</div>
-				</header>
 
-				<div id="legend" style="padding:0 0.5em;">
-					<p style="margin:0.5em 0;">per motivi di lavoro basato su dati <b><a class="ref" href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank">ISTAT</a></b> riferiti al 31/12/2021</p>
-					<p style="margin:0.5em 0;"><b><span style="color:#000000">archi</span></b> = spostamenti tra comuni</p>
-					<p style="margin:0.5em 0;">cerchi<br>
-						<b><span style="color:green">verde</span></b> = più pendolari in <em>arrivo</em><br>
-						<b><span style="color:red">rosso</span></b> = più pendolari in <em>uscita</em><br>
-						<b><span style="color:#444444">anello nero</span></b> = spostamenti <em>intra comunali</em><br>
-					</p>
-					
-					<div style="margin-top:2em;padding:0 0.5em;">
-						<div style="margin-bottom:1em;">
-							<a href="javascript:ixmaps.changeThemeStyle('pendolari_flussi','maxcharts:0.5','factor')" class="button" style="pointer-events:all">-</a> 
-							<span style="margin:0 0.5em;">numeri archi</span>
-							<a href="javascript:ixmaps.changeThemeStyle('pendolari_flussi','maxcharts:2','factor')" class="button" style="pointer-events:all">+</a>
-						</div>
-						<div style="margin-bottom:1em;">
-							<a href="javascript:ixmaps.changeThemeStyle('pendolari_flussi','normalsizevalue:1.25','factor')" class="button" style="pointer-events:all">-</a> 
-							<span style="margin:0 0.5em;">spessore archi</span>
-							<a href="javascript:ixmaps.changeThemeStyle('pendolari_flussi','normalsizevalue:0.75','factor')" class="button" style="pointer-events:all">+</a>
-						</div>
-					</div>
-					
-					<p class="checkbox" style="margin-top:0.4em;float:left;margin-bottom:-1em">
-						<label class="toggle" style="margin-top:0px;float:left">
-							<span style="margin:0 0.5em 0 3.5em;">saldo arrivi/partenze</span>
-							<input type="checkbox" id="theme-values-checkbox" checked="checked" onchange="javascript:ixmaps.toggleTheme('pendolari_saldo')">
-							<span class=" handle"></span>
-						</label>
-						<label class="toggle" style="margin-top:0px;float:left">
-							<span style="margin:0 0.5em 0 3.5em;">spost. intra comunali</span>
-							<input type="checkbox" id="theme-values-checkbox2" checked="checked" onchange="javascript:ixmaps.toggleTheme('pendolari_self')">
-							<span class=" handle"></span>
-						</label>
-					</p>
-					
-					<!-- Descrizione completa -->
-					<div style="clear:both;margin-top:7em;padding:1em 0.5em;border-top:1px solid #ddd;">
-						<h3 style="font-size:1.1em;margin:0 0 1em 0;color:#000;">Informazioni sulla Mappa</h3>
-						
-						<h4 style="font-size:1em;margin:1.5em 0 0.5em 0;color:#000;font-weight:600;">Cosa sono le FUA?</h4>
-						<p style="margin:0.5em 0;font-size:0.9em;line-height:1.5;">
-							Le <strong>FUA (Functional Urban Areas)</strong> o "Aree Urbane Funzionali" sono zone geografiche che includono una città e l'area circostante con cui ha forti legami economici e sociali. Sono definite in base ai flussi di pendolarismo giornaliero per lavoro.
-						</p>
-						
-						<h4 style="font-size:1em;margin:1.5em 0 0.5em 0;color:#000;font-weight:600;">Dati Visualizzati</h4>
-						<p style="margin:0.5em 0;font-size:0.9em;line-height:1.5;">
-							Questa mappa interattiva visualizza gli <strong>spostamenti giornalieri per motivi di lavoro</strong> tra i comuni italiani, basandosi sui dati della <a href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank" class="ref">Matrice di Pendolarismo ISTAT</a> riferiti al <strong>31 dicembre 2021</strong>.
-						</p>
-						<p style="margin:0.5em 0;font-size:0.9em;line-height:1.5;">
-							Il dataset analizza oltre <strong>500.000 relazioni</strong> tra comuni, mostrando dove le persone vivono e dove lavorano.
-						</p>
-						
-						<h4 style="font-size:1em;margin:1.5em 0 0.5em 0;color:#000;font-weight:600;">Come Leggere la Mappa</h4>
-						<ul style="margin:0.5em 0;padding-left:1.5em;font-size:0.9em;line-height:1.6;">
-							<li style="margin:0.3em 0;"><strong>Archi (linee curve):</strong> Rappresentano i flussi di pendolari tra due comuni. Lo spessore indica il numero di persone che si spostano.</li>
-							<li style="margin:0.3em 0;"><strong>Cerchi verdi:</strong> Comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
-							<li style="margin:0.3em 0;"><strong>Cerchi rossi:</strong> Comuni con saldo negativo (più persone partono per lavoro di quante arrivano)</li>
-							<li style="margin:0.3em 0;"><strong>Anelli neri:</strong> Rappresentano gli spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
-						</ul>
-						
-						<h4 style="font-size:1em;margin:1.5em 0 0.5em 0;color:#000;font-weight:600;">Interazione</h4>
-						<ul style="margin:0.5em 0;padding-left:1.5em;font-size:0.9em;line-height:1.6;">
-							<li style="margin:0.3em 0;"><strong>Zoom:</strong> Usa la rotellina del mouse o i controlli + / - per ingrandire</li>
-							<li style="margin:0.3em 0;"><strong>Pan:</strong> Trascina la mappa per spostarti</li>
-							<li style="margin:0.3em 0;"><strong>Click:</strong> Clicca sui comuni o sugli archi per vedere i dettagli</li>
-							<li style="margin:0.3em 0;"><strong>Controlli:</strong> Usa i pulsanti +/- per regolare la visualizzazione degli archi</li>
-							<li style="margin:0.3em 0;"><strong>Toggle:</strong> Attiva/disattiva i layer con le checkbox sopra</li>
-						</ul>
-						
-						<h4 style="font-size:1em;margin:1.5em 0 0.5em 0;color:#000;font-weight:600;">Insights Chiave</h4>
-						<p style="margin:0.5em 0;font-size:0.9em;line-height:1.5;">
-							La mappa permette di identificare:
-						</p>
-						<ul style="margin:0.5em 0;padding-left:1.5em;font-size:0.9em;line-height:1.6;">
-							<li style="margin:0.3em 0;">I <strong>poli di attrazione lavorativa</strong> (grandi città con molti pendolari in entrata)</li>
-							<li style="margin:0.3em 0;">Le <strong>città dormitorio</strong> (comuni residenziali da cui partono molti lavoratori)</li>
-							<li style="margin:0.3em 0;">Le <strong>connessioni più forti</strong> tra aree urbane</li>
-							<li style="margin:0.3em 0;">Le <strong>FUA più estese</strong> e integrate</li>
-						</ul>
-						
-						<div style="margin-top:2em;padding:1em;background:#f8f9fa;border-radius:8px;font-size:0.85em;">
-							<p style="margin:0;"><strong>📌 Note:</strong></p>
-							<p style="margin:0.5em 0 0 0;line-height:1.5;">
-								I dati si riferiscono al <strong>31 dicembre 2021</strong>, durante il periodo pandemico, e potrebbero riflettere i cambiamenti nelle modalità di lavoro (smart working) emersi con la pandemia COVID-19.
-							</p>
-						</div>
-						
-						<div style="margin-top:1.5em;padding-top:1em;border-top:1px solid #ddd;font-size:0.8em;color:#666;">
-							<p style="margin:0;"><strong>Fonte dati:</strong> <a href="https://www.istat.it" target="_blank" class="ref">ISTAT</a> - Istituto Nazionale di Statistica</p>
-							<p style="margin:0.5em 0 0 0;"><strong>Visualizzazione:</strong> <a href="https://ixmaps.com" target="_blank" class="ref">iXMaps</a></p>
-						</div>
-					</div>
+			<div class="controls search-box">
+				<input type="text" id="municipality_search" placeholder="Cerca comune..."
+					aria-label="Cerca comune per nome"
+					aria-describedby="search_help"
+					autocomplete="off"
+					aria-autocomplete="list"
+					aria-expanded="false"
+					aria-controls="search_results">
+				<button class="search-clear" id="search_clear" onclick="clearSearch()"
+					aria-label="Cancella ricerca"
+					title="Cancella ricerca">×</button>
+				<div id="search_help" class="sr-only">Digita il nome di un comune per cercarlo sulla mappa</div>
+				<div id="search_results" class="search-results" role="listbox" aria-label="Risultati ricerca"></div>
+			</div>
+
+			<div class="controls">
+				<label for="maxcharts_slider" class="control-label">numero archi visibili <span id="maxcharts_value">10000</span></label>
+				<input type="range" id="maxcharts_slider" class="slider" min="100" max="20000" value="10000" step="100"
+					oninput="updateMaxCharts(this.value)"
+					aria-label="Regola il numero di archi visibili sulla mappa"
+					aria-valuemin="100"
+					aria-valuemax="20000"
+					aria-valuenow="10000">
+				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
+					<span>Pochi</span>
+					<span>Molti</span>
 				</div>
+
+				<label for="thickness_slider" class="control-label" style="margin-top:14px">spessore archi <span id="thickness_value">1.0</span></label>
+				<input type="range" id="thickness_slider" class="slider" min="0.5" max="2.0" value="1.0" step="0.1"
+					oninput="updateThickness(this.value)"
+					aria-label="Regola lo spessore degli archi sulla mappa"
+					aria-valuemin="0.5"
+					aria-valuemax="2.0"
+					aria-valuenow="1.0">
+				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
+					<span>Sottili</span>
+					<span>Spessi</span>
+				</div>
+			</div>
+
+			<div class="controls">
+				<label class="control-label" style="margin-bottom:12px;">livelli visibili</label>
+				<p class="checkbox" style="margin:0;overflow:hidden;">
+					<label class="toggle" style="margin-top:0px;float:left">
+						<span style="margin:0 0.5em 0 3.5em;">saldo arrivi/partenze</span>
+						<input type="checkbox" id="theme-values-checkbox" checked="checked" onchange="javascript:ixmaps.toggleTheme('pendolari_saldo')">
+						<span class=" handle"></span>
+					</label>
+					<label class="toggle" style="margin-top:0px;float:left">
+						<span style="margin:0 0.5em 0 3.5em;">spost. intra comunali</span>
+						<input type="checkbox" id="theme-values-checkbox2" checked="checked" onchange="javascript:ixmaps.toggleTheme('pendolari_self')">
+						<span class=" handle"></span>
+					</label>
+				</p>
+			</div>
+
+			<div class="statistics" id="stats_panel">
+				<div class="stat-row"><span>Pendolari visibili</span><span class="v big" id="stat_total">-</span></div>
+				<div class="stat-row"><span>Flussi visibili</span><span class="v" id="stat_flows">-</span></div>
+				<div class="stat-row"><span>Comuni saldo positivo</span><span class="v" id="stat_positive">-</span></div>
+				<div class="stat-row"><span>Comuni saldo negativo</span><span class="v" id="stat_negative">-</span></div>
+				<div class="stat-row" style="border-top:1px solid var(--line);margin-top:0.4em;padding-top:0.4em;"><span>Comuni visibili</span><span class="v" id="stat_visible">-</span></div>
+			</div>
+
+			<div class="export-buttons" style="margin-top:14px;">
+				<button class="export-btn" onclick="exportScreenshot()" aria-label="Esporta screenshot della mappa">
+					<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right:0.3em;">
+						<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
+						<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+					</svg>
+					Screenshot
+				</button>
+				<button class="export-btn" onclick="exportData()" aria-label="Esporta dati della mappa">
+					<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right:0.3em;">
+						<path d="M.5 9.9a.5.5 0 0 1 .5.5h2a.5.5 0 0 1 0 1H3a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h.5a.5.5 0 0 1 0 1H3a1 1 0 0 0-1 1v5.5a1 1 0 0 0 1 1h.5a.5.5 0 0 1 .5.5z"/>
+						<path d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+					</svg>
+					Esporta Dati
+				</button>
 			</div>
 		</div>
 	</aside>
-</div>
-	<title>iXMaps</title>
-	<!--
-	<h1>di questa mappa</h1>
-	-->
-	<!--========================================================================= -->
 
+	<!-- Overlay codice -->
+	<div class="code-overlay" id="code_overlay" style="display:none">
+		<div class="code-container">
+			<div class="code-header">
+				<h2 style="margin: 0;">Codice HTML della Mappa</h2>
+				<div class="code-actions">
+					<a href="#" onclick="copyToClipboard()" title="Copia negli appunti">
+						<i class="bi bi-clipboard"></i> Copia
+					</a>
+					<a href="#" onclick="saveAsFile()" title="Salva come file">
+						<i class="bi bi-download"></i> Salva
+					</a>
+					<a href="#" onclick="closeCodeView()" title="Chiudi">
+						<i class="bi bi-x-circle"></i> Chiudi
+					</a>
+				</div>
+			</div>
+			<div class="code-content">
+				<pre id="code_display" class="hljs"></pre>
+			</div>
+		</div>
+	</div>
+
+	<!--========================================================================= -->
+	<!--
 	<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@0.9.1/ui/js/htmlgui_flat.js"></script>
+	-->		
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@master/ixmaps.js"></script>
+	<script type="text/javascript" src="../js/facet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@master/ui/js/tools/json_config.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@master/ui/js/tools/json_config_html.js"></script>
 
 	<!--========================================================================= -->
 
@@ -416,6 +716,13 @@ $Log:index_only_map_embed.html,v $
 		ixmaps.htmlgui_onZoomAndPan = function(nZoom){
 			var nOpacity = (ixmaps.getZoom() - 6) / 3;
 			ixmaps.setBasemapOpacity(null, nOpacity, "absolute");
+		};
+		
+		// Global data storage for statistics and search
+		window.mapDataStore = {
+			pendolariData: null,
+			municipalityNames: null,
+			matrixData: null
 		};
 		
 		query_data = function(theme, options) {
@@ -443,6 +750,14 @@ $Log:index_only_map_embed.html,v $
 					}, function(value) {
 						return (nameLookupA[value]);
 					});
+					
+					// Store data globally for statistics and search
+					window.mapDataStore.pendolariData = data;
+					window.mapDataStore.municipalityNames = nameLookupA;
+					
+					// Calculate statistics
+					calculateStatistics(data);
+					
 					options.type = "jsonDB", ixmaps.setExternalData(data, options);
 				});
 		};
@@ -602,7 +917,7 @@ $Log:index_only_map_embed.html,v $
 					sizefield: "Pendolari",
 					minvalue: 20,
 					linecolor: [
-						"#ff4444","#44dd44"],
+						"#ff4444","#93CC91"],
 					valuescale: 1,
 					maxcharts: 10000,
 					name: "pendolari_flussi"
@@ -611,7 +926,7 @@ $Log:index_only_map_embed.html,v $
 					"title": "Pendolari 2021",
 					"snippet": "<b>Flusso</b> degli spostamenti casa lavoro/studi per destinazione",
 					"splash":"... analizzando più di 500 000 righe ...",
-					tooltip: "<div style='white-space:nowrap'>{{theme.title}}<hr><h3><big>{{nome}}<br><b>{{theme.item.value}}</b></big> persone</h3></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Da:</b> {{theme.item.lookupvalue}}<br><b>A:</b> {{theme.item.lookupvalue2}}<br><b>Pendolari:</b> <span style='font-size:1.2em;color:#008800;'><b>{{theme.item.value}}</b></span> persone</div></div>"
 				})
 			);
 		
@@ -640,9 +955,10 @@ $Log:index_only_map_embed.html,v $
 						"none"],
 					linewidth: 2,
 					valuescale: 1,
-					textscale: 2.5,
+					textscale: 1.5,
+					textcolor: "black",
 					boxopacity: 0.1,
-					boxupper: "1:500000",
+					boxupper: "1:200000",
 					name: "pendolari_labels"
 				})
 				.meta({		 
@@ -661,7 +977,7 @@ $Log:index_only_map_embed.html,v $
 					value: "self",
 					title: "nome"
 				})
-				.type("CHART|BUBBLE|SIZE|SUM|CIRCULARBOX|BOTTOMTITLE|NOLEGEND")
+				.type("CHART|BUBBLE|SIZE|SUM|NOLEGEND")
 				.style({
 					colorscheme: [
 						"rgba(255,255,255,0)"],
@@ -681,7 +997,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Pendolari <b>intra comunali</b> 2021",
 					snippet: "Movimenti complessivi sul territorio del comune",
 					splash: "... caricando la tabella con i spostamenti, ci sono più di 500000 righe. Datemi un po' di tempo ... ",
-					tooltip: "<div style='white-space:nowrap'>{{theme.title}}<hr><h3><big>{{nome}}<br><b>{{theme.item.value}}</b></big> persone</h3></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Comune:</b> {{nome}}<br><b>Spostamenti intra-comunali:</b> <span style='font-size:1.2em;color:#444;'><b>{{theme.item.value}}</b></span> persone</div></div>"
 				})
 			);
 
@@ -713,7 +1029,7 @@ $Log:index_only_map_embed.html,v $
 					title: "<b>Saldo</b> pendolari 2021",
 					snippet: "Saldo di entrate e uscite per motivi di lavoro o studio",
 					splash: "... caricando la tabella con i spostamenti, ci sono più di 500000 righe. Datemi un po' di tempo ... ",
-					tooltip: "<div style='white-space:nowrap'>{{theme.title}}<hr><h3>{{nome}}<br><big><b>{{theme.item.value}}</b></big> persone</h3></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Comune:</b> {{nome}}<br><b>Saldo:</b> <span style='font-size:1.2em;'><b>{{theme.item.value}}</b></span> persone<br><small style='color:#666;'>Valore positivo = più arrivi, negativo = più partenze</small></div></div>"
 				})
 			);
 
@@ -794,8 +1110,8 @@ $Log:index_only_map_embed.html,v $
 		// create the map
 		// ----------------------------------------
 
-		var map = ixmaps.embed(
-			"map", {
+		var map = ixmaps.Map(
+			"map_div", {
 				mapService: "leaflet_vt",
 				mapType: "VT_DATAVIZ",
 				mode: "pan",
@@ -803,9 +1119,7 @@ $Log:index_only_map_embed.html,v $
 				width: "100%",
 				height: "800px",
 				legend: true
-			},
-			(map) =>
-			map
+			}).then(map => map
 			.view({
 				"center": {
 					"lat": "42.069863610957555",
@@ -813,7 +1127,6 @@ $Log:index_only_map_embed.html,v $
 					},
 				"zoom": "6.241252622041781"
 			})
-			.require("https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@master/ui/js/tools/tooltip_mustache.js")
 			.options({
 				objectscaling: "dynamic", // grafici crescono leggermente con lo zoom
 				seaturescaling: "true", // grafici crescono leggermente con lo zoom
@@ -844,7 +1157,23 @@ $Log:index_only_map_embed.html,v $
 			.layer(__saldo)
 			.layer(__arcs)
 			.layer(__labels)
-		);
+		).then(function() {
+			// Map is ready, hide loading overlay
+			hideLoadingOverlay();
+
+			// Load matrix data for statistics
+			loadMatrixData();
+			
+			// Setup click interactions
+			setupClickInteractions();
+			
+			// Trigger initial statistics calculation after a short delay
+			// to ensure all themes are drawn
+			setTimeout(function() {
+				ixmaps.statistics("pendolari_saldo");
+				ixmaps.statistics("pendolari_flussi");
+			}, 1000);
+		});
         ixmaps.htmlgui_onZoomAndPan = function() { 
 
 	var nOpacity = (ixmaps.getZoom() - 7) / 3;
@@ -854,44 +1183,12 @@ $Log:index_only_map_embed.html,v $
 
 	<script>
 		// Sidebar toggle functionality
-		let sidebarOpen = true;
+		let sidebarOpen = window.innerWidth > 768;
 
 		function toggleSidebar() {
 			const sidebar = document.getElementById('main_sidebar');
-			const toggleBtn = sidebar.querySelector('.sidebar-toggle svg path');
-			const externalToggle = document.getElementById('sidebar_toggle');
 			sidebarOpen = !sidebarOpen;
-			
-			if (window.innerWidth <= 768) {
-				sidebar.classList.toggle('active');
-				// Su mobile, nascondi il pulsante esterno quando la sidebar è aperta
-				if (sidebar.classList.contains('active')) {
-					externalToggle.style.display = 'none';
-				} else {
-					externalToggle.style.display = 'block';
-				}
-			} else {
-				sidebar.classList.toggle('hidden');
-				// Su desktop, mostra il pulsante esterno quando la sidebar è nascosta
-				if (sidebar.classList.contains('hidden')) {
-					externalToggle.style.display = 'block';
-				} else {
-					externalToggle.style.display = 'none';
-				}
-			}
-			
-			// Cambia icona in base allo stato
-			if (toggleBtn) {
-				if (sidebarOpen) {
-					// Freccia destra (chiudi) - nasconde la sidebar
-					toggleBtn.setAttribute('d', 'M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z');
-				} else {
-					// Freccia sinistra (apri) - riporta la sidebar
-					toggleBtn.setAttribute('d', 'M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z');
-				}
-			}
-			
-			// Aggiorna mappa dopo animazione
+			sidebar.style.display = sidebarOpen ? 'flex' : 'none';
 			setTimeout(() => {
 				if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
 					ixmaps.map().resize();
@@ -899,46 +1196,928 @@ $Log:index_only_map_embed.html,v $
 			}, 300);
 		}
 
-		// Gestione responsive
-		window.addEventListener('resize', function() {
+		function debounce(func, wait) {
+			let timeout;
+			return function executedFunction(...args) {
+				const later = () => { clearTimeout(timeout); func(...args); };
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+			};
+		}
+
+		function handleResize() {
 			const sidebar = document.getElementById('main_sidebar');
-			const externalToggle = document.getElementById('sidebar_toggle');
-			
 			if (window.innerWidth <= 768) {
-				// Mobile: nascosta di default
-				sidebar.classList.remove('hidden');
-				externalToggle.style.display = 'block';
-				if (!sidebar.classList.contains('active')) {
-					// Se non è attiva, assicurati che sia nascosta con transform
-				} else {
-					externalToggle.style.display = 'none';
-				}
+				sidebar.style.display = 'none';
+				sidebarOpen = false;
 			} else {
-				// Desktop: visibile di default
-				sidebar.classList.remove('active');
-				if (!sidebarOpen) {
-					sidebar.classList.add('hidden');
-					externalToggle.style.display = 'block';
-				} else {
-					externalToggle.style.display = 'none';
+				sidebar.style.display = 'flex';
+				sidebarOpen = true;
+			}
+			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
+				ixmaps.map().resize();
+			}
+		}
+
+		// Gestione responsive
+		window.addEventListener('resize', debounce(handleResize, 250));
+
+		// ----------------------------
+		// I N F O   P O P U P
+		// ----------------------------
+		function toggleInfoPopup() {
+			const popup = document.getElementById('infoPopup');
+			const overlay = document.getElementById('infoOverlay');
+			if (popup.classList.contains('active')) {
+				popup.classList.remove('active');
+				overlay.classList.remove('active');
+			} else {
+				popup.classList.add('active');
+				overlay.classList.add('active');
+			}
+		}
+
+		// ----------------------------
+		// C O D E   V I E W E R
+		// ----------------------------
+		function toggleCodeView() {
+			const overlay = document.getElementById('code_overlay');
+			overlay.style.display = (overlay.style.display === 'none' ? 'block' : 'none');
+			if (overlay.style.display === 'block') {
+				generateHtmlCode();
+			}
+		}
+
+		function closeCodeView() {
+			document.getElementById('code_overlay').style.display = 'none';
+			document.getElementById('code_display').textContent = "";
+		}
+
+		function generateHtmlCode() {
+			const codeDisplay = document.getElementById('code_display');
+			const projectCode = ixmaps.map().getProjectString();
+			const htmlCode = new Config(projectCode).getProjectHTML();
+			codeDisplay.textContent = htmlCode;
+			delete codeDisplay.dataset.highlighted;
+			hljs.highlightElement(codeDisplay);
+		}
+
+		function copyToClipboard() {
+			const codeText = document.getElementById('code_display').textContent;
+			navigator.clipboard.writeText(codeText).then(() => {
+				alert('Codice HTML copiato negli appunti!');
+			}).catch(err => {
+				console.error('Errore nella copia:', err);
+			});
+		}
+
+		function saveAsFile() {
+			const codeText = document.getElementById('code_display').textContent;
+			const blob = new Blob([codeText], { type: 'text/html' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'mappa_fua_pendolari.html';
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+		}
+
+		// Unified keyboard handler
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape') {
+				closeCodeView();
+				const popup = document.getElementById('infoPopup');
+				const overlay = document.getElementById('infoOverlay');
+				if (popup.classList.contains('active')) {
+					popup.classList.remove('active');
+					overlay.classList.remove('active');
 				}
 			}
 		});
 
+		// Control functions
+		function updateMaxCharts(value) {
+			document.getElementById('maxcharts_value').textContent = parseInt(value).toLocaleString('it-IT');
+			if (typeof ixmaps !== 'undefined') {
+				ixmaps.changeThemeStyle('pendolari_flussi', 'maxcharts:' + value, 'factor');
+			}
+		}
+		
+		function updateThickness(value) {
+			document.getElementById('thickness_value').textContent = parseFloat(value).toFixed(1);
+			if (typeof ixmaps !== 'undefined') {
+				// Calculate normalsizevalue based on slider (inverse relationship)
+				var normalsizevalue = 1.0 / parseFloat(value);
+				ixmaps.changeThemeStyle('pendolari_flussi', 'normalsizevalue:' + normalsizevalue, 'factor');
+			}
+		}
+		
+		// Statistics calculation using ixmaps.statistics pattern (like Airbnb example)
+		ixmaps.statistics = function(szId) {
+			if (szId === "pendolari_saldo" || szId === "pendolari_flussi" || szId === "pendolari_self") {
+				try {
+					var themeObj = ixmaps.getThemeObj(szId) || {};
+					var nCount = 0;
+					var totalPendolari = 0;
+					var positiveCount = 0;
+					var negativeCount = 0;
+					
+					// Get facet data filtered to visible map extent
+					var lastFilter = themeObj.szFilter || "";
+					
+					// For saldo theme, get visible municipalities with facets
+					if (szId === "pendolari_saldo") {
+						try {
+							// Get facets for saldo and inout to get totals
+							var facetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', ['saldo', 'inout'], szId, "map", "NUMERIC");
+							
+							// First, try to get counts from facets (most reliable)
+							if (facetsA && facetsA.length) {
+								for (var f = 0; f < facetsA.length; f++) {
+									if (facetsA[f].id === 'saldo') {
+										var saldoFacet = facetsA[f];
+										
+										// Get count from facet
+										var facetCount = saldoFacet.nCount || saldoFacet.nValuesSum || 0;
+										if (facetCount > 0) {
+											nCount = facetCount;
+										}
+										
+										// Try to count positive/negative from ranges
+										if (saldoFacet.ranges && saldoFacet.ranges.length) {
+											for (var r = 0; r < saldoFacet.ranges.length; r++) {
+												var range = saldoFacet.ranges[r];
+												var minVal = parseFloat(range.min);
+												var maxVal = parseFloat(range.max);
+												var rangeCount = parseInt(range.count) || 0;
+												
+												if (!isNaN(minVal) && !isNaN(maxVal) && rangeCount > 0) {
+													if (minVal > 0) {
+														// Fully positive range
+														positiveCount += rangeCount;
+													} else if (maxVal < 0) {
+														// Fully negative range
+														negativeCount += rangeCount;
+													} else if (minVal < 0 && maxVal > 0) {
+														// Range spans zero - approximate split
+														var totalRange = Math.abs(minVal) + maxVal;
+														var negPortion = Math.abs(minVal) / totalRange;
+														negativeCount += Math.round(rangeCount * negPortion);
+														positiveCount += Math.round(rangeCount * (1 - negPortion));
+													}
+												}
+											}
+										}
+										
+										// Also check valuesCount if available
+										if (saldoFacet.valuesCount && Object.keys(saldoFacet.valuesCount).length > 0) {
+											for (var valKey in saldoFacet.valuesCount) {
+												var val = parseFloat(valKey);
+												var count = parseInt(saldoFacet.valuesCount[valKey]) || 0;
+												if (!isNaN(val) && count > 0) {
+													if (val > 0) {
+														positiveCount += count;
+													} else if (val < 0) {
+														negativeCount += count;
+													}
+												}
+											}
+										}
+									}
+									if (facetsA[f].id === 'inout') {
+										// Get total from inout facet
+										var inoutFacet = facetsA[f];
+										var inoutSum = inoutFacet.nValuesSum || inoutFacet.sum || 0;
+										if (inoutSum > 0) {
+											totalPendolari = inoutSum;
+										}
+									}
+								}
+							}
+							
+							// Fallback: Use pre-calculated statistics from window.statisticsStore
+							if ((positiveCount === 0 && negativeCount === 0) && window.statisticsStore) {
+								console.log('Using fallback: pre-calculated statistics from calculateStatistics()');
+								positiveCount = window.statisticsStore.positive || 0;
+								negativeCount = window.statisticsStore.negative || 0;
+								if (nCount === 0) {
+									nCount = window.statisticsStore.visible || window.statisticsStore.totalMunicipalities || 0;
+								}
+								if (totalPendolari === 0) {
+									totalPendolari = window.statisticsStore.total || 0;
+								}
+								console.log('Fallback results from statisticsStore:', {
+									positiveCount: positiveCount,
+									negativeCount: negativeCount,
+									totalVisible: nCount,
+									totalPendolari: totalPendolari
+								});
+							}
+							
+							// Final debug log
+							if (positiveCount === 0 && negativeCount === 0 && nCount > 0) {
+								console.warn('Warning: positive/negative counts are 0 but', nCount, 'municipalities visible');
+							}
+						} catch(e) {
+							console.warn('getFacets error for saldo:', e);
+						}
+					}
+					
+					// For flussi theme, count visible arcs
+					if (szId === "pendolari_flussi") {
+						try {
+							// Get facets for flow sizes - this gives us the sum of Pendolari
+							var flowFacetsA = ixmaps.data.getFacets(lastFilter, 'user_legend', ['Pendolari'], szId, "map", "NUMERIC");
+							
+							// Get total from facets
+							if (flowFacetsA && flowFacetsA.length) {
+								for (var f2 = 0; f2 < flowFacetsA.length; f2++) {
+									if (flowFacetsA[f2].id === 'Pendolari') {
+										var facet = flowFacetsA[f2];
+										
+										// Try different ways to get the sum
+										var facetSum = 0;
+										
+										// Check if there's a sum property directly
+										if (facet.sum !== undefined) {
+											facetSum = parseFloat(facet.sum) || 0;
+										}
+										// Check nValuesSum
+										if (facetSum === 0 && facet.nValuesSum !== undefined) {
+											facetSum = parseFloat(facet.nValuesSum) || 0;
+										}
+										// Try to calculate from ranges if available
+										if (facetSum === 0 && facet.ranges && facet.ranges.length) {
+											for (var r = 0; r < facet.ranges.length; r++) {
+												var range = facet.ranges[r];
+												if (range.sum !== undefined) {
+													facetSum += parseFloat(range.sum) || 0;
+												} else if (range.count && range.mean) {
+													facetSum += parseFloat(range.count) * parseFloat(range.mean) || 0;
+												}
+											}
+										}
+										
+										if (facetSum > 0) {
+											totalPendolari = facetSum;
+										}
+									}
+								}
+							}
+							
+							// Count visible arcs/flows
+							// For AGGREGATE themes, each item in indexA represents an aggregated group
+							// We need to count the actual number of flows, not just the groups
+							if (themeObj.indexA && themeObj.itemA) {
+								nCount = 0;
+								for (var k2 = 0; k2 < themeObj.indexA.length; k2++) {
+									var idx2 = themeObj.indexA[k2];
+									var item2 = themeObj.itemA[idx2];
+									if (!item2) continue;
+									
+									// Count actual flows: dbIndexA contains multiple records per aggregated item
+									if (item2.dbIndexA && item2.dbIndexA.length > 0) {
+										nCount += item2.dbIndexA.length;
+									} else if (item2.dbIndex !== null && item2.dbIndex !== undefined) {
+										// Single flow
+										nCount += 1;
+									}
+								}
+							}
+							
+							// Fallback: if total is still 0, try to calculate from items
+							if (totalPendolari === 0 && themeObj.indexA && themeObj.itemA) {
+								for (var k3 = 0; k3 < themeObj.indexA.length; k3++) {
+									var idx3 = themeObj.indexA[k3];
+									var item3 = themeObj.itemA[idx3];
+									if (!item3) continue;
+									
+									// Try multiple ways to get the value
+									var val = 0;
+									
+									// Method 1: item.value (aggregated value)
+									if (item3.value !== undefined && item3.value !== null) {
+										val = parseFloat(item3.value) || 0;
+									}
+									
+									// Method 2: item.size (for size-based charts)
+									if (val === 0 && item3.size !== undefined) {
+										val = parseFloat(item3.size) || 0;
+									}
+									
+									// Method 3: Access from dbTable if available
+									if (val === 0 && item3.dbIndexA && item3.dbIndexA.length > 0 && themeObj.objTheme && themeObj.objTheme.dbTable) {
+										try {
+											var dbTable = themeObj.objTheme.dbTable;
+											var dbRecords = themeObj.objTheme.dbRecords;
+											if (dbRecords && dbTable.fields) {
+												var pendolariFieldIndex = -1;
+												for (var fi2 = 0; fi2 < dbTable.fields.length; fi2++) {
+													if (dbTable.fields[fi2] === 'Pendolari') {
+														pendolariFieldIndex = fi2;
+														break;
+													}
+												}
+												if (pendolariFieldIndex >= 0) {
+													for (var di = 0; di < item3.dbIndexA.length; di++) {
+														var dbIdx = item3.dbIndexA[di];
+														if (dbRecords[dbIdx] && dbRecords[dbIdx][pendolariFieldIndex] !== undefined) {
+															val += parseFloat(dbRecords[dbIdx][pendolariFieldIndex]) || 0;
+														}
+													}
+												}
+											}
+										} catch(e) {
+											// Silently fail
+										}
+									}
+									
+									if (val > 0) {
+										totalPendolari += val;
+									}
+								}
+							}
+						} catch(e) {
+							console.warn('getFacets error for flussi:', e);
+						}
+					}
+					
+					// Update statistics panel with visible data - update only relevant fields per theme
+					if (szId === "pendolari_saldo") {
+						// For saldo, update saldo-related stats
+						// Also try to get total from inout if available
+						updateStatisticsPanel({
+							total: totalPendolari > 0 ? totalPendolari : undefined, // Only update if we got a value
+							positive: positiveCount,
+							negative: negativeCount,
+							visible: nCount
+						});
+					} else if (szId === "pendolari_flussi") {
+						// For flussi, update total and flows (this is the main source for total pendolari)
+						// Only update total if we got a value (preserve from saldo if flussi returns 0)
+						if (totalPendolari > 0) {
+							updateStatisticsPanel({
+								total: totalPendolari,
+								flows: nCount
+							});
+						} else {
+							// Only update flows, preserve total from saldo
+							updateStatisticsPanel({
+								flows: nCount
+							});
+						}
+					}
+					
+				} catch(e) {
+					console.error('Error in ixmaps.statistics:', e);
+				}
+			}
+		};
+		
+		
+		// Global statistics storage to preserve values across multiple theme updates
+		window.statisticsStore = {
+			total: 0,
+			flows: 0,
+			positive: 0,
+			negative: 0,
+			visible: 0
+		};
+		
+		// Helper function to update statistics panel (preserves existing values)
+		function updateStatisticsPanel(stats) {
+			const statTotal = document.getElementById('stat_total');
+			const statFlows = document.getElementById('stat_flows');
+			const statPositive = document.getElementById('stat_positive');
+			const statNegative = document.getElementById('stat_negative');
+			const statVisible = document.getElementById('stat_visible');
+			
+			// Update store only if new values are provided
+			if (stats.total !== undefined && stats.total !== null) {
+				window.statisticsStore.total = stats.total;
+			}
+			if (stats.flows !== undefined && stats.flows !== null) {
+				window.statisticsStore.flows = stats.flows;
+			}
+			if (stats.positive !== undefined && stats.positive !== null) {
+				window.statisticsStore.positive = stats.positive;
+			}
+			if (stats.negative !== undefined && stats.negative !== null) {
+				window.statisticsStore.negative = stats.negative;
+			}
+			if (stats.visible !== undefined && stats.visible !== null) {
+				window.statisticsStore.visible = stats.visible;
+			}
+			
+			// Update UI from store
+			if (statTotal) {
+				if (window.statisticsStore.total > 0) {
+					statTotal.textContent = Math.round(window.statisticsStore.total).toLocaleString('it-IT');
+				} else if (window.statisticsStore.total === 0) {
+					statTotal.textContent = '0';
+				} else {
+					statTotal.textContent = '-';
+				}
+			}
+			if (statFlows) {
+				if (window.statisticsStore.flows > 0) {
+					statFlows.textContent = window.statisticsStore.flows.toLocaleString('it-IT');
+				} else if (window.statisticsStore.flows === 0) {
+					statFlows.textContent = '0';
+				} else {
+					statFlows.textContent = '-';
+				}
+			}
+			if (statPositive) {
+				if (window.statisticsStore.positive > 0) {
+					statPositive.textContent = window.statisticsStore.positive.toLocaleString('it-IT');
+				} else if (window.statisticsStore.positive === 0) {
+					statPositive.textContent = '0';
+				} else {
+					statPositive.textContent = '-';
+				}
+			}
+			if (statNegative) {
+				if (window.statisticsStore.negative > 0) {
+					statNegative.textContent = window.statisticsStore.negative.toLocaleString('it-IT');
+				} else if (window.statisticsStore.negative === 0) {
+					statNegative.textContent = '0';
+				} else {
+					statNegative.textContent = '-';
+				}
+			}
+			if (statVisible) {
+				if (window.statisticsStore.visible > 0) {
+					statVisible.textContent = window.statisticsStore.visible.toLocaleString('it-IT');
+				} else if (window.statisticsStore.visible === 0) {
+					statVisible.textContent = '0';
+				} else {
+					statVisible.textContent = '-';
+				}
+			}
+		}
+		
+		// Hook into theme drawing to update statistics automatically
+		(function hookStatistics() {
+			var old_onDrawTheme = ixmaps.htmlgui_onDrawTheme;
+			ixmaps.htmlgui_onDrawTheme = function(szId) {
+				// Call original handler if it exists
+				try { 
+					if (old_onDrawTheme) { 
+						old_onDrawTheme(szId); 
+					} 
+				} catch(e) {
+					console.warn('Error in old_onDrawTheme:', e);
+				}
+				// Update statistics for visible data
+				ixmaps.statistics(szId);
+			};
+		})();
+		
+		// Legacy function for initial data load (kept for compatibility)
+		function calculateStatistics(data) {
+			if (!data) {
+				console.warn('No data available for statistics');
+				return;
+			}
+			
+			try {
+				let totalPendolari = 0;
+				let positiveCount = 0;
+				let negativeCount = 0;
+				let municipalityCount = 0;
+				
+				// Get columns
+				var saldoColumn = data.column("saldo");
+				var inoutColumn = data.column("inout");
+				
+				console.log('saldoColumn type:', typeof saldoColumn, 'isArray:', Array.isArray(saldoColumn), 'length:', saldoColumn ? saldoColumn.length : 'null');
+				if (saldoColumn && saldoColumn.length > 0) {
+					console.log('First 5 saldo values:', saldoColumn.slice(0, 5));
+				}
+				
+				if (saldoColumn && saldoColumn.length > 0) {
+					municipalityCount = saldoColumn.length;
+					// Use for loop instead of forEach for better compatibility
+					for (var i = 0; i < saldoColumn.length; i++) {
+						var saldo = parseFloat(saldoColumn[i]);
+						if (!isNaN(saldo)) {
+							if (saldo > 0) positiveCount++;
+							else if (saldo < 0) negativeCount++;
+						}
+					}
+					console.log('After counting: positive=', positiveCount, 'negative=', negativeCount);
+				}
+				
+				if (inoutColumn && inoutColumn.length > 0) {
+					inoutColumn.forEach(function(value) {
+						totalPendolari += parseFloat(value) || 0;
+					});
+				}
+				
+				// Store in global statistics store for later use
+				window.statisticsStore = window.statisticsStore || {};
+				window.statisticsStore.total = Math.round(totalPendolari);
+				window.statisticsStore.positive = positiveCount;
+				window.statisticsStore.negative = negativeCount;
+				window.statisticsStore.visible = municipalityCount;
+				window.statisticsStore.totalMunicipalities = municipalityCount;
+				
+				console.log('Statistics calculated:', {
+					total: totalPendolari,
+					positive: positiveCount,
+					negative: negativeCount,
+					municipalities: municipalityCount
+				});
+				
+				// Update UI (with error handling)
+				const statTotal = document.getElementById('stat_total');
+				const statPositive = document.getElementById('stat_positive');
+				const statNegative = document.getElementById('stat_negative');
+				const statVisible = document.getElementById('stat_visible');
+				
+				if (statTotal) statTotal.textContent = Math.round(totalPendolari).toLocaleString('it-IT');
+				if (statPositive) statPositive.textContent = positiveCount.toLocaleString('it-IT');
+				if (statNegative) statNegative.textContent = negativeCount.toLocaleString('it-IT');
+				if (statVisible) statVisible.textContent = municipalityCount.toLocaleString('it-IT');
+				
+			} catch(e) {
+				console.error('Error calculating statistics:', e);
+				// Show error in UI
+				const statTotal = document.getElementById('stat_total');
+				if (statTotal) statTotal.textContent = 'Errore';
+			}
+		}
+		
+		// Load matrix data for flow statistics
+		function loadMatrixData() {
+			if (window.mapDataStore.matrixData) return;
+			
+			const statFlows = document.getElementById('stat_flows');
+			if (statFlows) statFlows.textContent = 'Caricamento...';
+			
+			// Use fetch to load matrix data
+			fetch("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.csv")
+				.then(response => {
+					if (!response.ok) throw new Error('Network response was not ok');
+					return response.text();
+				})
+				.then(text => {
+					// Count lines (approximate for large files)
+					const lineCount = text.split('\n').length - 1; // Subtract header
+					
+					// Store approximate count
+					window.mapDataStore.matrixData = { count: lineCount };
+					
+					// Update flow count
+					if (statFlows) {
+						if (lineCount > 100000) {
+							statFlows.textContent = (Math.round(lineCount / 1000) + 'k+').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+						} else {
+							statFlows.textContent = lineCount.toLocaleString('it-IT');
+						}
+					}
+				})
+				.catch(err => {
+					console.error('Error loading matrix data:', err);
+					if (statFlows) statFlows.textContent = '500.000+';
+				});
+		}
+		
+		function clearSearch() {
+			document.getElementById('municipality_search').value = '';
+			document.getElementById('search_clear').classList.remove('visible');
+			document.getElementById('search_results').classList.remove('visible');
+			document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
+			
+			// Clear map highlight
+			if (window.currentHighlight) {
+				// Reset any highlighting
+				window.currentHighlight = null;
+			}
+		}
+		
+		// Municipality search functionality
+		function searchMunicipalities(query) {
+			if (!window.mapDataStore.municipalityNames || !query || query.length < 2) {
+				return [];
+			}
+			
+			const results = [];
+			const queryLower = query.toLowerCase();
+			
+			// Search through municipality names
+			for (let procom in window.mapDataStore.municipalityNames) {
+				const name = window.mapDataStore.municipalityNames[procom];
+				if (name && name.toLowerCase().includes(queryLower)) {
+					results.push({
+						procom: parseInt(procom),
+						name: name
+					});
+					
+					if (results.length >= 10) break; // Limit results
+				}
+			}
+			
+			return results.sort((a, b) => {
+				// Sort by relevance (exact matches first)
+				const aExact = a.name.toLowerCase().startsWith(queryLower);
+				const bExact = b.name.toLowerCase().startsWith(queryLower);
+				if (aExact && !bExact) return -1;
+				if (!aExact && bExact) return 1;
+				return a.name.localeCompare(b.name);
+			});
+		}
+		
+		function displaySearchResults(results) {
+			const resultsContainer = document.getElementById('search_results');
+			resultsContainer.innerHTML = '';
+			
+			if (results.length === 0) {
+				resultsContainer.innerHTML = '<div class="search-result-item">Nessun risultato trovato</div>';
+				resultsContainer.classList.add('visible');
+				return;
+			}
+			
+			results.forEach(result => {
+				const item = document.createElement('div');
+				item.className = 'search-result-item';
+				item.setAttribute('role', 'option');
+				item.tabIndex = 0;
+				item.innerHTML = `
+					<div class="search-result-name">${result.name}</div>
+					<div class="search-result-details">Codice: ${result.procom}</div>
+				`;
+				
+				item.addEventListener('click', () => highlightMunicipality(result.procom, result.name));
+				item.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						highlightMunicipality(result.procom, result.name);
+					}
+				});
+				
+				resultsContainer.appendChild(item);
+			});
+			
+			resultsContainer.classList.add('visible');
+			document.getElementById('municipality_search').setAttribute('aria-expanded', 'true');
+		}
+		
+		function highlightMunicipality(procom, name) {
+			// Clear previous highlight
+			clearSearch();
+			
+			// Center map on municipality
+			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
+				// Try to get the municipality's position from the map
+				// This would require access to the map's feature data
+				// For now, we'll just log it
+				console.log('Highlighting municipality:', name, 'Procom:', procom);
+				
+				// Store current highlight
+				window.currentHighlight = { procom: procom, name: name };
+				
+				// Show a message or tooltip
+				if (typeof ixmaps !== 'undefined') {
+					// You could use ixmaps to zoom to or highlight the feature
+					// This depends on the ixmaps API
+				}
+			}
+		}
+		
+		// Setup click interactions on map
+		function setupClickInteractions() {
+			// This would require ixmaps event handlers
+			// The implementation depends on ixmaps API for click events
+			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
+				// Example: Listen for feature clicks
+				// ixmaps.map().on('click', function(e) {
+				//     // Handle click
+				// });
+			}
+		}
+		
+		// Export functions
+		function exportScreenshot() {
+			if (typeof ixmaps === 'undefined' || !ixmaps.map()) {
+				alert('Mappa non ancora caricata. Attendi il completamento del caricamento.');
+				return;
+			}
+			
+			// Check if html2canvas is available
+			if (typeof html2canvas !== 'undefined') {
+				const mapDiv = document.getElementById('map_div');
+				const btn = event.target;
+				btn.disabled = true;
+				btn.textContent = 'Esportazione...';
+				
+				html2canvas(mapDiv, {
+					useCORS: true,
+					allowTaint: true,
+					backgroundColor: '#ffffff',
+					scale: 1
+				}).then(canvas => {
+					const link = document.createElement('a');
+					link.download = 'mappa_pendolari_' + new Date().toISOString().split('T')[0] + '.png';
+					link.href = canvas.toDataURL('image/png');
+					link.click();
+					btn.disabled = false;
+					btn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right:0.3em;"><path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/></svg>Screenshot';
+				}).catch(err => {
+					console.error('Screenshot export error:', err);
+					alert('Errore durante l\'esportazione. Usa Cmd+Shift+4 (Mac) o Snipping Tool (Windows).');
+					btn.disabled = false;
+					btn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right:0.3em;"><path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/></svg>Screenshot';
+				});
+			} else {
+				// Fallback: provide instructions
+				const instructions = 'Per esportare uno screenshot:\n\n' +
+					'Mac: Cmd+Shift+4, poi seleziona l\'area\n' +
+					'Windows: Usa Snipping Tool o Win+Shift+S\n' +
+					'Linux: Usa il tuo strumento di screenshot\n\n' +
+					'Per una funzionalità automatica, aggiungi la libreria html2canvas.';
+				alert(instructions);
+			}
+		}
+		
+		function exportData() {
+			if (!window.mapDataStore.pendolariData) {
+				alert('Dati non ancora caricati');
+				return;
+			}
+			
+			try {
+				const data = window.mapDataStore.pendolariData;
+				
+				// Get known column names from the data structure
+				// Based on the query_data function, we know these columns exist
+				const knownColumns = ['procom', 'in', 'out', 'self', 'inout', 'saldo', 'nome'];
+				
+				// Try to get actual columns from data object
+				let columns = knownColumns;
+				
+				// Check if data has a way to get column names
+				if (data._columns) {
+					columns = data._columns;
+				} else if (data.columns && typeof data.columns === 'function') {
+					columns = data.columns();
+				} else if (data.getColumns && typeof data.getColumns === 'function') {
+					columns = data.getColumns();
+				} else {
+					// Filter to only columns that actually exist in the data
+					columns = knownColumns.filter(col => {
+						try {
+							const colData = data.column(col);
+							return colData && colData.length > 0;
+						} catch(e) {
+							return false;
+						}
+					});
+				}
+				
+				// Build CSV header
+				const rows = [columns.join(',')];
+				
+				// Get row count
+				let rowCount = 0;
+				if (data.length && typeof data.length === 'function') {
+					rowCount = data.length();
+				} else if (data._length !== undefined) {
+					rowCount = data._length;
+				} else {
+					// Try to get length from first column
+					try {
+						const firstCol = data.column(columns[0]);
+						if (firstCol && firstCol.length) {
+							rowCount = firstCol.length;
+						}
+					} catch(e) {
+						console.warn('Could not determine row count:', e);
+					}
+				}
+				
+				// Limit for performance
+				rowCount = Math.min(rowCount, 10000);
+				
+				// Build rows
+				for (let i = 0; i < rowCount; i++) {
+					const row = [];
+					columns.forEach(col => {
+						try {
+							const colData = data.column(col);
+							let value = '';
+							if (colData && colData[i] !== undefined) {
+								value = colData[i];
+								// Handle values that might contain commas or quotes
+								if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+									value = '"' + value.replace(/"/g, '""') + '"';
+								}
+							}
+							row.push(value);
+						} catch(e) {
+							row.push('');
+						}
+					});
+					rows.push(row.join(','));
+				}
+				
+				// Create and download CSV
+				const csv = rows.join('\n');
+				const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.download = 'pendolari_data_' + new Date().toISOString().split('T')[0] + '.csv';
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				
+				// Clean up
+				setTimeout(() => URL.revokeObjectURL(link.href), 100);
+				
+			} catch(e) {
+				console.error('Data export error:', e);
+				alert('Errore durante l\'esportazione dei dati: ' + e.message);
+			}
+		}
+		
+		// Search functionality
+		let searchTimeout;
+		document.addEventListener('DOMContentLoaded', function() {
+			const searchInput = document.getElementById('municipality_search');
+			const searchClear = document.getElementById('search_clear');
+			
+			if (searchInput) {
+				searchInput.addEventListener('input', function(e) {
+					const value = e.target.value.trim();
+					if (value.length > 0) {
+						searchClear.classList.add('visible');
+						// Debounce search
+						clearTimeout(searchTimeout);
+						searchTimeout = setTimeout(function() {
+							const results = searchMunicipalities(value);
+							displaySearchResults(results);
+						}, 300);
+					} else {
+						searchClear.classList.remove('visible');
+						document.getElementById('search_results').classList.remove('visible');
+						document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
+					}
+				});
+				
+				// Keyboard navigation
+				searchInput.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape') {
+						clearSearch();
+						searchInput.blur();
+					} else if (e.key === 'ArrowDown') {
+						e.preventDefault();
+						const firstResult = document.querySelector('.search-result-item');
+						if (firstResult) firstResult.focus();
+					}
+				});
+				
+				// Close results when clicking outside
+				document.addEventListener('click', function(e) {
+					if (!e.target.closest('.search-box')) {
+						document.getElementById('search_results').classList.remove('visible');
+						document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
+					}
+				});
+			}
+		});
+		
+		// Hide loading overlay when map is ready
+		function hideLoadingOverlay() {
+			const overlay = document.getElementById('loading_overlay');
+			if (overlay) {
+				setTimeout(function() {
+					overlay.classList.add('hidden');
+					setTimeout(function() {
+						overlay.style.display = 'none';
+					}, 300);
+				}, 1000); // Give it a moment to ensure data is loaded
+			}
+		}
+		
 		// Inizializzazione
 		document.addEventListener('DOMContentLoaded', function() {
 			const sidebar = document.getElementById('main_sidebar');
-			const externalToggle = document.getElementById('sidebar_toggle');
-			
+
 			if (window.innerWidth <= 768) {
 				// Su mobile parte nascosta
+				sidebar.style.display = 'none';
 				sidebarOpen = false;
-				externalToggle.style.display = 'block';
 			} else {
 				// Su desktop parte visibile
+				sidebar.style.display = 'flex';
 				sidebarOpen = true;
-				externalToggle.style.display = 'none';
 			}
+
+			// Hide loading overlay after map initialization
+			setTimeout(hideLoadingOverlay, 2000);
 		});
 	</script>
 </body>
