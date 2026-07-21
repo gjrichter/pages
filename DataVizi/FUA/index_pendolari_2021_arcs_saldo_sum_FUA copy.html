@@ -272,6 +272,22 @@ $Log:index_only_map_embed.html,v $
 			color: var(--ink);
 		}
 
+		.legend-scale-bar {
+			height: 20px;
+			background: linear-gradient(to right, #ff4444, #ffaa44, #44dd44);
+			border-radius: 3px;
+			margin: 0.5em 0;
+			position: relative;
+		}
+
+		.legend-scale-labels {
+			display: flex;
+			justify-content: space-between;
+			font-size: 0.75em;
+			color: var(--ink-2);
+			margin-top: 0.3em;
+		}
+
 		/* Search box */
 		.search-box {
 			margin: 0;
@@ -568,6 +584,13 @@ $Log:index_only_map_embed.html,v $
 					<strong style="color:#444444">○ Anello nero:</strong> spostamenti <em>intra comunali</em>
 				</p>
 				<p style="margin:0.3em 0;font-size:0.75em;color:var(--ink-2);">💡 Clicca su un comune per filtrare i suoi spostamenti, clicca sulla mappa per azzerare</p>
+				<div class="legend-scale-title" style="margin-top:0.9em;">Saldo pendolari</div>
+				<div class="legend-scale-bar"></div>
+				<div class="legend-scale-labels">
+					<span>Uscita</span>
+					<span>Bilanciato</span>
+					<span>Arrivo</span>
+				</div>
 			</div>
 
 			<div class="controls search-box">
@@ -599,10 +622,10 @@ $Log:index_only_map_embed.html,v $
 				</div>
 
 				<label for="thickness_slider" class="control-label" style="margin-top:14px">spessore archi <span id="thickness_value">1.0</span></label>
-				<input type="range" id="thickness_slider" class="slider" min="0.1" max="2.0" value="1.0" step="0.1"
+				<input type="range" id="thickness_slider" class="slider" min="0.5" max="2.0" value="1.0" step="0.1"
 					oninput="updateThickness(this.value)"
 					aria-label="Regola lo spessore degli archi sulla mappa"
-					aria-valuemin="0.1"
+					aria-valuemin="0.5"
 					aria-valuemax="2.0"
 					aria-valuenow="1.0">
 				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
@@ -622,11 +645,6 @@ $Log:index_only_map_embed.html,v $
 					<label class="toggle" style="margin-top:0px;float:left">
 						<span style="margin:0 0.5em 0 3.5em;">spost. intra comunali</span>
 						<input type="checkbox" id="theme-values-checkbox2" checked="checked" onchange="javascript:ixmaps.toggleTheme('pendolari_self')">
-						<span class=" handle"></span>
-					</label>
-					<label class="toggle" style="margin-top:0px;float:left">
-						<span style="margin:0 0.5em 0 3.5em;">archi con frecce</span>
-						<input type="checkbox" id="arrows-checkbox" onchange="toggleArrowVectors(this.checked)">
 						<span class=" handle"></span>
 					</label>
 				</p>
@@ -865,9 +883,9 @@ $Log:index_only_map_embed.html,v $
 		// t h e   t h e m e s  
 		// ---------------------------------------------------
 		
-		/* arc theme — factory so the arrowhead style (POINTER) can be swapped at runtime */
-		function makeArcsTheme(withArrows) {
-			return ixmaps.layer("ITALIA_Comuni_2022", layer => layer
+		/* arc theme */
+		var __arcs =
+			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
 					name: "pendolari_matrix",
 					url: "https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.csv",
@@ -887,9 +905,7 @@ $Log:index_only_map_embed.html,v $
 					lookupfield2: "Procom_lav",
 					value: "Procom_lav"
 				})
-				.type(withArrows
-					? "CHART|CATEGORICAL|VECTOR|BEZIER|POINTER|GRADIENT|SIZE|AGGREGATE|FAST|SUM"
-					: "CHART|CATEGORICAL|VECTOR|BEZIER|GRADIENT|SIZE|AGGREGATE|FAST|SUM")
+				.type("CHART|CATEGORICAL|VECTOR|POINTER|BEZIER|GRADIENT|SIZE|AGGREGATE|FAST|SUM")
 				.style({
 					colorscheme: [
 						"#000000"],
@@ -902,19 +918,18 @@ $Log:index_only_map_embed.html,v $
 					sizefield: "Pendolari",
 					minvalue: 20,
 					linecolor: [
-						"#999999","#444444"],
+						"#dd8888","#33aa31"],
 					valuescale: 1,
 					maxcharts: 1000,
 					name: "pendolari_flussi"
 				})
-				.meta({
+				.meta({		 
 					"title": "Pendolari 2021",
 					"snippet": "<b>Flusso</b> degli spostamenti casa lavoro/studi per destinazione",
 					"splash":"... analizzando più di 500 000 righe ...",
 					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Da:</b> {{theme.item.lookupvalue}}<br><b>A:</b> {{theme.item.lookupvalue2}}<br><b>Pendolari:</b> <span style='font-size:1.2em;color:#008800;'><b>{{theme.item.value}}</b></span> persone</div></div>"
 				})
 			);
-		}
 		
 		
 		/* bubble themes */
@@ -1141,7 +1156,7 @@ $Log:index_only_map_embed.html,v $
 			.layer(__fua)
 			.layer(__self)
 			.layer(__saldo)
-			.layer(makeArcsTheme(false))
+			.layer(__arcs)
 			.layer(__labels)
 		).then(function() {
 			// Map is ready, hide loading overlay
@@ -1297,15 +1312,6 @@ $Log:index_only_map_embed.html,v $
 				// Calculate normalsizevalue from the base value (8000, matching __arcs style) — inverse relationship
 				var normalsizevalue = 8000 / parseFloat(value);
 				ixmaps.map().changeThemeStyle('pendolari_flussi', 'normalsizevalue:' + normalsizevalue, 'set');
-			}
-		}
-
-		// Swap the arcs theme (POINTER on/off) — type flags aren't runtime-changeable via
-		// changeThemeStyle, so the arrows toggle redefines the theme under the same
-		// meta name, which auto-replaces it in place.
-		function toggleArrowVectors(withArrows) {
-			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
-				ixmaps.map().replace('pendolari_flussi', makeArcsTheme(withArrows), 'silent');
 			}
 		}
 		

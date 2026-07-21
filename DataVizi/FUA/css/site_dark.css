@@ -1,36 +1,36 @@
     /* ============================================================
-       ixMaps · linguaggio UI moderno
-       Identità ixMaps (blu cartografico + mono tecnico + molto bianco)
-       × pulizia Vercel / chat AI. Variabili compatibili con i map HTML.
+       ixMaps · linguaggio UI moderno — variante NOTTE
+       Stessa struttura di site.css, palette invertita per sfondo scuro
+       (ispirata alla mappa Zeit Online migration, sfondo nero).
        ============================================================ */
     :root {
         /* compat con riferimenti inline esistenti */
-        --primary-color: #08519c;
-        --secondary-color: #5b6470;
-        --accent-color: #3182bd;
-        --text-color: #0b0d0f;
-        --background-color: #ffffff;
-        --sidebar-background: #ffffff;
-        --title-color: #24A2AF;
+        --primary-color: #4da3ff;
+        --secondary-color: #a8a8a8;
+        --accent-color: #6ab0ff;
+        --text-color: #e8e8e8;
+        --background-color: #0a0a0a;
+        --sidebar-background: #141414;
+        --title-color: #2ec4d4;
 
         /* design tokens */
-        --soft: #f6f7f9;
-        --inset: #eef1f4;
-        --ink: #0b0d0f;
-        --ink-2: #5b6470;
-        --ink-3: #9aa1ab;
-        --line: #e9ebef;
-        --line-2: #d7dbe1;
-        --blue: #08519c;
-        --blue-2: #3182bd;
-        --azure: #e8f1fb;
-        --azure-ink: #0f4c81;
+        --soft: #1c1c1c;
+        --inset: #1c1c1c;
+        --ink: #e8e8e8;
+        --ink-2: #a8a8a8;
+        --ink-3: #6e6e6e;
+        --line: #2a2a2a;
+        --line-2: #3a3a3a;
+        --blue: #4da3ff;
+        --blue-2: #6ab0ff;
+        --azure: #16324a;
+        --azure-ink: #8ecbff;
 
         --border-radius: 14px;
         --r-ctrl: 9px;
         --r-pill: 999px;
-        --sh-soft: 0 1px 2px rgba(11, 30, 60, .05);
-        --sh-float: 0 6px 28px rgba(11, 40, 80, .10);
+        --sh-soft: 0 1px 2px rgba(0, 0, 0, .4);
+        --sh-float: 0 6px 28px rgba(0, 0, 0, .6);
         --transition: all 0.15s ease;
 
         --mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -61,7 +61,7 @@
     .logo-text {
         font-family: 'Helvetica Neue', Arial, sans-serif;
         font-size: 24px; line-height: 0.85; font-weight: 700;
-        color: #9aa0a6; text-align: left;
+        color: #7a7a7a; text-align: left;
     }
 
     /* Sidebar — flat, hairline, ombra appena accennata */
@@ -111,7 +111,7 @@
     }
     .seg .seg-btn:hover { color: var(--ink); }
     .seg .seg-btn.active {
-        background: #fff; color: var(--blue); font-weight: 600;
+        background: #262626; color: var(--blue); font-weight: 600;
         box-shadow: var(--sh-soft);
     }
 
@@ -125,7 +125,7 @@
 
     /* Controlli */
     .controls {
-        background: #fff; padding: 14px;
+        background: #171717; padding: 14px;
         border-radius: var(--r-ctrl); margin: 14px 0;
         border: 1px solid var(--line);
     }
@@ -151,13 +151,13 @@
     .legend-bottom-slider .slider::-webkit-slider-thumb {
         -webkit-appearance: none; appearance: none;
         width: 16px !important; height: 16px !important; border-radius: 50% !important;
-        background: #fff !important; border: 2px solid var(--blue) !important;
+        background: #0a0a0a !important; border: 2px solid var(--blue) !important;
         box-shadow: var(--sh-soft); cursor: pointer;
     }
     .controls .slider::-moz-range-thumb,
     .legend-bottom-slider .slider::-moz-range-thumb {
         width: 16px; height: 16px; border-radius: 50%;
-        background: #fff; border: 2px solid var(--blue); box-shadow: var(--sh-soft); cursor: pointer;
+        background: #0a0a0a; border: 2px solid var(--blue); box-shadow: var(--sh-soft); cursor: pointer;
     }
     .controls .slider::-moz-range-track,
     .legend-bottom-slider .slider::-moz-range-track {
@@ -193,12 +193,12 @@
     /* Codice overlay */
     .code-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(11, 20, 35, .5); z-index: 999999; display: none;
+        background: rgba(0, 0, 0, .75); z-index: 999999; display: none;
     }
     .code-container {
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 1200px; height: 80%; background: #fff;
-        border-radius: var(--border-radius); box-shadow: 0 12px 44px rgba(11, 40, 80, .22);
+        width: 90%; max-width: 1200px; height: 80%; background: #141414;
+        border-radius: var(--border-radius); box-shadow: 0 12px 44px rgba(0, 0, 0, .6);
         display: flex; flex-direction: column; border: 1px solid var(--line);
     }
     .code-header {
@@ -216,8 +216,8 @@
     /* Scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #b3b8bf; }
+    ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 
     @media (max-width: 1200px) {
         .sidebar {

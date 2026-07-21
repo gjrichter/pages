@@ -26,7 +26,7 @@ $Log:index_only_map_embed.html,v $
 	<meta name="author" content="guenter richter">
 	<meta name="keywords" content="FUA, pendolarismo, ISTAT, Italia, mappa interattiva">
 
-	<title>Data Viz Italia - FUA e Pendolarismo 2021</title>
+	<title>Data Viz Italia - FUA e Pendolarismo 2021 (notte)</title>
 
 	<!-- Preconnect per performance -->
 	<link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -34,12 +34,12 @@ $Log:index_only_map_embed.html,v $
 
 	<!-- CSS Libraries -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
 
 	<link rel="shortcut icon" href="https://gjrichter.github.io/ixmaps/ui/resources/images/ixmaps_logo.png">
 
     <!-- CSS Site -->
-    <link rel="stylesheet" href="./css/site.css">
+    <link rel="stylesheet" href="./css/site_dark.css">
 
 	<style>
 		/* Info Button — inline accanto al titolo della sidebar */
@@ -49,13 +49,13 @@ $Log:index_only_map_embed.html,v $
 			justify-content: center;
 			width: 18px;
 			height: 18px;
-			background: #fff;
-			color: #666;
+			background: #1c1c1c;
+			color: #aaa;
 			border-radius: 50%;
 			font-size: 11px;
 			font-weight: 700;
 			cursor: pointer;
-			border: 1px solid #bbb;
+			border: 1px solid #444;
 			font-family: Georgia, serif;
 			transition: color 0.15s, border-color 0.15s;
 			user-select: none;
@@ -67,7 +67,7 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		.info-button:hover {
-			color: #111;
+			color: #eee;
 			border-color: #888;
 		}
 
@@ -91,10 +91,10 @@ $Log:index_only_map_embed.html,v $
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			background: #fff;
-			border: 1px solid #e5e7eb;
+			background: #141414;
+			border: 1px solid #2a2a2a;
 			border-radius: 12px;
-			box-shadow: 0 10px 34px rgba(0, 0, 0, 0.12);
+			box-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
 			z-index: 100001;
 			width: min(620px, 94vw);
 			max-height: 88vh;
@@ -108,10 +108,10 @@ $Log:index_only_map_embed.html,v $
 
 		.info-popup-header {
 			padding: 16px 20px 14px;
-			border-bottom: 1px solid #eef0f2;
+			border-bottom: 1px solid #2a2a2a;
 			position: sticky;
 			top: 0;
-			background: #f7f8f9;
+			background: #1c1c1c;
 			z-index: 10;
 		}
 
@@ -119,7 +119,7 @@ $Log:index_only_map_embed.html,v $
 			margin: 0;
 			font-size: 15px;
 			font-weight: 600;
-			color: #222;
+			color: #eee;
 			letter-spacing: 0.01em;
 		}
 
@@ -129,7 +129,7 @@ $Log:index_only_map_embed.html,v $
 			right: 14px;
 			background: none;
 			border: none;
-			color: #888;
+			color: #999;
 			font-size: 20px;
 			cursor: pointer;
 			line-height: 1;
@@ -139,12 +139,12 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		.info-popup-close:hover {
-			color: #222;
+			color: #eee;
 		}
 
 		.info-popup-content {
 			padding: 18px 20px;
-			color: #333;
+			color: #ccc;
 			font-size: 13.5px;
 			line-height: 1.65;
 			overflow-y: auto;
@@ -152,13 +152,13 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		.info-popup-content h3 {
-			color: #0b0d0f;
+			color: #eee;
 			margin: 22px 0 6px;
 			font-size: 11px;
 			font-weight: 600;
 			text-transform: uppercase;
 			letter-spacing: 0.07em;
-			border-bottom: 1px solid #e9ebef;
+			border-bottom: 1px solid #2a2a2a;
 			padding-bottom: 5px;
 		}
 
@@ -181,28 +181,28 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		.info-popup-content strong {
-			color: #0b0d0f;
+			color: #fff;
 			font-weight: 600;
 		}
 
 		.info-section {
-			background: #f4f8fd;
+			background: #0f2436;
 			padding: 11px 14px;
 			border-radius: 9px;
 			margin: 10px 0;
-			border-left: 3px solid #3182bd;
+			border-left: 3px solid #4da3ff;
 		}
 
 		.info-popup-footer {
 			padding: 11px 20px;
-			background: #f6f7f9;
-			border-top: 1px solid #e9ebef;
+			background: #171717;
+			border-top: 1px solid #2a2a2a;
 			font-size: 12px;
-			color: #5b6470;
+			color: #999;
 		}
 
 		.info-popup-footer a {
-			color: #08519c;
+			color: #6ab0ff;
 			text-decoration: none;
 		}
 
@@ -215,7 +215,7 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		em {
-			color: black;
+			color: #ddd;
 		}
 
 		/* Toggle switch (checkbox pillola) */
@@ -272,99 +272,6 @@ $Log:index_only_map_embed.html,v $
 			color: var(--ink);
 		}
 
-		/* Search box */
-		.search-box {
-			margin: 0;
-			position: relative;
-		}
-
-		.search-box input {
-			width: 100%;
-			padding: 0.6em 2.5em 0.6em 0.8em;
-			border: 1px solid var(--line);
-			border-radius: var(--r-ctrl);
-			font-size: 0.9em;
-			box-sizing: border-box;
-			font: inherit;
-		}
-
-		.search-box input:focus {
-			outline: 2px solid var(--blue-2);
-			outline-offset: 2px;
-		}
-
-		.search-clear {
-			position: absolute;
-			right: 0.5em;
-			top: 50%;
-			transform: translateY(-50%);
-			background: none;
-			border: none;
-			cursor: pointer;
-			font-size: 1.2em;
-			color: var(--ink-3);
-			padding: 0.2em;
-			display: none;
-		}
-
-		.search-clear.visible {
-			display: block;
-		}
-
-		.search-clear:hover {
-			color: var(--ink);
-		}
-
-		/* Search results dropdown */
-		.search-results {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			right: 0;
-			background: #fff;
-			border: 1px solid var(--line);
-			border-top: none;
-			border-radius: 0 0 var(--r-ctrl) var(--r-ctrl);
-			max-height: 200px;
-			overflow-y: auto;
-			z-index: 1000;
-			display: none;
-			box-shadow: var(--sh-float);
-		}
-
-		.search-results.visible {
-			display: block;
-		}
-
-		.search-result-item {
-			padding: 0.6em 0.8em;
-			cursor: pointer;
-			border-bottom: 1px solid var(--line);
-			font-size: 0.9em;
-			transition: background 0.2s ease;
-		}
-
-		.search-result-item:hover,
-		.search-result-item:focus {
-			background: var(--soft);
-			outline: none;
-		}
-
-		.search-result-item:last-child {
-			border-bottom: none;
-		}
-
-		.search-result-name {
-			font-weight: 600;
-			color: var(--ink);
-		}
-
-		.search-result-details {
-			font-size: 0.85em;
-			color: var(--ink-2);
-			margin-top: 0.2em;
-		}
-
 		/* Export buttons */
 		.export-buttons {
 			margin-top: 0;
@@ -414,7 +321,7 @@ $Log:index_only_map_embed.html,v $
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: rgba(255, 255, 255, 0.95);
+			background: rgba(10, 10, 10, 0.95);
 			z-index: 100000;
 			display: flex;
 			flex-direction: column;
@@ -478,9 +385,9 @@ $Log:index_only_map_embed.html,v $
 			<h3>Come leggere la mappa</h3>
 			<ul>
 				<li><strong>Archi (linee curve):</strong> flussi di pendolari tra due comuni — lo spessore indica il numero di persone che si spostano</li>
-				<li><strong>Cerchi verdi:</strong> comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
-				<li><strong>Cerchi rossi:</strong> comuni con saldo negativo (più persone partono per lavoro di quante arrivano)</li>
-				<li><strong>Anelli neri:</strong> spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
+				<li><strong>Cerchi gialli:</strong> comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
+				<li><strong>Cerchi arancioni:</strong> comuni con saldo negativo (più persone partono per lavoro di quante arrivano)</li>
+				<li><strong>Anelli blu:</strong> spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
 			</ul>
 
 			<h3>Interazione</h3>
@@ -553,7 +460,7 @@ $Log:index_only_map_embed.html,v $
 			</button>
 
 			<header>
-				<h1 style="font-size:1.3em;">FUA e Pendolarismo 2021<span class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni" role="button" tabindex="0">i</span></h1>
+				<h1 style="font-size:1.3em;"><span style="color:#3d7fff;">FUA</span> e <span style="color:#FBEBAC;">Pendolarismo 2021</span><span class="info-button" onclick="toggleInfoPopup()" title="Informazioni sulla mappa" aria-label="Informazioni" role="button" tabindex="0">i</span></h1>
 				<p style="margin: 0; font-size: 0.9em; color: var(--secondary-color);">
 					Aree Urbane Funzionali e spostamenti per lavoro — fonte: <a href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank" rel="noopener" class="source-link">ISTAT</a> (31/12/2021)
 				</p>
@@ -563,48 +470,33 @@ $Log:index_only_map_embed.html,v $
 				<div class="legend-scale-title">Legenda elementi</div>
 				<p style="margin:0.3em 0;font-size:0.85em;"><strong>Archi (linee curve):</strong> spostamenti tra comuni</p>
 				<p style="margin:0.3em 0;font-size:0.85em;">
-					<strong style="color:green">● Verde:</strong> più pendolari in <em>arrivo</em><br>
-					<strong style="color:red">● Rosso:</strong> più pendolari in <em>uscita</em><br>
-					<strong style="color:#444444">○ Anello nero:</strong> spostamenti <em>intra comunali</em>
+					<strong style="color:#FBEBAC">● Giallo:</strong> più pendolari in <em>arrivo</em><br>
+					<strong style="color:#ff4400">● Arancio:</strong> più pendolari in <em>uscita</em><br>
+					<strong style="color:#0000dd">○ Anello blu:</strong> spostamenti <em>intra comunali</em>
 				</p>
 				<p style="margin:0.3em 0;font-size:0.75em;color:var(--ink-2);">💡 Clicca su un comune per filtrare i suoi spostamenti, clicca sulla mappa per azzerare</p>
 			</div>
 
-			<div class="controls search-box">
-				<input type="text" id="municipality_search" placeholder="Cerca comune..."
-					aria-label="Cerca comune per nome"
-					aria-describedby="search_help"
-					autocomplete="off"
-					aria-autocomplete="list"
-					aria-expanded="false"
-					aria-controls="search_results">
-				<button class="search-clear" id="search_clear" onclick="clearSearch()"
-					aria-label="Cancella ricerca"
-					title="Cancella ricerca">×</button>
-				<div id="search_help" class="sr-only">Digita il nome di un comune per cercarlo sulla mappa</div>
-				<div id="search_results" class="search-results" role="listbox" aria-label="Risultati ricerca"></div>
-			</div>
-
 			<div class="controls">
-				<label for="maxcharts_slider" class="control-label">numero archi visibili <span id="maxcharts_value">1000</span></label>
-				<input type="range" id="maxcharts_slider" class="slider" min="100" max="20000" value="1000" step="100"
+				<label for="maxcharts_slider" class="control-label">numero archi visibili <span id="maxcharts_value">5000</span></label>
+				<input type="range" id="maxcharts_slider" class="slider" min="100" max="20000" value="5000" step="100"
 					oninput="updateMaxCharts(this.value)"
 					aria-label="Regola il numero di archi visibili sulla mappa"
 					aria-valuemin="100"
 					aria-valuemax="20000"
-					aria-valuenow="1000">
+					aria-valuenow="5000">
 				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
 					<span>Pochi</span>
 					<span>Molti</span>
 				</div>
 
-				<label for="thickness_slider" class="control-label" style="margin-top:14px">spessore archi <span id="thickness_value">1.0</span></label>
-				<input type="range" id="thickness_slider" class="slider" min="0.1" max="2.0" value="1.0" step="0.1"
+				<label for="thickness_slider" class="control-label" style="margin-top:14px">spessore archi <span id="thickness_value">0.5</span></label>
+				<input type="range" id="thickness_slider" class="slider" min="0.1" max="2.0" value="0.5" step="0.1"
 					oninput="updateThickness(this.value)"
 					aria-label="Regola lo spessore degli archi sulla mappa"
 					aria-valuemin="0.1"
 					aria-valuemax="2.0"
-					aria-valuenow="1.0">
+					aria-valuenow="0.5">
 				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
 					<span>Sottili</span>
 					<span>Spessi</span>
@@ -627,6 +519,11 @@ $Log:index_only_map_embed.html,v $
 					<label class="toggle" style="margin-top:0px;float:left">
 						<span style="margin:0 0.5em 0 3.5em;">archi con frecce</span>
 						<input type="checkbox" id="arrows-checkbox" onchange="toggleArrowVectors(this.checked)">
+						<span class=" handle"></span>
+					</label>
+					<label class="toggle" style="margin-top:0px;float:left">
+						<span style="margin:0 0.5em 0 3.5em;">aree FUA</span>
+						<input type="checkbox" id="fua-checkbox" checked="checked" onchange="javascript:ixmaps.toggleTheme('data_1760737389569_317')">
 						<span class=" handle"></span>
 					</label>
 				</p>
@@ -683,10 +580,7 @@ $Log:index_only_map_embed.html,v $
 	</div>
 
 	<!--========================================================================= -->
-	<!--
-	<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps_flat@0.9.1/ui/js/htmlgui_flat.js"></script>
-	-->		
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@master/ixmaps.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@1/ixmaps.js"></script>
 	<script type="text/javascript" src="../js/facet.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@master/ui/js/tools/json_config.js"></script>
@@ -700,7 +594,71 @@ $Log:index_only_map_embed.html,v $
 			var nOpacity = (ixmaps.getZoom() - 6) / 3;
 			ixmaps.setBasemapOpacity(null, nOpacity, "absolute");
 		};
-		
+
+		// ===================================
+		// Persistenza stato in URL (view, slider) — history.replaceState,
+		// nessun reload, nessuna nuova voce di history.
+		// ===================================
+		function updateURLParams(paramsObj) {
+			var url = new URL(window.location.href);
+			Object.keys(paramsObj).forEach(function(k) {
+				url.searchParams.set(k, paramsObj[k]);
+			});
+			window.history.replaceState({}, '', url);
+		}
+
+		var __viewPersistTimer = null;
+		function persistView() {
+			clearTimeout(__viewPersistTimer);
+			__viewPersistTimer = setTimeout(function() {
+				try {
+					var c = ixmaps.getCenter();
+					var z = ixmaps.getZoom();
+					updateURLParams({ view: '[' + c.lat.toFixed(6) + ',' + c.lng.toFixed(6) + ',' + z.toFixed(6) + ']' });
+				} catch (e) { /* mappa non ancora pronta */ }
+			}, 500);
+		}
+
+		var __sliderPersistTimer = null;
+		function persistSliders() {
+			clearTimeout(__sliderPersistTimer);
+			__sliderPersistTimer = setTimeout(function() {
+				updateURLParams({
+					maxcharts: document.getElementById('maxcharts_slider').value,
+					thickness: document.getElementById('thickness_slider').value
+				});
+			}, 300);
+		}
+
+		const params = new Proxy(new URLSearchParams(window.location.search), {
+			get: (searchParams, prop) => searchParams.get(prop),
+		});
+
+		var __lat = null;
+		var __lon = null;
+		var __zoom = null;
+		if (params.view) {
+			var latlonA = params.view.split('[')[1].split(']')[0].split(',');
+			__lat = latlonA[0];
+			__lon = latlonA[1];
+			__zoom = parseFloat(params.view.split(',')[2]);
+		}
+
+		// Slider persistiti in URL — applicati prima della costruzione del tema archi
+		var __maxcharts = 5000;
+		var __normalsizevalue = 16000;
+		if (params.maxcharts) {
+			__maxcharts = parseInt(params.maxcharts);
+			document.getElementById('maxcharts_slider').value = __maxcharts;
+			document.getElementById('maxcharts_value').textContent = __maxcharts.toLocaleString('it-IT');
+		}
+		if (params.thickness) {
+			var __thicknessVal = parseFloat(params.thickness);
+			__normalsizevalue = 8000 / __thicknessVal;
+			document.getElementById('thickness_slider').value = __thicknessVal;
+			document.getElementById('thickness_value').textContent = __thicknessVal.toFixed(1);
+		}
+
 		// Global data storage for statistics and search
 		window.mapDataStore = {
 			pendolariData: null,
@@ -764,7 +722,7 @@ $Log:index_only_map_embed.html,v $
 					id: "PRO_COM",
 					position: "geometry"
 				})
-				.type("FEATURES|NOLEGEND")
+				.type("FEATURES|SILENT|NOLEGEND")
 				.style({
 					colorscheme: ["none"],
 					linecolor: "none",
@@ -773,7 +731,8 @@ $Log:index_only_map_embed.html,v $
 				})
 			);
 
-		/* 2. last istat data (2022), for changes since 2011 */
+		/* 2. last istat data (2022), for changes since 2011 — geometry base only,
+		   no visible border (boundaries without borders, per Zeit reference) */
 		var __georef =
 			ixmaps.layer("ITALIA_Comuni_2022", layer => layer
 				.data({
@@ -784,56 +743,17 @@ $Log:index_only_map_embed.html,v $
 					id: "PRO_COM",
 					position: "geometry"
 				})
-				.type("FEATURES|NOLEGEND")
+				.type("FEATURES|SILENT|NOLEGEND")
 				.style({
 					colorscheme: ["none"],
-					linecolor: "white",
+					linecolor: "none",
 					linewidth: "0.3",
 					sizefield: "Shape_Area"
 				})
 			);
 
-
-		/* 3. last istat data (2022), province */
-		var __georef_prov =
-			ixmaps.layer("ITALIA_Province_2022", layer => layer
-				.data({
-					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/province_2022/Prov01012022_g_WGS84.topojson.gz",
-					type: "topojson"
-				})
-				.binding({
-					id: "COD_PROV",
-					position: "geometry"
-				})
-				.type("FEATURES|NOLEGEND")
-				.style({
-					colorscheme: ["none"],
-					linecolor: "black",
-					linewidth: "0.1",
-					sizefield: "Shape_Area"
-				})
-			);
-
-		/* 4. last istat data (2022), regioni */
-		var __georef_reg =
-			ixmaps.layer("ITALIA_Regioni_2022", layer => layer
-				.data({
-					url: "https://s3.eu-central-1.amazonaws.com/maps.ixmaps.com/Istat/regioni_2022/Reg01012022_s_WGS84.topojson.gz",
-					type: "topojson"
-				})
-				.binding({
-					id: "COD_REG",
-					position: "geometry"
-				})
-				.type("FEATURES|NOLEGEND")
-				.style({
-					colorscheme: ["rgba(255,255,255,0.5)"],
-					linecolor: "black",
-					linewidth: "0.3",
-					sizefield: "Shape_Area"
-				})
-			);
-
+		/* country silhouette — flat fill, no border, colors from the Zeit Online
+		   migration map (World_countries: colorscheme #222222, linecolor none) */
 		const nuts2 =
             ixmaps.layer("nuts2", layer => layer
                 .type("FEATURES|SILENT|LOCKED|NOLEGEND")
@@ -847,11 +767,11 @@ $Log:index_only_map_embed.html,v $
                 .filter("WHERE CNTR_CODE = IT")
                 .style({
                     colorscheme: [
-                        "white"
+                        "#222222"
                     ],
                     fillopacity: "1",
-                    linecolor: "#F7F6EF",
-                    linewidth: "2",
+                    linecolor: "none",
+                    linewidth: "0",
                     shadow: true,
                     showdata: true,
                     featurelower: "1:2000000",
@@ -892,26 +812,26 @@ $Log:index_only_map_embed.html,v $
 					: "CHART|CATEGORICAL|VECTOR|BEZIER|GRADIENT|SIZE|AGGREGATE|FAST|SUM")
 				.style({
 					colorscheme: [
-						"#000000"],
+						"#0000dd"],
 					fillopacity: 0.9,
 					units: "persone",
-					normalsizevalue: 8000,
+					normalsizevalue: __normalsizevalue,
 					scale: 1,
-					rangescale: 2,
+					rangescale: 3,
 					sizepow: 1.5,
 					sizefield: "Pendolari",
 					minvalue: 20,
 					linecolor: [
-						"#999999","#444444"],
+						"#dd3300","#FBEB7C"],
 					valuescale: 1,
-					maxcharts: 1000,
+					maxcharts: __maxcharts,
 					name: "pendolari_flussi"
 				})
 				.meta({
 					"title": "Pendolari 2021",
 					"snippet": "<b>Flusso</b> degli spostamenti casa lavoro/studi per destinazione",
 					"splash":"... analizzando più di 500 000 righe ...",
-					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Da:</b> {{theme.item.lookupvalue}}<br><b>A:</b> {{theme.item.lookupvalue2}}<br><b>Pendolari:</b> <span style='font-size:1.2em;color:#008800;'><b>{{theme.item.value}}</b></span> persone</div></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Da:</b> {{theme.item.lookupvalue}}<br><b>A:</b> {{theme.item.lookupvalue2}}<br><b>Pendolari:</b> <span style='font-size:1.2em;color:#FBEB7C;'><b>{{theme.item.value}}</b></span> persone</div></div>"
 				})
 			);
 		}
@@ -942,7 +862,7 @@ $Log:index_only_map_embed.html,v $
 					linewidth: 2,
 					valuescale: 1,
 					textscale: 1.5,
-					textcolor: "black",
+					textcolor: "#dd4400",
 					boxopacity: 0.1,
 					boxupper: "1:200000",
 					name: "pendolari_labels"
@@ -971,12 +891,12 @@ $Log:index_only_map_embed.html,v $
 					normalsizevalue: 10000,
 					scale: 1,
 					linecolor: [
-						"#444444"],
+						"#0000dd"],
 					linewidth: 2,
 					valuescale: 1,
 					textscale: 2.5,
 					boxopacity: 0.1,
-					boxupper: "1:500000",
+					boxupper: "1:500",
 					name: "pendolari_self"
 				})
 				.meta({		 
@@ -1001,8 +921,8 @@ $Log:index_only_map_embed.html,v $
 				.type("CHART|BUBBLE|SIZE|FAST|NEGATIVEISVALUE|NOLEGEND")
 				.style({
 					colorscheme: [
-						"red",
-						"#33aa00"],
+						"#ff4400",
+						"#FBEBAC"],
 					rangecentervalue: 0,
 					fillopacity: 0.5,
 					units: "persone",
@@ -1034,8 +954,8 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: [
 						"7",
-						"red",
-						"#33aa00"],
+						"#ff4400",
+						"#FBEBAC"],
 					dopacitypow: 3,
 					dopacityscale: 0.2,
 					units: "persone"
@@ -1063,8 +983,8 @@ $Log:index_only_map_embed.html,v $
 				.type("FEATURE")
 				.style({
 					colorscheme: [
-						"#008800"],
-					fillopacity: "0.3",
+						"#3d7fff"],
+					fillopacity: "0.4",
 					shadow: "false",
 					visible: "true",
 					showdata: "true",
@@ -1072,7 +992,7 @@ $Log:index_only_map_embed.html,v $
 					scale: "1",
 					sizepow: "2",
 					linecolor: [
-						"black"],
+						"white"],
 					linewidth: "0.1",
 					valuescale: "1"
 					})
@@ -1086,7 +1006,7 @@ $Log:index_only_map_embed.html,v $
 			);
 
 		
-		var attribution = '<div style="padding:0.5em;background:rgba(255,255,255,0.2);width:70%">'+
+		var attribution = '<div style="padding:0.5em;background:rgba(255,255,255,0);width:70%">'+
 						'<b>dati:</b> ISTAT - '+
 						'<a class="ref" href="https://www.istat.it/notizia/matrice-di-pendolarismo-per-lavoro/" target="_blank">Matrice Pendolarismo</a> del 2021 - '+
 						'<a class="ref" href="https://www.istat.it/comunicato-stampa/aggiornamento-delle-fua-aree-funzionali-urbane/" target="_blank">FUA</a> del 2021'+
@@ -1099,7 +1019,7 @@ $Log:index_only_map_embed.html,v $
 		var map = ixmaps.Map(
 			"map_div", {
 				mapService: "leaflet_vt",
-				mapType: "VT_DATAVIZ",
+				mapType: "CartoDB - Dark matter",
 				mode: "pan",
 				tools: true,
 				width: "100%",
@@ -1108,10 +1028,10 @@ $Log:index_only_map_embed.html,v $
 			}).then(map => map
 			.view({
 				"center": {
-					"lat": "42.069863610957555",
-					"lng": "15.24128223193711"
+					"lat": __lat || "42.069863610957555",
+					"lng": __lon || "15.24128223193711"
 					},
-				"zoom": "6.241252622041781"
+				"zoom": __zoom || "6.241252622041781"
 			})
 			.options({
 				objectscaling: "dynamic", // grafici crescono leggermente con lo zoom
@@ -1129,11 +1049,9 @@ $Log:index_only_map_embed.html,v $
 			// -----------------------------
 
 			.layer(nuts2)
-			.layer(__georef_reg)
 			.layer(__georef_urban)
 			.layer(__georef)
-			.layer(__georef_prov)
-			
+
 			// -----------------------------		 
 			// the theme layer 
 			// -----------------------------
@@ -1160,10 +1078,11 @@ $Log:index_only_map_embed.html,v $
 				ixmaps.statistics("pendolari_flussi");
 			}, 1000);
 		});
-        ixmaps.htmlgui_onZoomAndPan = function() { 
+        ixmaps.htmlgui_onZoomAndPan = function() {
 
 	var nOpacity = (ixmaps.getZoom() - 7) / 3;
 		ixmaps.map().setBasemapOpacity(nOpacity, "absolute");
+		persistView();
 	}
 	</script>
 
@@ -1289,6 +1208,7 @@ $Log:index_only_map_embed.html,v $
 			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
 				ixmaps.map().changeThemeStyle('pendolari_flussi', 'maxcharts:' + value, 'set');
 			}
+			persistSliders();
 		}
 
 		function updateThickness(value) {
@@ -1298,6 +1218,7 @@ $Log:index_only_map_embed.html,v $
 				var normalsizevalue = 8000 / parseFloat(value);
 				ixmaps.map().changeThemeStyle('pendolari_flussi', 'normalsizevalue:' + normalsizevalue, 'set');
 			}
+			persistSliders();
 		}
 
 		// Swap the arcs theme (POINTER on/off) — type flags aren't runtime-changeable via
@@ -1781,108 +1702,6 @@ $Log:index_only_map_embed.html,v $
 				});
 		}
 		
-		function clearSearch() {
-			document.getElementById('municipality_search').value = '';
-			document.getElementById('search_clear').classList.remove('visible');
-			document.getElementById('search_results').classList.remove('visible');
-			document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
-			
-			// Clear map highlight
-			if (window.currentHighlight) {
-				// Reset any highlighting
-				window.currentHighlight = null;
-			}
-		}
-		
-		// Municipality search functionality
-		function searchMunicipalities(query) {
-			if (!window.mapDataStore.municipalityNames || !query || query.length < 2) {
-				return [];
-			}
-			
-			const results = [];
-			const queryLower = query.toLowerCase();
-			
-			// Search through municipality names
-			for (let procom in window.mapDataStore.municipalityNames) {
-				const name = window.mapDataStore.municipalityNames[procom];
-				if (name && name.toLowerCase().includes(queryLower)) {
-					results.push({
-						procom: parseInt(procom),
-						name: name
-					});
-					
-					if (results.length >= 10) break; // Limit results
-				}
-			}
-			
-			return results.sort((a, b) => {
-				// Sort by relevance (exact matches first)
-				const aExact = a.name.toLowerCase().startsWith(queryLower);
-				const bExact = b.name.toLowerCase().startsWith(queryLower);
-				if (aExact && !bExact) return -1;
-				if (!aExact && bExact) return 1;
-				return a.name.localeCompare(b.name);
-			});
-		}
-		
-		function displaySearchResults(results) {
-			const resultsContainer = document.getElementById('search_results');
-			resultsContainer.innerHTML = '';
-			
-			if (results.length === 0) {
-				resultsContainer.innerHTML = '<div class="search-result-item">Nessun risultato trovato</div>';
-				resultsContainer.classList.add('visible');
-				return;
-			}
-			
-			results.forEach(result => {
-				const item = document.createElement('div');
-				item.className = 'search-result-item';
-				item.setAttribute('role', 'option');
-				item.tabIndex = 0;
-				item.innerHTML = `
-					<div class="search-result-name">${result.name}</div>
-					<div class="search-result-details">Codice: ${result.procom}</div>
-				`;
-				
-				item.addEventListener('click', () => highlightMunicipality(result.procom, result.name));
-				item.addEventListener('keydown', (e) => {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault();
-						highlightMunicipality(result.procom, result.name);
-					}
-				});
-				
-				resultsContainer.appendChild(item);
-			});
-			
-			resultsContainer.classList.add('visible');
-			document.getElementById('municipality_search').setAttribute('aria-expanded', 'true');
-		}
-		
-		function highlightMunicipality(procom, name) {
-			// Clear previous highlight
-			clearSearch();
-			
-			// Center map on municipality
-			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
-				// Try to get the municipality's position from the map
-				// This would require access to the map's feature data
-				// For now, we'll just log it
-				console.log('Highlighting municipality:', name, 'Procom:', procom);
-				
-				// Store current highlight
-				window.currentHighlight = { procom: procom, name: name };
-				
-				// Show a message or tooltip
-				if (typeof ixmaps !== 'undefined') {
-					// You could use ixmaps to zoom to or highlight the feature
-					// This depends on the ixmaps API
-				}
-			}
-		}
-		
 		// ---------------------------------------------------
 		// c l i c k   t o   f i l t e r
 		// ---------------------------------------------------
@@ -1990,82 +1809,31 @@ $Log:index_only_map_embed.html,v $
 				alert('Dati non ancora caricati');
 				return;
 			}
-			
+
 			try {
 				const data = window.mapDataStore.pendolariData;
-				
-				// Get known column names from the data structure
-				// Based on the query_data function, we know these columns exist
-				const knownColumns = ['procom', 'in', 'out', 'self', 'inout', 'saldo', 'nome'];
-				
-				// Try to get actual columns from data object
-				let columns = knownColumns;
-				
-				// Check if data has a way to get column names
-				if (data._columns) {
-					columns = data._columns;
-				} else if (data.columns && typeof data.columns === 'function') {
-					columns = data.columns();
-				} else if (data.getColumns && typeof data.getColumns === 'function') {
-					columns = data.getColumns();
-				} else {
-					// Filter to only columns that actually exist in the data
-					columns = knownColumns.filter(col => {
-						try {
-							const colData = data.column(col);
-							return colData && colData.length > 0;
-						} catch(e) {
-							return false;
-						}
-					});
-				}
-				
-				// Build CSV header
+
+				// Data.Table API (data.js): column names via columnNames(), row count via
+				// .records.length, and column(name) returns a Data.Column wrapper — the
+				// actual values only come from .values(), not index access on the wrapper
+				// itself (that's what silently produced the empty/0-byte export before).
+				const columns = data.columnNames();
+				const rowCount = Math.min(data.records.length, 10000);
+				const colArrays = columns.map(col => data.column(col).values());
+
 				const rows = [columns.join(',')];
-				
-				// Get row count
-				let rowCount = 0;
-				if (data.length && typeof data.length === 'function') {
-					rowCount = data.length();
-				} else if (data._length !== undefined) {
-					rowCount = data._length;
-				} else {
-					// Try to get length from first column
-					try {
-						const firstCol = data.column(columns[0]);
-						if (firstCol && firstCol.length) {
-							rowCount = firstCol.length;
-						}
-					} catch(e) {
-						console.warn('Could not determine row count:', e);
-					}
-				}
-				
-				// Limit for performance
-				rowCount = Math.min(rowCount, 10000);
-				
-				// Build rows
 				for (let i = 0; i < rowCount; i++) {
-					const row = [];
-					columns.forEach(col => {
-						try {
-							const colData = data.column(col);
-							let value = '';
-							if (colData && colData[i] !== undefined) {
-								value = colData[i];
-								// Handle values that might contain commas or quotes
-								if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
-									value = '"' + value.replace(/"/g, '""') + '"';
-								}
-							}
-							row.push(value);
-						} catch(e) {
-							row.push('');
+					const row = colArrays.map(values => {
+						let value = values[i];
+						if (value === undefined || value === null) value = '';
+						if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+							value = '"' + value.replace(/"/g, '""') + '"';
 						}
+						return value;
 					});
 					rows.push(row.join(','));
 				}
-				
+
 				// Create and download CSV
 				const csv = rows.join('\n');
 				const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -2086,51 +1854,6 @@ $Log:index_only_map_embed.html,v $
 		}
 		
 		// Search functionality
-		let searchTimeout;
-		document.addEventListener('DOMContentLoaded', function() {
-			const searchInput = document.getElementById('municipality_search');
-			const searchClear = document.getElementById('search_clear');
-			
-			if (searchInput) {
-				searchInput.addEventListener('input', function(e) {
-					const value = e.target.value.trim();
-					if (value.length > 0) {
-						searchClear.classList.add('visible');
-						// Debounce search
-						clearTimeout(searchTimeout);
-						searchTimeout = setTimeout(function() {
-							const results = searchMunicipalities(value);
-							displaySearchResults(results);
-						}, 300);
-					} else {
-						searchClear.classList.remove('visible');
-						document.getElementById('search_results').classList.remove('visible');
-						document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
-					}
-				});
-				
-				// Keyboard navigation
-				searchInput.addEventListener('keydown', function(e) {
-					if (e.key === 'Escape') {
-						clearSearch();
-						searchInput.blur();
-					} else if (e.key === 'ArrowDown') {
-						e.preventDefault();
-						const firstResult = document.querySelector('.search-result-item');
-						if (firstResult) firstResult.focus();
-					}
-				});
-				
-				// Close results when clicking outside
-				document.addEventListener('click', function(e) {
-					if (!e.target.closest('.search-box')) {
-						document.getElementById('search_results').classList.remove('visible');
-						document.getElementById('municipality_search').setAttribute('aria-expanded', 'false');
-					}
-				});
-			}
-		});
-		
 		// Hide loading overlay when map is ready
 		function hideLoadingOverlay() {
 			const overlay = document.getElementById('loading_overlay');
