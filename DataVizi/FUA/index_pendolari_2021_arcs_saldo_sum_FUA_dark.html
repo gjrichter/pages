@@ -779,7 +779,7 @@ $Log:index_only_map_embed.html,v $
 		query_arcs = function(theme, options) {
 			new Data.Broker()
 
-				.addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.csv", "csv")
+				.addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.parquet", "parquet")
 				.addSource("https://raw.githubusercontent.com/ondata/liberiamoli-tutti/main/ries/data/comuni_dimensioni.csv", "csv")
 
 				.realize(function(dataA) {
