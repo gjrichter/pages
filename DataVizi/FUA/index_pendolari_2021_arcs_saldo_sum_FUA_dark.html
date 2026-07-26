@@ -351,6 +351,14 @@ $Log:index_only_map_embed.html,v $
 			margin-top: 1em;
 		}
 
+		/* ixmaps' own tooltip_mustache.js sets border-color:#555 inline on #tooltipDiv
+		   whenever mapType matches /dark/i — !important is the only way to override a
+		   non-important inline style set via JS .style.setProperty() */
+		#tooltipDiv {
+			border: none !important;
+			box-shadow: none !important;
+		}
+
 	</style>
 
 
@@ -384,10 +392,10 @@ $Log:index_only_map_embed.html,v $
 
 			<h3>Come leggere la mappa</h3>
 			<ul>
-				<li><strong>Archi (linee curve):</strong> flussi di pendolari tra due comuni — lo spessore indica il numero di persone che si spostano</li>
-				<li><strong>Cerchi gialli:</strong> comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
+				<li><strong>Archi gialli (linee curve):</strong> flussi di pendolari tra due comuni — lo spessore indica il numero di persone che si spostano</li>
+				<li><strong>Cerchi verdi:</strong> comuni con saldo positivo (più persone arrivano per lavoro di quante partono)</li>
 				<li><strong>Cerchi arancioni:</strong> comuni con saldo negativo (più persone partono per lavoro di quante arrivano)</li>
-				<li><strong>Anelli blu:</strong> spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
+				<li><strong>Anelli gialli:</strong> spostamenti intra-comunali (persone che lavorano nello stesso comune in cui risiedono)</li>
 			</ul>
 
 			<h3>Interazione</h3>
@@ -468,11 +476,11 @@ $Log:index_only_map_embed.html,v $
 
 			<div class="controls">
 				<div class="legend-scale-title">Legenda elementi</div>
-				<p style="margin:0.3em 0;font-size:0.85em;"><strong>Archi (linee curve):</strong> spostamenti tra comuni</p>
+				<p style="margin:0.3em 0;font-size:0.85em;"><strong style="color:#FBEB7C">— Giallo:</strong> archi (linee curve), spostamenti tra comuni</p>
 				<p style="margin:0.3em 0;font-size:0.85em;">
-					<strong style="color:#FBEBAC">● Giallo:</strong> più pendolari in <em>arrivo</em><br>
+					<strong style="color:#00ff44">● Verde:</strong> più pendolari in <em>arrivo</em><br>
 					<strong style="color:#ff4400">● Arancio:</strong> più pendolari in <em>uscita</em><br>
-					<strong style="color:#0000dd">○ Anello blu:</strong> spostamenti <em>intra comunali</em>
+					<strong style="color:#FBEB7C">○ Anello giallo:</strong> spostamenti <em>intra comunali</em>
 				</p>
 				<p style="margin:0.3em 0;font-size:0.75em;color:var(--ink-2);">💡 Clicca su un comune per filtrare i suoi spostamenti, clicca sulla mappa per azzerare</p>
 			</div>
@@ -500,6 +508,18 @@ $Log:index_only_map_embed.html,v $
 				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
 					<span>Sottili</span>
 					<span>Spessi</span>
+				</div>
+
+				<label for="sizepow_slider" class="control-label" style="margin-top:14px">contrasto spessore <span id="sizepow_value">1.2</span></label>
+				<input type="range" id="sizepow_slider" class="slider" min="0.5" max="3.0" value="1.2" step="0.1"
+					oninput="updateSizePow(this.value)"
+					aria-label="Regola quanto i valori alti vengono esagerati nello spessore degli archi"
+					aria-valuemin="0.5"
+					aria-valuemax="3.0"
+					aria-valuenow="1.2">
+				<div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--ink-3);margin-top:0.2em;">
+					<span>Lineare</span>
+					<span>Esagerata</span>
 				</div>
 			</div>
 
@@ -625,7 +645,8 @@ $Log:index_only_map_embed.html,v $
 			__sliderPersistTimer = setTimeout(function() {
 				updateURLParams({
 					maxcharts: document.getElementById('maxcharts_slider').value,
-					thickness: document.getElementById('thickness_slider').value
+					thickness: document.getElementById('thickness_slider').value,
+					sizepow: document.getElementById('sizepow_slider').value
 				});
 			}, 300);
 		}
@@ -645,19 +666,42 @@ $Log:index_only_map_embed.html,v $
 		}
 
 		// Slider persistiti in URL — applicati prima della costruzione del tema archi
-		var __maxcharts = 5000;
+		var __maxcharts = 3000;
 		var __normalsizevalue = 16000;
+		var __thicknessVal = 1.0;
+		var __sizepow = 2;
+		var __withArrows = true;
+		
 		if (params.maxcharts) {
 			__maxcharts = parseInt(params.maxcharts);
-			document.getElementById('maxcharts_slider').value = __maxcharts;
-			document.getElementById('maxcharts_value').textContent = __maxcharts.toLocaleString('it-IT');
 		}
+		document.getElementById('maxcharts_slider').value = __maxcharts;
+		document.getElementById('maxcharts_value').textContent = __maxcharts.toLocaleString('it-IT');
+
 		if (params.thickness) {
-			var __thicknessVal = parseFloat(params.thickness);
 			__normalsizevalue = 8000 / __thicknessVal;
-			document.getElementById('thickness_slider').value = __thicknessVal;
-			document.getElementById('thickness_value').textContent = __thicknessVal.toFixed(1);
 		}
+		document.getElementById('thickness_slider').value = __thicknessVal;
+		document.getElementById('thickness_value').textContent = __thicknessVal.toFixed(1);
+
+		if (params.sizepow) {
+			__sizepow = parseFloat(params.sizepow);
+		}
+		document.getElementById('sizepow_slider').value = __sizepow;
+		document.getElementById('sizepow_value').textContent = __sizepow.toFixed(1);
+
+		if (params.arrows) {
+			__withArrows = params.arrows === '1';
+		}
+		document.getElementById('arrows-checkbox').checked = __withArrows;
+
+		// Two independent slider profiles — "main" (single theme, no selection) and
+		// "clone" (red/green direction clones during a click2filter selection).
+		// Switching selection on/off swaps which profile drives the sliders/themes.
+		var __arcsProfile = {
+			main:  { maxcharts: __maxcharts, normalsizevalue: __normalsizevalue, sizepow: __sizepow },
+			clone: { maxcharts: __maxcharts, normalsizevalue: __normalsizevalue, sizepow: __sizepow }
+		};
 
 		// Global data storage for statistics and search
 		window.mapDataStore = {
@@ -691,7 +735,33 @@ $Log:index_only_map_embed.html,v $
 					}, function(value) {
 						return (nameLookupA[value]);
 					});
-					
+					// Colore/segno del saldo precalcolati riga per riga — il template
+					// tooltip (mustache) fa solo sostituzione, nessuna condizione ">0"
+					data.addColumn({
+						source: "saldo",
+						destination: "saldo_color"
+					}, function(value) {
+						var n = Number(value);
+						return n < 0 ? "#ff4400" : (n > 0 ? "#00ff44" : "#eee");
+					});
+					// theme.item.value for a NEGATIVEISVALUE bubble renders oddly (size-class
+					// prefix like "0-3" glued to the value, e.g. "0-3 180" for -3180) — format
+					// the signed number ourselves instead of relying on it for the tooltip.
+					data.addColumn({
+						source: "saldo",
+						destination: "saldo_display"
+					}, function(value) {
+						// Space-grouped, not period-grouped: the tooltip engine treats any
+						// cell where !isNaN(v) as numeric and re-formats it with formatValue()
+						// — "+49.416" parses as the float 49.416 there (period = decimal point),
+						// silently corrupting it to "49.42". A space breaks Number() parsing,
+						// so the engine leaves this string alone.
+						var n = Math.round(Number(value));
+						var neg = n < 0;
+						var grouped = String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+						return (neg ? "−" : "+") + grouped;
+					});
+
 					// Store data globally for statistics and search
 					window.mapDataStore.pendolariData = data;
 					window.mapDataStore.municipalityNames = nameLookupA;
@@ -703,8 +773,70 @@ $Log:index_only_map_embed.html,v $
 				});
 		};
 		
+		// Matrice degli spostamenti + nomi dei comuni (stesso join di query_data,
+		// applicato a Procom_res/Procom_lav) — serve a mostrare i nomi nel tooltip
+		// degli archi invece dei soli codici PROCOM numerici.
+		query_arcs = function(theme, options) {
+			new Data.Broker()
+
+				.addSource("https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.csv", "csv")
+				.addSource("https://raw.githubusercontent.com/ondata/liberiamoli-tutti/main/ries/data/comuni_dimensioni.csv", "csv")
+
+				.realize(function(dataA) {
+
+					var data = dataA[0];
+					data.column("Procom_res").map(function(value){
+						return Number(value);
+					});
+					data.column("Procom_lav").map(function(value){
+						return Number(value);
+					});
+					dataA[1].column("PRO_COM_T").map(function(value){
+						return Number(value);
+					});
+					var nameLookupA = dataA[1].lookupArray({
+						key: "PRO_COM_T",
+						value: "istat_comune_nome"
+					});
+					data.addColumn({
+						source: "Procom_res",
+						destination: "nome_res"
+					}, function(value) {
+						return (nameLookupA[value]);
+					});
+					data.addColumn({
+						source: "Procom_lav",
+						destination: "nome_lav"
+					}, function(value) {
+						return (nameLookupA[value]);
+					});
+					// theme.item.value is unreliable for this SIZE/AGGREGATE theme (same class
+					// of bug as the saldo bubbles) — format the real Pendolari count ourselves,
+					// space-grouped so the tooltip engine's isNaN-based auto-reformat leaves it alone.
+					data.addColumn({
+						source: "Pendolari",
+						destination: "pendolari_display"
+					}, function(value) {
+						var n = Math.round(Number(value));
+						return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+					});
+					// data.js's filter parser only reliably combines conditions with AND
+					// (source comment: "only 'AND' combination (OR tdb)") — "Procom_res = X
+					// OR Procom_lav = X" silently drops the OR side. Precompute a combined,
+					// comma-delimited field instead and match it with a single LIKE.
+					data.addColumn({
+						source: ["Procom_res", "Procom_lav"],
+						destination: "od_pair"
+					}, function(res, lav) {
+						return "," + res + "," + lav + ",";
+					});
+
+					options.type = "jsonDB", ixmaps.setExternalData(data, options);
+				});
+		};
+
 		// ---------------------------------------------------
-		// t h e   m a p   l a y e r 
+		// t h e   m a p   l a y e r
 		// ---------------------------------------------------
 
 		/**
@@ -756,7 +888,7 @@ $Log:index_only_map_embed.html,v $
 		   migration map (World_countries: colorscheme #222222, linecolor none) */
 		const nuts2 =
             ixmaps.layer("nuts2", layer => layer
-                .type("FEATURES|SILENT|LOCKED|NOLEGEND")
+                .type("FEATURES|SILENT|NOLEGEND")
                 .data({
                     url: "https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_2.geojson",
                     type: "geojson"
@@ -776,7 +908,7 @@ $Log:index_only_map_embed.html,v $
                     showdata: true,
                     featurelower: "1:2000000",
                     titlefield: "NUTS_NAME",
-                    name: "nuts2"
+                    name: "regioni"
                 })
             );
 
@@ -786,54 +918,52 @@ $Log:index_only_map_embed.html,v $
 		// ---------------------------------------------------
 		
 		/* arc theme — factory so the arrowhead style (POINTER) can be swapped at runtime */
-		function makeArcsTheme(withArrows) {
-			return ixmaps.layer("ITALIA_Comuni_2022", layer => layer
-				.data({
-					name: "pendolari_matrix",
-					url: "https://raw.githubusercontent.com/gjrichter/data/refs/heads/master/ISTAT/pendoLAVORO/matrix_pendoLAVORO_2021.csv",
-					type: "csv",
-					process: function(data) {
-						data.column("Procom_res").map(function(value){
-							return Number(value);
-						});
-						data.column("Procom_lav").map(function(value){
-							return Number(value);
-						});
-						return data;
-					}
-				})
-				.binding({
-					lookupfield: "Procom_res",
-					lookupfield2: "Procom_lav",
-					value: "Procom_lav"
-				})
-				.type(withArrows
-					? "CHART|CATEGORICAL|VECTOR|BEZIER|POINTER|GRADIENT|SIZE|AGGREGATE|FAST|SUM"
-					: "CHART|CATEGORICAL|VECTOR|BEZIER|GRADIENT|SIZE|AGGREGATE|FAST|SUM")
-				.style({
-					colorscheme: [
-						"#0000dd"],
-					fillopacity: 0.9,
-					units: "persone",
-					normalsizevalue: __normalsizevalue,
-					scale: 1,
-					rangescale: 3,
-					sizepow: 1.5,
-					sizefield: "Pendolari",
-					minvalue: 20,
-					linecolor: [
-						"#dd3300","#FBEB7C"],
-					valuescale: 1,
-					maxcharts: __maxcharts,
-					name: "pendolari_flussi"
-				})
-				.meta({
-					"title": "Pendolari 2021",
-					"snippet": "<b>Flusso</b> degli spostamenti casa lavoro/studi per destinazione",
-					"splash":"... analizzando più di 500 000 righe ...",
-					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Da:</b> {{theme.item.lookupvalue}}<br><b>A:</b> {{theme.item.lookupvalue2}}<br><b>Pendolari:</b> <span style='font-size:1.2em;color:#FBEB7C;'><b>{{theme.item.value}}</b></span> persone</div></div>"
-				})
-			);
+		// opts lets click2filter clone this theme into direction-specific variants
+		// (see __applyClickFilter): { name, linecolor, filter }
+		function makeArcsTheme(withArrows, opts) {
+			opts = opts || {};
+			return ixmaps.layer("ITALIA_Comuni_2022", layer => {
+				var t = layer
+					.data({
+						name: "pendolari_matrix",
+						query: query_arcs.toString(),
+						cache: "true"
+					})
+					.binding({
+						lookupfield: "Procom_res",
+						lookupfield2: "Procom_lav",
+						value: "Pendolari"
+					})
+					.type(withArrows
+						? "CHART|CATEGORICAL|VECTOR|BEZIER|POINTER|FADEIN|GRADIENT|SIZE|SUM"
+						: "CHART|CATEGORICAL|VECTOR|BEZIER|FADEIN|GRADIENT|SIZE|SUM")
+					.style({
+						colorscheme: [
+							"#0000dd"],
+						fillopacity: 0.9,
+						units: "persone",
+						normalsizevalue: opts.normalsizevalue || __normalsizevalue,
+						scale: 1,
+						markersize: 0.7,
+						rangescale: 3,
+						sizepow: opts.sizepow || __sizepow,
+						sizefield: "Pendolari",
+						minvalue: 20,
+						linecolor: opts.linecolor || ["#FBEB7C","#FBEB7C"],
+						valuescale: 1,
+						showdata: "true",
+						maxcharts: opts.maxcharts || __maxcharts,
+						name: opts.name || "pendolari_flussi"
+					})
+					.meta({
+						"title": "Pendolari 2021",
+						"snippet": "<b>Flusso</b> degli spostamenti casa lavoro/studi per destinazione",
+						"splash":"... analizzando più di 500 000 righe ...",
+						tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.6em;background:#1c1c1c;color:#eee;border-radius:6px;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;border-color:#444;'><div style='font-size:0.9em;'><b style='font-size:1.3em;'>{{nome_res}} &rarr; {{nome_lav}}</b><br><span style='font-size:1.2em;color:#FBEB7C;'><b>{{pendolari_display}}</b></span> persone</div></div>"
+					});
+				if (opts.filter) { t = t.filter(opts.filter); }
+				return t;
+			});
 		}
 		
 		
@@ -850,7 +980,7 @@ $Log:index_only_map_embed.html,v $
 					value: "self",
 					title: "nome"
 				})
-				.type("CHART|BUBBLE|SIZE|SUM|CIRCULARBOX|BOTTOMTITLE|NOLEGEND")
+				.type("CHART|BUBBLE|SIZE|SUM|CIRCULARBOX|BOTTOMTITLE|DTEXT|NOLEGENDSILENT")
 				.style({
 					colorscheme: [
 						"none"],
@@ -861,14 +991,16 @@ $Log:index_only_map_embed.html,v $
 						"none"],
 					linewidth: 2,
 					valuescale: 1,
-					textscale: 1.5,
-					textcolor: "#dd4400",
+					textscale: 2.5,
+					textcolor: "#000000",
 					boxopacity: 0.1,
 					boxupper: "1:200000",
+					showdata: true,
 					name: "pendolari_labels"
 				})
 				.meta({		 
-					title: "Nome comune"
+					title: "Nome comune",
+					tooltip: "{{theme.item.data}}"
 				})
 			);
 
@@ -891,8 +1023,8 @@ $Log:index_only_map_embed.html,v $
 					normalsizevalue: 10000,
 					scale: 1,
 					linecolor: [
-						"#0000dd"],
-					linewidth: 2,
+						"#FBEB7C"],
+					linewidth: 0.5,
 					valuescale: 1,
 					textscale: 2.5,
 					boxopacity: 0.1,
@@ -903,7 +1035,7 @@ $Log:index_only_map_embed.html,v $
 					title: "Pendolari <b>intra comunali</b> 2021",
 					snippet: "Movimenti complessivi sul territorio del comune",
 					splash: "... caricando la tabella con i spostamenti, ci sono più di 500000 righe. Datemi un po' di tempo ... ",
-					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Comune:</b> {{nome}}<br><b>Spostamenti intra-comunali:</b> <span style='font-size:1.2em;color:#444;'><b>{{theme.item.value}}</b></span> persone</div></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.6em;background:#1c1c1c;color:#eee;border-radius:6px;'><b style='color:white'>{{theme.title}}</b><hr style='margin:0.5em 0;border-color:#444;'><div style='font-size:0.9em;'><b>Comune:</b> {{nome}}<br><b>Spostamenti intra-comunali:</b> <span style='font-size:1.2em;color:#FBEB7C;'><b>{{theme.item.value}}</b></span> persone</div></div>"
 				})
 			);
 
@@ -922,7 +1054,7 @@ $Log:index_only_map_embed.html,v $
 				.style({
 					colorscheme: [
 						"#ff4400",
-						"#FBEBAC"],
+						"#00ff44"],
 					rangecentervalue: 0,
 					fillopacity: 0.5,
 					units: "persone",
@@ -935,7 +1067,7 @@ $Log:index_only_map_embed.html,v $
 					title: "<b>Saldo</b> pendolari 2021",
 					snippet: "Saldo di entrate e uscite per motivi di lavoro o studio",
 					splash: "... caricando la tabella con i spostamenti, ci sono più di 500000 righe. Datemi un po' di tempo ... ",
-					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.5em;'><b>{{theme.title}}</b><hr style='margin:0.5em 0;'><div style='font-size:0.9em;'><b>Comune:</b> {{nome}}<br><b>Saldo:</b> <span style='font-size:1.2em;'><b>{{theme.item.value}}</b></span> persone<br><small style='color:#666;'>Valore positivo = più arrivi, negativo = più partenze</small></div></div>"
+					tooltip: "<div style='white-space:nowrap;max-width:300px;padding:0.6em;background:#1c1c1c;color:#eee;border-radius:6px;'><b style='font-size:1.3em;'>{{nome}}</b><br><span style='font-size:1.2em;color:{{saldo_color}};'><b>{{saldo_display}}</b></span> persone<br><small style='color:#aaa;'>saldo pendolari (arrivi − partenze)</small></div></div>"
 				})
 			);
 
@@ -950,7 +1082,7 @@ $Log:index_only_map_embed.html,v $
 					value: "saldo",
 					value100: "inout"
 				})
-				.type("CHOROPLETH|QUANTILE|DOPACITYMINMAX|NOLEGEND")
+				.type("CHOROPLETH|QUANTILE|DOPACITYMINMAX|NOLEGEND|SILENT")
 				.style({
 					colorscheme: [
 						"7",
@@ -980,7 +1112,7 @@ $Log:index_only_map_embed.html,v $
 					geo: "geometry",
 					value: "$item$"
 					})
-				.type("FEATURE")
+				.type("FEATURE|SILENT")
 				.style({
 					colorscheme: [
 						"#3d7fff"],
@@ -1001,7 +1133,7 @@ $Log:index_only_map_embed.html,v $
 					snippet: "",
 					description: "",
 					name: "data_1760737389569_317",
-					tooltip: "{{theme.item.chart}}{{theme.item.data}}"
+					tooltip: "<div style='padding:0.6em;background:#1c1c1c;color:#eee;border-radius:6px;'>{{theme.item.chart}}{{theme.item.data}}</div>"
 					})
 			);
 
@@ -1016,14 +1148,17 @@ $Log:index_only_map_embed.html,v $
 		// create the map
 		// ----------------------------------------
 
+		// info mode also shows tooltips on hover; pan mode only on click (tap-vs-drag
+		// conflicts on touch), so touch gets pan and mouse/desktop gets info.
+		var MAP_MODE = (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? "pan" : "info";
+
 		var map = ixmaps.Map(
 			"map_div", {
 				mapService: "leaflet_vt",
 				mapType: "CartoDB - Dark matter",
-				mode: "pan",
+				mode: MAP_MODE,
 				tools: true,
 				width: "100%",
-				height: "800px",
 				legend: true
 			}).then(map => map
 			.view({
@@ -1057,9 +1192,9 @@ $Log:index_only_map_embed.html,v $
 			// -----------------------------
 			
 			.layer(__fua)
+			.layer(makeArcsTheme(__withArrows))
 			.layer(__self)
 			.layer(__saldo)
-			.layer(makeArcsTheme(false))
 			.layer(__labels)
 		).then(function() {
 			// Map is ready, hide loading overlay
@@ -1203,31 +1338,83 @@ $Log:index_only_map_embed.html,v $
 		});
 
 		// Control functions
+		// Applies a style change to the main arcs theme AND the two click2filter
+		// direction clones (whichever of the three currently exist) — the sliders must
+		// stay in effect regardless of whether the main theme or the clones are visible.
+		function __activeProfileKey() {
+			return (__clickFilterProcom !== null) ? 'clone' : 'main';
+		}
+
+		function __changeArcsStyle(styleString) {
+			// While a click2filter selection is active only the two clones are visible
+			// (the main theme is hidden) — touch only what's actually on screen.
+			var names = (__clickFilterProcom !== null)
+				? ['pendolari_flussi_out', 'pendolari_flussi_in']
+				: ['pendolari_flussi'];
+			names.forEach(function(name) {
+				try { ixmaps.map().changeThemeStyle(name, styleString, 'set'); } catch (e) {}
+			});
+		}
+
 		function updateMaxCharts(value) {
 			document.getElementById('maxcharts_value').textContent = parseInt(value).toLocaleString('it-IT');
+			__arcsProfile[__activeProfileKey()].maxcharts = parseInt(value);
 			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
-				ixmaps.map().changeThemeStyle('pendolari_flussi', 'maxcharts:' + value, 'set');
+				__changeArcsStyle('maxcharts:' + value);
 			}
 			persistSliders();
 		}
 
 		function updateThickness(value) {
 			document.getElementById('thickness_value').textContent = parseFloat(value).toFixed(1);
+			// Calculate normalsizevalue from the base value (8000, matching __arcs style) — inverse relationship
+			var normalsizevalue = 8000 / parseFloat(value);
+			__arcsProfile[__activeProfileKey()].normalsizevalue = normalsizevalue;
 			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
-				// Calculate normalsizevalue from the base value (8000, matching __arcs style) — inverse relationship
-				var normalsizevalue = 8000 / parseFloat(value);
-				ixmaps.map().changeThemeStyle('pendolari_flussi', 'normalsizevalue:' + normalsizevalue, 'set');
+				__changeArcsStyle('normalsizevalue:' + normalsizevalue);
 			}
 			persistSliders();
+		}
+
+		function updateSizePow(value) {
+			document.getElementById('sizepow_value').textContent = parseFloat(value).toFixed(1);
+			__arcsProfile[__activeProfileKey()].sizepow = parseFloat(value);
+			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
+				__changeArcsStyle('sizepow:' + value);
+			}
+			persistSliders();
+		}
+
+		// Push a stored slider profile's values back into the DOM (sliders + labels)
+		// when switching between "main" and "clone" view.
+		function __applySliderProfileToUI(key) {
+			var p = __arcsProfile[key];
+			var maxchartsSlider = document.getElementById('maxcharts_slider');
+			var thicknessSlider = document.getElementById('thickness_slider');
+			var sizepowSlider = document.getElementById('sizepow_slider');
+			maxchartsSlider.value = p.maxcharts;
+			document.getElementById('maxcharts_value').textContent = p.maxcharts.toLocaleString('it-IT');
+			var thicknessVal = 8000 / p.normalsizevalue;
+			thicknessSlider.value = thicknessVal;
+			document.getElementById('thickness_value').textContent = thicknessVal.toFixed(1);
+			sizepowSlider.value = p.sizepow;
+			document.getElementById('sizepow_value').textContent = p.sizepow.toFixed(1);
 		}
 
 		// Swap the arcs theme (POINTER on/off) — type flags aren't runtime-changeable via
 		// changeThemeStyle, so the arrows toggle redefines the theme under the same
 		// meta name, which auto-replaces it in place.
+		var __lastWithArrows = __withArrows;
 		function toggleArrowVectors(withArrows) {
+			__lastWithArrows = withArrows;
 			if (typeof ixmaps !== 'undefined' && ixmaps.map()) {
 				ixmaps.map().replace('pendolari_flussi', makeArcsTheme(withArrows), 'silent');
+				// keep the direction clones (if a click-filter selection is active) in sync
+				if (__clickFilterProcom !== null) {
+					__applyClickFilter(__clickFilterProcom);
+				}
 			}
+			updateURLParams({ arrows: withArrows ? '1' : '0' });
 		}
 		
 		// Statistics calculation using ixmaps.statistics pattern (like Airbnb example)
@@ -1713,28 +1900,91 @@ $Log:index_only_map_embed.html,v $
 
 		var __clickFilterProcom = null;
 
+		// Instead of filtering the single "pendolari_flussi" theme in place, the selection
+		// view hides it and shows two clones (see makeArcsTheme opts): rosso = uscita
+		// (Procom_res = procom, this comune is the origin), verde = arrivo (Procom_lav =
+		// procom, this comune is the destination). Each clone uses a single-field filter,
+		// so it doesn't depend on the OR combination discussed earlier.
 		function __applyClickFilter(procom) {
-			ixmaps.map().changeThemeStyle('pendolari_flussi', 'filter:WHERE Procom_res = ' + procom + ' OR Procom_lav = ' + procom, 'set');
+			ixmaps.hideTheme('pendolari_flussi');
+			var p = __arcsProfile.clone;
+			// .layer(def) — not .replace() — since these clones don't exist yet on the
+			// first click (removeTheme'd away on the previous clear); .layer() safely
+			// adds a new theme by meta.name or replaces one already present by that name.
+			ixmaps.map().layer(makeArcsTheme(__lastWithArrows, {
+				name: 'pendolari_flussi_out',
+				linecolor: ['#ff3333', '#ff3333'],
+				filter: 'WHERE Procom_res = ' + procom,
+				maxcharts: p.maxcharts,
+				normalsizevalue: p.normalsizevalue,
+				sizepow: p.sizepow
+			}));
+			ixmaps.map().layer(makeArcsTheme(__lastWithArrows, {
+				name: 'pendolari_flussi_in',
+				linecolor: ['#33cc33', '#33cc33'],
+				filter: 'WHERE Procom_lav = ' + procom,
+				maxcharts: p.maxcharts,
+				normalsizevalue: p.normalsizevalue,
+				sizepow: p.sizepow
+			}));
 			ixmaps.map().changeThemeStyle('pendolari_saldo', 'filter:WHERE procom = ' + procom, 'set');
 			ixmaps.map().changeThemeStyle('pendolari_self', 'filter:WHERE procom = ' + procom, 'set');
 			__clickFilterProcom = procom;
+			__applySliderProfileToUI('clone');
 		}
 
 		function __clearClickFilter() {
 			if (__clickFilterProcom === null) return;
-			ixmaps.map().changeThemeStyle('pendolari_flussi', 'filter', 'remove');
+			try { ixmaps.map().removeTheme('pendolari_flussi_out'); } catch (e) {}
+			try { ixmaps.map().removeTheme('pendolari_flussi_in'); } catch (e) {}
+			ixmaps.showTheme('pendolari_flussi');
 			ixmaps.map().changeThemeStyle('pendolari_saldo', 'filter', 'remove');
 			ixmaps.map().changeThemeStyle('pendolari_self', 'filter', 'remove');
 			__clickFilterProcom = null;
+			__applySliderProfileToUI('main');
 		}
 
 		// Setup click interactions on map
+		// In "info" mode, tooltips already show on hover; a click on top of that also
+		// pins the tooltip open (ixmaps.htmlgui_onItemClick), freezing it against later
+		// hovers. Un-pinning after our own click handling restores normal hover tracking.
+		// Only do this in "info" mode — in "pan" mode the click IS what shows the
+		// tooltip in the first place, so unpinning right after would delete it before
+		// the user ever sees it (confirmed the hard way).
+		function __unpinTooltip() {
+			// ixmaps.getMapMode() doesn't exist in the engine — confirmed by reading the
+			// actual source (htmlgui_flat.js): the real live-mode getter is
+			// ixmaps.getMapTool() ('info'/'pan'/'idle'), used internally by
+			// __switchInputMode(). Falls back to our static MAP_MODE guess if the
+			// live getter isn't available for some reason.
+			var currentMode = (typeof ixmaps.getMapTool === 'function') ? ixmaps.getMapTool() : MAP_MODE;
+			if (currentMode !== 'info') return;
+			// 0ms (next-tick) isn't always enough: the tooltip's own positioning runs
+			// inside a requestAnimationFrame callback (tooltip_mustache.js), so on a
+			// slower render the pin/delete function can still be mid-setup right after
+			// the click. A short delay lets that settle before we try to unpin.
+			setTimeout(function() {
+				if (typeof ixmaps.htmlgui_deleteItemPinned === 'function') {
+					try { ixmaps.htmlgui_deleteItemPinned(); } catch (e) {}
+				}
+			}, 600);
+		}
+
 		function setupClickInteractions() {
 			var mapEl = document.getElementById('map') || document.getElementById('map_div');
 			if (!mapEl || mapEl.__clickFilterBound) return;
 			mapEl.__clickFilterBound = true;
 
 			mapEl.addEventListener('click', function(evt) {
+				// Ignore clicks on map UI controls (zoom +/-, pan button, attribution,
+				// leaflet controls) that live inside the map container div — these
+				// bubble up to this same listener and were wrongly treated as "clicked
+				// the map background", clearing the selection on every zoom/pan click.
+				if (evt.target.closest && evt.target.closest(
+					'a, button, input, select, .leaflet-control, .leaflet-bar, .leaflet-control-container'
+				)) {
+					return;
+				}
 				var el = evt.target;
 				while (el && el !== mapEl) {
 					if (el.id && el.id.indexOf('::') >= 0) {
@@ -1752,12 +2002,14 @@ $Log:index_only_map_embed.html,v $
 								__applyClickFilter(procom);
 							}
 						}
+						__unpinTooltip();
 						return;
 					}
 					el = el.parentNode;
 				}
 				// click landed on the map background -> clear the filter
 				__clearClickFilter();
+				__unpinTooltip();
 			});
 		}
 		
