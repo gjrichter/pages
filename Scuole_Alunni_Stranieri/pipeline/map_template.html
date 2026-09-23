@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alunni stranieri per scuola</title>
+<script src="https://cdn.jsdelivr.net/gh/gjrichter/ixmaps-flat@1/ixmaps.js"></script>
+<style>
+  html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
+  #map { width: 100%; height: 100%; }
+  #city-picker {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 1000;   /* in basso: in alto copre il titolo della legenda */
+    max-width: calc(100% - 32px); box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0;
+    background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15); font-size: 14px;
+  }
+  #city-picker select { font-size: 14px; margin-left: 6px; }
+  #city-picker label + select { margin-right: 12px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="city-picker">
+  <label for="city">Città</label>
+  <select id="city"></select>
+  <label for="tipo">Tipo di scuola</label>
+  <select id="tipo"><option value="">tutti</option></select>
+</div>
+<script>
+// dati generati da make_map.mjs a partire da out/scuole_12citta.csv
+var DATA    = /*__DATA__*/null;
+var CITIES  = /*__CITIES__*/null;
+var CLASSES = /*__CLASSES__*/null;
+var TYPES   = /*__TYPES__*/null;
+
+// chiave dei simboli per la legenda (il pannello legenda nativo mostra solo le classi di colore)
+var SHAPES = {
+  circle:   '<circle cx="7" cy="7" r="6"/>',
+  square:   '<rect x="1.5" y="1.5" width="11" height="11"/>',
+  triangle: '<polygon points="1,1 13,1 7,13"/>',  // il motore disegna il triangolo con la punta in basso
+  diamond:  '<polygon points="7,0.5 13.5,7 7,13.5 0.5,7"/>'
+};
+var SYMBOL_KEY = TYPES.map(function (t) {
+  return "<span style='display:inline-flex;align-items:center;margin-right:0.9em;white-space:nowrap'>" +
+         "<svg width='14' height='14' viewBox='0 0 14 14' style='margin-right:0.35em;fill:#2a78d6;stroke:#fff'>" +
+         SHAPES[t.symbol] + "</svg>" + t.label + "</span>";
+}).join("");
+
+var START = CITIES.find(function (c) { return c.name === "Milano"; }) || CITIES[0];
+var MAP_MODE = (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? "pan" : "info";
+
+var myMap = ixmaps.Map("map", { mapType: "VT_TONER_LITE", mode: MAP_MODE, legend: "open", tools: true })
+  .view({ center: { lat: START.lat, lng: START.lng }, zoom: START.zoom })
+  .options({ objectscaling: "dynamic", normalSizeScale: "100000", basemapopacity: 0.6, flushChartDraw: 1000000 });
+
+myMap.layer("scuole")
+  .data({ obj: DATA, type: "json" })
+  .binding({ geo: "lat|lon", value: "classe", size: "a", title: "n" })
+  .type("CHART|SYMBOL|CATEGORICAL|NOSORT")
+  .style({
+    colorscheme: CLASSES.map(function (k) { return k.color; }),
+    values:      CLASSES.map(function (k) { return k.label; }),
+    // forma per tipo di scuola, indipendente dal colore (classe di %)
+    symbolfield:  "tipo",
+    symbolvalues: TYPES.map(function (t) { return t.label; }),
+    symbols:      TYPES.map(function (t) { return t.symbol; }),
+    normalsizevalue: "400",
+    fillopacity: 0.85,
+    linecolor: "#ffffff",
+    linewidth: 1,
+    scale: 0.55,
+    showdata: "true"
+  })
+  .meta({
+    name: "scuole-pct-stranieri",
+    tooltip: "<b>{{n}}</b><br>{{tipo}} · {{gest}} · {{c}}<br><span style='color:#666'>{{g}}</span><br>" +
+             "Alunni con cittadinanza non italiana: <b>{{raw.p}}%</b><br>({{s}} su {{a}} alunni)<br>" +
+             "<span style='color:#888;font-size:0.85em'>posizione: {{fonte}}</span>",
+    snippet: "Plessi statali e paritari, a.s. 2024/25 · colore = % stranieri, forma = tipo di scuola, " +
+             "dimensione = numero di alunni",
+    description: "<div style='margin-bottom:0.6em'>" + SYMBOL_KEY + "</div>" +
+                 "Percentuale di alunni con cittadinanza non italiana per plesso (media nazionale 12%). " +
+                 "Esclusi i plessi con meno di 20 alunni; l'infanzia non è inclusa perché i dati MIM sulla " +
+                 "cittadinanza per scuola coprono solo primaria e secondaria." +
+                 "<div style='margin-top:0.6em;padding-top:0.5em;border-top:1px solid #e5e5e5;font-size:0.8em;color:#888'>" +
+                 "Fonti: MIM open data (anagrafe scuole, studenti per cittadinanza); coordinate da " +
+                 "beni immobili pubblici, ANNCSU, civici dei Comuni di Torino e Bari, " +
+                 "© OpenStreetMap contributors (ODbL).</div>"
+  })
+  .title("Alunni stranieri per scuola")
+  .define();
+
+myMap.then(function () {
+  if (MAP_MODE === "info") { try { ixmaps.setMapTool("info"); } catch (e) {} }   // Hotspot #26
+});
+
+var sel = document.getElementById("city");
+CITIES.forEach(function (c) {
+  var o = document.createElement("option");
+  o.value = c.name;
+  o.textContent = c.name + " — " + String(c.pct).replace(".", ",") + "%";
+  if (c === START) o.selected = true;
+  sel.appendChild(o);
+});
+sel.onchange = function () {
+  var c = CITIES.find(function (x) { return x.name === sel.value; });
+  myMap.view({ center: { lat: c.lat, lng: c.lng }, zoom: c.zoom });
+};
+
+// filtro per tipo di scuola: "" = tutti (rimuove il filtro); virgolette doppie nel WHERE (le singole non funzionano)
+var tipoSel = document.getElementById("tipo");
+TYPES.forEach(function (t) {
+  var o = document.createElement("option");
+  o.value = t.label;
+  o.textContent = t.label;
+  tipoSel.appendChild(o);
+});
+tipoSel.onchange = function () {
+  var v = tipoSel.value;
+  myMap.then(function (api) {
+    if (v) api.changeThemeStyle("scuole-pct-stranieri", 'filter:WHERE "tipo" == "' + v + '"', "set");
+    else   api.changeThemeStyle("scuole-pct-stranieri", "filter", "remove");
+  });
+};
+</script>
+</body>
+</html>

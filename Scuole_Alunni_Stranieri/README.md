@@ -31,6 +31,34 @@ Controlli: selettore **Città** (ordinato per % complessiva) e filtro **Tipo di 
 
 Percentuali calcolate sulle scuole mappate (stranieri / alunni). Nei licei la quota di stranieri è circa un terzo di quella degli altri tipi di scuola; nelle città del Nord le quote più alte si concentrano in periferia.
 
+## File
+
+| File | Contenuto |
+|---|---|
+| [`index.html`](index.html) | la mappa, con i dati incorporati |
+| [`data/scuole_12citta.csv`](data/scuole_12citta.csv) | anagrafe geolocalizzata: 6.305 scuole (statali e paritarie, compresa l'infanzia), 5.850 con coordinate |
+| [`data/non_geolocalizzate.csv`](data/non_geolocalizzate.csv) | le 455 scuole senza coordinate |
+| [`data/report_citta.csv`](data/report_citta.csv) | statistiche per città: scuole per livello di geolocalizzazione, copertura, controlli OSM ↔ FGB e OSM ↔ civici |
+| [`pipeline/`](pipeline/) | gli script che producono i CSV e la mappa (vedi [Riprodurre](#riprodurre)) |
+
+### Colonne di `scuole_12citta.csv`
+
+| Colonna | Significato |
+|---|---|
+| `codice_scuola`, `codice_istituto` | codice MIM del plesso e dell'istituto di riferimento (vuoto per le paritarie) |
+| `gestione` | `statale` / `paritaria` |
+| `denominazione`, `grado`, `indirizzo`, `cap` | dall'anagrafe MIM |
+| `codice_comune`, `comune` | codice catastale (Belfiore) e nome del comune |
+| `lon`, `lat` | coordinate WGS84 (vuote se non geolocalizzata) |
+| `fonte` | livello della cascata che ha dato le coordinate (vedi sotto) |
+| `codice_edificio` | codice edificio MIM dell'indirizzo che ha trovato un match nell'FGB (anche se poi le coordinate vengono da un'altra fonte) |
+| `id_bene` | id dell'immobile nel dataset beni pubblici, se `fonte` = `fgb_*` |
+| `osm_id` | elemento OSM (`node/…`, `way/…`), se `fonte` = `osm_*` |
+| `alunni`, `stranieri`, `stranieri_ue`, `stranieri_nonue` | alunni totali e con cittadinanza non italiana (UE / non UE), tutti gli anni di corso; vuoti per l'infanzia |
+| `pct_stranieri` | stranieri / alunni × 100 |
+| `percorso_prevalente`, `quota_percorso` | solo II grado: LICEO / TECNICO / PROFESSIONALE prevalente e quota dei suoi studenti |
+| `flag` | `ambiguo`, `conflitto_osm_fgb`, `fuori_comune`, `pochi_alunni` (separati da `;`) |
+
 ## Il problema
 
 L'anagrafe delle scuole del Ministero dell'Istruzione e del Merito (MIM) **non ha coordinate**, e nemmeno il dataset MIM "Elenco e localizzazione degli edifici scolastici attivi", che nonostante il nome contiene solo indirizzi. Per mappare le scuole bisogna geolocalizzarle. Qui si combinano più fonti in cascata, dalla più affidabile, e si misura la precisione di ciascuna.
@@ -135,6 +163,28 @@ La mappa mostra le 3.438 scuole con coordinate, dati di cittadinanza e almeno 20
 - **Palette:** blu a un solo tono, 5 classi, verificata per monotonia di luminosità e distanza tra classi adiacenti. Con 6 classi i passi scuri non restavano distinguibili.
 - **Motore:** tema ixMaps `CHART|SYMBOL|CATEGORICAL|NOSORT`, con colore dalla classe di %, dimensione dal numero di alunni (`binding.size`) e forma dal tipo di scuola (`symbolfield` / `symbolvalues` / `symbols`).
 - **Filtro per tipo:** `changeThemeStyle` con `filter:WHERE "tipo" == "…"`.
+
+## Riprodurre
+
+Requisiti: Node.js 18 o superiore, `unzip` e, per i civici di Bari, `ogr2ogr` (GDAL). Senza GDAL Bari viene saltata con un avviso e ritentata al run successivo.
+
+```bash
+cd pipeline
+npm install
+node build.mjs      # scarica le fonti, geolocalizza → out/scuole_12citta.csv, non_geolocalizzate.csv, report_citta.csv
+node make_map.mjs   # → out/mappa_stranieri.html (da map_template.html)
+```
+
+| Script | Ruolo |
+|---|---|
+| `build.mjs` | dati MIM, join cittadinanza e percorsi, lettura FGB per bbox, Overpass, cascata delle coordinate, controlli, report |
+| `civici.mjs` | carica ANNCSU e i civici di Torino e Bari, matching via + civico, Nominatim con cache |
+| `make_map.mjs` | filtra le scuole mappabili, calcola classi e tipo di scuola, genera la pagina da `map_template.html` |
+
+- **Tempi:** il primo run scarica circa 300 MB in `pipeline/data/` (soprattutto gli indirizzari ANNCSU) e interroga Nominatim a 1 richiesta al secondo: circa 10–15 minuti. I run successivi usano la cache e durano 1–2 minuti.
+- **`--no-nominatim`:** salta Nominatim, ma ignora anche i risultati già in cache. Usalo solo per prove veloci.
+- **Aggiornare le fonti:** i download restano in cache in `pipeline/data/`. Per riscaricare una fonte, cancellane il file. Per ANNCSU, che è aggiornato ogni mese, cancella anche `data/civici_12citta.json`.
+- **Cambiare anno scolastico:** aggiorna i nomi dei file MIM in `SRC` in `build.mjs`. L'anagrafe, la cittadinanza e i percorsi devono essere dello stesso anno.
 
 ## Limiti
 
