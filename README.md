@@ -33,6 +33,8 @@ e altro
 
 [Incidentilità nella Regione Lombardia](https://gjrichter.github.io/pages/AREU_facets)
 
+[Alunni stranieri per scuola - 12 grandi città, a.s. 2024/25](https://gjrichter.github.io/pages/Scuole_Alunni_Stranieri/) - [metodo e fonti](https://github.com/gjrichter/pages/tree/main/Scuole_Alunni_Stranieri)
+
 
 
 TEST
