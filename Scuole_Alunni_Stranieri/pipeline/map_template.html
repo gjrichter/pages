@@ -9,10 +9,15 @@
   html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
   #map { width: 100%; height: 100%; }
   #city-picker {
-    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 1000;   /* in basso: in alto copre il titolo della legenda */
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 1000;   /* mobile: in basso al centro */
     max-width: calc(100% - 32px); box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0;
     background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 10px;
     box-shadow: 0 1px 4px rgba(0,0,0,.15); font-size: 14px;
+  }
+  /* schermi larghi: in alto, centrata nello spazio libero a sinistra della legenda (~340px);
+     centrata sulla finestra copre il titolo della legenda */
+  @media (min-width: 900px) {
+    #city-picker { bottom: auto; top: 12px; left: calc((100% - 340px) / 2); max-width: calc(100% - 340px - 120px); }
   }
   #city-picker select { font-size: 14px; margin-left: 6px; }
   #city-picker label + select { margin-right: 12px; }
