@@ -40,7 +40,7 @@ Percentuali calcolate sulle scuole mappate (stranieri / alunni). Nei licei la qu
 | [`data/non_geolocalizzate.csv`](data/non_geolocalizzate.csv) | le 455 scuole senza coordinate |
 | [`data/report_citta.csv`](data/report_citta.csv) | statistiche per città: scuole per livello di geolocalizzazione, copertura, controlli OSM ↔ FGB e OSM ↔ civici |
 | [`data/LICENSE.md`](data/LICENSE.md) | licenza dei CSV (ODbL 1.0) e attribuzione da riportare |
-| [`pipeline/`](pipeline/) | gli script che producono i CSV e la mappa (vedi [Riprodurre](#riprodurre)) |
+| [`pipeline/`](pipeline/) | gli script che producono i CSV e la mappa (vedi [Riprodurre](#riprodurre)), licenza [MIT](pipeline/LICENSE) |
 
 ### Colonne di `scuole_12citta.csv`
 
@@ -200,4 +200,5 @@ node make_map.mjs   # → out/mappa_stranieri.html (da map_template.html)
 
 - **I CSV in `data/` sono distribuiti con licenza [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/)** (i singoli contenuti sotto [DbCL 1.0](https://opendatacommons.org/licenses/dbcl/1-0/)). La ragione è che contengono coordinate ricavate da OpenStreetMap: circa 370 righe con `fonte` = `osm_plesso`, `osm_istituto` o `nominatim`. Condizioni e attribuzione da riportare sono in [`data/LICENSE.md`](data/LICENSE.md).
 - **Fonti originali:** dati MIM, ANNCSU, Comune di Torino, Comune di Bari e openpolis sono CC BY 4.0; beni immobili pubblici: open data MEF. Le coordinate OSM e Nominatim sono © OpenStreetMap contributors, ODbL.
+- **Codice della pipeline** (`pipeline/`): licenza [MIT](pipeline/LICENSE). La licenza MIT copre solo il codice; i dati che la pipeline scarica restano sotto le licenze delle rispettive fonti.
 - **Mappa di base:** © MapTiler © OpenStreetMap contributors.
