@@ -39,6 +39,7 @@ Percentuali calcolate sulle scuole mappate (stranieri / alunni). Nei licei la qu
 | [`data/scuole_12citta.csv`](data/scuole_12citta.csv) | anagrafe geolocalizzata: 6.305 scuole (statali e paritarie, compresa l'infanzia), 5.850 con coordinate |
 | [`data/non_geolocalizzate.csv`](data/non_geolocalizzate.csv) | le 455 scuole senza coordinate |
 | [`data/report_citta.csv`](data/report_citta.csv) | statistiche per città: scuole per livello di geolocalizzazione, copertura, controlli OSM ↔ FGB e OSM ↔ civici |
+| [`data/LICENSE.md`](data/LICENSE.md) | licenza dei CSV (ODbL 1.0) e attribuzione da riportare |
 | [`pipeline/`](pipeline/) | gli script che producono i CSV e la mappa (vedi [Riprodurre](#riprodurre)) |
 
 ### Colonne di `scuole_12citta.csv`
@@ -197,6 +198,6 @@ node make_map.mjs   # → out/mappa_stranieri.html (da map_template.html)
 
 ## Licenze e attribuzioni
 
-- Dati MIM, ANNCSU, Comune di Torino, Comune di Bari, openpolis: CC BY 4.0 (beni immobili pubblici: open data MEF).
-- Le coordinate con `fonte` = `osm_plesso`, `osm_istituto` o `nominatim` derivano da © OpenStreetMap contributors, **ODbL**.
-- Mappa di base: © MapTiler © OpenStreetMap contributors.
+- **I CSV in `data/` sono distribuiti con licenza [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/)** (i singoli contenuti sotto [DbCL 1.0](https://opendatacommons.org/licenses/dbcl/1-0/)). La ragione è che contengono coordinate ricavate da OpenStreetMap: circa 370 righe con `fonte` = `osm_plesso`, `osm_istituto` o `nominatim`. Condizioni e attribuzione da riportare sono in [`data/LICENSE.md`](data/LICENSE.md).
+- **Fonti originali:** dati MIM, ANNCSU, Comune di Torino, Comune di Bari e openpolis sono CC BY 4.0; beni immobili pubblici: open data MEF. Le coordinate OSM e Nominatim sono © OpenStreetMap contributors, ODbL.
+- **Mappa di base:** © MapTiler © OpenStreetMap contributors.
