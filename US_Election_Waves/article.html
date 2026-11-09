@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The pendulum, state by state · US elections 2016–2026</title>
+<meta name="description" content="An animated map of how every US state's Democratic–Republican margin moved after each presidential election and midterm from 2016 to 2026.">
+<style>
+  /* palette: ink on paper-white, with the map's own blue and red as the only colours */
+  :root { --bg:#fbfbfa; --ink:#15181e; --muted:#5c6572; --rule:#dfe3e8; --panel:#f0f3f6; --dem:#2f6fd6; --rep:#d6322f;
+          --serif: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif; --sans: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1319; --ink:#eceff3; --muted:#9aa5b2; --rule:#2a323d; --panel:#171d26; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg:#0f1319; --ink:#eceff3; --muted:#9aa5b2; --rule:#2a323d; --panel:#171d26; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6; font-size:18px; }
+  .wrap { max-width:800px; margin:0 auto; padding-inline:max(18px, env(safe-area-inset-left, 0px)) max(18px, env(safe-area-inset-right, 0px)); }
+  .col  { max-width:660px; }
+  header { padding-block:44px 22px; }
+  .kicker { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+  h1 { font-family:var(--serif); font-size:clamp(32px, 6vw, 48px); line-height:1.08; letter-spacing:-.01em; margin:.35em 0 .4em; text-wrap:balance; font-weight:700; }
+  .dek { font-size:clamp(18px, 2.6vw, 21px); line-height:1.45; color:var(--muted); margin:0 0 18px; text-wrap:pretty; }
+  .meta { font-size:14px; color:var(--muted); }
+  figure { margin:8px 0 6px; }
+  .frame { width:100%; height:760px; border:1px solid var(--rule); border-radius:6px; background:var(--panel); display:block; }
+  figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
+  figcaption a { color:inherit; }
+  h2 { font-family:var(--serif); font-size:26px; line-height:1.2; margin:2.1em 0 .5em; text-wrap:balance; }
+  p { margin:0 0 1.05em; text-wrap:pretty; }
+  a { color:var(--dem); text-underline-offset:3px; }
+  /* the six steps: how many states moved each way */
+  .steps { list-style:none; margin:1.2em 0 1.6em; padding:0; border-top:1px solid var(--rule); }
+  .steps li { display:grid; grid-template-columns: 4.2em 1fr; gap:2px 14px; align-items:center; padding:12px 0; border-bottom:1px solid var(--rule); }
+  .steps .yr { font-family:var(--serif); font-size:26px; font-weight:700; grid-row:span 2; line-height:1; }
+  .steps .what { font-size:15px; color:var(--muted); }
+  .steps .what b { color:var(--ink); font-weight:600; }
+  .bar { display:flex; height:14px; border-radius:3px; overflow:hidden; background:var(--rule); }
+  .bar i { display:block; height:100%; }
+  .bar .d { background:var(--dem); } .bar .r { background:var(--rep); }
+  .counts { display:flex; justify-content:space-between; font-size:13px; font-variant-numeric:tabular-nums; color:var(--muted); margin-top:3px; }
+  .counts .d { color:var(--dem); font-weight:600; } .counts .r { color:var(--rep); font-weight:600; }
+  .note { font-size:15px; color:var(--muted); border-left:3px solid var(--rule); padding:2px 0 2px 14px; margin:1.4em 0; }
+  .sources { font-size:14px; color:var(--muted); border-top:1px solid var(--rule); margin-top:2.4em; padding-block:18px 56px; }
+  .sources p { margin:0 0 .6em; }
+  @media (max-width: 640px) { body { font-size:17px; } .frame { height:560px; } header { padding-block:30px 14px; } }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="kicker">Election maps</div>
+  <h1>The pendulum, state by state: six American elections, 2016–2026</h1>
+  <p class="dek">Each arrow is a state. It leans left when Democrats gained ground and right when Republicans did; the bigger the arrow, the bigger the swing. Watch the swell cross the country, fade, and reverse.</p>
+  <div class="meta">9 November 2026 · 2026 results are preliminary · AI-generated, see note at the end</div>
+</header>
+
+<main class="wrap">
+  <figure>
+    <iframe class="frame" src="index.html" title="Animated map: swing in the Democratic–Republican margin by state, 2016 to 2026" loading="lazy"></iframe>
+    <figcaption>Press Next to step through the elections, or switch the direction of the wave. <a href="index.html">Open the map on its own page</a>.</figcaption>
+  </figure>
+
+  <div class="col">
+    <h2>How to read it</h2>
+    <p>For every state, the map takes the gap between the Democratic and Republican vote, as a share of the two-party total, and compares it with an earlier election. If the gap moved toward Democrats, the arrow leans left and is blue. If it moved toward Republicans, it leans right and is red. Arrows are capped at a 30-point swing so one extreme state does not swamp the rest.</p>
+    <p>Presidential elections are compared with the previous presidential election. Midterms, counted by the House vote, are compared with the presidential election before them. The small dot beside the year shows the party of the president in office. Alaska and Hawaii sit in their usual insets.</p>
+
+    <h2>What the waves show</h2>
+    <p>Counting the states that moved each way at every step gives a plain picture:</p>
+    <ol class="steps" aria-label="States moving toward each party, by election">
+      <li><span class="yr">2016</span><span class="what"><b>Presidential</b> vs 2012</span>
+          <span><span class="bar" role="img" aria-label="12 states toward Democrats, 39 toward Republicans"><i class="d" style="width:23.5%"></i><i class="r" style="width:76.5%"></i></span><span class="counts"><span class="d">12 Democratic</span><span class="r">39 Republican</span></span></span></li>
+      <li><span class="yr">2018</span><span class="what"><b>Midterm</b> vs 2016</span>
+          <span><span class="bar" role="img" aria-label="48 states toward Democrats, 3 toward Republicans"><i class="d" style="width:94.1%"></i><i class="r" style="width:5.9%"></i></span><span class="counts"><span class="d">48 Democratic</span><span class="r">3 Republican</span></span></span></li>
+      <li><span class="yr">2020</span><span class="what"><b>Presidential</b> vs 2016</span>
+          <span><span class="bar" role="img" aria-label="44 states toward Democrats, 7 toward Republicans"><i class="d" style="width:86.3%"></i><i class="r" style="width:13.7%"></i></span><span class="counts"><span class="d">44 Democratic</span><span class="r">7 Republican</span></span></span></li>
+      <li><span class="yr">2022</span><span class="what"><b>Midterm</b> vs 2020</span>
+          <span><span class="bar" role="img" aria-label="8 states toward Democrats, 43 toward Republicans"><i class="d" style="width:15.7%"></i><i class="r" style="width:84.3%"></i></span><span class="counts"><span class="d">8 Democratic</span><span class="r">43 Republican</span></span></span></li>
+      <li><span class="yr">2024</span><span class="what"><b>Presidential</b> vs 2020</span>
+          <span><span class="bar" role="img" aria-label="0 states toward Democrats, 51 toward Republicans"><i class="r" style="width:100%"></i></span><span class="counts"><span class="d">0 Democratic</span><span class="r">51 Republican</span></span></span></li>
+      <li><span class="yr">2026</span><span class="what"><b>Midterm</b> vs 2024 · preliminary</span>
+          <span><span class="bar" role="img" aria-label="49 states toward Democrats, 1 toward Republicans"><i class="d" style="width:98%"></i><i class="r" style="width:2%"></i></span><span class="counts"><span class="d">49 Democratic</span><span class="r">1 Republican</span></span></span></li>
+    </ol>
+    <p>Two things stand out. First, every midterm in the series moved against the party of the sitting president: toward Democrats in 2018 under a Republican president, toward Republicans in 2022 under a Democratic one, and toward Democrats again in the early 2026 count. Second, 2024 is the only step in which no state moved the other way: all 51 contests, the District of Columbia included, shifted toward the Republican candidate compared with 2020.</p>
+    <p>The nationwide two-party margin tells the same story in one line. It was Democratic +3.9 points in 2012, +2.2 in 2016 and +4.5 in 2020, then Republican +1.5 in 2024.</p>
+
+    <h2>Read it with care</h2>
+    <p class="note"><b>2026 is a snapshot.</b> It uses live House results from NBC News, with between 74% and 99% of the vote counted per state, and Washington, DC has no House vote, so it shows no arrow in that step. Late-counted ballots can shift margins, and Alaska, the one state moving Republican, was the least counted.</p>
+    <p class="note"><b>House totals include uncontested seats.</b> Where a party fielded no candidate in a district, its votes there are zero, which exaggerates the swing in some states. The Dakotas and parts of the Deep South show this most in 2022.</p>
+    <p class="note"><b>Midterm electorates differ.</b> A midterm swing partly reflects who turned out, not only who changed their mind, and a House vote is not a presidential vote.</p>
+  </div>
+
+  <div class="sources col">
+    <p><b>Data.</b> 2012, 2016 presidential and 2018, 2022 House: Federal Election Commission official results. 2020 and 2024 presidential: county results summed per state from <a href="https://github.com/tonmcg/US_County_Level_Election_Results_08-24">tonmcg/US_County_Level_Election_Results_08-24</a>. 2026 House: NBC News live results, collected 9 November 2026. The cleaned table is in <a href="data/states.csv">data/states.csv</a>.</p>
+    <p><b>AI-generated.</b> This article and the map were produced with Claude, an AI model made by Anthropic, working under the direction of the map's author. The AI collected the data, computed every figure and wrote the text. Check the figures against the sources above before you rely on them or quote them.</p>
+    <p><b>Map.</b> Built with <a href="https://github.com/gjrichter/ixmaps-gl">ixmaps-gl</a>. State outlines: <a href="https://github.com/topojson/us-atlas">us-atlas</a>, Albers USA projection.</p>
+  </div>
+</main>
+</body>
+</html>
