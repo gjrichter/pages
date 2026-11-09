@@ -15,7 +15,9 @@ Margin = (Democratic − Republican) / (Democratic + Republican) × 100, two-par
 
 ## Caveats
 - House vote totals include uncontested seats, which distort the margin in some states (for example Alabama, Florida, the Dakotas in 2022).
-- Alaska and Hawaii are outside the map frame; Washington, DC has no House vote in the 2026 data.
+- Washington, DC has no House vote in the 2026 data, so it has no arrow in that step.
 - Midterm and presidential electorates differ, so a midterm "swing" also contains turnout composition effects.
+
+The map uses an Albers USA layout (Alaska and Hawaii as insets): state outlines are the pre-projected geometry from [us-atlas](https://github.com/topojson/us-atlas), and the arrows sit at the projected state centres.
 
 `index.html` is self-contained (data and state outlines inline) and loads ixmaps-gl 0.2.42 from jsDelivr.
