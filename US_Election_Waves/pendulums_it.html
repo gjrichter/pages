@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Pendoli del cambiamento · elezioni USA 2016–2026</title>
+<meta name="description" content="Un pendolo per ogni stato USA, una riga per ogni elezione 2016–2026: ognuno oscilla verso il partito che ha guadagnato, in proporzione allo spostamento del margine. In più i soli presidenziali e i soli midterm.">
+<link rel="canonical" href="https://gjrichter.github.io/pages/US_Election_Waves/pendulums_it.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26":99.0,"m2012":-22.43,"m2016":-28.75,"m2018":-17.95,"m2020":-25.82,"m2022":-49.48,"m2024":-30.88,"m2026":-9.03,"sw2016":-6.32,"sw2018":10.79,"sw2020":-7.87,"sw2022":-23.65,"sw2024":18.59,"sw2026":21.85,"x":672.2,"y":431.6},{"st":"AK","name":"Alaska","lat":64.0,"lon":-152.0,"unc":"","in26":74.0,"m2012":-14.63,"m2016":-16.77,"m2018":-6.61,"m2020":-10.63,"m2022":-0.32,"m2024":-13.8,"m2026":-74.34,"sw2016":-2.14,"sw2018":10.16,"sw2020":-4.02,"sw2022":10.31,"sw2024":-13.48,"sw2026":-60.54,"x":103.6,"y":522.5},{"st":"AZ","name":"Arizona","lat":34.3,"lon":-111.7,"unc":"","in26":98.0,"m2012":-9.23,"m2016":-3.78,"m2018":1.72,"m2020":0.31,"m2022":-13.76,"m2024":-5.59,"m2026":10.98,"sw2016":5.45,"sw2018":5.5,"sw2020":-1.41,"sw2022":-14.07,"sw2024":8.17,"sw2026":16.57,"x":207.4,"y":381.7},{"st":"AR","name":"Arkansas","lat":34.9,"lon":-92.4,"unc":"","in26":99.0,"m2012":-24.31,"m2016":-28.57,"m2018":-27.99,"m2020":-28.42,"m2022":-37.51,"m2024":-31.34,"m2026":-19.1,"sw2016":-4.26,"sw2018":0.58,"sw2020":-0.43,"sw2022":-9.08,"sw2024":6.17,"sw2026":12.24,"x":564.4,"y":390.8},{"st":"CA","name":"California","lat":37.2,"lon":-119.5,"unc":"","in26":77.0,"m2012":23.75,"m2016":32.26,"m2018":33.69,"m2020":29.82,"m2022":28.69,"m2024":20.8,"m2026":40.12,"sw2016":8.51,"sw2018":1.43,"sw2020":-3.87,"sw2022":-1.13,"sw2024":-7.89,"sw2026":19.32,"x":81.7,"y":287.7},{"st":"CO","name":"Colorado","lat":39.0,"lon":-105.5,"unc":"","in26":96.0,"m2012":5.5,"m2016":5.37,"m2018":10.87,"m2020":13.88,"m2022":13.01,"m2024":11.29,"m2026":24.68,"sw2016":-0.13,"sw2018":5.51,"sw2020":3.0,"sw2022":-0.86,"sw2024":-1.72,"sw2026":13.39,"x":332.4,"y":289.9},{"st":"CT","name":"Connecticut","lat":41.6,"lon":-72.7,"unc":"","in26":98.0,"m2012":17.55,"m2016":14.28,"m2018":22.42,"m2020":20.34,"m2022":15.51,"m2024":14.76,"m2026":27.39,"sw2016":-3.26,"sw2018":8.13,"sw2020":-2.07,"sw2022":-4.83,"sw2024":-0.75,"sw2026":12.64,"x":886.4,"y":190.8},{"st":"DE","name":"Delaware","lat":39.0,"lon":-75.5,"unc":"","in26":99.0,"m2012":18.89,"m2016":12.0,"m2018":28.91,"m2020":19.25,"m2022":12.7,"m2024":14.96,"m2026":28.67,"sw2016":-6.9,"sw2018":16.91,"sw2020":-9.65,"sw2022":-6.55,"sw2024":2.26,"sw2026":13.71,"x":853.3,"y":259.7},{"st":"DC","name":"Distretto di Columbia","lat":38.9,"lon":-77.0,"unc":"","in26":null,"m2012":85.18,"m2016":91.39,"m2018":90.71,"m2020":88.93,"m2022":87.41,"m2024":86.63,"m2026":null,"sw2016":6.22,"sw2018":-0.68,"sw2020":-1.78,"sw2022":-1.52,"sw2024":-0.78,"sw2026":null,"x":828.1,"y":267.3},{"st":"FL","name":"Florida","lat":28.6,"lon":-82.4,"unc":"","in26":95.0,"m2012":0.88,"m2016":-1.24,"m2018":-5.27,"m2020":-3.39,"m2022":-19.03,"m2024":-13.22,"m2026":-2.21,"sw2016":-2.12,"sw2018":-4.04,"sw2020":1.88,"sw2022":-15.64,"sw2024":5.8,"sw2026":11.01,"x":768.6,"y":516.2},{"st":"GA","name":"Georgia","lat":32.7,"lon":-83.4,"unc":"","in26":99.0,"m2012":-7.91,"m2016":-5.32,"m2018":-4.54,"m2020":0.24,"m2022":-4.61,"m2024":-2.21,"m2026":12.41,"sw2016":2.59,"sw2018":0.78,"sw2020":4.78,"sw2022":-4.85,"sw2024":2.4,"sw2026":14.62,"x":736.5,"y":426.5},{"st":"HI","name":"Hawaii","lat":20.5,"lon":-157.0,"unc":"","in26":99.0,"m2012":43.41,"m2016":34.88,"m2018":53.45,"m2020":30.07,"m2022":37.33,"m2024":23.56,"m2026":41.59,"sw2016":-8.53,"sw2018":18.57,"sw2020":-23.38,"sw2022":7.27,"sw2024":-13.77,"sw2026":18.03,"x":285.2,"y":569.7},{"st":"ID","name":"Idaho","lat":44.4,"lon":-114.6,"unc":"","in26":99.0,"m2012":-32.84,"m2016":-36.62,"m2018":-27.93,"m2020":-31.75,"m2022":-37.19,"m2024":-37.52,"m2026":-26.25,"sw2016":-3.78,"sw2018":8.69,"sw2020":-3.82,"sw2022":-5.44,"sw2024":-0.33,"sw2026":11.27,"x":199.2,"y":145.4},{"st":"IL","name":"Illinois","lat":40.0,"lon":-89.2,"unc":"","in26":95.0,"m2012":17.16,"m2016":18.04,"m2018":22.23,"m2020":17.32,"m2022":12.44,"m2024":11.14,"m2026":25.08,"sw2016":0.89,"sw2018":4.19,"sw2020":-4.91,"sw2022":-4.88,"sw2024":-1.3,"sw2026":13.94,"x":615,"y":271.1},{"st":"IN","name":"Indiana","lat":39.9,"lon":-86.3,"unc":"","in26":99.0,"m2012":-10.4,"m2016":-20.23,"m2018":-11.03,"m2020":-16.4,"m2022":-22.34,"m2024":-19.3,"m2026":3.65,"sw2016":-9.83,"sw2018":9.21,"sw2020":-5.37,"sw2022":-5.95,"sw2024":3.04,"sw2026":22.96,"x":665,"y":269},{"st":"IA","name":"Iowa","lat":42.1,"lon":-93.5,"unc":"","in26":99.0,"m2012":5.92,"m2016":-10.13,"m2018":4.1,"m2020":-8.37,"m2022":-12.57,"m2024":-13.45,"m2026":1.35,"sw2016":-16.05,"sw2018":14.23,"sw2020":-12.46,"sw2022":-4.2,"sw2024":-0.87,"sw2026":14.79,"x":539.8,"y":226.7},{"st":"KS","name":"Kansas","lat":38.5,"lon":-98.4,"unc":"","in26":99.0,"m2012":-22.23,"m2016":-22.22,"m2018":-9.62,"m2020":-15.15,"m2022":-14.5,"m2024":-16.41,"m2026":-2.14,"sw2016":0.0,"sw2018":12.61,"sw2020":-5.53,"sw2022":0.65,"sw2024":-1.91,"sw2026":14.27,"x":455.8,"y":309.1},{"st":"KY","name":"Kentucky","lat":37.5,"lon":-85.3,"unc":"","in26":99.0,"m2012":-23.09,"m2016":-31.34,"m2018":-20.82,"m2020":-26.4,"m2022":-32.02,"m2024":-31.03,"m2026":-10.29,"sw2016":-8.26,"sw2018":10.52,"sw2020":-5.58,"sw2022":-5.62,"sw2024":0.99,"sw2026":20.74,"x":688.4,"y":321.8},{"st":"LA","name":"Louisiana","lat":31.0,"lon":-92.0,"unc":"","in26":99.0,"m2012":-17.49,"m2016":-20.34,"m2018":-20.34,"m2020":-18.93,"m2022":-41.62,"m2024":-22.36,"m2026":-10.01,"sw2016":-2.85,"sw2018":0.0,"sw2020":1.41,"sw2022":-22.69,"sw2024":19.26,"sw2026":12.35,"x":575.6,"y":479.5},{"st":"ME","name":"Maine","lat":45.3,"lon":-69.2,"unc":"","in26":95.0,"m2012":15.72,"m2016":3.19,"m2018":15.18,"m2020":8.93,"m2022":15.9,"m2024":7.09,"m2026":16.1,"sw2016":-12.53,"sw2018":11.99,"sw2020":-6.25,"sw2022":6.97,"sw2024":-8.81,"sw2026":9.01,"x":919.9,"y":94.4},{"st":"MD","name":"Maryland","lat":39.0,"lon":-76.8,"unc":"","in26":87.0,"m2012":26.64,"m2016":28.03,"m2018":33.85,"m2020":34.06,"m2022":30.32,"m2024":29.51,"m2026":38.32,"sw2016":1.39,"sw2018":5.82,"sw2020":0.21,"sw2022":-3.73,"sw2024":-0.81,"sw2026":8.81,"x":831.1,"y":264.4},{"st":"MA","name":"Massachusetts","lat":42.3,"lon":-71.8,"unc":"","in26":90.0,"m2012":23.57,"m2016":29.3,"m2018":59.21,"m2020":34.23,"m2022":39.67,"m2024":25.91,"m2026":54.46,"sw2016":5.73,"sw2018":29.91,"sw2020":-24.98,"sw2022":5.44,"sw2024":-13.76,"sw2026":28.55,"x":897.1,"y":171.6},{"st":"MI","name":"Michigan","lat":43.3,"lon":-84.6,"unc":"","in26":96.0,"m2012":9.6,"m2016":-0.24,"m2018":11.69,"m2020":2.83,"m2022":2.37,"m2024":-1.44,"m2026":9.14,"sw2016":-9.84,"sw2018":11.93,"sw2020":-8.87,"sw2022":-0.46,"sw2024":-3.81,"sw2026":10.58,"x":684.9,"y":188.6},{"st":"MN","name":"Minnesota","lat":46.3,"lon":-94.3,"unc":"","in26":99.0,"m2012":7.88,"m2016":1.66,"m2018":11.59,"m2020":7.28,"m2022":2.03,"m2024":4.34,"m2026":12.89,"sw2016":-6.22,"sw2018":9.93,"sw2020":-4.32,"sw2022":-5.25,"sw2024":2.32,"sw2026":8.55,"x":524.7,"y":131.4},{"st":"MS","name":"Mississippi","lat":32.7,"lon":-89.7,"unc":"","in26":97.0,"m2012":-11.6,"m2016":-18.18,"m2018":-8.32,"m2020":-16.77,"m2022":-28.79,"m2024":-23.15,"m2026":-4.99,"sw2016":-6.58,"sw2018":9.86,"sw2020":-8.45,"sw2022":-12.02,"sw2024":5.65,"sw2026":18.16,"x":617.5,"y":438.4},{"st":"MO","name":"Missouri","lat":38.4,"lon":-92.5,"unc":"","in26":99.0,"m2012":-9.56,"m2016":-19.64,"m2018":-12.84,"m2020":-15.67,"m2022":-21.23,"m2024":-18.67,"m2026":-0.73,"sw2016":-10.08,"sw2018":6.79,"sw2020":-2.83,"sw2022":-5.56,"sw2024":2.56,"sw2026":17.94,"x":559.6,"y":310.8},{"st":"MT","name":"Montana","lat":47.0,"lon":-109.6,"unc":"","in26":98.0,"m2012":-14.07,"m2016":-22.22,"m2018":-4.77,"m2020":-16.79,"m2022":-21.38,"m2024":-20.58,"m2026":-10.52,"sw2016":-8.15,"sw2018":17.45,"sw2020":-12.02,"sw2022":-4.59,"sw2024":0.8,"sw2026":10.06,"x":287.3,"y":100.7},{"st":"NE","name":"Nebraska","lat":41.5,"lon":-99.8,"unc":"","in26":97.0,"m2012":-22.26,"m2016":-27.1,"m2018":-24.06,"m2020":-19.57,"m2022":-27.54,"m2024":-20.84,"m2026":-13.1,"sw2016":-4.84,"sw2018":3.04,"sw2020":4.49,"sw2022":-7.97,"sw2024":6.69,"sw2026":7.74,"x":434,"y":239.7},{"st":"NV","name":"Nevada","lat":39.3,"lon":-116.6,"unc":"","in26":98.0,"m2012":6.82,"m2016":2.59,"m2018":5.54,"m2020":2.45,"m2022":-3.49,"m2024":-3.16,"m2026":17.76,"sw2016":-4.23,"sw2018":2.95,"sw2020":-3.09,"sw2022":-5.94,"sw2024":0.33,"sw2026":20.92,"x":142.5,"y":252.6},{"st":"NH","name":"New Hampshire","lat":43.7,"lon":-71.6,"unc":"","in26":99.0,"m2012":5.67,"m2016":0.39,"m2018":11.11,"m2020":7.5,"m2022":9.92,"m2024":2.82,"m2026":17.28,"sw2016":-5.27,"sw2018":10.72,"sw2020":-3.62,"sw2022":2.43,"sw2024":-7.11,"sw2026":14.46,"x":892.2,"y":139.8},{"st":"NJ","name":"New Jersey","lat":40.1,"lon":-74.7,"unc":"","in26":96.0,"m2012":17.97,"m2016":14.57,"m2018":21.54,"m2020":16.14,"m2022":9.94,"m2024":6.03,"m2026":28.46,"sw2016":-3.41,"sw2018":6.97,"sw2020":-5.4,"sw2022":-6.2,"sw2024":-3.91,"sw2026":22.43,"x":861.3,"y":232.1},{"st":"NM","name":"Nuovo Messico","lat":34.4,"lon":-106.1,"unc":"","in26":98.0,"m2012":10.59,"m2016":9.3,"m2018":20.83,"m2020":11.04,"m2022":10.13,"m2024":6.14,"m2026":23.16,"sw2016":-1.29,"sw2018":11.53,"sw2020":-9.8,"sw2022":-0.91,"sw2024":-3.99,"sw2026":17.02,"x":310.8,"y":393.5},{"st":"NY","name":"New York","lat":42.9,"lon":-75.5,"unc":"","in26":92.0,"m2012":28.6,"m2016":23.54,"m2018":38.63,"m2020":23.47,"m2022":15.11,"m2024":12.69,"m2026":24.44,"sw2016":-5.06,"sw2018":15.08,"sw2020":-15.16,"sw2022":-8.36,"sw2024":-2.42,"sw2026":11.75,"x":834.2,"y":172.6},{"st":"NC","name":"Carolina del Nord","lat":35.6,"lon":-79.4,"unc":"","in26":99.0,"m2012":-2.07,"m2016":-3.81,"m2018":-2.07,"m2020":-1.37,"m2022":-4.31,"m2024":-3.26,"m2026":15.3,"sw2016":-1.74,"sw2018":1.73,"sw2020":0.7,"sw2022":-2.94,"sw2024":1.05,"sw2026":18.56,"x":800,"y":349.6},{"st":"ND","name":"Dakota del Nord","lat":47.5,"lon":-100.5,"unc":"2022","in26":98.0,"m2012":-20.24,"m2016":-39.62,"m2018":-25.72,"m2020":-34.43,"m2022":-100.0,"m2024":-37.39,"m2026":-22.05,"sw2016":-19.38,"sw2018":13.9,"sw2020":-8.72,"sw2022":-65.57,"sw2024":62.61,"sw2026":15.35,"x":428.6,"y":102.9},{"st":"OH","name":"Ohio","lat":40.3,"lon":-82.8,"unc":"","in26":98.0,"m2012":3.03,"m2016":-8.54,"m2018":-4.81,"m2020":-8.15,"m2022":-12.86,"m2024":-11.31,"m2026":3.12,"sw2016":-11.56,"sw2018":3.73,"sw2020":-3.35,"sw2022":-4.7,"sw2024":1.54,"sw2026":14.43,"x":723.7,"y":252.7},{"st":"OK","name":"Oklahoma","lat":35.6,"lon":-97.5,"unc":"","in26":99.0,"m2012":-33.54,"m2016":-38.61,"m2018":-26.06,"m2020":-33.88,"m2022":-36.12,"m2024":-34.94,"m2026":-17.26,"sw2016":-5.06,"sw2018":12.55,"sw2020":-7.82,"sw2022":-2.24,"sw2024":1.18,"sw2026":17.68,"x":470.6,"y":375.8},{"st":"OR","name":"Oregon","lat":43.9,"lon":-120.6,"unc":"","in26":92.0,"m2012":12.54,"m2016":12.31,"m2018":20.35,"m2020":16.61,"m2022":8.62,"m2024":14.85,"m2026":18.56,"sw2016":-0.23,"sw2018":8.03,"sw2020":-3.73,"sw2022":-7.99,"sw2024":6.23,"sw2026":3.71,"x":101.8,"y":134.6},{"st":"PA","name":"Pennsylvania","lat":40.9,"lon":-77.8,"unc":"","in26":99.0,"m2012":5.46,"m2016":-0.75,"m2018":9.59,"m2020":1.19,"m2022":-5.16,"m2024":-1.73,"m2026":13.39,"sw2016":-6.21,"sw2018":10.34,"sw2020":-8.4,"sw2022":-6.36,"sw2024":3.44,"sw2026":15.12,"x":805.7,"y":225.1},{"st":"RI","name":"Rhode Island","lat":41.7,"lon":-71.5,"unc":"","in26":98.0,"m2012":28.03,"m2016":16.62,"m2018":30.27,"m2020":21.02,"m2022":14.7,"m2024":14.16,"m2026":32.42,"sw2016":-11.41,"sw2018":13.65,"sw2020":-9.25,"sw2022":-6.32,"sw2024":-0.54,"sw2026":18.26,"x":905.4,"y":183.6},{"st":"SC","name":"Carolina del Sud","lat":33.9,"lon":-80.9,"unc":"","in26":99.0,"m2012":-10.62,"m2016":-14.92,"m2018":-10.03,"m2020":-11.85,"m2022":-34.26,"m2024":-18.12,"m2026":-2.63,"sw2016":-4.3,"sw2018":4.89,"sw2020":-1.82,"sw2022":-22.4,"sw2024":16.13,"sw2026":15.49,"x":779.1,"y":392.6},{"st":"SD","name":"Dakota del Sud","lat":44.4,"lon":-100.2,"unc":"2022","in26":99.0,"m2012":-18.44,"m2016":-31.94,"m2018":-25.23,"m2020":-26.87,"m2022":-100.0,"m2024":-29.89,"m2026":-28.01,"sw2016":-13.51,"sw2018":6.72,"sw2020":-1.64,"sw2022":-73.13,"sw2024":70.11,"sw2026":1.88,"x":430.1,"y":173.3},{"st":"TN","name":"Tennessee","lat":35.9,"lon":-86.4,"unc":"","in26":99.0,"m2012":-20.7,"m2016":-27.25,"m2018":-20.38,"m2020":-23.66,"m2022":-30.78,"m2024":-30.12,"m2026":-10.02,"sw2016":-6.55,"sw2018":6.87,"sw2020":-3.28,"sw2022":-7.13,"sw2024":0.66,"sw2026":20.1,"x":672.6,"y":360.4},{"st":"TX","name":"Texas","lat":31.4,"lon":-99.3,"unc":"","in26":99.0,"m2012":-16.02,"m2016":-9.43,"m2018":-3.54,"m2020":-5.66,"m2022":-20.64,"m2024":-13.88,"m2026":5.71,"sw2016":6.59,"sw2018":5.89,"sw2020":-2.12,"sw2022":-14.98,"sw2024":6.76,"sw2026":19.59,"x":434.4,"y":470.9},{"st":"UT","name":"Utah","lat":39.3,"lon":-111.7,"unc":"","in26":94.0,"m2012":-49.25,"m2016":-24.77,"m2018":-24.54,"m2020":-21.39,"m2022":-32.46,"m2024":-22.21,"m2026":-1.01,"sw2016":24.49,"sw2018":0.22,"sw2020":3.16,"sw2022":-11.08,"sw2024":10.25,"sw2026":21.2,"x":226.2,"y":268.8},{"st":"VT","name":"Vermont","lat":44.0,"lon":-72.7,"unc":"","in26":99.0,"m2012":36.49,"m2016":30.37,"m2018":45.45,"m2020":36.6,"m2022":38.49,"m2024":32.77,"m2026":35.75,"sw2016":-6.12,"sw2018":15.08,"sw2020":-8.86,"sw2022":1.89,"sw2024":-5.72,"sw2026":2.97,"x":873.1,"y":137.7},{"st":"VA","name":"Virginia","lat":37.5,"lon":-78.8,"unc":"","in26":98.0,"m2012":3.93,"m2016":5.65,"m2018":13.99,"m2020":10.31,"m2022":3.63,"m2024":5.9,"m2026":19.21,"sw2016":1.72,"sw2018":8.34,"sw2020":-3.68,"sw2022":-6.68,"sw2024":2.27,"sw2026":13.31,"x":803,"y":304.9},{"st":"WA","name":"Washington","lat":47.4,"lon":-120.5,"unc":"","in26":88.0,"m2012":15.26,"m2016":17.57,"m2018":35.46,"m2020":19.85,"m2022":16.25,"m2024":18.93,"m2026":26.18,"sw2016":2.32,"sw2018":17.89,"sw2020":-15.61,"sw2022":-3.6,"sw2024":2.68,"sw2026":7.25,"x":123.7,"y":58.3},{"st":"WV","name":"Virginia Occidentale","lat":38.6,"lon":-80.6,"unc":"","in26":99.0,"m2012":-27.35,"m2016":-44.32,"m2018":-17.94,"m2020":-39.6,"m2022":-35.15,"m2024":-42.69,"m2026":-18.49,"sw2016":-16.97,"sw2018":26.38,"sw2020":-21.65,"sw2022":4.45,"sw2024":-7.54,"sw2026":24.2,"x":767.3,"y":285.5},{"st":"WI","name":"Wisconsin","lat":44.6,"lon":-89.9,"unc":"","in26":98.0,"m2012":7.03,"m2016":-0.82,"m2018":9.9,"m2020":0.64,"m2022":-16.15,"m2024":-0.87,"m2026":13.61,"sw2016":-7.85,"sw2018":10.72,"sw2020":-9.27,"sw2022":-16.78,"sw2024":15.27,"sw2026":14.49,"x":596.3,"y":167.1},{"st":"WY","name":"Wyoming","lat":43.0,"lon":-107.5,"unc":"","in26":97.0,"m2012":-42.32,"m2016":-51.41,"m2018":-36.23,"m2020":-44.96,"m2022":-47.34,"m2024":-46.96,"m2026":-23.65,"sw2016":-9.09,"sw2018":15.18,"sw2020":-8.73,"sw2022":-2.38,"sw2024":0.38,"sw2026":23.31,"x":308.7,"y":195.2}];
+</script>
+<style>
+  :root { --dem:#2f6fd6; --rep:#d6322f; --ink:#1b1f27; --rod:#4a5160; --neutral:#aab2bf; }
+  html, body { margin:0; background:#e9edf2; font-family:-apple-system, "Helvetica Neue", sans-serif; color:var(--ink); }
+  #app { max-width:900px; margin:0 auto; padding:16px 12px 28px; position:relative; }
+  h1 { font-size:22px; margin:0 0 2px; }
+  #sub { font-size:13px; opacity:.7; margin:0 0 10px; max-width:640px; }
+  #bar { display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; font-size:12px; margin-bottom:6px; }
+  #bar i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; }
+  #bar .sp { flex:1; }
+  button { font:inherit; font-size:12px; padding:5px 11px; border:0; border-radius:6px; background:#1b1f27; color:#fff; cursor:pointer; margin-left:4px; }
+  .embed h1, .embed #sub, .embed #foot { display:none; }
+  .embed body { background:transparent; }
+  .embed #app { padding-top:4px; }
+  .embed h2:first-of-type { margin-top:18px; }
+  h2 { font-size:17px; margin:26px 0 2px; }
+  .note { font-size:12px; opacity:.65; margin:0 0 8px; }
+  svg { width:100%; height:auto; display:block; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+  svg text { font-family:inherit; }
+  .rowlbl { transition:opacity .4s; }
+  #tip { position:fixed; pointer-events:none; z-index:10; background:rgba(27,31,39,.94); color:#fff; padding:7px 10px; border-radius:6px; font-size:12px; line-height:1.45; display:none; max-width:240px; }
+  #foot { font-size:11px; opacity:.6; margin-top:8px; max-width:720px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>Pendoli del cambiamento</h1>
+  <p id="sub">Un pendolo per stato, una riga per elezione. Ognuno parte a riposo; riga dopo riga oscilla verso il partito che ha guadagnato — a sinistra i Democratici, a destra i Repubblicani — in proporzione allo spostamento del margine.</p>
+  <div id="bar">
+    <span><i style="background:var(--dem)"></i>Guadagno democratico ◀ a sinistra</span>
+    <span><i style="background:var(--rep)"></i>Guadagno repubblicano ▶ a destra</span>
+    <span style="opacity:.65">oscillazione massima = 25 punti o più</span>
+    <span class="sp"></span>
+    <span><button id="sort">Est → Ovest</button><button id="play">Pausa</button><button id="replay">Riavvia</button></span>
+  </div>
+  <svg id="svg" viewBox="0 0 1000 640" role="img" aria-label="Griglia di pendoli: variazione per stato e per elezione"></svg>
+  <h2>Solo le elezioni presidenziali</h2>
+  <p class="note">Ogni voto presidenziale a confronto con il precedente.</p>
+  <svg id="svg_pres" viewBox="0 0 1000 400" role="img" aria-label="Griglia di pendoli, solo presidenziali"></svg>
+  <h2>Solo i midterm</h2>
+  <p class="note">Ogni voto per la Camera a confronto con il voto presidenziale precedente. Il 2026 è ancora in scrutinio.</p>
+  <svg id="svg_mid" viewBox="0 0 1000 400" role="img" aria-label="Griglia di pendoli, solo midterm"></svg>
+  <div id="foot">Le presidenziali sono confrontate con le presidenziali precedenti; i midterm (voto per la Camera) con le presidenziali precedenti. I dati 2026 sono preliminari (scrutinato il 74–99 %); il DC non ha voto per la Camera nel 2026 e resta fermo. I seggi non contestati alterano alcuni margini dei midterm.</div>
+</div>
+<div id="tip"></div>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  var STEPS = [
+    { year: 2016, base: 2012, midterm: false, tag: "PRESIDENZIALI", sub: "vs presid. 2012" },
+    { year: 2018, base: 2016, midterm: true,  tag: "MIDTERM",      sub: "Camera vs presid. 2016" },
+    { year: 2020, base: 2016, midterm: false, tag: "PRESIDENZIALI", sub: "vs presid. 2016" },
+    { year: 2022, base: 2020, midterm: true,  tag: "MIDTERM",      sub: "Camera vs presid. 2020" },
+    { year: 2024, base: 2020, midterm: false, tag: "PRESIDENZIALI", sub: "vs presid. 2020" },
+    { year: 2026, base: 2024, midterm: true,  tag: "MIDTERM · PRELIMINARE", sub: "Camera vs presid. 2024" }
+  ];
+  var DEM = "#2f6fd6", REP = "#d6322f";
+  var CAP = 25, MAXANG = 40;
+  var ROW_MS = 1900, STAGGER = 900, HOLD = 4500, RESET_MS = 900;
+  var W = 1000, LEFT = 150, RIGHT = 16, TOP = 62, ROWH = 90, PIV = 12, ROD = 26, BOB = 4.3;
+
+  var data = window.STATES.slice();
+  function SW(s, st) { var a = s["m" + st.year], b = s["m" + st.base]; return (a == null || b == null) ? null : Math.round((a - b) * 100) / 100; }
+  var N = data.length, pitch = (W - LEFT - RIGHT) / N;
+  function el(n, a, p) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+
+  var SORTS = [
+    { label: "Est → Ovest", fn: function (a, b) { return b.lon - a.lon; } },
+    { label: "Ovest → Est", fn: function (a, b) { return a.lon - b.lon; } },
+    { label: "Per orientamento 2024", fn: function (a, b) { return (b.m2024 || 0) - (a.m2024 || 0); } },
+    { label: "A → Z", fn: function (a, b) { return a.st < b.st ? -1 : 1; } }
+  ];
+  var sortIx = 0, T = 0, playing = true, last = null, phase = "run", resetT = 0;
+  var tip = document.getElementById("tip");
+
+  function Grid(svg, steps) {
+    var R = steps.length, H = TOP + R * ROWH + 14, self = this;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    var colLbl = [], rowLbl = [], cells = [], hits = [], order = [];
+    var gHead = el("g", {}, svg), gRows = el("g", {}, svg);
+    steps.forEach(function (st, r) {
+      var y0 = TOP + r * ROWH;
+      if (r % 2 === 0) el("rect", { x: 0, y: y0 - 8, width: W, height: ROWH, fill: "#f6f8fb" }, gRows);
+      var g = el("g", { "class": "rowlbl", opacity: 0.35 }, gRows);
+      el("text", { x: 14, y: y0 + 22, "font-size": 24, "font-weight": 800 }, g).textContent = st.year;
+      el("text", { x: 15, y: y0 + 40, "font-size": 9.5, "font-weight": 700, fill: "#1b1f27" }, g).textContent = st.tag;
+      el("text", { x: 15, y: y0 + 54, "font-size": 9.5, fill: "#6b7280" }, g).textContent = st.sub;
+      rowLbl.push(g);
+      el("line", { x1: LEFT - 4, x2: W - RIGHT + 4, y1: y0 + PIV, y2: y0 + PIV, stroke: "#c9cfd9", "stroke-width": 1.5 }, gRows);
+      cells.push([]);
+    });
+    var gP = el("g", {}, svg), gHit = el("g", {}, svg);
+    for (var r = 0; r < R; r++) for (var i = 0; i < N; i++) {
+      var g = el("g", {}, gP), rot = el("g", {}, g);
+      el("line", { x1: 0, y1: 0, x2: 0, y2: ROD, stroke: "var(--rod)", "stroke-width": 1.2 }, rot);
+      var bob = el("circle", { cx: 0, cy: ROD, r: BOB, fill: "var(--neutral)", stroke: "#fff", "stroke-width": 0.8 }, rot);
+      el("circle", { cx: 0, cy: 0, r: 1.6, fill: "var(--rod)" }, g);
+      cells[r].push({ g: g, rot: rot, bob: bob, tgt: 0, sw: null, ang: 0 });
+    }
+    for (var i = 0; i < N; i++) hits.push(el("rect", { y: TOP - 8, width: pitch, height: R * ROWH, fill: "transparent" }, gHit));
+
+    this.end = (R - 1) * ROW_MS + STAGGER + 2600 + HOLD;
+    this.layout = function () {
+      order = data.map(function (s, k) { return k; }).sort(function (a, b) { return SORTS[sortIx].fn(data[a], data[b]); });
+      colLbl.forEach(function (t) { gHead.removeChild(t); }); colLbl = [];
+      order.forEach(function (di, pos) {
+        var x = LEFT + (pos + 0.5) * pitch, s = data[di];
+        var t = el("text", { x: 0, y: 0, "font-size": 8.5, fill: "#4a5160", transform: "translate(" + (x + 3) + "," + (TOP - 12) + ") rotate(-90)" }, gHead);
+        t.textContent = s.st; colLbl.push(t);
+        for (var r = 0; r < R; r++) {
+          var c = cells[r][pos];
+          c.sw = SW(s, steps[r]);
+          c.tgt = c.sw == null ? 0 : (c.sw >= 0 ? 1 : -1) * Math.min(Math.abs(c.sw), CAP) / CAP * MAXANG;
+          c.g.setAttribute("transform", "translate(" + x + "," + (TOP + r * ROWH + PIV) + ")");
+        }
+        hits[pos].setAttribute("x", x - pitch / 2); hits[pos].dataset.pos = pos;
+      });
+    };
+    this.paint = function (factor, resetting) {
+      for (var r = 0; r < R; r++) {
+        var rowStart = r * ROW_MS;
+        rowLbl[r].setAttribute("opacity", (T >= rowStart || resetting) ? 1 : 0.35);
+        for (var i = 0; i < N; i++) {
+          var c = cells[r][i], a;
+          if (resetting) a = c.ang * (1 - factor);
+          else { a = c.tgt * damped((T - rowStart - i / (N - 1) * STAGGER) / 1000); c.ang = a; }
+          c.rot.setAttribute("transform", "rotate(" + a.toFixed(2) + ")");
+          c.bob.setAttribute("fill", c.sw == null ? "#e2e6ec" : (Math.abs(a) > 0.4 ? (c.sw >= 0 ? DEM : REP) : "var(--neutral)"));
+        }
+      }
+    };
+    gHit.addEventListener("mousemove", function (e) {
+      var pos = +e.target.dataset.pos; if (isNaN(pos)) return;
+      var s = data[order[pos]];
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      var r = Math.min(R - 1, Math.max(0, Math.floor((p.y - (TOP - 8)) / ROWH)));
+      var st = steps[r], sw = cells[r][pos].sw, h = "<b>" + s.name + "</b> · " + st.year + (st.midterm ? " · midterm" : " · presidenziali");
+      if (sw == null) h += "<br>nessun voto confrontabile";
+      else h += "<br><span style='color:" + (sw >= 0 ? "#8db6ff" : "#ff9a97") + "'>" + "Guadagno " + (sw >= 0 ? "democratico" : "repubblicano") + ": " + Math.abs(sw).toFixed(1).replace(".", ",") + " punti</span>" +
+                "<br><span style='opacity:.7'>" + st.sub + (st.year === 2026 && s.in26 != null ? " · " + s.in26 + "% scrutinato" : "") + "</span>";
+      tip.innerHTML = h; tip.style.display = "block";
+      tip.style.left = Math.min(innerWidth - 250, e.clientX + 14) + "px"; tip.style.top = (e.clientY + 14) + "px";
+    });
+    gHit.addEventListener("mouseleave", function () { tip.style.display = "none"; });
+    this.cells = cells;
+  }
+
+  function damped(t) { return t <= 0 ? 0 : 1 - Math.exp(-3.1 * t) * Math.cos(2 * Math.PI * 1.15 * t); }
+
+  var grids = [
+    new Grid(document.getElementById("svg"), STEPS),
+    new Grid(document.getElementById("svg_pres"), STEPS.filter(function (s) { return !s.midterm; })),
+    new Grid(document.getElementById("svg_mid"), STEPS.filter(function (s) { return s.midterm; }))
+  ];
+  var END = Math.max.apply(0, grids.map(function (g) { return g.end; }));
+  function layoutAll() { grids.forEach(function (g) { g.layout(); }); }
+  function paintAll(f, rs) { grids.forEach(function (g) { g.paint(f, rs); }); }
+  function restart() { T = 0; phase = "run"; paintAll(0, false); }
+
+  function tick(now) {
+    if (last == null) last = now;
+    var dt = now - last; last = now;
+    if (playing) {
+      if (phase === "run") { T += dt; paintAll(0, false); if (T > END) { phase = "reset"; resetT = 0; } }
+      else { resetT += dt; var u = Math.min(1, resetT / RESET_MS); paintAll(u * u * (3 - 2 * u), true); if (u >= 1) restart(); }
+    }
+    requestAnimationFrame(tick);
+  }
+  document.getElementById("play").onclick = function () { playing = !playing; this.textContent = playing ? "Pausa" : "Avvia"; };
+  document.getElementById("replay").onclick = restart;
+  document.getElementById("sort").onclick = function () { sortIx = (sortIx + 1) % SORTS.length; this.textContent = SORTS[sortIx].label; layoutAll(); restart(); };
+
+  if (window.self !== window.top) {   // embedded in an article: report our height to the parent
+    document.documentElement.classList.add("embed");
+    var report = function () { parent.postMessage({ pendulumsHeight: Math.ceil(document.getElementById("app").getBoundingClientRect().height) + 8, src: location.pathname.split("/").pop() }, "*"); };
+    window.addEventListener("load", report); window.addEventListener("resize", report);
+    if (window.ResizeObserver) new ResizeObserver(report).observe(document.getElementById("app"));
+  }
+  layoutAll(); paintAll(0, false);
+  window.__pend = { grids: grids, setT: function (t) { T = t; playing = false; paintAll(0, false); } };
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

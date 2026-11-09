@@ -63,6 +63,7 @@
   .sources { font-size:14px; color:var(--muted); border-top:1px solid var(--rule); margin-top:2.4em; padding-block:18px 56px; }
   .sources p { margin:0 0 .6em; }
   @media (max-width: 640px) { body { font-size:17px; } .frame { height:560px; } header { padding-block:30px 14px; } }
+  .frame.tall { height:1500px; }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
 </style>
 </head>
@@ -104,6 +105,16 @@
     <p>Due cose spiccano. La prima: ogni midterm della serie si è mosso contro il partito del presidente in carica: verso i Democratici nel 2018 con un presidente repubblicano, verso i Repubblicani nel 2022 con uno democratico, e di nuovo verso i Democratici nello scrutinio ancora parziale del 2026. La seconda: il 2024 è l'unico passaggio in cui nessuno stato si è mosso nella direzione opposta: tutte le 51 sfide, Distretto di Columbia compreso, si sono spostate verso il candidato repubblicano rispetto al 2020.</p>
     <p>Il margine nazionale tra i due partiti racconta la stessa storia in una riga. Era democratico di +3,9 punti nel 2012, +2,2 nel 2016 e +4,5 nel 2020, poi repubblicano di +1,5 nel 2024.</p>
 
+    <h2>Le stesse variazioni, in forma di pendoli</h2>
+    <p>La mappa mostra un'elezione alla volta. Per vederle tutte e sei insieme, dai a ogni stato un pendolo e a ogni elezione una riga. Tutto parte a riposo; riga dopo riga, ogni pendolo oscilla verso il partito che ha guadagnato, a sinistra per i Democratici e a destra per i Repubblicani, quanto si è spostato il margine, con oscillazione massima a 25 punti. Leggi una colonna per seguire uno stato nel corso del decennio. Leggi una riga per vedere tutto il paese in una sola elezione.</p>
+  </div>
+  <figure>
+    <iframe class="frame tall" data-pend src="pendulums_it.html" title="Griglia di pendoli: variazione del margine tra Democratici e Repubblicani per ogni stato ed elezione, dal 2016 al 2026" loading="lazy"></iframe>
+    <figcaption>Usa il pulsante per riordinare gli stati, oppure passa sopra un pendolo per vedere la variazione esatta. <a href="pendulums_it.html">Apri i pendoli in una pagina a sé</a>.</figcaption>
+  </figure>
+  <div class="col">
+    <p>Le due griglie più piccole separano i due tipi di elezione. Nelle presidenziali i pendoli si alternano nettamente: per lo più a destra nel 2016, per lo più a sinistra nel 2020 e tutti a destra nel 2024. Nei midterm oscillano sempre contro il partito alla Casa Bianca: a sinistra nel 2018, a destra nel 2022 e di nuovo a sinistra nel conteggio parziale del 2026.</p>
+
     <h2>Da leggere con cautela</h2>
     <p class="note"><b>Il 2026 è un'istantanea.</b> Usa i risultati in tempo reale per la Camera pubblicati da NBC News, con tra il 74% e il 99% dei voti scrutinati per stato. Washington, DC non elegge un deputato con diritto di voto e nei dati del 2026 non compare, quindi in quel passaggio non ha frecce. I voti scrutinati più tardi possono spostare i margini, e l'Alaska, l'unico stato che va verso i Repubblicani, era il meno scrutinato.</p>
     <p class="note"><b>I totali della Camera comprendono i seggi non contestati.</b> Dove un partito non ha presentato un candidato in un collegio, i suoi voti sono zero, e questo esagera lo spostamento in alcuni stati. Nel 2022 il fenomeno è più evidente nei due Dakota e in parte del Profondo Sud.</p>
@@ -116,5 +127,12 @@
     <p><b>Mappa.</b> Realizzata con <a href="https://github.com/gjrichter/ixmaps-gl">ixmaps-gl</a>. Contorni degli stati: <a href="https://github.com/topojson/us-atlas">us-atlas</a>, proiezione Albers USA.</p>
   </div>
 </main>
+<script>
+  // the pendulum page reports its own height, so the frame never needs an inner scrollbar
+  window.addEventListener("message", function (e) {
+    var d = e.data, f = document.querySelector("iframe[data-pend]");
+    if (d && d.pendulumsHeight && f && e.source === f.contentWindow) f.style.height = (d.pendulumsHeight + 2) + "px";
+  });
+</script>
 </body>
 </html>

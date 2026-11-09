@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title>Pendulums of change · US elections 2016–2026</title>
@@ -19,6 +19,10 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
   #bar i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; }
   #bar .sp { flex:1; }
   button { font:inherit; font-size:12px; padding:5px 11px; border:0; border-radius:6px; background:#1b1f27; color:#fff; cursor:pointer; margin-left:4px; }
+  .embed h1, .embed #sub, .embed #foot { display:none; }
+  .embed body { background:transparent; }
+  .embed #app { padding-top:4px; }
+  .embed h2:first-of-type { margin-top:18px; }
   h2 { font-size:17px; margin:26px 0 2px; }
   .note { font-size:12px; opacity:.65; margin:0 0 8px; }
   svg { width:100%; height:auto; display:block; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
@@ -176,6 +180,12 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
   document.getElementById("replay").onclick = restart;
   document.getElementById("sort").onclick = function () { sortIx = (sortIx + 1) % SORTS.length; this.textContent = SORTS[sortIx].label; layoutAll(); restart(); };
 
+  if (window.self !== window.top) {   // embedded in an article: report our height to the parent
+    document.documentElement.classList.add("embed");
+    var report = function () { parent.postMessage({ pendulumsHeight: Math.ceil(document.getElementById("app").getBoundingClientRect().height) + 8, src: location.pathname.split("/").pop() }, "*"); };
+    window.addEventListener("load", report); window.addEventListener("resize", report);
+    if (window.ResizeObserver) new ResizeObserver(report).observe(document.getElementById("app"));
+  }
   layoutAll(); paintAll(0, false);
   window.__pend = { grids: grids, setT: function (t) { T = t; playing = false; paintAll(0, false); } };
   requestAnimationFrame(tick);

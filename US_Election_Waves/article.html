@@ -63,6 +63,7 @@
   .sources { font-size:14px; color:var(--muted); border-top:1px solid var(--rule); margin-top:2.4em; padding-block:18px 56px; }
   .sources p { margin:0 0 .6em; }
   @media (max-width: 640px) { body { font-size:17px; } .frame { height:560px; } header { padding-block:30px 14px; } }
+  .frame.tall { height:1500px; }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
 </style>
 </head>
@@ -104,6 +105,16 @@
     <p>Two things stand out. First, every midterm in the series moved against the party of the sitting president: toward Democrats in 2018 under a Republican president, toward Republicans in 2022 under a Democratic one, and toward Democrats again in the early 2026 count. Second, 2024 is the only step in which no state moved the other way: all 51 contests, the District of Columbia included, shifted toward the Republican candidate compared with 2020.</p>
     <p>The nationwide two-party margin tells the same story in one line. It was Democratic +3.9 points in 2012, +2.2 in 2016 and +4.5 in 2020, then Republican +1.5 in 2024.</p>
 
+    <h2>The same swings, as pendulums</h2>
+    <p>The map shows one election at a time. To see all six together, give every state a pendulum and every election a row. Everything starts at rest; row by row, each pendulum swings toward the party that gained, left for Democrats and right for Republicans, as far as the margin moved, with a full swing at 25 points. Read down a column to follow one state through the decade. Read across a row to see the whole country in one election.</p>
+  </div>
+  <figure>
+    <iframe class="frame tall" data-pend src="pendulums.html" title="Pendulum grid: swing in the Democratic–Republican margin for every state and election, 2016 to 2026" loading="lazy"></iframe>
+    <figcaption>Use the button to reorder the states, or hover a pendulum for its exact swing. <a href="pendulums.html">Open the pendulums on their own page</a>.</figcaption>
+  </figure>
+  <div class="col">
+    <p>The two smaller grids pull the two kinds of election apart. Among presidential elections the pendulums alternate cleanly: mostly right in 2016, mostly left in 2020, and all the way right in 2024. Among midterms they always swing against the party in the White House: left in 2018, right in 2022 and left again in the early 2026 count.</p>
+
     <h2>Read it with care</h2>
     <p class="note"><b>2026 is a snapshot.</b> It uses live House results from NBC News, with between 74% and 99% of the vote counted per state, and Washington, DC has no House vote, so it shows no arrow in that step. Late-counted ballots can shift margins, and Alaska, the one state moving Republican, was the least counted.</p>
     <p class="note"><b>House totals include uncontested seats.</b> Where a party fielded no candidate in a district, its votes there are zero, which exaggerates the swing in some states. The Dakotas and parts of the Deep South show this most in 2022.</p>
@@ -116,5 +127,12 @@
     <p><b>Map.</b> Built with <a href="https://github.com/gjrichter/ixmaps-gl">ixmaps-gl</a>. State outlines: <a href="https://github.com/topojson/us-atlas">us-atlas</a>, Albers USA projection.</p>
   </div>
 </main>
+<script>
+  // the pendulum page reports its own height, so the frame never needs an inner scrollbar
+  window.addEventListener("message", function (e) {
+    var d = e.data, f = document.querySelector("iframe[data-pend]");
+    if (d && d.pendulumsHeight && f && e.source === f.contentWindow) f.style.height = (d.pendulumsHeight + 2) + "px";
+  });
+</script>
 </body>
 </html>
