@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Pendulums of change · US elections 2016–2026</title>
-<meta name="description" content="One pendulum per US state, one row per election 2016–2026: each swings toward the party that gained, by the size of the swing in the margin.">
+<meta name="description" content="One pendulum per US state, one row per election 2016–2026: each swings toward the party that gained, by the size of the swing in the margin. Plus presidential-only and midterm-only sets.">
 <link rel="canonical" href="https://gjrichter.github.io/pages/US_Election_Waves/pendulums.html">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
@@ -19,6 +19,8 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
   #bar i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; }
   #bar .sp { flex:1; }
   button { font:inherit; font-size:12px; padding:5px 11px; border:0; border-radius:6px; background:#1b1f27; color:#fff; cursor:pointer; margin-left:4px; }
+  h2 { font-size:17px; margin:26px 0 2px; }
+  .note { font-size:12px; opacity:.65; margin:0 0 8px; }
   svg { width:100%; height:auto; display:block; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
   svg text { font-family:inherit; }
   .rowlbl { transition:opacity .4s; }
@@ -38,6 +40,12 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
     <span><button id="sort">East → West</button><button id="play">Pause</button><button id="replay">Replay</button></span>
   </div>
   <svg id="svg" viewBox="0 0 1000 640" role="img" aria-label="Pendulum grid of state swings by election"></svg>
+  <h2>Presidential elections only</h2>
+  <p class="note">Each presidential vote against the one before it.</p>
+  <svg id="svg_pres" viewBox="0 0 1000 400" role="img" aria-label="Pendulum grid, presidential elections only"></svg>
+  <h2>Midterms only</h2>
+  <p class="note">Each House vote against the presidential vote before it. 2026 is still being counted.</p>
+  <svg id="svg_mid" viewBox="0 0 1000 400" role="img" aria-label="Pendulum grid, midterms only"></svg>
   <div id="foot">Presidential years vs the previous presidential election; midterms (House vote) vs the previous presidential. 2026 counts are preliminary (74–99 % counted); DC has no 2026 House vote and stays at rest. Uncontested House seats distort some midterm margins.</div>
 </div>
 <div id="tip"></div>
@@ -53,17 +61,13 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
     { year: 2026, base: 2024, midterm: true,  tag: "MIDTERM · PRELIMINARY", sub: "House vs 2024 pres." }
   ];
   var DEM = "#2f6fd6", REP = "#d6322f";
-  var CAP = 25, MAXANG = 40;                 // pts of swing for a full deflection; max angle in degrees
+  var CAP = 25, MAXANG = 40;
   var ROW_MS = 1900, STAGGER = 900, HOLD = 4500, RESET_MS = 900;
   var W = 1000, LEFT = 150, RIGHT = 16, TOP = 62, ROWH = 90, PIV = 12, ROD = 26, BOB = 4.3;
 
   var data = window.STATES.slice();
   function SW(s, st) { var a = s["m" + st.year], b = s["m" + st.base]; return (a == null || b == null) ? null : Math.round((a - b) * 100) / 100; }
-  var N = data.length, R = STEPS.length;
-  var pitch = (W - LEFT - RIGHT) / N;
-  var H = TOP + R * ROWH + 14;
-  var svg = document.getElementById("svg"); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
-
+  var N = data.length, pitch = (W - LEFT - RIGHT) / N;
   function el(n, a, p) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
 
   var SORTS = [
@@ -72,113 +76,108 @@ window.STATES=[{"st":"AL","name":"Alabama","lat":32.8,"lon":-86.8,"unc":"","in26
     { label: "By 2024 lean", fn: function (a, b) { return (b.m2024 || 0) - (a.m2024 || 0); } },
     { label: "A → Z", fn: function (a, b) { return a.st < b.st ? -1 : 1; } }
   ];
-  var sortIx = 0;
+  var sortIx = 0, T = 0, playing = true, last = null, phase = "run", resetT = 0;
+  var tip = document.getElementById("tip");
 
-  // ---- static frame -------------------------------------------------------
-  var colLbl = [], rowLbl = [], cells = [];   // cells[r][i] -> {g, rot, bob, tgt, vis}
-  var gHead = el("g", {}, svg), gRows = el("g", {}, svg);
-  el("text", { x: LEFT, y: 16, "font-size": 11, fill: "#6b7280" }, gHead).textContent = "";
-
-  STEPS.forEach(function (st, r) {
-    var y0 = TOP + r * ROWH;
-    if (r % 2 === 0) el("rect", { x: 0, y: y0 - 8, width: W, height: ROWH, fill: "#f6f8fb" }, gRows);
-    var g = el("g", { "class": "rowlbl", opacity: 0.35 }, gRows);
-    el("text", { x: 14, y: y0 + 22, "font-size": 24, "font-weight": 800 }, g).textContent = st.year;
-    el("text", { x: 15, y: y0 + 40, "font-size": 9.5, "font-weight": 700, fill: "#1b1f27" }, g).textContent = st.tag;
-    el("text", { x: 15, y: y0 + 54, "font-size": 9.5, fill: "#6b7280" }, g).textContent = st.sub;
-    rowLbl.push(g);
-    // rail the pendulums hang from
-    el("line", { x1: LEFT - 4, x2: W - RIGHT + 4, y1: y0 + PIV, y2: y0 + PIV, stroke: "#c9cfd9", "stroke-width": 1.5 }, gRows);
-    cells.push([]);
-  });
-
-  var gP = el("g", {}, svg), gHit = el("g", {}, svg);
-  for (var r = 0; r < R; r++) {
-    for (var i = 0; i < N; i++) {
-      var g = el("g", {}, gP);
-      var rot = el("g", {}, g);
+  function Grid(svg, steps) {
+    var R = steps.length, H = TOP + R * ROWH + 14, self = this;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    var colLbl = [], rowLbl = [], cells = [], hits = [], order = [];
+    var gHead = el("g", {}, svg), gRows = el("g", {}, svg);
+    steps.forEach(function (st, r) {
+      var y0 = TOP + r * ROWH;
+      if (r % 2 === 0) el("rect", { x: 0, y: y0 - 8, width: W, height: ROWH, fill: "#f6f8fb" }, gRows);
+      var g = el("g", { "class": "rowlbl", opacity: 0.35 }, gRows);
+      el("text", { x: 14, y: y0 + 22, "font-size": 24, "font-weight": 800 }, g).textContent = st.year;
+      el("text", { x: 15, y: y0 + 40, "font-size": 9.5, "font-weight": 700, fill: "#1b1f27" }, g).textContent = st.tag;
+      el("text", { x: 15, y: y0 + 54, "font-size": 9.5, fill: "#6b7280" }, g).textContent = st.sub;
+      rowLbl.push(g);
+      el("line", { x1: LEFT - 4, x2: W - RIGHT + 4, y1: y0 + PIV, y2: y0 + PIV, stroke: "#c9cfd9", "stroke-width": 1.5 }, gRows);
+      cells.push([]);
+    });
+    var gP = el("g", {}, svg), gHit = el("g", {}, svg);
+    for (var r = 0; r < R; r++) for (var i = 0; i < N; i++) {
+      var g = el("g", {}, gP), rot = el("g", {}, g);
       el("line", { x1: 0, y1: 0, x2: 0, y2: ROD, stroke: "var(--rod)", "stroke-width": 1.2 }, rot);
       var bob = el("circle", { cx: 0, cy: ROD, r: BOB, fill: "var(--neutral)", stroke: "#fff", "stroke-width": 0.8 }, rot);
       el("circle", { cx: 0, cy: 0, r: 1.6, fill: "var(--rod)" }, g);
-      cells[r].push({ g: g, rot: rot, bob: bob, tgt: 0, sw: null, ang: 0, shown: false });
+      cells[r].push({ g: g, rot: rot, bob: bob, tgt: 0, sw: null, ang: 0 });
     }
-  }
-  var hits = [];
-  for (var i = 0; i < N; i++) { hits.push(el("rect", { y: TOP - 8, width: pitch, height: R * ROWH, fill: "transparent" }, gHit)); }
+    for (var i = 0; i < N; i++) hits.push(el("rect", { y: TOP - 8, width: pitch, height: R * ROWH, fill: "transparent" }, gHit));
 
-  var order = [];
-  function layout() {
-    order = data.map(function (s, k) { return k; }).sort(function (a, b) { return SORTS[sortIx].fn(data[a], data[b]); });
-    colLbl.forEach(function (t) { gHead.removeChild(t); }); colLbl = [];
-    order.forEach(function (di, pos) {
-      var x = LEFT + (pos + 0.5) * pitch, s = data[di];
-      var t = el("text", { x: 0, y: 0, "font-size": 8.5, fill: "#4a5160", "text-anchor": "start", transform: "translate(" + (x + 3) + "," + (TOP - 12) + ") rotate(-90)" }, gHead);
-      t.textContent = s.st; colLbl.push(t);
+    this.end = (R - 1) * ROW_MS + STAGGER + 2600 + HOLD;
+    this.layout = function () {
+      order = data.map(function (s, k) { return k; }).sort(function (a, b) { return SORTS[sortIx].fn(data[a], data[b]); });
+      colLbl.forEach(function (t) { gHead.removeChild(t); }); colLbl = [];
+      order.forEach(function (di, pos) {
+        var x = LEFT + (pos + 0.5) * pitch, s = data[di];
+        var t = el("text", { x: 0, y: 0, "font-size": 8.5, fill: "#4a5160", transform: "translate(" + (x + 3) + "," + (TOP - 12) + ") rotate(-90)" }, gHead);
+        t.textContent = s.st; colLbl.push(t);
+        for (var r = 0; r < R; r++) {
+          var c = cells[r][pos];
+          c.sw = SW(s, steps[r]);
+          c.tgt = c.sw == null ? 0 : (c.sw >= 0 ? 1 : -1) * Math.min(Math.abs(c.sw), CAP) / CAP * MAXANG;
+          c.g.setAttribute("transform", "translate(" + x + "," + (TOP + r * ROWH + PIV) + ")");
+        }
+        hits[pos].setAttribute("x", x - pitch / 2); hits[pos].dataset.pos = pos;
+      });
+    };
+    this.paint = function (factor, resetting) {
       for (var r = 0; r < R; r++) {
-        var c = cells[r][pos];
-        c.di = di; c.sw = SW(s, STEPS[r]);
-        c.tgt = c.sw == null ? 0 : (c.sw >= 0 ? 1 : -1) * Math.min(Math.abs(c.sw), CAP) / CAP * MAXANG;
-        c.g.setAttribute("transform", "translate(" + x + "," + (TOP + r * ROWH + PIV) + ")");
+        var rowStart = r * ROW_MS;
+        rowLbl[r].setAttribute("opacity", (T >= rowStart || resetting) ? 1 : 0.35);
+        for (var i = 0; i < N; i++) {
+          var c = cells[r][i], a;
+          if (resetting) a = c.ang * (1 - factor);
+          else { a = c.tgt * damped((T - rowStart - i / (N - 1) * STAGGER) / 1000); c.ang = a; }
+          c.rot.setAttribute("transform", "rotate(" + a.toFixed(2) + ")");
+          c.bob.setAttribute("fill", c.sw == null ? "#e2e6ec" : (Math.abs(a) > 0.4 ? (c.sw >= 0 ? DEM : REP) : "var(--neutral)"));
+        }
       }
-      hits[pos].setAttribute("x", x - pitch / 2); hits[pos].dataset.pos = pos;
+    };
+    gHit.addEventListener("mousemove", function (e) {
+      var pos = +e.target.dataset.pos; if (isNaN(pos)) return;
+      var s = data[order[pos]];
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      var r = Math.min(R - 1, Math.max(0, Math.floor((p.y - (TOP - 8)) / ROWH)));
+      var st = steps[r], sw = cells[r][pos].sw, h = "<b>" + s.name + "</b> · " + st.year + (st.midterm ? " midterm" : " presidential");
+      if (sw == null) h += "<br>no comparable vote";
+      else h += "<br><span style='color:" + (sw >= 0 ? "#8db6ff" : "#ff9a97") + "'>" + (sw >= 0 ? "Democratic" : "Republican") + " gain: " + Math.abs(sw).toFixed(1) + " pts</span>" +
+                "<br><span style='opacity:.7'>" + st.sub + (st.year === 2026 && s.in26 != null ? " · " + s.in26 + "% counted" : "") + "</span>";
+      tip.innerHTML = h; tip.style.display = "block";
+      tip.style.left = Math.min(innerWidth - 250, e.clientX + 14) + "px"; tip.style.top = (e.clientY + 14) + "px";
     });
+    gHit.addEventListener("mouseleave", function () { tip.style.display = "none"; });
+    this.cells = cells;
   }
 
-  // ---- animation ----------------------------------------------------------
-  function damped(t) {                    // 0 → 1 with a pendulum-like overshoot, t in seconds
-    if (t <= 0) return 0;
-    return 1 - Math.exp(-3.1 * t) * Math.cos(2 * Math.PI * 1.15 * t);
-  }
-  var END = (R - 1) * ROW_MS + STAGGER + 2600 + HOLD;
-  var T = 0, playing = true, last = null, phase = "run", resetT = 0;
-  function paint(factor, resetting) {
-    for (var r = 0; r < R; r++) {
-      var rowStart = r * ROW_MS, shownRow = T >= rowStart || resetting;
-      rowLbl[r].setAttribute("opacity", shownRow ? 1 : 0.35);
-      for (var i = 0; i < N; i++) {
-        var c = cells[r][i], a;
-        if (resetting) a = c.ang * (1 - factor);
-        else { var t = (T - rowStart - i / (N - 1) * STAGGER) / 1000; a = c.tgt * damped(t); c.ang = a; }
-        c.rot.setAttribute("transform", "rotate(" + a.toFixed(2) + ")");
-        var on = c.sw != null && Math.abs(a) > 0.4;
-        c.bob.setAttribute("fill", c.sw == null ? "#e2e6ec" : (!on ? "var(--neutral)" : (c.sw >= 0 ? DEM : REP)));
-      }
-    }
-  }
+  function damped(t) { return t <= 0 ? 0 : 1 - Math.exp(-3.1 * t) * Math.cos(2 * Math.PI * 1.15 * t); }
+
+  var grids = [
+    new Grid(document.getElementById("svg"), STEPS),
+    new Grid(document.getElementById("svg_pres"), STEPS.filter(function (s) { return !s.midterm; })),
+    new Grid(document.getElementById("svg_mid"), STEPS.filter(function (s) { return s.midterm; }))
+  ];
+  var END = Math.max.apply(0, grids.map(function (g) { return g.end; }));
+  function layoutAll() { grids.forEach(function (g) { g.layout(); }); }
+  function paintAll(f, rs) { grids.forEach(function (g) { g.paint(f, rs); }); }
+  function restart() { T = 0; phase = "run"; paintAll(0, false); }
+
   function tick(now) {
     if (last == null) last = now;
     var dt = now - last; last = now;
     if (playing) {
-      if (phase === "run") { T += dt; paint(0, false); if (T > END) { phase = "reset"; resetT = 0; } }
-      else { resetT += dt; var u = Math.min(1, resetT / RESET_MS); paint(u * u * (3 - 2 * u), true); if (u >= 1) { T = 0; phase = "run"; paint(0, false); } }
+      if (phase === "run") { T += dt; paintAll(0, false); if (T > END) { phase = "reset"; resetT = 0; } }
+      else { resetT += dt; var u = Math.min(1, resetT / RESET_MS); paintAll(u * u * (3 - 2 * u), true); if (u >= 1) restart(); }
     }
     requestAnimationFrame(tick);
   }
-  function restart() { T = 0; phase = "run"; paint(0, false); }
-
-  // ---- ui -----------------------------------------------------------------
   document.getElementById("play").onclick = function () { playing = !playing; this.textContent = playing ? "Pause" : "Play"; };
-  document.getElementById("replay").onclick = function () { restart(); };
-  document.getElementById("sort").onclick = function () { sortIx = (sortIx + 1) % SORTS.length; this.textContent = SORTS[sortIx].label; layout(); restart(); };
+  document.getElementById("replay").onclick = restart;
+  document.getElementById("sort").onclick = function () { sortIx = (sortIx + 1) % SORTS.length; this.textContent = SORTS[sortIx].label; layoutAll(); restart(); };
 
-  var tip = document.getElementById("tip");
-  gHit.addEventListener("mousemove", function (e) {
-    var pos = +e.target.dataset.pos; if (isNaN(pos)) return;
-    var s = data[order[pos]];
-    // row under the pointer
-    var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
-    var r = Math.min(R - 1, Math.max(0, Math.floor((p.y - (TOP - 8)) / ROWH)));
-    var st = STEPS[r], sw = cells[r][pos].sw, h = "<b>" + s.name + "</b> · " + st.year + (st.midterm ? " midterm" : " presidential");
-    if (sw == null) h += "<br>no comparable vote";
-    else h += "<br><span style='color:" + (sw >= 0 ? "#8db6ff" : "#ff9a97") + "'>" + (sw >= 0 ? "Democratic" : "Republican") + " gain: " + Math.abs(sw).toFixed(1) + " pts</span>" +
-              "<br><span style='opacity:.7'>" + st.sub + (st.year === 2026 && s.in26 != null ? " · " + s.in26 + "% counted" : "") + "</span>";
-    tip.innerHTML = h; tip.style.display = "block";
-    tip.style.left = Math.min(innerWidth - 250, e.clientX + 14) + "px"; tip.style.top = (e.clientY + 14) + "px";
-  });
-  gHit.addEventListener("mouseleave", function () { tip.style.display = "none"; });
-
-  layout(); paint(0, false);
-  window.__pend = { cells: cells, setT: function (t) { T = t; playing = false; paint(0, false); }, STEPS: STEPS };
+  layoutAll(); paintAll(0, false);
+  window.__pend = { grids: grids, setT: function (t) { T = t; playing = false; paintAll(0, false); } };
   requestAnimationFrame(tick);
 })();
 </script>
