@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il pendolo, stato per stato · Elezioni USA 2016–2026</title>
+<meta name="description" content="Una mappa animata di come si è spostato il margine tra Democratici e Repubblicani in ogni stato americano dopo ogni elezione presidenziale e ogni midterm, dal 2016 al 2026.">
+<style>
+  /* palette: inchiostro su carta bianca, con il blu e il rosso della mappa come unici colori */
+  :root { --bg:#fbfbfa; --ink:#15181e; --muted:#5c6572; --rule:#dfe3e8; --panel:#f0f3f6; --dem:#2f6fd6; --rep:#d6322f;
+          --serif: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif; --sans: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1319; --ink:#eceff3; --muted:#9aa5b2; --rule:#2a323d; --panel:#171d26; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg:#0f1319; --ink:#eceff3; --muted:#9aa5b2; --rule:#2a323d; --panel:#171d26; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6; font-size:18px; }
+  .wrap { max-width:800px; margin:0 auto; padding-inline:max(18px, env(safe-area-inset-left, 0px)) max(18px, env(safe-area-inset-right, 0px)); }
+  .col  { max-width:660px; }
+  header { padding-block:44px 22px; }
+  .kicker { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+  h1 { font-family:var(--serif); font-size:clamp(32px, 6vw, 48px); line-height:1.08; letter-spacing:-.01em; margin:.35em 0 .4em; text-wrap:balance; font-weight:700; }
+  .dek { font-size:clamp(18px, 2.6vw, 21px); line-height:1.45; color:var(--muted); margin:0 0 18px; text-wrap:pretty; }
+  .meta { font-size:14px; color:var(--muted); }
+  figure { margin:8px 0 6px; }
+  .frame { width:100%; height:760px; border:1px solid var(--rule); border-radius:6px; background:var(--panel); display:block; }
+  figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
+  figcaption a { color:inherit; }
+  h2 { font-family:var(--serif); font-size:26px; line-height:1.2; margin:2.1em 0 .5em; text-wrap:balance; }
+  p { margin:0 0 1.05em; text-wrap:pretty; }
+  a { color:var(--dem); text-underline-offset:3px; }
+  /* i sei passaggi: quanti stati si sono mossi in ciascuna direzione */
+  .steps { list-style:none; margin:1.2em 0 1.6em; padding:0; border-top:1px solid var(--rule); }
+  .steps li { display:grid; grid-template-columns: 4.2em 1fr; gap:2px 14px; align-items:center; padding:12px 0; border-bottom:1px solid var(--rule); }
+  .steps .yr { font-family:var(--serif); font-size:26px; font-weight:700; grid-row:span 2; line-height:1; }
+  .steps .what { font-size:15px; color:var(--muted); }
+  .steps .what b { color:var(--ink); font-weight:600; }
+  .bar { display:flex; height:14px; border-radius:3px; overflow:hidden; background:var(--rule); }
+  .bar i { display:block; height:100%; }
+  .bar .d { background:var(--dem); } .bar .r { background:var(--rep); }
+  .counts { display:flex; justify-content:space-between; font-size:13px; font-variant-numeric:tabular-nums; color:var(--muted); margin-top:3px; }
+  .counts .d { color:var(--dem); font-weight:600; } .counts .r { color:var(--rep); font-weight:600; }
+  .note { font-size:15px; color:var(--muted); border-left:3px solid var(--rule); padding:2px 0 2px 14px; margin:1.4em 0; }
+  .sources { font-size:14px; color:var(--muted); border-top:1px solid var(--rule); margin-top:2.4em; padding-block:18px 56px; }
+  .sources p { margin:0 0 .6em; }
+  @media (max-width: 640px) { body { font-size:17px; } .frame { height:560px; } header { padding-block:30px 14px; } }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="kicker">Mappe elettorali</div>
+  <h1>Il pendolo, stato per stato: sei elezioni americane, 2016–2026</h1>
+  <p class="dek">Ogni freccia è uno stato. Si inclina a sinistra quando i Democratici guadagnano terreno e a destra quando lo guadagnano i Repubblicani; più la freccia è grande, più è ampio lo spostamento. Guarda l'onda attraversare il paese, spegnersi e invertirsi.</p>
+  <div class="meta">9 novembre 2026 · i risultati del 2026 sono provvisori · generato con IA, vedi la nota in fondo</div>
+</header>
+
+<main class="wrap">
+  <figure>
+    <iframe class="frame" src="index_it.html" title="Mappa animata: variazione del margine tra Democratici e Repubblicani per stato, dal 2016 al 2026" loading="lazy"></iframe>
+    <figcaption>Premi Avanti per scorrere le elezioni, oppure cambia la direzione dell'onda. <a href="index_it.html">Apri la mappa in una pagina a sé</a>.</figcaption>
+  </figure>
+
+  <div class="col">
+    <h2>Come leggerla</h2>
+    <p>Per ogni stato la mappa prende la differenza tra il voto democratico e quello repubblicano, in percentuale sul totale dei due partiti, e la confronta con un'elezione precedente. Se la differenza si è spostata verso i Democratici, la freccia si inclina a sinistra ed è blu. Se si è spostata verso i Repubblicani, si inclina a destra ed è rossa. Le frecce sono limitate a uno spostamento di 30 punti, perché un solo stato estremo non schiacci gli altri.</p>
+    <p>Le elezioni presidenziali sono confrontate con le presidenziali precedenti. I midterm, misurati con il voto per la Camera, sono confrontati con le presidenziali che li precedono. Il piccolo cerchio accanto all'anno indica il partito del presidente in carica. Alaska e Hawaii sono nei consueti riquadri a parte.</p>
+
+    <h2>Cosa mostrano le onde</h2>
+    <p>Contando gli stati che si sono mossi in ciascuna direzione a ogni passaggio, il quadro è semplice:</p>
+    <ol class="steps" aria-label="Stati che si sono spostati verso ciascun partito, per elezione">
+      <li><span class="yr">2016</span><span class="what"><b>Presidenziali</b> rispetto al 2012</span>
+          <span><span class="bar" role="img" aria-label="12 stati verso i Democratici, 39 verso i Repubblicani"><i class="d" style="width:23.5%"></i><i class="r" style="width:76.5%"></i></span><span class="counts"><span class="d">12 democratici</span><span class="r">39 repubblicani</span></span></span></li>
+      <li><span class="yr">2018</span><span class="what"><b>Midterm</b> rispetto al 2016</span>
+          <span><span class="bar" role="img" aria-label="48 stati verso i Democratici, 3 verso i Repubblicani"><i class="d" style="width:94.1%"></i><i class="r" style="width:5.9%"></i></span><span class="counts"><span class="d">48 democratici</span><span class="r">3 repubblicani</span></span></span></li>
+      <li><span class="yr">2020</span><span class="what"><b>Presidenziali</b> rispetto al 2016</span>
+          <span><span class="bar" role="img" aria-label="44 stati verso i Democratici, 7 verso i Repubblicani"><i class="d" style="width:86.3%"></i><i class="r" style="width:13.7%"></i></span><span class="counts"><span class="d">44 democratici</span><span class="r">7 repubblicani</span></span></span></li>
+      <li><span class="yr">2022</span><span class="what"><b>Midterm</b> rispetto al 2020</span>
+          <span><span class="bar" role="img" aria-label="8 stati verso i Democratici, 43 verso i Repubblicani"><i class="d" style="width:15.7%"></i><i class="r" style="width:84.3%"></i></span><span class="counts"><span class="d">8 democratici</span><span class="r">43 repubblicani</span></span></span></li>
+      <li><span class="yr">2024</span><span class="what"><b>Presidenziali</b> rispetto al 2020</span>
+          <span><span class="bar" role="img" aria-label="0 stati verso i Democratici, 51 verso i Repubblicani"><i class="r" style="width:100%"></i></span><span class="counts"><span class="d">0 democratici</span><span class="r">51 repubblicani</span></span></span></li>
+      <li><span class="yr">2026</span><span class="what"><b>Midterm</b> rispetto al 2024 · provvisorio</span>
+          <span><span class="bar" role="img" aria-label="49 stati verso i Democratici, 1 verso i Repubblicani"><i class="d" style="width:98%"></i><i class="r" style="width:2%"></i></span><span class="counts"><span class="d">49 democratici</span><span class="r">1 repubblicano</span></span></span></li>
+    </ol>
+    <p>Due cose spiccano. La prima: ogni midterm della serie si è mosso contro il partito del presidente in carica: verso i Democratici nel 2018 con un presidente repubblicano, verso i Repubblicani nel 2022 con uno democratico, e di nuovo verso i Democratici nello scrutinio ancora parziale del 2026. La seconda: il 2024 è l'unico passaggio in cui nessuno stato si è mosso nella direzione opposta: tutte le 51 sfide, Distretto di Columbia compreso, si sono spostate verso il candidato repubblicano rispetto al 2020.</p>
+    <p>Il margine nazionale tra i due partiti racconta la stessa storia in una riga. Era democratico di +3,9 punti nel 2012, +2,2 nel 2016 e +4,5 nel 2020, poi repubblicano di +1,5 nel 2024.</p>
+
+    <h2>Da leggere con cautela</h2>
+    <p class="note"><b>Il 2026 è un'istantanea.</b> Usa i risultati in tempo reale per la Camera pubblicati da NBC News, con tra il 74% e il 99% dei voti scrutinati per stato. Washington, DC non elegge un deputato con diritto di voto e nei dati del 2026 non compare, quindi in quel passaggio non ha frecce. I voti scrutinati più tardi possono spostare i margini, e l'Alaska, l'unico stato che va verso i Repubblicani, era il meno scrutinato.</p>
+    <p class="note"><b>I totali della Camera comprendono i seggi non contestati.</b> Dove un partito non ha presentato un candidato in un collegio, i suoi voti sono zero, e questo esagera lo spostamento in alcuni stati. Nel 2022 il fenomeno è più evidente nei due Dakota e in parte del Profondo Sud.</p>
+    <p class="note"><b>Gli elettorati dei midterm sono diversi.</b> Lo spostamento di un midterm riflette in parte chi è andato a votare, non solo chi ha cambiato idea, e il voto per la Camera non è un voto presidenziale.</p>
+  </div>
+
+  <div class="sources col">
+    <p><b>Dati.</b> Presidenziali 2012 e 2016 e Camera 2018 e 2022: risultati ufficiali della Federal Election Commission. Presidenziali 2020 e 2024: risultati per contea sommati per stato da <a href="https://github.com/tonmcg/US_County_Level_Election_Results_08-24">tonmcg/US_County_Level_Election_Results_08-24</a>. Camera 2026: risultati in tempo reale di NBC News, raccolti il 9 novembre 2026. La tabella ripulita è in <a href="data/states.csv">data/states.csv</a>.</p>
+    <p><b>Generato con IA.</b> Questo articolo e la mappa sono stati realizzati con Claude, un modello di intelligenza artificiale di Anthropic, sotto la direzione dell'autore della mappa. L'IA ha raccolto i dati, calcolato ogni cifra e scritto il testo. Verifica le cifre sulle fonti indicate prima di farvi affidamento o di citarle.</p>
+    <p><b>Mappa.</b> Realizzata con <a href="https://github.com/gjrichter/ixmaps-gl">ixmaps-gl</a>. Contorni degli stati: <a href="https://github.com/topojson/us-atlas">us-atlas</a>, proiezione Albers USA.</p>
+  </div>
+</main>
+</body>
+</html>
