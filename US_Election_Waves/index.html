@@ -33,6 +33,7 @@
   body { margin:0; position:relative; overflow:hidden; font-family:-apple-system, "Helvetica Neue", Arial, sans-serif; background:var(--side); color:var(--ink); }
   #app { position:relative; max-width:800px; height:100%; margin:0 auto; overflow:hidden; background:var(--page); box-shadow:0 0 24px rgba(0,0,0,.18); }
   #map_div { position:absolute; inset:0; }
+  #title .lang { display:block; margin-top:4px; font-size:13px; color:var(--muted); text-underline-offset:3px; }
   #hud { position:absolute; left:20px; bottom:28px; z-index:1000; pointer-events:none; }
   #year { font-size:84px; font-weight:800; letter-spacing:-2px; line-height:.9; }
   #year small { font-size:20px; letter-spacing:1px; font-weight:800; vertical-align:top; margin-left:10px; padding:3px 8px; border-radius:4px; position:relative; top:10px; white-space:nowrap; }
@@ -57,14 +58,14 @@
     #pres { font-size:14px; } #sub { font-size:13px; max-width:64vw; }
     #title { left:60px; top:14px; max-width:calc(100% - 76px); } #title span { display:none; }
     #ctl { right:12px; top:auto; bottom:12px; flex-direction:column; align-items:flex-end; } #ctl button { padding:5px 10px; font-size:13px; }
-    #key { right:auto; left:60px; top:46px; bottom:auto; font-size:11px; padding:7px 10px; } #key .note { display:none; }
+    #key { right:auto; left:60px; top:76px; bottom:auto; font-size:11px; padding:7px 10px; } #key .note { display:none; }
   }
 </style>
 </head>
 <body>
 <div id="app">
 <div id="map_div"></div>
-<div id="title"><b>Waves of change</b><span>Swing in the Dem–Rep margin: presidential vs previous presidential, midterm vs previous presidential · 2016 → 2026 (2026 still being counted)</span></div>
+<div id="title"><b>Waves of change</b><span>Swing in the Dem–Rep margin: presidential vs previous presidential, midterm vs previous presidential · 2016 → 2026 (2026 still being counted)</span><a class="lang" href="index_it.html" hreflang="it" lang="it">Italiano</a></div>
 <div id="ctl"><button id="dir" title="Direction the wave travels">West → East</button><button id="play">Pause</button><button id="skip">Next ›</button></div>
 <div id="hud"><div id="year">2016<small class="pre"><i class="dot" style="background:var(--rep)"></i>PRESIDENTIAL</small></div><div id="pres" style="color:var(--rep)">President elected: Donald Trump (R)</div><div id="sub">2016 presidential vs 2012 presidential</div></div>
 <div id="key"><div><i style="background:var(--dem)"></i>Democratic gain ◣ leans left</div><div><i style="background:var(--rep)"></i>Republican gain ◢ leans right</div><div class="note">Arrow size = swing in margin (pts, capped at 30)</div></div>
@@ -140,7 +141,7 @@
   function bandData(year, b) {
     return { type: "FeatureCollection", features: data.filter(function (s) { return s.band === b && SW(s, year) != null; }).map(function (s) {
       var sw = SW(s, year);
-      return { type: "Feature", properties: { name: s.name, st: s.st, swing: sw, ab: Math.min(Math.abs(sw), CAP),
+      return { type: "Feature", properties: { name: s.name, st: s.st, swing: sw, ab: Math.min(Math.abs(sw), CAP), abtxt: Math.abs(sw).toFixed(1),
           who: sw >= 0 ? "Democratic" : "Republican", note: (STEPS.filter(function (t) { return t.year === year; })[0].midterm ? "House vote vs previous presidential vote. " : "") + (year === 2026 && s.in26 != null ? "Preliminary: " + s.in26 + "% counted" : "") + (s.unc && s.unc.indexOf(String(year)) >= 0 ? " House: uncontested seats distort this margin" : "") },
         geometry: { type: "Point", coordinates: [s.lon, s.lat] } };
     }) };
@@ -150,8 +151,8 @@
       .data({ obj: bandData(year, b), type: "geojson" })
       .binding({ geo: "geometry", value: "swing", size: "ab", title: "name" })
       .type("CHART|USER|SIZE|NOLEGEND")
-      .style({ userdraw: "waveArrow", normalsizevalue: String(CAP), scale: String(scale), colorscheme: [DEM], showdata: "true" })
-      .meta({ name: THEME(b), title: THEME(b), tooltip: "<b>{{name}}</b><br>{{who}} gain: {{ab}} pts<br><i>{{note}}</i>" });
+      .style({ userdraw: "waveArrow", normalsizevalue: String(CAP), scale: String(scale), colorscheme: [DEM], showdata: "true", datafields: ["abtxt"] })
+      .meta({ name: THEME(b), title: THEME(b), tooltip: "<b>{{name}}</b><br>{{who}} gain: {{raw.abtxt}} pts<br><i>{{note}}</i>" });
     });
   }
 

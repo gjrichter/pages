@@ -33,6 +33,7 @@
   body { margin:0; position:relative; overflow:hidden; font-family:-apple-system, "Helvetica Neue", Arial, sans-serif; background:var(--side); color:var(--ink); }
   #app { position:relative; max-width:800px; height:100%; margin:0 auto; overflow:hidden; background:var(--page); box-shadow:0 0 24px rgba(0,0,0,.18); }
   #map_div { position:absolute; inset:0; }
+  #title .lang { display:block; margin-top:4px; font-size:13px; color:var(--muted); text-underline-offset:3px; }
   #hud { position:absolute; left:20px; bottom:28px; z-index:1000; pointer-events:none; }
   #year { font-size:84px; font-weight:800; letter-spacing:-2px; line-height:.9; }
   #year small { font-size:20px; letter-spacing:1px; font-weight:800; vertical-align:top; margin-left:10px; padding:3px 8px; border-radius:4px; position:relative; top:10px; white-space:nowrap; }
@@ -57,14 +58,14 @@
     #pres { font-size:14px; } #sub { font-size:13px; max-width:64vw; }
     #title { left:60px; top:14px; max-width:calc(100% - 76px); } #title span { display:none; }
     #ctl { right:12px; top:auto; bottom:12px; flex-direction:column; align-items:flex-end; } #ctl button { padding:5px 10px; font-size:13px; }
-    #key { right:auto; left:60px; top:46px; bottom:auto; font-size:11px; padding:7px 10px; } #key .note { display:none; }
+    #key { right:auto; left:60px; top:76px; bottom:auto; font-size:11px; padding:7px 10px; } #key .note { display:none; }
   }
 </style>
 </head>
 <body>
 <div id="app">
 <div id="map_div"></div>
-<div id="title"><b>Onde di cambiamento</b><span>Variazione del margine Dem–Rep: presidenziali rispetto alle presidenziali precedenti, midterm rispetto alle presidenziali precedenti · 2016 → 2026 (scrutinio 2026 ancora in corso)</span></div>
+<div id="title"><b>Onde di cambiamento</b><span>Variazione del margine Dem–Rep: presidenziali rispetto alle presidenziali precedenti, midterm rispetto alle presidenziali precedenti · 2016 → 2026 (scrutinio 2026 ancora in corso)</span><a class="lang" href="index.html" hreflang="en" lang="en">English</a></div>
 <div id="ctl"><button id="dir" title="Direzione dell'onda">Ovest → Est</button><button id="play">Pausa</button><button id="skip">Avanti ›</button></div>
 <div id="hud"><div id="year">2016<small class="pre"><i class="dot" style="background:var(--rep)"></i>PRESIDENZIALI</small></div><div id="pres" style="color:var(--rep)">Presidente eletto: Donald Trump (R)</div><div id="sub">Presidenziali 2016 rispetto alle presidenziali 2012</div></div>
 <div id="key"><div><i style="background:var(--dem)"></i>Guadagno democratico ◣ inclinata a sinistra</div><div><i style="background:var(--rep)"></i>Guadagno repubblicano ◢ inclinata a destra</div><div class="note">Dimensione della freccia = variazione del margine (punti, massimo 30)</div></div>
